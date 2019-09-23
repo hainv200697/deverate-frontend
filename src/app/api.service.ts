@@ -4,7 +4,8 @@ import { HttpClient } from '@angular/common/http';
     providedIn: 'root'
 })
 export class ApiService {
-    URL = 'http://deverate-env.2y3udamrqr.us-east-2.elasticbeanstalk.com/';
+    // URL = 'http://deverate-env.2y3udamrqr.us-east-2.elasticbeanstalk.com/';
+    URL = 'http://localhost:58810/';
     constructor(private httpClient: HttpClient) { }
 
     public getAll() {
@@ -12,5 +13,8 @@ export class ApiService {
         return this.httpClient.get(this.URL + API);
     }
 
-
+    public getProfile() {
+        const API = 'AccountAPI/GetAccountByAccountId?id=1';
+        return this.httpClient.get(this.URL + API);
+    }
 }
