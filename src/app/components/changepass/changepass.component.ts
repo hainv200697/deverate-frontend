@@ -11,4 +11,8 @@ export class ChangepassComponent implements OnInit {
     constructor() {}
 
     ngOnInit() {}
+
+    changePassword(){
+        
+    }
 }

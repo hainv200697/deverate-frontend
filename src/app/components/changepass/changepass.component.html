@@ -1,27 +1,32 @@
-<div class="login-page" [@routerTransition]>
-    <div class="row justify-content-md-center">
-        <div class="col-md-4">
-            <img class="user-avatar" src="assets/images/logo.png" width="150px" />
-            <h1>SB Admin BS4 Angular8</h1>
+<div class="profile-body row col-md-12">
+    <div class="col col-sm-8">
+        <div class="card mb-3">
+            <div class="card-header">
+                Change Password
+            </div>
             <form role="form">
-                <div class="form-content">
-                    <div class="form-group">
-                        <input type="text" class="form-control input-underline input-lg" id="" placeholder="{{ 'Full Name' | translate }}">
-                    </div>
-
-                    <div class="form-group">
-                        <input type="text" class="form-control input-underline input-lg" id="" placeholder="{{ 'Email' | translate }}">
-                    </div>
-
-                    <div class="form-group">
-                        <input type="password" class="form-control input-underline input-lg" id="" placeholder="{{ 'Password' | translate }}">
-                    </div>
-                    <div class="form-group">
-                        <input type="password" class="form-control input-underline input-lg" id="" placeholder="{{ 'Repeat Password' | translate }}">
+                <div class="card-body">
+                    <div class="form-content">
+                        <div class="form-group col-sm-12 col-md-5 col-lg-5 align-conten-style">
+                            <label>Password:</label>
+                            <input type="text" class="form-control input-underline input-lg col-md-12 col-lg-12" id=""
+                                placeholder="{{ 'Password' | translate }}">
+                        </div>
+                        <div class="form-group col-sm-12 col-md-5 col-lg-5 align-conten-style">
+                            <label>New Password:</label>
+                            <input type="text" class="form-control input-underline input-lg col-md-12 col-lg-12" id=""
+                                placeholder="{{ 'Password' | translate }}">
+                        </div>
+                        <div class="form-group col-sm-12 col-md-5 col-lg-5 align-conten-style">
+                            <label>New Password Confirm:</label>
+                            <input type="text" class="form-control input-underline input-lg col-md-12 col-lg-12" id=""
+                                placeholder="{{ 'Password' | translate }}">
+                        </div>
                     </div>
                 </div>
-                <a class="btn rounded-btn" [routerLink]="['/dashboard']">{{ 'Register' | translate }}</a>&nbsp;
-                <a class="btn rounded-btn" [routerLink]="['/login']">{{ 'Log in' | translate }}</a>
+                <div class="card-footer text-right">
+                    <button class="btn btn-info btn-sm" (click)="changePassword()">Change Password</button>
+                </div>
             </form>
         </div>
     </div>

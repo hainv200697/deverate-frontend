@@ -11,4 +11,8 @@ export class ForgotpassComponent implements OnInit {
     constructor() {}
 
     ngOnInit() {}
+
+    resetPassword(){
+
+    }
 }
