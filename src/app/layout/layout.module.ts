@@ -8,6 +8,7 @@ import { LayoutComponent } from './layout.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ProfileComponent } from './profile/profile.component';
+import { ChangepassComponent } from '../components/changepass/changepass.component';
 
 @NgModule({
     imports: [
@@ -16,6 +17,6 @@ import { ProfileComponent } from './profile/profile.component';
         TranslateModule,
         NgbDropdownModule
     ],
-    declarations: [LayoutComponent, SidebarComponent, HeaderComponent, ProfileComponent]
+    declarations: [LayoutComponent, SidebarComponent, HeaderComponent, ProfileComponent,ChangepassComponent]
 })
 export class LayoutModule {}
