@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LayoutComponent } from './layout.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ChangepassComponent } from '../components/changepass/changepass.component';
+// import { InsertQuestionComponent } from '../components/question/ins-question/insert-question.component';
 
 const routes: Routes = [
     {
@@ -19,7 +20,8 @@ const routes: Routes = [
             { path: 'components', loadChildren: () => import('./bs-component/bs-component.module').then(m => m.BsComponentModule) },
             { path: 'blank-page', loadChildren: () => import('./blank-page/blank-page.module').then(m => m.BlankPageModule) },
             { path: 'profile', component: ProfileComponent },
-            { path: 'changepass', component: ChangepassComponent }
+            { path: 'changepass', component: ChangepassComponent },
+            { path: 'insquestion', loadChildren: () => import('../components/question/ins-question/insert-question.module').then(m => m.InsertQuestionModule) }
         ]
     }
 ];
