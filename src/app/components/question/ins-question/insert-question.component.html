@@ -20,6 +20,19 @@
                         <!-- <input type="text"  class="form-control input-underline input-lg" id="" placeholder="{{ 'Company' | translate }}"> -->
 
                     </div>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                        <label>Question name:</label>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="optionsRadios" id="optionsRadios1" [(ngModel)]="question['status']" value='1' checked=""> Active
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="optionsRadios" id="optionsRadios2" [(ngModel)]="question['status']" value='0'> Disable
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="card-footer text-right">
