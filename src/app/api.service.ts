@@ -8,7 +8,12 @@ export class ApiService {
     URL = 'http://localhost:58810/';
     constructor(private httpClient: HttpClient) { }
 
-    public getAll() {
+    getAll() {
+        const API = 'AccountAPI/GetAllAccount?pageSize=5&pageIndex=1';
+        return this.httpClient.get(this.URL + API );
+    }
+
+    insertQuestion() {
         const API = 'AccountAPI/GetAllAccount?pageSize=5&pageIndex=1';
         return this.httpClient.get(this.URL + API);
     }
