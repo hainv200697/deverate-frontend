@@ -1,0 +1,101 @@
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Insert Company</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="form-group">
+                <label>Company Name: </label>
+                <input class="form-control" placeholder="Name">
+            </div>
+            <div class="form-group">
+                <label>Address: </label>
+                <input class="form-control" placeholder="Address">
+            </div>
+            <fieldset class="form-group">
+                <label>Status: </label>
+                <label class="radio-inline padding-ratio">
+                    <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="option1"
+                        checked="">Active
+                </label>
+                <label class="radio-inline padding-ratio">
+                    <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="option2">Disable
+                </label>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    </div>
+</ng-template>
+
+<div class="col-md-12 col-lg-12 d-flex justify-content-end">
+    <button class="btn btn-sm btn-primary" (click)="open(content)">INSERT COMPANY</button>
+</div>
+<hr>
+
+<!-- Search -->
+
+<!-- Table question -->
+<div class="insert-form col-md-12">
+    <div class="card mb-3">
+        <div class="card-header" style="color: white">
+            COMPANY
+        </div>
+        <div class="table-responsive col-md-12 datatable">
+            <div class="col-md-12 mb-3">
+                <div class="form-group col-md-12 row">
+                    <div class="input-group col-md-6">
+                        <input type="text" placeholder="{{'Enter your key word' | translate}}" class="form-control"
+                            [(ngModel)]="searchText">
+                        
+                    </div>
+                    <div class="input-group-append d-flex justify-content-end col-md-6" (clickOutside)="onClickOutside($event)">
+                        <a (click)="clickButtonRefresh();" class="input-group-text cursor-pointer">
+                            <i class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
+                                [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table table-striped table-bordered table-hover table-sm customtable">
+                <thead>
+                    <tr>
+                        <th class="text-center" scope="col">Action</th>
+                        <th class="text-center" scope="col">STT</th>
+                        <th class="text-center" scope="col">Name</th>
+                        <th class="text-center" scope="col">Address</th>
+                        <th class="text-center" scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let c of allCompany; let i = index">
+                        <td class="nowrap text-center action-column">
+                            <a class="btn-sm btn-link cursor-pointer" (click)="clickButtonUpdate(c.CompanyId, content);"
+                                tooltip="{{'common_modify' | translate}}">
+                                <i class="fa fa-edit edit-icon"></i>
+                            </a>|
+                            <a class="btn-sm btn-link cursor-pointer" (click)="clickButtonDel(item);"
+                                tooltip="{{'common_delete' | translate}}">
+                                <i class="fa fa-trash-o delete-icon"></i>
+                            </a>
+                        </td>
+                        <td class="text-center">{{i+1}}</td>
+                        <td class="text-center">{{c.Name}}</td>
+                        <td class="text-center">{{c.Address}}</td>
+                        <td class="text-center" [hidden]="c.IsActive==true" style="color: red">
+                            Disable
+                        </td>
+                        <td class="text-center" [hidden]="c.IsActive==false" style="color: green;">
+                            Active
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

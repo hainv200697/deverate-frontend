@@ -4,11 +4,11 @@ import { HttpClient } from '@angular/common/http';
     providedIn: 'root'
 })
 export class QuestionApiService {
-    URL = 'http://localhost:58810/swagger/';
+    URL = 'http://localhost:58810/';
     constructor(private httpClient: HttpClient) { }
     
     getAllQuestion() {
-        const API = 'Question/Question_GetAllQuestion';
+        const API = 'QuestionAPI/GetAllQuestion';
         return this.httpClient.get(this.URL + API );
     }
     
