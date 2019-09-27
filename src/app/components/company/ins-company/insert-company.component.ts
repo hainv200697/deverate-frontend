@@ -18,11 +18,12 @@ export class InsertCompanyComponent implements OnInit {
     }
     closeResult: string;
     question ={};
-    allCompany =[
+    Companies =[
       {
         "CompanyId": 1,
         "Name": "công ty của Huy",
         "Address": "string",
+        "CreatAt": "20-10-2019",
         "IsActive": true
       },
       {
