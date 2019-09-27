@@ -1,0 +1,73 @@
+<div class="profile-body row col-md-12">
+  <div class="col col-sm-8">
+    <div class="card mb-3">
+      <div class="card-header">
+        Edit Profile
+      </div>
+      <form role="form">
+        <div class="card-body">
+          <div class="form-content row">
+            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+              <label>Username:</label>
+              <input type="text" class="form-control input-underline input-lg" readonly="readonly" id="" placeholder="{{account.Username}}">
+            </div>
+            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+              <label>Full name:</label>
+              <input type="text" class="form-control input-underline input-lg" id="" placeholder="{{account.Fullname}}">
+            </div>
+            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+              <label>Phone:</label>
+              <input type="text" class="form-control input-underline input-lg" id="" placeholder="{{account.Phone}}">
+            </div>
+            <div class="form-group col-sm-12 col-md-6 col-lg-6">
+              <label>Email:</label>
+              <input type="text" class="form-control input-underline input-lg" id="" placeholder="{{account.Email}}">
+            </div>
+            <div class="form-group col-sm-12 col-md-6 col-lg-6">
+              <label>Address:</label>
+              <input type="text" class="form-control input-underline input-lg" id="" placeholder="{{account.Address}}">
+            </div>
+            <fieldset class="form-group col-sm-12 col-md-6 col-lg-6">
+              <label>Gender:</label>
+              <div class="radio">
+                <label>
+                  <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked=""> Male
+                </label>
+              </div>
+              <div class="radio">
+                <label>
+                  <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2"> Female
+                </label>
+              </div>
+            </fieldset>
+            <div class="form-group col-sm-12 col-md-6 col-lg-6">
+              <label>Start Date:</label>
+              <input type="date" class="form-control input-underline input-lg" id="" placeholder="{{account.JoinDate}}">
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-right">
+          <button class="btn btn-info btn-sm" (click)="updateProfile()">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="col col-sm-4">
+    <div class="card mb-3">
+      <div class="card-body text-center">
+        <div class="logo-img">
+          <img src="{{account.Avatar}}" width="150px" class="user-avatar" />
+          <!-- <input type="file" (change)="selectFile($event)"/>
+          <button type="button" (click)="upload()">Upload</button> -->
+        </div>
+        <h3>Deverate</h3>
+        <a [routerLink]="['/changepass']"  href="javascript:void(0)">
+          <i class="fa fa-fw fa-user"></i> {{ 'Change password' | translate }}
+        </a>
+        <p>"Description"</p>
+      </div>
+
+    </div>
+  </div>
+
+</div>

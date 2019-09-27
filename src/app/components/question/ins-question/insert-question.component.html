@@ -1,0 +1,105 @@
+<div class="insert-form col-md-12">
+    <div class="card mb-3">
+        <div class="card-header">
+            Insert Question
+        </div>
+        <form class="text-left mt-1" (ngSubmit)="insertQuestionSubmit()">
+            <div class="card-body">
+                <div class="form-content row">
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                        <label>Catalog:</label>
+                        <input type="text" [(ngModel)]="question['cate_id']" name="ins_question_cate_id" class="form-control input-underline input-lg"
+                            id="" placeholder="{{ 'Catalog' | translate }}">
+                        <!-- <input type="text" class="form-control input-underline input-lg" id="" placeholder="{{ 'Company' | translate }}"> -->
+
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                        <label>Question name:</label>
+                        <input type="text" [(ngModel)]="question['question_name']" name="ins_question_name" class="form-control input-underline input-lg"
+                            id="" placeholder="{{ 'Question' | translate }}">
+                        <!-- <input type="text"  class="form-control input-underline input-lg" id="" placeholder="{{ 'Company' | translate }}"> -->
+
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                        <label>Question name:</label>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="optionsRadios" id="optionsRadios1" [(ngModel)]="question['status']" value='1' checked=""> Active
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="optionsRadios" id="optionsRadios2" [(ngModel)]="question['status']" value='0'> Disable
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-right">
+                <button class="btn btn-info btn-sm">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Search -->
+
+<!-- Table question -->
+<div class="insert-form col-md-12">
+    <div class="card mb-3">
+        <div class="card-header">
+            Question
+        </div>
+        <div class="table-responsive col-md-12 datatable">
+            <div class="row mb-1">
+                <div class="col">
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            <input type="text" placeholder="{{'Enter your key word' | translate}}" class="form-control" [(ngModel)]="searchText">
+                            <div class="input-group-append" (clickOutside)="onClickOutside($event)">
+                                <a (click)="clickButtonRefresh();" class="input-group-text cursor-pointer">
+                                    <i class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                                </a>
+                                <a class="input-group-text cursor-pointer" (click)="clickButtonExportExcel();" placement="left">
+                                    <i class="fa fa-file-excel-o" tooltip="{{'common_export_excel' | translate}}" placement="top"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table table-striped table-bordered table-hover table-sm customtable">
+                <thead>
+                    <tr>
+                        <th class="text-center" scope="col">Action</th>
+                        <th class="text-center" scope="col">Catalog</th>
+                        <th class="text-center" scope="col">Question</th>
+                        <th class="text-center" scope="col">Create By</th>
+                        <th class="text-center" scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let q of allQuestions">
+                            <td class="nowrap text-center action-column">
+                                    <a class="btn-sm btn-link cursor-pointer" (click)="clickButtonUpd(item);" tooltip="{{'common_modify' | translate}}">
+                                        <i class="fa fa-edit edit-icon"></i>
+                                    </a>|
+                                    <a class="btn-sm btn-link cursor-pointer" (click)="clickButtonDel(item);" tooltip="{{'common_delete' | translate}}" >
+                                        <i class="fa fa-trash-o delete-icon"></i>
+                                    </a>
+                            </td>
+                        <td>{{q.CatalogueId}}</td>
+                        <td>{{q.Question}}</td>
+                        <td>{{q.create_by}}</td>
+                        <td [hidden]="q.IsActive==true" style="color: red">
+                            Disable
+                        </td>
+                        <td [hidden]="q.IsActive==false" style="color: green;">
+                            Active
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

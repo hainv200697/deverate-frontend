@@ -1,4 +1,4 @@
-$topnav-background-color: #222;
+$topnav-background-color: linear-gradient( #3e5ae8, rgba(255, 11, 11, 0.83));
 :host {
     display: block;
 }
@@ -11,7 +11,7 @@ $topnav-background-color: #222;
     overflow: auto;
     background: $topnav-background-color;
     text-align: center;
-    color: #fff;
+    color: black;
     padding: 3em;
     .col-lg-4 {
         padding: 0;
@@ -28,11 +28,11 @@ $topnav-background-color: #222;
         border: none;
         box-shadow: none;
         border-bottom: 2px solid rgba(255, 255, 255, 0.5);
-        color: #fff;
+        color: black;
         border-radius: 0;
     }
     .input-underline:focus {
-        border-bottom: 2px solid #fff;
+        border-bottom: 2px solid black;
         box-shadow: none;
     }
     .rounded-btn {
@@ -67,7 +67,7 @@ $topnav-background-color: #222;
     .form-group {
         padding: 8px 0;
         input::-webkit-input-placeholder {
-            color: rgba(255, 255, 255, 0.6) !important;
+            color: gray !important;
         }
 
         input:-moz-placeholder {
@@ -84,12 +84,16 @@ $topnav-background-color: #222;
             color: rgba(255, 255, 255, 0.6) !important;
         }
     }
-    .form-content {
-        padding: 40px 0;
-    }
     .user-avatar {
-        -webkit-border-radius: 50%;
-        border-radius: 50%;
         border: 2px solid #fff;
+    }
+
+    .login{
+        background-color: #fff;
+        border: black 1px solid;
+        border-radius: 5%;
+    }
+    .button{
+        padding-bottom: 20px;
     }
 }

@@ -4,21 +4,18 @@
             <img src="assets/images/logo/Deverate_logo.jpg" width="150px" class="user-avatar" />
             <h1>SB Admin BS4 Angular8</h1>
             <form role="form">
+                <div style="text-align: left;">Enter your email address you've registerd with us. We'll send you new password to that address.</div>
                 <div class="form-content">
+                    
                     <div class="text-left form-group">
-                        <label >Username</label>
+                        <label >Email</label>
                         <input type="text" ng-model="name" class="form-control " id="" placeholder="{{ 'Email' | translate }}">
                     </div>
 
-                    <div class="text-left form-group">
-                        <label >Password</label>
-                        <input type="password" class="form-control " id="" placeholder="{{ 'Password' | translate }}">
-                    </div>
+                    
                 </div>
                 <div class="button">
-                    <a class="btn btn-primary" [routerLink]="['/dashboard']" (click)="onLoggedin()">{{ 'Log in' | translate }}</a>
-                    &nbsp;
-                    <a class="btn btn-success" [routerLink]="['/forgotpass']">{{ 'Change password' | translate }}</a>
+                    <a class="btn btn-primary" [routerLink]="['/login']" (click)="resetPassword()">{{ 'RESET' | translate }}</a>
                 </div>
             </form>
         </div>
