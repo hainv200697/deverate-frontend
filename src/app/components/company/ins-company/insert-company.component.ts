@@ -18,25 +18,29 @@ export class InsertCompanyComponent implements OnInit {
     }
     closeResult: string;
     question ={};
+    selectedAll: any;
     Companies =[
       {
         "CompanyId": 1,
         "Name": "công ty của Huy",
         "Address": "string",
         "CreatAt": "20-10-2019",
-        "IsActive": true
+        "IsActive": true,
+        selected: false
       },
       {
         "CompanyId": 2,
         "Name": "công ty của Huy",
         "Address": "string",
-        "IsActive": true
+        "IsActive": true,
+        selected: false
       },
       {
         "CompanyId": 3,
         "Name": "công ty của Huy",
         "Address": "string",
-        "IsActive": false
+        "IsActive": false,
+        selected: false
       }
     ];
     catalogue={};
@@ -68,6 +72,16 @@ export class InsertCompanyComponent implements OnInit {
         this.open(content);
       }
     
+      selectAll() {
+        for (var i = 0; i < this.Companies.length; i++) {
+          this.Companies[i].selected = this.selectedAll;
+        }
+      }
+      checkIfAllSelected() {
+        this.selectedAll = this.Companies.every(function(item:any) {
+            return item.selected == true;
+          })
+      }
 
     
 
