@@ -21,8 +21,8 @@ const routes: Routes = [
             { path: 'blank-page', loadChildren: () => import('./blank-page/blank-page.module').then(m => m.BlankPageModule) },
             { path: 'profile', component: ProfileComponent },
             { path: 'changepass', component: ChangepassComponent },
-            { path: 'insquestion', loadChildren: () => import('../components/question/ins-question/insert-question.module').then(m => m.InsertQuestionModule) },
-            { path: 'inscompany', loadChildren: () => import('../components/company/ins-company/insert-company.module').then(m => m.InsertCompanyModule) }
+            { path: 'manage-question', loadChildren: () => import('../components/question/ins-question/insert-question.module').then(m => m.InsertQuestionModule) },
+            { path: 'manage-company', loadChildren: () => import('../components/company/ins-company/insert-company.module').then(m => m.InsertCompanyModule) }
         ]
     }
 ];
