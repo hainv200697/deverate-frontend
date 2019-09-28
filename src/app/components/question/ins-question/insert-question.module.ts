@@ -6,10 +6,12 @@ import { InsertQuestionComponent } from './insert-question.component';
 import { PageHeaderModule } from '../../../shared';
 import { InsertQuestionRoutingModule } from './insert-question-routing.module';
 import {TooltipModule} from "ngx-tooltip";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   imports: [
     CommonModule,
+    NgbModule,
     FormsModule,
     TranslateModule,
     ReactiveFormsModule,

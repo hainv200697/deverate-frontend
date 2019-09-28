@@ -1,53 +1,173 @@
-<div class="insert-form col-md-12">
-    <div class="card mb-3">
-        <div class="card-header">
-            Insert Question
+<ng-template #content let-modal>
+
+    <div class="text-left mt-1 " *ngIf="index == 0">
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Step 1: Create Question</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
-        <form class="text-left mt-1" (ngSubmit)="insertQuestionSubmit()">
+
+        <div class="modal-body">
+            <div class="card-body">
+                <form class="text-left mt-1 ">
+                    <div class="form-content row">
+                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                            <label>Catalog:</label>
+                            <select name="ins_question_cate_id" class="form-control" [(ngModel)]="question['cate_id']">
+                                <option [value]="item.CatalogueID" *ngFor="let item of catalogueList">{{item.Catalogue_name}}</option>
+                            </select>
+
+                        </div>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                            <label>Question:</label>
+                            <input type="text" [(ngModel)]="question['question_name']" name="ins_question_name" class="form-control input-underline input-lg"
+                                id="" placeholder="{{ 'Question' | translate }}">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="text-left mt-1 " *ngIf="index == 1">
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Step 2: Create Answer</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            
+            <form [formGroup]="answerForm">
+                <p class="text-right">Number of answers :  {{count}}</p>
+                <div class="list-group-item " style="margin-top: 20px;" *ngFor="let answer of answerForm.controls.answers.controls; let i=index">
+                    <h5 class="card-title">Answer {{i + 1}}</h5>
+                    <div [formGroup]="answer" class="form-row">
+                        <div class="form-group col-10">
+                            <label>Answer</label>
+                            <input type="text" formControlName="answers" class="form-control" />
+                        </div>
+                        <div class="form-group col-1">
+                            <label>Mark</label>
+                            <input type="text" formControlName="mark" class="form-control" />
+                        </div>
+                        <div class="form-group col-1" style="position: relative;" >
+                            <button style="position: absolute; bottom: 0;" type="button " class="btn btn-danger" mat-mini-fab color="warn" fxFlex="nogrow" *ngIf="answerForm.controls.answers.controls.length > 1" (click)="removeUnit(i)">
+                                <span class="fa fa-fw fa-trash-o "></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="form-row" style="padding-top: 20px;">
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" (click)="onAddAnswers()">Add answers</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-left mt-1 " *ngIf="index == 2">
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Step 3: View Question</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
             <div class="card-body">
                 <div class="form-content row">
-                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
                         <label>Catalog:</label>
-                        <input type="text" [(ngModel)]="question['cate_id']" name="ins_question_cate_id" class="form-control input-underline input-lg"
-                            id="" placeholder="{{ 'Catalog' | translate }}">
-                        <!-- <input type="text" class="form-control input-underline input-lg" id="" placeholder="{{ 'Company' | translate }}"> -->
+                        <select name="ins_question_cate_id" class="form-control" [(ngModel)]="question['cate_id']">
+                            <option [value]="item.CatalogueID" *ngFor="let item of catalogueList">{{item.Catalogue_name}}</option>
+                        </select>
 
                     </div>
-                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                        <label>Question name:</label>
+                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                        <label>Question:</label>
                         <input type="text" [(ngModel)]="question['question_name']" name="ins_question_name" class="form-control input-underline input-lg"
                             id="" placeholder="{{ 'Question' | translate }}">
-                        <!-- <input type="text"  class="form-control input-underline input-lg" id="" placeholder="{{ 'Company' | translate }}"> -->
-
                     </div>
-                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                        <label>Question name:</label>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="optionsRadios" id="optionsRadios1" [(ngModel)]="question['status']" value='1' checked=""> Active
-                            </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary back" (click)="back()">Back</button>
+        <button class="btn btn-success next" (click)="next()">Next</button>
+        <button class="btn btn-success save" (click)="insertQuestionSubmit()">Save</button>
+        <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Close</button>
+    </div>
+
+    <!-- <form class="text-left mt-1 modal-2" >
+            <div class="modal-body " >
+                <div class="card-body">
+                    <div class="form-content row">
+                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                            <label>Catalog:</label>
+                            <select name="ins_question_cate_id" class="form-control" [(ngModel)]="question['cate_id']">
+                                <option [value]="item.CatalogueID" *ngFor="let item of catalogueList">{{item.Catalogue_name}}</option>
+                            </select>
+    
                         </div>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="optionsRadios" id="optionsRadios2" [(ngModel)]="question['status']" value='0'> Disable
-                            </label>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                            <label>Question:</label>
+                            <input type="text" [(ngModel)]="question['question_name']" name="ins_question_name" class="form-control input-underline input-lg"
+                                id="" placeholder="{{ 'Question' | translate }}">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card-footer text-right">
-                <button class="btn btn-info btn-sm">Update</button>
+            <div class="modal-footer">
+                <button class="btn btn-secondary back" (click)="back(1)">Back</button>
+                <button class="btn btn-success next" (click)="next(3)">Next</button>
+                <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Close</button>
             </div>
         </form>
-    </div>
-</div>
+    
+        <form class="text-left mt-1 modal-3" >
+                <div class="modal-body " >
+                    <div class="card-body">
+                        <div class="form-content row">
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                <label>Catalog:</label>
+                                <select name="ins_question_cate_id" class="form-control" [(ngModel)]="question['cate_id']">
+                                    <option [value]="item.CatalogueID" *ngFor="let item of catalogueList">{{item.Catalogue_name}}</option>
+                                </select>
+        
+                            </div>
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                <label>Question:</label>
+                                <input type="text" [(ngModel)]="question['question_name']" name="ins_question_name" class="form-control input-underline input-lg"
+                                    id="" placeholder="{{ 'Question' | translate }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary back" (click)="back(2)">Back</button>
+                    <button class="btn btn-success save" (click)="insertQuestionSubmit()">Save</button>
+                    <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Close</button>
+                </div>
+            </form> -->
+</ng-template>
+
+<button class="btn btn-lg btn-outline-primary" (click)="open(content)">
+    <i class="fa fa-fw fa-plus"></i>
+    Create Question
+</button>
+
+<hr>
+
+<pre>{{closeResult}}</pre>
+
 <!-- Search -->
 
 <!-- Table question -->
 <div class="insert-form col-md-12">
     <div class="card mb-3">
         <div class="card-header">
-            Question
+            <h5>Question</h5>
         </div>
         <div class="table-responsive col-md-12 datatable">
             <div class="row mb-1">
@@ -80,14 +200,14 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let q of allQuestions">
-                            <td class="nowrap text-center action-column">
-                                    <a class="btn-sm btn-link cursor-pointer" (click)="clickButtonUpd(item);" tooltip="{{'common_modify' | translate}}">
-                                        <i class="fa fa-edit edit-icon"></i>
-                                    </a>|
-                                    <a class="btn-sm btn-link cursor-pointer" (click)="clickButtonDel(item);" tooltip="{{'common_delete' | translate}}" >
-                                        <i class="fa fa-trash-o delete-icon"></i>
-                                    </a>
-                            </td>
+                        <td class="nowrap text-center action-column">
+                            <a class="btn-sm btn-link cursor-pointer" (click)="clickButtonUpd(item);" tooltip="{{'common_modify' | translate}}">
+                                <i class="fa fa-edit edit-icon"></i>
+                            </a>|
+                            <a class="btn-sm btn-link cursor-pointer" (click)="clickButtonDel(item);" tooltip="{{'common_delete' | translate}}">
+                                <i class="fa fa-trash-o delete-icon"></i>
+                            </a>
+                        </td>
                         <td>{{q.CatalogueId}}</td>
                         <td>{{q.Question}}</td>
                         <td>{{q.create_by}}</td>
