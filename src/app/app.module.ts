@@ -22,7 +22,7 @@ import { ToastrModule } from 'ngx-toastr';
         ToastrModule.forRoot()
     ],
     declarations: [
-        AppComponent,
+        AppComponent
     ],
     providers: [AuthGuard],
     bootstrap: [AppComponent]
