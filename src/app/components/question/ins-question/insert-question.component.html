@@ -1,165 +1,310 @@
+<!-- Modal create -->
 <ng-template #content let-modal>
-
-    <div class="text-left mt-1 " *ngIf="index == 0">
-        <div class="modal-header">
-            <h4 class="modal-title" id="modal-basic-title">Step 1: Create Question</h4>
-            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-
-        <div class="modal-body">
-            <div class="card-body">
-                <form class="text-left mt-1 ">
-                    <div class="form-content row">
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                            <label>Catalog:</label>
-                            <select name="ins_question_cate_id" class="form-control" [(ngModel)]="question['cate_id']">
-                                <option [value]="item.CatalogueID" *ngFor="let item of catalogueList">{{item.Catalogue_name}}</option>
-                            </select>
-
-                        </div>
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                            <label>Question:</label>
-                            <input type="text" [(ngModel)]="question['question_name']" name="ins_question_name" class="form-control input-underline input-lg"
-                                id="" placeholder="{{ 'Question' | translate }}">
-                        </div>
+    <div class="container">
+        <div id="stepper1" class="bs-stepper">
+            <div class="modal-header header-custom">
+                <div class="bs-stepper-header">
+                    <div class="step" data-target="#test-l-1">
+                        <button [disabled]="index != 1" class="step-trigger">
+                            <span class="bs-stepper-circle">1</span>
+                            <span class="bs-stepper-label">Create Question</span>
+                        </button>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="text-left mt-1 " *ngIf="index == 1">
-        <div class="modal-header">
-            <h4 class="modal-title" id="modal-basic-title">Step 2: Create Answer</h4>
-            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            
-            <form [formGroup]="answerForm">
-                <p class="text-right">Number of answers :  {{count}}</p>
-                <div class="list-group-item " style="margin-top: 20px;" *ngFor="let answer of answerForm.controls.answers.controls; let i=index">
-                    <h5 class="card-title">Answer {{i + 1}}</h5>
-                    <div [formGroup]="answer" class="form-row">
-                        <div class="form-group col-10">
-                            <label>Answer</label>
-                            <input type="text" formControlName="answers" class="form-control" />
-                        </div>
-                        <div class="form-group col-1">
-                            <label>Mark</label>
-                            <input type="text" formControlName="mark" class="form-control" />
-                        </div>
-                        <div class="form-group col-1" style="position: relative;" >
-                            <button style="position: absolute; bottom: 0;" type="button " class="btn btn-danger" mat-mini-fab color="warn" fxFlex="nogrow" *ngIf="answerForm.controls.answers.controls.length > 1" (click)="removeUnit(i)">
-                                <span class="fa fa-fw fa-trash-o "></span>
-                            </button>
-                        </div>
+                    <div class="line"></div>
+                    <div class="step" data-target="#test-l-2">
+                        <button [disabled]="index != 2" class="step-trigger">
+                            <span class="bs-stepper-circle">2</span>
+                            <span class="bs-stepper-label">View Question and Answer</span>
+                        </button>
+                    </div>
+                    <div class="line"></div>
+                    <div class="step" data-target="#test-l-3">
+                        <button [disabled]="index != 3" class="step-trigger">
+                            <span class="bs-stepper-circle">3</span>
+                            <span class="bs-stepper-label">Save Change</span>
+                        </button>
                     </div>
                 </div>
-            </form>
-            <div class="form-row" style="padding-top: 20px;">
-                <div class="form-group">
-                    <button type="button" class="btn btn-primary" (click)="onAddAnswers()">Add answers</button>
-                </div>
             </div>
-        </div>
-    </div>
-    <div class="text-left mt-1 " *ngIf="index == 2">
-        <div class="modal-header">
-            <h4 class="modal-title" id="modal-basic-title">Step 3: View Question</h4>
-            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="card-body">
-                <div class="form-content row">
-                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                        <label>Catalog:</label>
-                        <select name="ins_question_cate_id" class="form-control" [(ngModel)]="question['cate_id']">
-                            <option [value]="item.CatalogueID" *ngFor="let item of catalogueList">{{item.Catalogue_name}}</option>
-                        </select>
+            <div class="modal-body">
+                <div class="bs-stepper-content">
+                    <form (ngSubmit)="onSubmit()">
+                        <div id="test-l-1" class="content">
+                            <!-- Add question -->
+                            <div class="form-content row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                    <h4>Create Question</h4>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
 
-                    </div>
-                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                        <label>Question:</label>
-                        <input type="text" [(ngModel)]="question['question_name']" name="ins_question_name" class="form-control input-underline input-lg"
-                            id="" placeholder="{{ 'Question' | translate }}">
-                    </div>
+                                    <label>Catalog:</label>
+                                    <select id="ins_question_cate_id" name="ins_question_cate_id" class="form-control" [(ngModel)]="insQuestion['CatalogueId']">
+                                        <option [value]="item.CatalogueId" *ngFor="let item of catalogue">{{item.Name}}</option>
+                                    </select>
+
+                                </div>
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                    <label>Question:</label>
+                                    <input type="text" [(ngModel)]="insQuestion['question']" name="ins_question_question" class="form-control input-underline input-lg"
+                                        id="ins_question_question" placeholder="{{ 'Question' | translate }}">
+                                </div>
+                            </div>
+                            <!--Add answer  -->
+                            <div class="form-content answer-form">
+                                <h4>Create Answer</h4>
+
+                                <form [formGroup]="answerForm" (ngSubmit)="next()">
+                                    <div class="form-row" style="padding-top: 20px;">
+                                        <div class="col align-self-start form-group">
+                                            <button type="button" class="btn btn-primary" (click)="onAddAnswers()">Add answers</button>
+                                        </div>
+                                        <div class="col align-self-end form-group">
+                                            <p class="text-right">Number of answers : {{count}}</p>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="list-group-item " *ngFor="let answer of answerForm.controls.answers.controls; let i=index">
+                                        <h5 class="card-title">Answer {{i + 1}}</h5>
+                                        <div [formGroup]="answer" class="form-row">
+                                            <div class="form-group col-10">
+                                                <label>Answer</label>
+                                                <input type="text" formControlName="Answer" class="form-control ans-{{i}}" />
+                                            </div>
+                                            <div class="form-group col-1">
+                                                <label>Mark</label>
+                                                <input type="number" formControlName="mark" class="form-control mark-{{i}}" />
+                                            </div>
+                                            <div class="form-group col-1" style="position: relative;">
+                                                <button style="position: absolute; bottom: 0;" type="button " class="btn btn-danger" mat-mini-fab color="warn" fxFlex="nogrow"
+                                                    *ngIf="answerForm.controls.answers.controls.length > 3" (click)="removeUnit(i)">
+                                                    <span class="fa fa-fw fa-trash-o "></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div id="test-l-2" class="content">
+                            <div class="form-content">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                    <table class="table table-striped table-bordered table-hover customtable">
+                                        <tbody>
+                                            <tr class="col-md-12 row no-padding-no-margin">
+                                                <td class="col-md-3" style="font-weight: bold">
+                                                    Catalogue
+                                                </td>
+                                                <td class="col-md-9">
+                                                    {{insQuestion['catalogue_name']}}
+                                                </td>
+                                            </tr>
+                                            <tr class="col-md-12 row no-padding-no-margin">
+                                                <td class="col-md-3" style="font-weight: bold">
+                                                    Question
+                                                </td>
+                                                <td class="col-md-9">
+                                                    {{insQuestion['question']}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                    <table class="table table-striped table-bordered table-hover customtable">
+                                        <thead>
+                                            <tr class="col-md-12 row no-padding-no-margin">
+                                                <td class="col-md-9" style="font-weight: bold">Answer</td>
+                                                <td class="col-md-3" style="font-weight: bold">Point</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="col-md-12 row no-padding-no-margin" *ngFor="let q of insAnswer">
+                                                <td class="col-md-9">
+                                                    {{q.Answer}}
+                                                </td>
+                                                <td class="col-md-3">
+                                                    {{q.mark}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="test-l-3" class="content text-center">
+                            <button type="submit" class="btn btn-primary mt-5">Submit</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-secondary back" (click)="back()">Back</button>
-        <button class="btn btn-success next" (click)="next()">Next</button>
-        <button class="btn btn-success save" (click)="insertQuestionSubmit()">Save</button>
-        <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Close</button>
+        <button class="btn btn-secondary back" [hidden]="index==1" (click)="back()">Back</button>
+        <button (click)="next()" class="btn btn-primary">Next</button>
+        <button class="btn btn-success save" *ngIf="index == 3" (click)="insertQuestionSubmit()">Create</button>
+        <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
     </div>
-
-    <!-- <form class="text-left mt-1 modal-2" >
-            <div class="modal-body " >
-                <div class="card-body">
-                    <div class="form-content row">
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                            <label>Catalog:</label>
-                            <select name="ins_question_cate_id" class="form-control" [(ngModel)]="question['cate_id']">
-                                <option [value]="item.CatalogueID" *ngFor="let item of catalogueList">{{item.Catalogue_name}}</option>
-                            </select>
-    
-                        </div>
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                            <label>Question:</label>
-                            <input type="text" [(ngModel)]="question['question_name']" name="ins_question_name" class="form-control input-underline input-lg"
-                                id="" placeholder="{{ 'Question' | translate }}">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary back" (click)="back(1)">Back</button>
-                <button class="btn btn-success next" (click)="next(3)">Next</button>
-                <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Close</button>
-            </div>
-        </form>
-    
-        <form class="text-left mt-1 modal-3" >
-                <div class="modal-body " >
-                    <div class="card-body">
-                        <div class="form-content row">
-                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                <label>Catalog:</label>
-                                <select name="ins_question_cate_id" class="form-control" [(ngModel)]="question['cate_id']">
-                                    <option [value]="item.CatalogueID" *ngFor="let item of catalogueList">{{item.Catalogue_name}}</option>
-                                </select>
-        
-                            </div>
-                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                <label>Question:</label>
-                                <input type="text" [(ngModel)]="question['question_name']" name="ins_question_name" class="form-control input-underline input-lg"
-                                    id="" placeholder="{{ 'Question' | translate }}">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary back" (click)="back(2)">Back</button>
-                    <button class="btn btn-success save" (click)="insertQuestionSubmit()">Save</button>
-                    <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Close</button>
-                </div>
-            </form> -->
 </ng-template>
 
+<!-- Modal update -->
+<ng-template #update let-modal>
+    <div class="container">
+        <div id="stepper1" class="bs-stepper">
+            <div class="modal-header header-custom">
+                <div class="bs-stepper-header">
+                    <div class="step" data-target="#test-l-1">
+                        <button [disabled]="index != 1" class="step-trigger">
+                            <span class="bs-stepper-circle">1</span>
+                            <span class="bs-stepper-label">Update Question</span>
+                        </button>
+                    </div>
+                    <div class="line"></div>
+                    <div class="step" data-target="#test-l-2">
+                        <button [disabled]="index != 2" class="step-trigger">
+                            <span class="bs-stepper-circle">2</span>
+                            <span class="bs-stepper-label">View Question and Answer</span>
+                        </button>
+                    </div>
+                    <div class="line"></div>
+                    <div class="step" data-target="#test-l-3">
+                        <button [disabled]="index != 3" class="step-trigger">
+                            <span class="bs-stepper-circle">3</span>
+                            <span class="bs-stepper-label">Save Change</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="bs-stepper-content">
+                    <form (ngSubmit)="onSubmit()">
+                        <div id="test-l-1" class="content">
+                            <!-- Add question -->
+                            <div class="form-content row">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                    <h4>Update Question</h4>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
+
+                                    <label>Catalog:</label>
+                                    <select id="upd_question_cate_id" name="upd_question_cate_id" class="form-control" [(ngModel)]="updQuestion['CatalogueId']">
+                                        <option [value]="item.CatalogueId" *ngFor="let item of catalogue">{{item.Name}}</option>
+                                    </select>
+
+                                </div>
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                    <label>Question:</label>
+                                    <input type="text" [(ngModel)]="updQuestion['question']" name="upd_question_question" class="form-control input-underline input-lg"
+                                        id="upd_question_question" placeholder="{{ 'Question' | translate }}">
+                                </div>
+                            </div>
+                            <!--Add answer  -->
+                            <div class="form-content answer-form">
+                                <h4>Update Answer</h4>
+
+                                <form [formGroup]="answerForm" (ngSubmit)="next()">
+                                    <div class="form-row" style="padding-top: 20px;">
+                                        <div class="col align-self-start form-group">
+                                            <button type="button" class="btn btn-primary" (click)="onAddAnswers()">Add answers</button>
+                                        </div>
+                                        <div class="col align-self-end form-group">
+                                            <p class="text-right">Number of answers : {{count}}</p>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="list-group-item " *ngFor="let answer of answerForm.controls.answers.controls; let i=index">
+                                        <h5 class="card-title">Answer {{i + 1}}</h5>
+                                        <div [formGroup]="answer" class="form-row">
+                                            <div class="form-group col-10">
+                                                <label>Answer</label>
+                                                <input type="text" formControlName="Answer" class="form-control ans-{{i}}" />
+                                            </div>
+                                            <div class="form-group col-1">
+                                                <label>Mark</label>
+                                                <input type="number" formControlName="mark" class="form-control mark-{{i}}" />
+                                            </div>
+                                            <div class="form-group col-1" style="position: relative;">
+                                                <button style="position: absolute; bottom: 0;" type="button " class="btn btn-danger" mat-mini-fab color="warn" fxFlex="nogrow"
+                                                    *ngIf="answerForm.controls.answers.controls.length > 3" (click)="removeUnit(i)">
+                                                    <span class="fa fa-fw fa-trash-o "></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div id="test-l-2" class="content">
+                            <div class="form-content">
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                    <table class="table table-striped table-bordered table-hover customtable">
+                                        <tbody>
+                                            <tr class="col-md-12 row no-padding-no-margin">
+                                                <td class="col-md-3" style="font-weight: bold">
+                                                    Catalogue
+                                                </td>
+                                                <td class="col-md-9">
+                                                    {{updQuestion['catalogue_name']}}
+                                                </td>
+                                            </tr>
+                                            <tr class="col-md-12 row no-padding-no-margin">
+                                                <td class="col-md-3" style="font-weight: bold">
+                                                    Question
+                                                </td>
+                                                <td class="col-md-9">
+                                                    {{updQuestion['question']}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                    <table class="table table-striped table-bordered table-hover customtable">
+                                        <thead>
+                                            <tr class="col-md-12 row no-padding-no-margin">
+                                                <td class="col-md-9" style="font-weight: bold">Answer</td>
+                                                <td class="col-md-3" style="font-weight: bold">Point</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="col-md-12 row no-padding-no-margin" *ngFor="let q of updAnswer">
+                                                <td class="col-md-9">
+                                                    {{q.Answer}}
+                                                </td>
+                                                <td class="col-md-3">
+                                                    {{q.mark}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="test-l-3" class="content text-center">
+                            <button type="submit" class="btn btn-primary mt-5">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary back" [hidden]="index==1" (click)="back()">Back</button>
+        <button (click)="next()" class="btn btn-primary">Next</button>
+        <button class="btn btn-success save" *ngIf="index == 3" (click)="updateQuestionSubmit()">Update</button>
+        <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
+    </div>
+</ng-template>
+
+<!-- Grid view -->
 <button class="btn btn-lg btn-outline-primary" (click)="open(content)">
     <i class="fa fa-fw fa-plus"></i>
     Create Question
 </button>
 
 <hr>
-
-<pre>{{closeResult}}</pre>
 
 <!-- Search -->
 
@@ -175,50 +320,66 @@
                     <div class="form-group">
                         <div class="input-group mb-3">
                             <input type="text" placeholder="{{'Enter your key word' | translate}}" class="form-control" [(ngModel)]="searchText">
-                            <div class="input-group-append" (clickOutside)="onClickOutside($event)">
-                                <a (click)="clickButtonRefresh();" class="input-group-text cursor-pointer">
-                                    <i class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
-                                </a>
-                                <a class="input-group-text cursor-pointer" (click)="clickButtonExportExcel();" placement="left">
-                                    <i class="fa fa-file-excel-o" tooltip="{{'common_export_excel' | translate}}" placement="top"></i>
-                                </a>
-                            </div>
+                            
                         </div>
+                        <button (click)="clickButtonChangeStatus(false);" class="icon-btn" style="padding-left: 24px;">
+                                <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                            </button>
+                            <button (click)="clickButtonRefresh(refesh)" class="icon-btn">
+                                <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top" aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <table class="table table-striped table-bordered table-hover table-sm customtable">
+            <table class="table table-striped table-bordered table-hover customtable" [svData]="allQuestions" #sv="svDataTable" [svRowsOnPage]="5"
+                svSortBy="name" svSortOrder="asc">
                 <thead>
-                    <tr>
-                        <th class="text-center" scope="col">Action</th>
-                        <th class="text-center" scope="col">Catalog</th>
-                        <th class="text-center" scope="col">Question</th>
-                        <th class="text-center" scope="col">Create By</th>
-                        <th class="text-center" scope="col">Status</th>
+                    <tr class="col-md-12 row no-padding-no-margin">
+                        <th class="text-center col-md-1" scope="col">
+                            <input class="btn" type="checkbox" value="" [(ngModel)]="selectedAll" (change)="selectAll();">
+                        </th>
+                        <th class="col-md-3 text-center" scope="col">
+                            <sv-default-sorter by='catalogue_name'>Catalog</sv-default-sorter>
+                        </th>
+                        <th class="col-md-3 text-center" scope="col">
+                            <sv-default-sorter by='Question'>Question</sv-default-sorter>
+                        </th>
+                        <th class="col-md-2 text-center" scope="col">Create By</th>
+                        <th class="col-md-2 text-center" scope="col">Status</th>
+                        <th class="col-md-1 text-center" scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let q of allQuestions">
-                        <td class="nowrap text-center action-column">
-                            <a class="btn-sm btn-link cursor-pointer" (click)="clickButtonUpd(item);" tooltip="{{'common_modify' | translate}}">
-                                <i class="fa fa-edit edit-icon"></i>
-                            </a>|
-                            <a class="btn-sm btn-link cursor-pointer" (click)="clickButtonDel(item);" tooltip="{{'common_delete' | translate}}">
-                                <i class="fa fa-trash-o delete-icon"></i>
-                            </a>
+                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let q of sv.data">
+                        <td class="text-center col-md-1">
+                            <label>
+                                <input type="checkbox" value="" [(ngModel)]="q.selected" class="btn" (change)="checkIfAllSelected();">
+                            </label>
                         </td>
-                        <td>{{q.CatalogueId}}</td>
-                        <td>{{q.Question}}</td>
-                        <td>{{q.create_by}}</td>
-                        <td [hidden]="q.IsActive==true" style="color: red">
+                        <td class="text-center col-md-3">{{q.catalogue_name}}</td>
+                        <td class="text-center col-md-3">{{q.Question}}</td>
+                        <td class="text-center col-md-2">{{q.create_by}}</td>
+                        <td class="text-center col-md-2" [hidden]="q.IsActive==true" style="color: red">
                             Disable
                         </td>
-                        <td [hidden]="q.IsActive==false" style="color: green;">
+                        <td class="text-center col-md-2" [hidden]="q.IsActive==false" style="color: green;">
                             Active
+                        </td>
+                        <td class="col-md-1 nowrap text-center action-column" style="color: red;">
+                            <a class="btn-sm btn-link cursor-pointer" (click)="openUpdate(q,update);" tooltip="{{'common_modify' | translate}}">
+                                <i class="fa fa-edit edit-icon"></i>
+                            </a>
                         </td>
                     </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5">
+                            <sv-bootstrap-paginator [rowsOnPageSet]="[5, 25, 50]"></sv-bootstrap-paginator>
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

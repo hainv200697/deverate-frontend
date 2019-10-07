@@ -1,41 +1,3 @@
-
-@import '~bs-stepper/dist/css/bs-stepper.min.css';
-// @import '~ngx-toastr/toastr';
-// @import '~ngx-toastr/toastr-bs4-alert';
-// @import '~bootstrap/scss/functions';
-// @import '~bootstrap/scss/variables';
-// @import '~bootstrap/scss/mixins';
-// @import '~ngx-toastr/toastr-bs4-alert';
-.datatable{
-    padding: 20px;
-}
-.card-footer {
-    padding: 0.3rem 1.25rem;
-}
-.card-header {
-    padding: 0.5rem 1.25rem;
-    background-color: rgba(0, 0, 0, 0.36);
-}
-.modal-lg { max-width: 1000px !important; }
-.header-custom{
-    width: 100%;
-}
-@media only screen and (min-width: 794px) {
-    .step {
-        padding-right: 50px;
-        padding-left: 50px;
-    }
-    
-}
-.form-content{
-    padding-top: 10px;
-}
-.no-padding-no-margin{
-    margin-left: 0px;
-    margin-right: 0px;
-    padding-right: 0px;
-    padding-left: 0px;
-}
 @mixin animation-name($name){
     animation-name: $name;
     -webkit-animation-name: $name;
@@ -81,4 +43,14 @@
     i.spin-animation{
         @include animation(spin, 0.5s, ease-in);
     }
+}
+.no-padding-no-margin{
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.card{
+    margin-top: 20px;
 }
