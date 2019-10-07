@@ -1,61 +1,170 @@
-<ng-template #content let-modal>
+<ng-template #create let-modal>
     <div class="modal-header">
         <h4 class="modal-title modal-header" id="modal-basic-title">Insert Company</h4>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-            <span aria-hidden="true">&times;</span>
-        </button>
     </div>
-    <div class="modal-body">
-        <form>
-            <div class="form-group">
+    <div class="modal-body modal-basic-title col-md-12 row no-padding-no-margin">
+        <form class="col-md-12 no-padding-no-margin row">
+            <div class="form-group col-md-6">
                 <label>Company Information: </label>
-                <input class="form-control background-input" placeholder="Name">
-                <br>
-                <input class="form-control background-input" placeholder="Address">
+
+                <div class="">
+                    <div class="input-group input-group-icon">
+                        <input type="text" [(ngModel)]="inputCompany['Name']" name="ins_company_name" id=""
+                            placeholder="{{ 'Name' | translate }}">
+                        <div class="input-icon"><i class="fa fa-institution"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="Address" [(ngModel)]="inputCompany['Address']"
+                            name="ins_company_address" id="">
+                        <div class="input-icon"><i class="fa fa-map-marker"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="Phone" [(ngModel)]="inputCompany['Phone']"
+                            name="ins_company_phone" id="">
+                        <div class="input-icon"><i class="fa fa-phone"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="Fax" [(ngModel)]="inputCompany['Fax']" name="ins_company_fax"
+                            id="">
+                        <div class="input-icon"><i class="fa fa-fax"></i></div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
+
+            <div class="form-group col-md-6">
                 <label>Manager Information: </label>
-                <input class="form-control background-input" placeholder="Email">
-                <br>
-                <input class="form-control background-input" placeholder="Address">
+                <div class="">
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="FullName" minlength="3" [(ngModel)]="inputManager['Fullname']"
+                            name="ins_manager_fullname">
+                        <div class="input-icon"><i class="fa fa-user"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="email" placeholder="Email" [(ngModel)]="inputManager['Email']"
+                            name="ins_manager_email">
+                        <div class="input-icon"><i class="fa fa-envelope"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="Phone" [(ngModel)]="inputManager['Phone']"
+                            name="ins_manager_phone">
+                        <div class="input-icon"><i class="fa fa-mobile"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="Address" [(ngModel)]="inputManager['Address']"
+                            name="ins_manager_address">
+                        <div class="input-icon"><i class="fa fa-home"></i></div>
+                    </div>
+                    <div class="col-half">
+                        <label> Gender</label>
+                        <div class="input-group">
+                            <input type="radio" name="Gender" [(ngModel)]="inputManager['Gender']" value="true"
+                                checked="checked" id="gender-male" />
+                            <label for="gender-male">Male</label>
+                            <input type="radio" [ngModel]="inputManager['Gender']" value="false" name="Gender"
+                                id="gender-female" />
+                            <label for="gender-female">Female</label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- <input type="radio" [(ngModel)]="inputManager['Gender']" [value]="true" name="Gender"
+                    checked="checked">Male
+                <input style="margin-left: 20px;" type="radio" [(ngModel)]="inputManager['Gender']" [value]="false"
+                    name="Gender"> Female -->
             </div>
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+        <button type="button" class="btn btn-success save shadow-card" (click)="Save()">Create</button>
     </div>
 </ng-template>
 
-<ng-template #content1 let-modal>
-        <div class="modal-header">
-            <h4 class="modal-title" id="modal-basic-title">Company</h4>
-            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <form>
-                <div class="form-group">
-                    <label>Company Information: </label>
-                    <input class="form-control background-input" placeholder="Name">
-                    <br>
-                    <input class="form-control background-input" placeholder="Address">
+<ng-template #update let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title modal-header" id="modal-basic-title"></h4>
+    </div>
+    <div class="modal-body modal-basic-title col-md-12 row no-padding-no-margin">
+        <form class="col-md-12 no-padding-no-margin row">
+            <div class="form-group col-md-6">
+                <label>Company Information: </label>
+
+                <div class="">
+                    <div class="input-group input-group-icon">
+                        <input type="text" [(ngModel)]="updateCompany['Name']" name="update_company_name" id=""
+                            placeholder="{{ 'Name' | translate }}">
+                        <div class="input-icon"><i class="fa fa-institution"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="Address" [(ngModel)]="updateCompany['Address']"
+                            name="update_company_address" id="">
+                        <div class="input-icon"><i class="fa fa-map-marker"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="Phone" [(ngModel)]="updateCompany['Phone']"
+                            name="update_company_phone" id="">
+                        <div class="input-icon"><i class="fa fa-phone"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="Fax" [(ngModel)]="updateCompany['Fax']"
+                            name="update_company_fax" id="">
+                        <div class="input-icon"><i class="fa fa-fax"></i></div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Manager Information: </label>
-                    <input class="form-control background-input" placeholder="Email">
-                    <br>
-                    <input class="form-control background-input" placeholder="Address">
+            </div>
+
+            <div class="form-group col-md-6">
+                <label>Manager Information: </label>
+                <div class="">
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="FullName" minlength="3" value="{{Account.Fullname}}"
+                            name="ins_manager_fullname">
+                        <div class="input-icon"><i class="fa fa-user"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="email" placeholder="Email" value="{{Account.Email}}" name="ins_manager_email">
+                        <div class="input-icon"><i class="fa fa-envelope"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="Phone" value="{{Account.Phone}}" name="ins_manager_phone">
+                        <div class="input-icon"><i class="fa fa-mobile"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="Address" value="{{Account.Address}}" name="ins_manager_address">
+                        <div class="input-icon"><i class="fa fa-home"></i></div>
+                    </div>
+                    <div class="col-half">
+                        <label> Gender</label>
+                        <div class="input-group">
+                            <input type="radio" name="Gender" [(ngModel)]="inputManager['Gender']" value="true"
+                                checked="checked" id="gender-male" />
+                            <label for="gender-male">Male</label>
+                            <input type="radio" [ngModel]="inputManager['Gender']" value="false" name="Gender"
+                                id="gender-female" />
+                            <label for="gender-female">Female</label>
+                        </div>
+                    </div>
                 </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Update</button>
-        </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success save shadow-card" (click)="Update()">Update</button>
+    </div>
+</ng-template>
+
+<ng-template #searchNull>
+    <tr class="col-md-12 row no-padding-no-margin">
+        <th class="text-center col-md-12" scope="col">No data</th>
+    </tr>
 </ng-template>
 
 <div class="col-md-12 col-lg-12 d-flex justify-content-end">
-    <button class="btn btn-outline-primary" (click)="open(content)">+ CREATE COMPANY</button>
+    <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
+        <i class="fa fa-fw fa-plus"></i>
+        Create Company
+    </button>
 </div>
 <hr>
 
@@ -68,56 +177,94 @@
             COMPANY
         </div>
         <div class="table-responsive col-md-12 datatable">
-            <div class="col-md-12 mb-3">
-                <div class="form-group col-md-12 row">
-                    <div class="input-group col-md-6">
-                        <input type="text" placeholder="{{'Enter your key word' | translate}}" class="form-control"
-                            [(ngModel)]="searchText">
 
-                    </div>
-                    <div class="input-group-append d-flex justify-content-end col-md-6"
-                        (clickOutside)="onClickOutside($event)">
-                        <button (click)="clickButtonRefresh();" class="btn input-group-text cursor-pointer">
-                            <i class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
-                                [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
-                        </button>
-                        <button (click)="clickButtonDelete();" class="btn input-group-text cursor-pointer">
-                                <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"
-                                    [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
-                            </button>
+            <div class="form-group col-md-12 row">
+                <div class="input-group input-group-icon col-md-6 no-padding-no-margin">
+                    <input type="search" placeholder="{{'Enter Company Name' | translate}}" [(ngModel)]="searchText">
+                    <div class="input-icon"><i class="fa fa-search"></i></div>
+                </div>
+
+            </div>
+            <div class="input-group-append col-md-6 mb-3" (clickOutside)="onClickOutside($event)">
+                <button (click)="clickButtonRefresh(refesh)" class="icon-btn">
+                    <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
+                        aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                </button>
+                <button [hidden]="iconIsActive==false" (click)="clickButtonChangeStatus(false);" class="icon-btn"
+                    style="padding-left: 24px;">
+                    <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
+                </button>
+                <button [hidden]="iconIsActive==true" (click)="clickButtonChangeStatus(true);" class="icon-btn"
+                    style="padding-left: 24px;">
+                    <i class="fa fa-check" tooltip="{{'active' | translate}}" placement="top"></i>
+                </button>
+                <div class="col-md-12"></div>
+                <div ngbDropdown class="col-md-11 d-flex justify-content-end d-inline-block dropdown">
+                    <button class="btn icon-btn border" ngbDropdownToggle>Item</button>
+                    <div ngbDropdownMenu>
+                        <button class="dropdown-item" (click)="PageSize(3)">3</button>
+                        <button class="dropdown-item" (click)="PageSize(4)">4</button>
                     </div>
                 </div>
+
             </div>
 
-            <table class="table table-striped table-bordered table-hover table-sm customtable">
+
+
+            <table [svData]="Companies | CompanyFilterPipe: searchText" #sv="svDataTable" svSortBy="Name" svSortOrder="asc"
+                *ngIf="Companies.length != 0; else searchNull">
                 <thead>
-                    <tr>
-                        <th class="text-center" scope="col"><input type="checkbox" value="" [(ngModel)]="selectedAll" (change)="selectAll();"></th>
-                        <th class="text-center" scope="col">STT</th>
-                        <th class="text-center" scope="col">Name</th>
-                        <th class="text-center" scope="col">Address</th>
-                        <th class="text-center" scope="col">Creat At</th>
-                        <th class="text-center" scope="col">Status</th>
-                        <th class="text-center" scope="col">Edit</th>
+                    <tr class="col-md-12 row no-padding-no-margin pt-3" style="color: white">
+                        <th class="text-center col-md-1" scope="col"><input class="btn" type="checkbox" value=""
+                                [(ngModel)]="selectedAll" (change)="selectAll();"></th>
+                        <th class="text-center col-md-1" scope="col">
+                            No.
+                        </th>
+                        <th class="text-center col-md-2" scope="col">
+                            <sv-default-sorter by="Name">Company
+                            </sv-default-sorter>
+                        </th>
+                        <th class="text-center col-md-3" scope="col">
+                            <sv-default-sorter by="ManagerName">Manager
+                            </sv-default-sorter>
+                        </th>
+                        <th class="text-center col-md-1" scope="col">Phone</th>
+                        <th class="text-center col-md-2" scope="col">
+                            <sv-default-sorter by="Create_At">Creat At
+                            </sv-default-sorter>
+                        </th>
+                        <th class="text-center col-md-1" scope="col">Status
+                            <div ngbDropdown class="d-inline-block dropdown">
+                                <button class=" icon-btn" ngbDropdownToggle style="color: white"></button>
+                                <div ngbDropdownMenu>
+                                    <button class="dropdown-item" (click)="getCompanyIsActive(true)">Active</button>
+                                    <button class="dropdown-item" (click)="getCompanyIsActive(false)">Disable</button>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="text-center col-md-1" scope="col">Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr *ngFor="let c of Companies; let i = index">
-                        <td class="text-center"><label>
-                                <input type="checkbox" value="" [(ngModel)]="c.selected" (change)="checkIfAllSelected();">
-                            </label></td>
-                        <td class="text-center">{{i+1}}</td>
-                        <td class="text-center">{{c.Name}}</td>
-                        <td class="text-center">{{c.Address}}</td>
-                        <td class="text-center">{{c.CreatAt}}</td>
-                        <td class="text-center" [hidden]="c.IsActive==true" style="color: red">
+                <tbody *ngIf="sv.data.length != 0;  else searchNull">
+                    <tr class="col-md-12 row no-padding-no-margin pt-2" style="font-size: 18px"
+                        *ngFor="let c of sv.data | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index">
+                        <td class="text-center col-md-1">
+                            <input type="checkbox" value="" [(ngModel)]="c.selected" class="btn"
+                                (change)="checkIfAllSelected();">
+                        </td>
+                        <td class="text-center col-md-1">{{i+1}}</td>
+                        <td class="text-center col-md-2">{{c.Name}}</td>
+                        <td class="text-center col-md-3">{{c.ManagerName}}</td>
+                        <td class="text-center col-md-1">{{c.Phone}}</td>
+                        <td class="text-center col-md-2">{{c.Create_At}}</td>
+                        <td class="text-center col-md-1" [hidden]="c.IsActive==true" style="color: red">
                             Disable
                         </td>
-                        <td class="text-center" [hidden]="c.IsActive==false" style="color: green;">
+                        <td class="text-center col-md-1" [hidden]="c.IsActive==false" style="color: green;">
                             Active
                         </td>
-                        <td class="nowrap text-center action-column">
-                            <button class="btn btn-sm btn-link cursor-pointer" (click)="open(content1)"
+                        <td class="nowrap text-center action-column col-md-1">
+                            <button class="icon-btn" (click)="openDetail(update, c)"
                                 tooltip="{{'common_modify' | translate}}">
                                 <i class="fa fa-edit edit-icon"></i>
                             </button>
@@ -128,3 +275,9 @@
         </div>
     </div>
 </div>
+
+<div class=" d-flex justify-content-center col-md-12">
+    <ngb-pagination [collectionSize]="Companies.length" [(page)]="page" [pageSize]="pageSize" [boundaryLinks]="true">
+    </ngb-pagination>
+</div>
+            
