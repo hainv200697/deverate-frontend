@@ -10,12 +10,26 @@ export class CatalogueApiService {
         private httpClient: HttpClient,
     ) { }
     
-    getCatalogueById(key:string):Observable<any> {
-        const API = 'CatelogueAPI/GetCatelogueById';
-        let id = new HttpParams().set('CatalogueId',key);
-        return this.httpClient.get(this.URL + API, {params:id});
+    getAllCatalogue(){
+        const API = 'CatelogueAPI/GetAllCatelogue';
+        return this.httpClient.get(this.URL + API);
     }
     
+    insertCatalogue(catalogue) {
+        console.log(catalogue);
+        const API = 'CatelogueAPI/CreateCatalogue';
+        return this.httpClient.post(this.URL+API, catalogue);
+    }
 
+    updateCatalogue(Catalogue) {
+        const API = 'CatelogueAPI/UpdateCatalogue';
+        return this.httpClient.put(this.URL+API,Catalogue);
+    }
+
+    removeCatalogue(Catalogue) {
+        const API = 'CatelogueAPI/RemoveCatalogue';
+        return this.httpClient.put(this.URL+API,Catalogue);
+    }
+    
 
 }
