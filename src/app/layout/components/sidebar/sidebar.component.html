@@ -36,6 +36,10 @@
             <i class="fa fa-th-list"></i>&nbsp;
             <span>{{ 'Manage Company' | translate }}</span>
         </a>
+        <a [routerLink]="['/manage-configuration']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-cog"></i>&nbsp;
+            <span>{{ 'Manage Configuration' | translate }}</span>
+        </a>
         <div class="nested-menu">
             <a class="list-group-item" (click)="addExpandClass('pages')">
                 <i class="fa fa-plus"></i>&nbsp;

@@ -1,0 +1,245 @@
+<ng-template #create let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title modal-header" id="modal-basic-title">Configuration Test</h4>
+    </div>
+    <div class="modal-body modal-basic-title col-md-12 row no-padding-no-margin">
+        <form class="col-md-12 no-padding-no-margin row">
+            <div class="col-md-12 form-group row no-padding-no-margin">
+                <div class="col-md-4 form-group row no-padding-no-margin">
+                    <input class="col-md-1 mt-2" type="checkbox" value="value1">
+                    <label class="col-md-11">Software Development Methods</label>
+                </div>
+                
+            </div>
+            <div class="col-md-12 form-group row ">
+                <div class="col-md-4 d-flex justify-content-center align-items-center mt-3">
+                    <label class="pt-1">Total question:</label>
+                    <input type="number" style="height: 10px; width: 90px;" min="1">
+                </div>
+                <div class="col-md-8 row no-padding-no-margin">
+                    <label class="pt-1 col-md-12">Time test:</label>
+                    <div class="input-group datepicker-input col-md-6">
+                        <input class="form-control" style="height: 10px" placeholder="start-date" name="dp" [(ngModel)]="model1" ngbDatepicker
+                            #d1="ngbDatepicker">
+                        <button style="height: 32px" class="input-group-addon" (click)="d1.toggle()" type="button">
+                            <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+                            <span class="fa fa-calendar"></span>
+                        </button>
+                    </div>
+                    <div class="input-group datepicker-input col-md-6">
+                        <input class="form-control"  style="height: 10px" placeholder="end-date" name="dp" [(ngModel)]="model2" ngbDatepicker
+                            #d2="ngbDatepicker">
+                        <button style="height: 32px" class="input-group-addon" (click)="d2.toggle()" type="button">
+                            <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+                            <span class="fa fa-calendar"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success save shadow-card" (click)="open(update)">Create</button>
+    </div>
+</ng-template>
+
+<ng-template #update let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title modal-header" id="modal-basic-title"></h4>
+    </div>
+    <div class="modal-body modal-basic-title col-md-12 row no-padding-no-margin">
+        <form class="col-md-12 no-padding-no-margin row">
+            <div class="form-group col-md-6">
+                <label>Company Information: </label>
+
+                <div class="">
+                    <div class="input-group input-group-icon">
+                        <input type="text" [(ngModel)]="updateCompany['Name']" name="update_company_name" id=""
+                            placeholder="{{ 'Name' | translate }}">
+                        <div class="input-icon"><i class="fa fa-institution"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="Address" [(ngModel)]="updateCompany['Address']"
+                            name="update_company_address" id="">
+                        <div class="input-icon"><i class="fa fa-map-marker"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="Phone" [(ngModel)]="updateCompany['Phone']"
+                            name="update_company_phone" id="">
+                        <div class="input-icon"><i class="fa fa-phone"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="Fax" [(ngModel)]="updateCompany['Fax']"
+                            name="update_company_fax" id="">
+                        <div class="input-icon"><i class="fa fa-fax"></i></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label>Manager Information: </label>
+                <div class="">
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="FullName" minlength="3" value="{{Account.Fullname}}"
+                            name="ins_manager_fullname">
+                        <div class="input-icon"><i class="fa fa-user"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="email" placeholder="Email" value="{{Account.Email}}" name="ins_manager_email">
+                        <div class="input-icon"><i class="fa fa-envelope"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="Phone" value="{{Account.Phone}}" name="ins_manager_phone">
+                        <div class="input-icon"><i class="fa fa-mobile"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" placeholder="Address" value="{{Account.Address}}" name="ins_manager_address">
+                        <div class="input-icon"><i class="fa fa-home"></i></div>
+                    </div>
+                    <div class="col-half">
+                        <label> Gender</label>
+                        <div class="input-group">
+                            <input type="radio" name="Gender" [(ngModel)]="inputManager['Gender']" value="true"
+                                checked="checked" id="gender-male" />
+                            <label for="gender-male">Male</label>
+                            <input type="radio" [ngModel]="inputManager['Gender']" value="false" name="Gender"
+                                id="gender-female" />
+                            <label for="gender-female">Female</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success save shadow-card" (click)="Update()">Update</button>
+    </div>
+</ng-template>
+
+<ng-template #searchNull>
+    <tr class="col-md-12 row no-padding-no-margin">
+        <th class="text-center col-md-12" scope="col">No data</th>
+    </tr>
+</ng-template>
+
+<div class="col-md-12 col-lg-12 d-flex justify-content-end">
+    <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
+        <i class="fa fa-fw fa-plus"></i>
+        Create Company
+    </button>
+</div>
+<hr>
+
+<!-- Search -->
+
+<!-- Table question -->
+<div class="insert-form col-md-12">
+    <div class="card mb-3 shadow-card">
+        <div class="card-header" style="color: white">
+            COMPANY
+        </div>
+        <div class="table-responsive col-md-12 datatable">
+
+            <div class="form-group col-md-12 row">
+                <div class="input-group input-group-icon col-md-6 no-padding-no-margin">
+                    <input type="search" placeholder="{{'Enter Company Name' | translate}}" [(ngModel)]="searchText">
+                    <div class="input-icon"><i class="fa fa-search"></i></div>
+                </div>
+
+            </div>
+            <div class="input-group-append col-md-6 mb-3" (clickOutside)="onClickOutside($event)">
+                <button (click)="clickButtonRefresh(refesh)" class="icon-btn">
+                    <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
+                        aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                </button>
+                <button [hidden]="iconIsActive==false" (click)="clickButtonChangeStatus(false);" class="icon-btn"
+                    style="padding-left: 24px;">
+                    <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
+                </button>
+                <button [hidden]="iconIsActive==true" (click)="clickButtonChangeStatus(true);" class="icon-btn"
+                    style="padding-left: 24px;">
+                    <i class="fa fa-check" tooltip="{{'active' | translate}}" placement="top"></i>
+                </button>
+                <div class="col-md-12"></div>
+                <div ngbDropdown class="col-md-11 d-flex justify-content-end d-inline-block dropdown">
+                    <button class="btn icon-btn border" ngbDropdownToggle>Item</button>
+                    <div ngbDropdownMenu>
+                        <button class="dropdown-item" (click)="PageSize(3)">3</button>
+                        <button class="dropdown-item" (click)="PageSize(4)">4</button>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <table [svData]="Configurations" #sv="svDataTable" svSortBy="Name"
+                svSortOrder="asc" *ngIf="Configurations.length != 0; else searchNull">
+                <thead>
+                    <tr class="col-md-12 row no-padding-no-margin pt-3" style="color: white">
+                        <th class="text-center col-md-1" scope="col"><input class="btn" type="checkbox" value=""
+                                [(ngModel)]="selectedAll" (change)="selectAll();"></th>
+                        <th class="text-center col-md-1" scope="col">
+                            No.
+                        </th>
+                        <th class="text-center col-md-2" scope="col">
+                            <sv-default-sorter by="Name">Total Question
+                            </sv-default-sorter>
+                        </th>
+                        <th class="text-center col-md-3" scope="col">
+                            <sv-default-sorter by="ManagerName">Time Test
+                            </sv-default-sorter>
+                        </th>
+                        <th class="text-center col-md-1" scope="col">Status</th>
+                        <th class="text-center col-md-2" scope="col">
+                            <sv-default-sorter by="Create_At">Creat At
+                            </sv-default-sorter>
+                        </th>
+                        <th class="text-center col-md-1" scope="col">Status
+                            <div ngbDropdown class="d-inline-block dropdown">
+                                <button class=" icon-btn" ngbDropdownToggle style="color: white"></button>
+                                <div ngbDropdownMenu>
+                                    <button class="dropdown-item" (click)="getCompanyIsActive(true)">Active</button>
+                                    <button class="dropdown-item" (click)="getCompanyIsActive(false)">Disable</button>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="text-center col-md-1" scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="sv.data.length != 0;  else searchNull">
+                    <tr class="col-md-12 row no-padding-no-margin pt-2" style="font-size: 18px"
+                        *ngFor="let c of sv.data | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index">
+                        <td class="text-center col-md-1">
+                            <input type="checkbox" value="" [(ngModel)]="c.selected" class="btn"
+                                (change)="checkIfAllSelected();">
+                        </td>
+                        <td class="text-center col-md-1">{{i+1}}</td>
+                        <td class="text-center col-md-2">{{c.TotalQuestion}}</td>
+                        <td class="text-center col-md-3">{{c.Duration}}</td>
+                        <td class="text-center col-md-1">{{c.Phone}}</td>
+                        <td class="text-center col-md-2">{{c.Create_At}}</td>
+                        <td class="text-center col-md-1" [hidden]="c.IsActive==true" style="color: red">
+                            Disable
+                        </td>
+                        <td class="text-center col-md-1" [hidden]="c.IsActive==false" style="color: green;">
+                            Active
+                        </td>
+                        <td class="nowrap text-center action-column col-md-1">
+                            <button class="icon-btn" (click)="openDetail(update, c)"
+                                tooltip="{{'common_modify' | translate}}">
+                                <i class="fa fa-edit edit-icon"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class=" d-flex justify-content-center col-md-12">
+    <ngb-pagination [collectionSize]="Configurations.length" [(page)]="page" [pageSize]="pageSize" [boundaryLinks]="true">
+    </ngb-pagination>
+</div>

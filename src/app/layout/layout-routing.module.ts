@@ -23,6 +23,7 @@ const routes: Routes = [
             { path: 'changepass', component: ChangepassComponent },
             { path: 'manage-question', loadChildren: () => import('../components/question/ins-question/insert-question.module').then(m => m.InsertQuestionModule) },
             { path: 'manage-company', loadChildren: () => import('../components/company/ins-company/insert-company.module').then(m => m.InsertCompanyModule) }
+            { path: 'manage-configuration', loadChildren: () => import('../components/configuration-test/manage-configuration/manage-configuration.module').then(m => m.ManageConfigurationModule)}
         ]
     }
 ];
