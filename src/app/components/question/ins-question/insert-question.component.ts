@@ -60,14 +60,14 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.insAnswer = this.answerForm.controls['answers'].value;
         console.log(this.insQuestion);
         let check = true;
-        const catalog = this.insAnswer['CatalogueId'];
+        const catalog  = this.insQuestion['CatalogueId'];
         if (catalog === "" || catalog === undefined || catalog === null) {
             this.toastr.error('Message', 'Cataloguecan not be blank!');
             $('#ins_question_cate_id').css('border-color', 'red');
             $('#ins_question_cate_id').focus();
             return;
         }
-        const question = this.insAnswer['question'];
+        const question = this.insQuestion['question'];
         if (question === "" || question === undefined || question === null) {
             this.toastr.error('Message', 'Question can not be blank!');
             $('#ins_question_question').css('border-color', 'red');
@@ -226,16 +226,18 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     openUpdate(item, update) {
-        this.checkDup = 0;
+        this.count = 0;
         this.answerForm = this.formBuilder.group({
             answers: this.formBuilder.array([
             ])
         });
         this.index = 1;
+
         this.getAnswerByQuestionId(item['QuestionId']);
         this.updQuestion['QuestionId'] = item['QuestionId'];
         this.updQuestion['CatalogueId'] = item['CatalogueId'];
         this.updQuestion['Question'] = item['Question'];
+        
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
         var a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
@@ -250,57 +252,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.getAllQuestion();
     }
 
-    // next(key) {
-
-    //     if (this.index == 0) {
-    //         console.log(key);
-
-    //         if (key === 'upd' && this.checkDup === 0) {
-    //             this.count = 0;
-    //             this.updAnswer = this.updQuestion['answer'];
-    //             this.updAnswer.forEach(item => {
-    //                 this.ansForm = this.updateAnswerForm();
-    //                 this.ansForm.setValue({
-    //                     "Answer": item['Answer'],
-    //                     "mark": item['mark'],
-    //                     "AnswerId": item['AnswerId']
-    //                 });
-    //                 (<FormArray>this.answerForm.controls['answers']).push(this.ansForm);
-    //                 this.count++;
-    //             });
-    //             this.checkDup = 1;
-    //         }
-
-    //     }
-    //     else if (this.index == 1) {
-
-    //         $('.next').css('display', 'none');
-    //         if (key === 'ins') {
-    //             this.insAnswer = this.answerForm.controls['answers'].value;
-    //         }
-    //         else {
-    //             this.updAnswer = this.answerForm.controls['answers'].value;
-    //         }
-    //         this.getCatalogById(this.insQuestion['cate_id']);
-    //     }
-    //     else {
-    //         $('.next').css('display', 'block');
-    //         $('.back').css('display', 'block');
-    //     }
-    //     this.index += 1;
-    // }
-
-    // back() {
-    //     if (this.index == 0) {
-    //         $('.back').css('display', 'none');
-    //     }
-    //     else {
-    //         $('.back').css('display', 'block');
-    //         $('.next').css('display', 'block');
-
-    //     }
-    //     this.index -= 1;
-    // }
 
     // checkbox
     selectAll() {
@@ -340,10 +291,10 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             }
             this.questionService.removeQuestion(this.updateStatus).subscribe(
                 (results) => {
-                    console.log(results);
+                    this.getAllQuestion();
                 }
             );
-            this.getAllQuestion();
+            this.getAllQuestion();  
             
             Swal.fire(
               'Deleted',
@@ -391,7 +342,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                         this.answerService.insertAnswer(element).subscribe(
                             (results) => {
 
-                                console.log(results);
+                                this.getAllQuestion();
                             }
                         );
                     });
@@ -408,7 +359,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             console.log(disable);
             this.updateAnser();
         }
-        this.getAllQuestion();
+        
         this.closeUpdateModal();
 
     }
@@ -420,6 +371,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         console.log(this.updQuestion);
         this.questionService.updateQuestion(this.updQuestion).subscribe(
             (results) => {
+                this.getAllQuestion();
             }
         );
     }
@@ -480,9 +432,22 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.answerService.getAllAnswerByQuestioId(questId).subscribe(
             (data) => {
 
-                this.updQuestion['answer'] = data['data']['data'];
+                this.updAnswer =data['data']['data'];
+                this.updAnswer.forEach(item => {
+                    this.ansForm = this.updateAnswerForm();
+                    this.ansForm.setValue({
+                        "Answer": item['Answer'],
+                        "mark": item['mark'],
+                        "AnswerId": item['AnswerId']
+                    });
+                
+                (<FormArray>this.answerForm.controls['answers']).push(this.ansForm);
+                this.count++;
+                });
             }
         );
+        
+        return true;
     }
 
     getCatalogById(id: Number) {

@@ -1,7 +1,7 @@
 <div [hidden]="check == 1" class="catalog-form col-md-12">
 
     <app-page-header [heading]="'Catalogue'"></app-page-header>
-    <button class="btn btn-lg btn-outline-primary" (click)="open(content)">
+    <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
         <i class="fa fa-fw fa-plus"></i>
         Create Question
     </button>
@@ -62,7 +62,7 @@
                             Active
                         </td>
                         <td class="col-md-2 text-center nowrap text-center action-column" style="color: red;">
-                            <a [routerLink]="['/insquestion']" class="btn-sm btn-link cursor-pointer" (click)="viewCatalog(item);" tooltip="View">
+                            <a [routerLink]="['/manage-question']" class="btn-sm btn-link cursor-pointer" (click)="viewCatalog(item);" tooltip="View">
                                 <i class="fa fa fa-eye"></i>
                             </a>
                             <a class="btn-sm btn-link cursor-pointer" (click)="openUpdateModal(item,update);" tooltip="Update">
