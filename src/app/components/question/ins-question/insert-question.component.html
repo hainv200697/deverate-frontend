@@ -142,8 +142,8 @@
     </div>
     <div class="modal-footer">
         <button class="btn btn-secondary back" [hidden]="index==1" (click)="back()">Back</button>
-        <button (click)="next()" class="btn btn-primary">Next</button>
-        <button class="btn btn-success save" *ngIf="index == 3" (click)="insertQuestionSubmit()">Create</button>
+        <button (click)="next()" [hidden]="index==3" class="btn btn-primary">Next</button>
+        <button class="btn btn-success save" [hidden]="index != 3" (click)="insertQuestionSubmit()">Create</button>
         <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
     </div>
 </ng-template>
@@ -195,7 +195,7 @@
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                     <label>Question:</label>
-                                    <input type="text" [(ngModel)]="updQuestion['question']" name="upd_question_question" class="form-control input-underline input-lg"
+                                    <input type="text" [(ngModel)]="updQuestion['Question']" name="upd_question_question" class="form-control input-underline input-lg"
                                         id="upd_question_question" placeholder="{{ 'Question' | translate }}">
                                 </div>
                             </div>
