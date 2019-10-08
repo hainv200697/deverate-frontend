@@ -7,16 +7,16 @@
                 <div class="form-content">
                     <div class="text-left form-group">
                         <label >Username</label>
-                        <input type="text" ng-model="name" class="form-control " id="" placeholder="{{ 'Email' | translate }}">
+                        <input type="text" [(ngModel)]="username" [ngModelOptions]="{standalone: true}" class="form-control " id="" placeholder="{{ 'Email' | translate }}">
                     </div>
 
                     <div class="text-left form-group">
                         <label >Password</label>
-                        <input type="password" class="form-control " id="" placeholder="{{ 'Password' | translate }}">
+                        <input type="password" [(ngModel)]="password" [ngModelOptions]="{standalone: true}" class="form-control " id="" placeholder="{{ 'Password' | translate }}">
                     </div>
                 </div>
                 <div class="button">
-                    <a class="btn btn-primary" [routerLink]="['/dashboard']" (click)="onLoggedin()">{{ 'Log in' | translate }}</a>
+                    <a class="btn btn-primary" (click)="onLogin()">{{ 'Log in' | translate }}</a>
                     &nbsp;
                     <a class="btn btn-success" [routerLink]="['/forgotpass']">{{ 'Change password' | translate }}</a>
                 </div>
