@@ -12,6 +12,9 @@ import { ViewEncapsulation } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 declare var $: any;
+import * as XLSX from 'ts-xlsx';
+import { AnswerModel } from '../../../models/answer-model';
+import { QuestionModel } from '../../../models/question-model';
 @Component({
     selector: 'app-insert-question',
     templateUrl: './insert-question.component.html',
@@ -30,9 +33,17 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         private toastr: ToastrService
     ) {
     }
+    // excel param
+    arrayBuffer: any;
+    file: File;
+    create = 0;
+    listDataExcel = [];
+    eachAnswer = {}
+    listAnswer:Array<AnswerModel>=[];
+    // stepper
     private stepper: Stepper;
     selectedAll: any;
-    updateStatus=[];
+    updateStatus = [];
     checkDup = 0;
     ansForm: FormGroup;
     answersForm: FormGroup;
@@ -47,93 +58,163 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     // inscrease Question
     insQuestion = {};
     insAnswer = [];
+    listInsert: Array<QuestionModel> = [];
     // update Question
     updQuestion = {};
     updAnswer = [];
     anwserDel = [];
     // Catalogue
     catalogue = [];
-    allQuestions = [];
+    allQuestions =[];
 
-    next() {
 
-        this.insAnswer = this.answerForm.controls['answers'].value;
-        console.log(this.insQuestion);
-        let check = true;
-        const catalog  = this.insQuestion['CatalogueId'];
-        if (catalog === "" || catalog === undefined || catalog === null) {
-            this.toastr.error('Message', 'Cataloguecan not be blank!');
-            $('#ins_question_cate_id').css('border-color', 'red');
-            $('#ins_question_cate_id').focus();
-            return;
+    // Import excel file
+    changeIns(key) {
+        this.create = key;
+    }
+    incomingfile(event) {
+        this.file = event.target.files[0];
+    }
+
+    readExcel() {
+
+
+        let fileReader = new FileReader();
+        fileReader.onload = (e) => {
+
+            this.arrayBuffer = fileReader.result;
+            var data = new Uint8Array(this.arrayBuffer);
+            var arr = new Array();
+            for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+            var bstr = arr.join("");
+            var workbook = XLSX.read(bstr, { type: "binary" });
+            var first_sheet_name = workbook.SheetNames[0];
+            var worksheet = workbook.Sheets[first_sheet_name];
+            this.listDataExcel = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+            this.formatExcel(this.listDataExcel);
+            
         }
-        const question = this.insQuestion['question'];
-        if (question === "" || question === undefined || question === null) {
-            this.toastr.error('Message', 'Question can not be blank!');
-            $('#ins_question_question').css('border-color', 'red');
-            $('#ins_question_question').focus();
-            return;
-        }
+        fileReader.readAsArrayBuffer(this.file);
+    }
 
-        if (question.length < 10) {
-            this.toastr.error('Message', 'question must be more than 10 characters!');
-            $('#ins_question_question').css('border-color', 'red');
-            $('#ins_question_question').focus();
-            return;
-        }
-
-        if (question.length > 300) {
-            this.toastr.error('Message', 'question must be less than 300 characters!');
-            $('#ins_question_question').css('border-color', 'red');
-            $('#ins_question_question').focus();
-            return;
-        }
+    formatExcel(list) {
 
 
-        let i = -1;
-        this.insAnswer.forEach(element => {
-            i++;
-            if (check == true) {
-                var ans = element['Answer'];
-                if (ans === "" || ans.length < 5) {
-                    this.toastr.error('Message', 'Answer must be more than 5 characters!');
-                    check = false;
-                    $('.ans-' + i).css('border-color', 'red');
-                    $('.ans-' + i).focus();
-                    return;
-                }
-                const mark: number = element['mark'];
-                if (mark === null || mark === undefined) {
-                    this.toastr.error('Message', 'Mark can not be blank!');
-                    check = false;
-                    $('.mark-' + i).css('border-color', 'red');
-                    $('.mark-' + i).focus();
-                    return;
-                }
-                if (6 < mark || mark < 1) {
-                    this.toastr.error('Message', 'Mark can not be bigger than 6!');
-                    check = false;
-                    $('.mark-' + i).css('border-color', 'red');
-                    $('.mark-' + i).focus();
-                    return;
-                }
-                if (mark < 1) {
-                    this.toastr.error('Message', 'Mark can not be smaller than 1!');
-                    check = false;
-                    $('.mark-' + i).css('border-color', 'red');
-                    $('.mark-' + i).focus();
-                    return;
+        list.forEach(element => {
+            let questionObj = new QuestionModel();
+            
+            this.listAnswer = [];
+            questionObj.Question = element['Question'];
+            questionObj.Status = true;
+            questionObj.Create_by =1;
+            questionObj.CategoryID = 15;
+            for (var i = 0; i <= 5; i++) {
+                let answerObj = new AnswerModel();
+                if (i == 0) {
+
+                    answerObj.Answer = element['answer'];
+                    answerObj.Point = element['point'];
+                    this.listAnswer.push(answerObj);
+                } else if (element['answer_' + i] != null || element['answer_' + i] != undefined) 
+                {
+                    answerObj.Answer = element['answer_' + i];
+                    answerObj.Point = element['point_' + i];
+                    this.listAnswer.push(answerObj);
                 }
             }
-            else {
+            questionObj.Answer = this.listAnswer;
+            this.listInsert.push(questionObj);
+            
+        });
+        // console.log(this.listInsert);
+    }
+    // End import
+    next() {
+        if (this.create === 0) {
+            this.insAnswer = this.answerForm.controls['answers'].value;
+            let check = true;
+            const catalog = this.insQuestion['CatalogueId'];
+            if (catalog === "" || catalog === undefined || catalog === null) {
+                this.toastr.error('Message', 'Cataloguecan not be blank!');
+                $('#ins_question_cate_id').css('border-color', 'red');
+                $('#ins_question_cate_id').focus();
                 return;
             }
-        });
-        if (check == true) {
-            this.stepper.next();
-            this.index++;
-        }
+            const question = this.insQuestion['question'];
+            if (question === "" || question === undefined || question === null) {
+                this.toastr.error('Message', 'Question can not be blank!');
+                $('#ins_question_question').css('border-color', 'red');
+                $('#ins_question_question').focus();
+                return;
+            }
 
+            if (question.length < 10) {
+                this.toastr.error('Message', 'question must be more than 10 characters!');
+                $('#ins_question_question').css('border-color', 'red');
+                $('#ins_question_question').focus();
+                return;
+            }
+
+            if (question.length > 300) {
+                this.toastr.error('Message', 'question must be less than 300 characters!');
+                $('#ins_question_question').css('border-color', 'red');
+                $('#ins_question_question').focus();
+                return;
+            }
+
+
+            let i = -1;
+            this.insAnswer.forEach(element => {
+                i++;
+                if (check == true) {
+                    var ans = element['Answer'];
+                    if (ans === "" || ans.length < 5) {
+                        this.toastr.error('Message', 'Answer must be more than 5 characters!');
+                        check = false;
+                        $('.ans-' + i).css('border-color', 'red');
+                        $('.ans-' + i).focus();
+                        return;
+                    }
+                    const mark: number = element['mark'];
+                    if (mark === null || mark === undefined) {
+                        this.toastr.error('Message', 'Mark can not be blank!');
+                        check = false;
+                        $('.mark-' + i).css('border-color', 'red');
+                        $('.mark-' + i).focus();
+                        return;
+                    }
+                    if (6 < mark || mark < 1) {
+                        this.toastr.error('Message', 'Mark can not be bigger than 6!');
+                        check = false;
+                        $('.mark-' + i).css('border-color', 'red');
+                        $('.mark-' + i).focus();
+                        return;
+                    }
+                    if (mark < 1) {
+                        this.toastr.error('Message', 'Mark can not be smaller than 1!');
+                        check = false;
+                        $('.mark-' + i).css('border-color', 'red');
+                        $('.mark-' + i).focus();
+                        return;
+                    }
+                }
+                else {
+                    return;
+                }
+            });
+            if (check == true) {
+                this.stepper.next();
+                this.index++;
+            }
+        }
+        else {
+            this.readExcel();
+            this.questionService.insertQuestionByExcel(this.listInsert).subscribe(
+                (results) => {
+                    console.log(results);
+                }
+            );
+        }
 
     }
 
@@ -145,7 +226,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         return false;
     }
     ngOnInit() {
-
+        this.insQuestion['Answer'] = [];
         this.mainForm();
         for (let i = 0; i <= 1; i++) {
             this.count++;
@@ -172,7 +253,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     onAddAnswers() {
 
         this.count++;
-        console.log(this.count);
         if (this.count < 6) {
             (<FormArray>this.answerForm.controls['answers']).push(this.addAnswerForm());
         }
@@ -237,7 +317,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.updQuestion['QuestionId'] = item['QuestionId'];
         this.updQuestion['CatalogueId'] = item['CatalogueId'];
         this.updQuestion['Question'] = item['Question'];
-        
+
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
         var a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
@@ -276,40 +356,40 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
     }
 
-    clickButtonChangeStatus(status: boolean){
+    clickButtonChangeStatus(status: boolean) {
         Swal.fire({
-          title: 'Are you sure?',
-          text: 'This catalogue will be delete!',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Yes, delete it!',
-          cancelButtonText: 'No, keep it'
+            title: 'Are you sure?',
+            text: 'This catalogue will be delete!',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, keep it'
         }).then((result) => {
-          if (result.value) {
-            for(var i =0; i< this.updateStatus.length; i++){
-              this.updateStatus[i].IsActive = status;
-            }
-            this.questionService.removeQuestion(this.updateStatus).subscribe(
-                (results) => {
-                    this.getAllQuestion();
+            if (result.value) {
+                for (var i = 0; i < this.updateStatus.length; i++) {
+                    this.updateStatus[i].IsActive = status;
                 }
-            );
-            this.getAllQuestion();  
-            
-            Swal.fire(
-              'Deleted',
-              '',
-              'success'
-            )
-            
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            this.updateStatus = [];
-            Swal.fire(
-              'Cancelled',
-              '',
-              'error'
-            )
-          }
+                this.questionService.removeQuestion(this.updateStatus).subscribe(
+                    (results) => {
+                        this.getAllQuestion();
+                    }
+                );
+                this.getAllQuestion();
+
+                Swal.fire(
+                    'Deleted',
+                    '',
+                    'success'
+                )
+
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                this.updateStatus = [];
+                Swal.fire(
+                    'Cancelled',
+                    '',
+                    'error'
+                )
+            }
         })
     }
 
@@ -332,7 +412,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     addQuestion() {
         this.insQuestion['IsActive'] = true;
         this.insQuestion['create_by'] = 1;
-        console.log(this.insAnswer);
         this.questionService.insertQuestion(this.insQuestion).subscribe(
             (results) => {
                 const QuestionId = results['data']['data'];
@@ -341,7 +420,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                         element['QuestionId'] = QuestionId;
                         this.answerService.insertAnswer(element).subscribe(
                             (results) => {
-
                                 this.getAllQuestion();
                             }
                         );
@@ -352,14 +430,18 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.getAllQuestion();
     }
 
+    addQuestionByExcel() {
+        
+        this.getAllQuestion();
+    }
+
     updateQuestionSubmit() {
         this.updateQuestion();
         const disable = this.disableAnswer();
         if (disable === true) {
-            console.log(disable);
             this.updateAnser();
         }
-        
+
         this.closeUpdateModal();
 
     }
@@ -368,7 +450,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.updQuestion['IsActive'] = true;
         this.updQuestion['create_by'] = 1;
         this.updQuestion['CatalogueId'] = parseInt(this.updQuestion['CatalogueId']);
-        console.log(this.updQuestion);
         this.questionService.updateQuestion(this.updQuestion).subscribe(
             (results) => {
                 this.getAllQuestion();
@@ -377,10 +458,8 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     updateAnser() {
-        console.log(this.updAnswer);
         this.updAnswer.forEach(element => {
             element['QuestionId'] = this.updQuestion['QuestionId'];
-            console.log(element);
             this.answerService.updateAnswer(element).subscribe(
                 (results) => {
                     console.log(results);
@@ -391,7 +470,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     disableAnswer() {
-        console.log(this.updQuestion['answer']);
         this.updQuestion['answer'].forEach(element => {
             this.anwserDel.push(element['AnswerId']);
         });
@@ -400,19 +478,14 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         //         console.log(results);
         //     }
         // );
-        console.log(this.anwserDel);
         return true;
     }
 
     // Get all question
     getAllQuestion() {
         this.questionService.getAllQuestion().subscribe(
-            (data) => {
-
-                this.allQuestions = data['data']['data'];
-                this.allQuestions.forEach(element => {
-                    element.catalogue_name = element.catalogue.Name;
-                });
+            (data:any[]) => {
+                this.allQuestions = data;
             }
         );
     }
@@ -432,7 +505,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.answerService.getAllAnswerByQuestioId(questId).subscribe(
             (data) => {
 
-                this.updAnswer =data['data']['data'];
+                this.updAnswer = data['data']['data'];
                 this.updAnswer.forEach(item => {
                     this.ansForm = this.updateAnswerForm();
                     this.ansForm.setValue({
@@ -440,13 +513,13 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                         "mark": item['mark'],
                         "AnswerId": item['AnswerId']
                     });
-                
-                (<FormArray>this.answerForm.controls['answers']).push(this.ansForm);
-                this.count++;
+
+                    (<FormArray>this.answerForm.controls['answers']).push(this.ansForm);
+                    this.count++;
                 });
             }
         );
-        
+
         return true;
     }
 
@@ -467,10 +540,10 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
 
-    ngAfterViewInit(){
-        $('input').focusout(function() {
-            $(this).css("border-color","#ced4da");;
-          });
-        
+    ngAfterViewInit() {
+        $('input').focusout(function () {
+            $(this).css("border-color", "#ced4da");;
+        });
+
     }
 }

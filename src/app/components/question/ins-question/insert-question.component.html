@@ -30,60 +30,67 @@
                 <div class="bs-stepper-content">
                     <form (ngSubmit)="onSubmit()">
                         <div id="test-l-1" class="content">
-                            <!-- Add question -->
-                            <div class="form-content row">
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                    <h4>Create Question</h4>
-                                </div>
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                            <div class="create-default" [hidden]="create==1">
+                                    <button class="btn btn-primary" (click)= "changeIns(1)">Insert excel</button>
+                                <!-- Add question -->
+                                <div class="form-content row">
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                        <h4>Create Question</h4>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
 
-                                    <label>Catalog:</label>
-                                    <select id="ins_question_cate_id" name="ins_question_cate_id" class="form-control" [(ngModel)]="insQuestion['CatalogueId']">
-                                        <option [value]="item.CatalogueId" *ngFor="let item of catalogue">{{item.Name}}</option>
-                                    </select>
+                                        <label>Catalog:</label>
+                                        <select id="ins_question_cate_id" name="ins_question_cate_id" class="form-control" [(ngModel)]="insQuestion['CatalogueId']">
+                                            <option [value]="item.CatalogueId" *ngFor="let item of catalogue">{{item.Name}}</option>
+                                        </select>
 
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                        <label>Question:</label>
+                                        <input type="text" [(ngModel)]="insQuestion['question']" name="ins_question_question" class="form-control input-underline input-lg"
+                                            id="ins_question_question" placeholder="{{ 'Question' | translate }}">
+                                    </div>
                                 </div>
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                    <label>Question:</label>
-                                    <input type="text" [(ngModel)]="insQuestion['question']" name="ins_question_question" class="form-control input-underline input-lg"
-                                        id="ins_question_question" placeholder="{{ 'Question' | translate }}">
+                                <!--Add answer  -->
+                                <div class="form-content answer-form">
+                                    <h4>Create Answer</h4>
+
+                                    <form [formGroup]="answerForm" (ngSubmit)="next()">
+                                        <div class="form-row" style="padding-top: 20px;">
+                                            <div class="col align-self-start form-group">
+                                                <button type="button" class="btn btn-primary" (click)="onAddAnswers()">Add answers</button>
+                                            </div>
+                                            <div class="col align-self-end form-group">
+                                                <p class="text-right">Number of answers : {{count}}</p>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="list-group-item " *ngFor="let answer of answerForm.controls.answers.controls; let i=index">
+                                            <h5 class="card-title">Answer {{i + 1}}</h5>
+                                            <div [formGroup]="answer" class="form-row">
+                                                <div class="form-group col-10">
+                                                    <label>Answer</label>
+                                                    <input type="text" formControlName="Answer" class="form-control ans-{{i}}" />
+                                                </div>
+                                                <div class="form-group col-1">
+                                                    <label>Mark</label>
+                                                    <input type="number" formControlName="mark" class="form-control mark-{{i}}" />
+                                                </div>
+                                                <div class="form-group col-1" style="position: relative;">
+                                                    <button style="position: absolute; bottom: 0;" type="button " class="btn btn-danger" mat-mini-fab color="warn" fxFlex="nogrow"
+                                                        *ngIf="answerForm.controls.answers.controls.length > 3" (click)="removeUnit(i)">
+                                                        <span class="fa fa-fw fa-trash-o "></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
-                            <!--Add answer  -->
-                            <div class="form-content answer-form">
-                                <h4>Create Answer</h4>
-
-                                <form [formGroup]="answerForm" (ngSubmit)="next()">
-                                    <div class="form-row" style="padding-top: 20px;">
-                                        <div class="col align-self-start form-group">
-                                            <button type="button" class="btn btn-primary" (click)="onAddAnswers()">Add answers</button>
-                                        </div>
-                                        <div class="col align-self-end form-group">
-                                            <p class="text-right">Number of answers : {{count}}</p>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="list-group-item " *ngFor="let answer of answerForm.controls.answers.controls; let i=index">
-                                        <h5 class="card-title">Answer {{i + 1}}</h5>
-                                        <div [formGroup]="answer" class="form-row">
-                                            <div class="form-group col-10">
-                                                <label>Answer</label>
-                                                <input type="text" formControlName="Answer" class="form-control ans-{{i}}" />
-                                            </div>
-                                            <div class="form-group col-1">
-                                                <label>Mark</label>
-                                                <input type="number" formControlName="mark" class="form-control mark-{{i}}" />
-                                            </div>
-                                            <div class="form-group col-1" style="position: relative;">
-                                                <button style="position: absolute; bottom: 0;" type="button " class="btn btn-danger" mat-mini-fab color="warn" fxFlex="nogrow"
-                                                    *ngIf="answerForm.controls.answers.controls.length > 3" (click)="removeUnit(i)">
-                                                    <span class="fa fa-fw fa-trash-o "></span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                            <div class="create-file" [hidden]="create==0">
+                                <button class="btn btn-primary" (click)= "changeIns(0)">Insert default</button>
+                                <input type="file" style="display: inline-block;" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx">
                             </div>
                         </div>
                         <div id="test-l-2" class="content">
@@ -133,7 +140,7 @@
                             </div>
                         </div>
                         <div id="test-l-3" class="content text-center">
-                            <button type="submit" class="btn btn-primary mt-5">Submit</button>
+                            
                         </div>
                     </form>
                 </div>
@@ -320,13 +327,13 @@
                     <div class="form-group">
                         <div class="input-group mb-3">
                             <input type="text" placeholder="{{'Enter your key word' | translate}}" class="form-control" [(ngModel)]="searchText">
-                            
+
                         </div>
                         <button (click)="clickButtonChangeStatus(false);" class="icon-btn" style="padding-left: 24px;">
-                                <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
-                            </button>
-                            <button (click)="clickButtonRefresh(refesh)" class="icon-btn">
-                                <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top" aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                            <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                        </button>
+                        <button (click)="clickButtonRefresh(refesh)" class="icon-btn">
+                            <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top" aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
                         </button>
                     </div>
                 </div>
@@ -357,13 +364,13 @@
                                 <input type="checkbox" value="" [(ngModel)]="q.selected" class="btn" (change)="checkIfAllSelected();">
                             </label>
                         </td>
-                        <td class="text-center col-md-3">{{q.catalogue_name}}</td>
-                        <td class="text-center col-md-3">{{q.Question}}</td>
-                        <td class="text-center col-md-2">{{q.create_by}}</td>
-                        <td class="text-center col-md-2" [hidden]="q.IsActive==true" style="color: red">
+                        <td class="text-center col-md-3">{{q.catalogueName}}</td>
+                        <td class="text-center col-md-3">{{q.question1}}</td>
+                        <td class="text-center col-md-2">{{q.createBy}}</td>
+                        <td class="text-center col-md-2" [hidden]="q.isActive==true" style="color: red">
                             Disable
                         </td>
-                        <td class="text-center col-md-2" [hidden]="q.IsActive==false" style="color: green;">
+                        <td class="text-center col-md-2" [hidden]="q.isActive==false" style="color: green;">
                             Active
                         </td>
                         <td class="col-md-1 nowrap text-center action-column" style="color: red;">
