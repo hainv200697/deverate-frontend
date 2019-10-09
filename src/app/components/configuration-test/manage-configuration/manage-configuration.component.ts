@@ -1,3 +1,4 @@
+import { RankApiService } from './../../../services/rank-api.services';
 import { CatalogueApiService } from './../../../services/catalogue-api.service';
 import { ConfigurationApiService } from './../../../services/configuration-api.service';
 import { CompanyApiService } from '../../../services/company-api.service';
@@ -23,18 +24,27 @@ export class ManageConfigurationComponent implements OnInit {
     private companyApi: CompanyApiService,
     private configAPi: ConfigurationApiService,
     private catalogueApi: CatalogueApiService,
+    private rankApi: RankApiService,
   ) {
     this.page = 1;
     this.pageSize = 3;
   }
   startdate: Date = new Date();
-  enddate: Date = new Date();
-  settings = {
+  enddate: Date = new Date(this.startdate);
+  settings1 = {
     bigBanner: true,
     timePicker: true,
     format: 'dd-MM-yyyy hh:mm a',
     defaultOpen: false,
-    closeOnSelect: false
+    closeOnSelect: false,
+  }
+  settings2 = {
+    bigBanner: true,
+    timePicker: true,
+    format: 'dd-MM-yyyy hh:mm a',
+    defaultOpen: false,
+    closeOnSelect: false,
+    minDateTime: new Date(this.startdate),
   }
   private stepper: Stepper;
   index = 1;
@@ -47,7 +57,7 @@ export class ManageConfigurationComponent implements OnInit {
   Configurations = [];
 
   Account = {};
-  Company: {};
+  ListRank: [];
   a = {};
   catalogueList = [
     {
@@ -75,16 +85,12 @@ export class ManageConfigurationComponent implements OnInit {
   answerForm: FormGroup;
 
   dropdownList = [
-    { "id": 1, "itemName": "India", "mark": 0 },
-    { "id": 2, "itemName": "Singapore", "mark": 0 },
-    { "id": 3, "itemName": "Australia", "mark": 0 },
-    { "id": 4, "itemName": "Canada", "mark": 0 },
-    { "id": 5, "itemName": "South Korea", "mark": 0 },
-    { "id": 6, "itemName": "Germany", "mark": 0 },
-    { "id": 7, "itemName": "France", "mark": 0 },
-    { "id": 8, "itemName": "Russia", "mark": 0 },
-    { "id": 9, "itemName": "Italy", "mark": 0 },
-    { "id": 10, "itemName": "Sweden", "mark": 0 }
+    {"id" : 1, "itemName" : "huy"},
+    {"id" : 5, "itemName" : "a"},
+    {"id" : 2, "itemName" : "b"},
+    {"id" : 3, "itemName" : "tt"},
+    {"id" : 4, "itemName" : "ccc"}
+
   ];
   selectedItems = [];
   dropdownSettings = {
@@ -105,33 +111,34 @@ export class ManageConfigurationComponent implements OnInit {
   ngOnInit() {
 
 
+    this.getAllRank(true);
 
     this.getConfigurationIsActive(true);
+
+    this.dropdownList['id'] = 0;
+    this.dropdownList['itemName'] = ""
+    this.dropdownList['isActive'] = true;
+
     this.inputConfiguration['Totalquestion'] = "";
     this.inputConfiguration['Duration'] = "";
     this.inputConfiguration['StartDate'] = "";
     this.inputConfiguration['EndDate'] = "";
   }
 
-  onItemSelect(item: any) {
-    this.selectedItems.push(item);
-  }
+  onItemSelect(item: any) { }
 
-  onDeSelectAll(item: any) {
-    this.selectedItems = [];
-  }
+  onSelectAll(item: any) { }
 
-  OnItemDeSelect(item: any) {
-    if (this.selectedItems.length == 0) {
-      this.selectedItems = [];
-      return;
-    }
-    else
-      for (var i = 0; i < this.selectedItems.length - 1; i++) {
-        if (this.selectedItems[i]['id'] == item['id']) {
-          this.selectedItems.splice(i, 1);
-        }
+  onDeSelectAll(item: any) { }
+
+  OnItemDeSelect(item: any) { }
+
+  removeItem(item) {
+    for (var i = 0; i < this.selectedItems.length; i++) {
+      if (this.selectedItems[i]['id'] == item['id']) {
+        this.selectedItems.splice(i, 1);
       }
+    }
     console.log(this.selectedItems);
   }
 
@@ -147,15 +154,29 @@ export class ManageConfigurationComponent implements OnInit {
 
   next() {
     this.stepper.next();
-    console.log(this.selectedItems);
+    this.index = this.index + 1;
+    this.inputConfiguration["StartDate"] = this.startdate;
+    this.inputConfiguration['EndDate'] = this.enddate;
+    console.log(this.selectedItems, this.inputConfiguration);
   }
 
   back() {
+    this.index = this.index - 1;
     this.stepper.previous();
   }
 
   closeModal() {
     this.modalService.dismissAll();
+    this.index = 1;
+  }
+
+  getAllRank(status: boolean) {
+    this.rankApi.getAllRank(status).subscribe(
+      (data) => {
+        this.ListRank = data['data']['data'];
+      }
+    );
+
   }
 
   getConfigurationIsActive(status: boolean) {
@@ -177,12 +198,10 @@ export class ManageConfigurationComponent implements OnInit {
         this.selectCattalogue.push(this.catalogueList[i])
       }
     }
-    console.log(this.selectCattalogue);
   }
 
   Create() {
     console.log(this.inputConfiguration);
-    console.log(this.a);
     if (this.inputConfiguration['Duration'] == "" || this.inputConfiguration['Totalquestion'] == "") {
       Swal.fire('Error', 'Something went wrong', 'error');
       return;
