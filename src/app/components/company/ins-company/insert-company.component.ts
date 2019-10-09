@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2'
 import { from } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 import { AccountApiService } from 'src/app/services/account-api.service';
 
 
@@ -20,6 +21,7 @@ export class InsertCompanyComponent implements OnInit {
     private modalService: NgbModal,
     private companyApi: CompanyApiService,
     private accountApi: AccountApiService,
+    private toast: ToastrService,
   ) {
     this.page = 1;
     this.pageSize = 3;
@@ -36,7 +38,7 @@ export class InsertCompanyComponent implements OnInit {
   inputCompany = {};
   inputManager = {};
 
-  searchText = '';
+  searchText = "";
 
   updateCompany = {};
   updateManager = {};
@@ -48,11 +50,11 @@ export class InsertCompanyComponent implements OnInit {
 
   ngOnInit() {
     this.getCompanyIsActive(true);
-    this.inputCompany['Name'] = '';
-    this.inputCompany['Address'] = '';
-    this.inputCompany['Phone'] = '';
-    this.inputCompany['Fax'] = '';
-    this.inputCompany['IsActive'] = true;
+    this.inputCompany['name'] = '';
+    this.inputCompany['address'] = '';
+    this.inputCompany['phone'] = '';
+    this.inputCompany['fax'] = '';
+    this.inputCompany['isActive'] = true;
 
     this.inputManager['Fullname'] = "";
     this.inputManager['Phone'] = "";
@@ -72,14 +74,14 @@ export class InsertCompanyComponent implements OnInit {
   }
 
   openDetail(content, c) {
-    this.getAccountManager(c['CompanyId'])
+    this.getAccountManager(c['companyId'])
 
-    this.updateCompany['CompanyId'] = c['CompanyId'];
-    this.updateCompany['Name'] = c['Name'];
-    this.updateCompany['Address'] = c['Address'];
-    this.updateCompany['IsActive'] = c['IsActive'];
-    this.updateCompany['Phone'] = c['Phone'];
-    this.updateCompany['Fax'] = c['Fax'];
+    this.updateCompany['companyId'] = c['companyId'];
+    this.updateCompany['name'] = c['name'];
+    this.updateCompany['address'] = c['address'];
+    this.updateCompany['isActive'] = c['isActive'];
+    this.updateCompany['phone'] = c['phone'];
+    this.updateCompany['fax'] = c['fax'];
 
 
     this.open(content);
@@ -217,7 +219,7 @@ export class InsertCompanyComponent implements OnInit {
     console.log(this.inputManager);
 
     if (this.inputCompany['Name'] == "" || this.inputCompany['Address'] == "" || this.inputManager['Fullname'].length < 3) {
-      Swal.fire('Error', 'Something went wrong', 'error');
+      this.toast.error('Message', 'Question can not be blank!');
       return;
     }
     this.closeModal();
