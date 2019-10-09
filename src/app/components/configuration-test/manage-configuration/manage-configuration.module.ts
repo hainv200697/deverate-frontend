@@ -12,6 +12,9 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { DataTableModule } from 'ng-angular8-datatable';
 import { CompanyFilterPipe } from './company-filter.pipe';
 import { ToastrModule } from 'ngx-toastr';
+import {AngularDateTimePickerModule} from 'angular2-datetimepicker';
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
+import { from } from 'rxjs';
 
 @NgModule({
   imports: [
@@ -28,7 +31,8 @@ import { ToastrModule } from 'ngx-toastr';
     SweetAlert2Module.forChild({}),
     DataTableModule,
     ToastrModule.forRoot(),
-    
+    AngularDateTimePickerModule,
+    AngularMultiSelectModule
   ],
   
   declarations: [ManageConfigurationComponent,CompanyFilterPipe]

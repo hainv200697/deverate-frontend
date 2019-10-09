@@ -2,7 +2,7 @@
     .modal-lg {
         width: 1000px !important;
     }
-    
+@import '~bs-stepper/dist/css/bs-stepper.min.css';
 @import "../../../../styles/style.scss";
 @mixin animation-name($name){
     animation-name: $name;
@@ -34,6 +34,7 @@
 @keyframes spin{
     to { transform: rotate(360deg) }
 }
+
 
 .icon-btn{
     border: none;
@@ -131,11 +132,6 @@ select:focus,
 select:active,
 input:checked + label:before,
 select:focus,
-select:active {
-  background-color: #7ed321;
-  color: #fff;
-  border-color: #64ac15;
-}
 
 
 input:checked + label:after {
@@ -312,7 +308,6 @@ input[type="radio"] + label,
 select,
 select {
   display: inline-block;
-  width: 50%;
   text-align: center;
   float: left;
   border-radius: 0;
@@ -334,11 +329,7 @@ select:focus,
 select:active,
 input:checked + label:before,
 select:focus,
-select:active {
-  background-color: #007bff;
-  color: #fff;
-  border-color: #007bff;
-}
+
 
 input:checked + label:after {
   opacity: 1;

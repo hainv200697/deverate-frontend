@@ -12,4 +12,12 @@ export class ConfigurationApiService {
         return this.httpClient.get(this.URL + API + status);
     }
 
+    createConfigurartion(ConfigurationModel) {
+        const API = 'ConfigurationAPI/CreateConfiguration';
+        return new Promise(resolve => {
+            this.httpClient.post(this.URL + API, ConfigurationModel).subscribe(data => {
+              resolve(data);
+            })
+        });
+    }
 }

@@ -211,7 +211,7 @@
 
 
 
-            <table [svData]="Companies | CompanyFilterPipe: searchText" #sv="svDataTable" svSortBy="Name" svSortOrder="asc"
+            <table [svData]="Companies" #sv="svDataTable" svSortBy="name" svSortOrder="asc"
                 *ngIf="Companies.length != 0; else searchNull">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin pt-3" style="color: white">
@@ -253,14 +253,14 @@
                                 (change)="checkIfAllSelected();">
                         </td>
                         <td class="text-center col-md-1">{{i+1}}</td>
-                        <td class="text-center col-md-2">{{c.Name}}</td>
-                        <td class="text-center col-md-3">{{c.ManagerName}}</td>
-                        <td class="text-center col-md-1">{{c.Phone}}</td>
-                        <td class="text-center col-md-2">{{c.Create_At}}</td>
-                        <td class="text-center col-md-1" [hidden]="c.IsActive==true" style="color: red">
+                        <td class="text-center col-md-2">{{c.name}}</td>
+                        <td class="text-center col-md-3">{{c.managerName}}</td>
+                        <td class="text-center col-md-1">{{c.phone}}</td>
+                        <td class="text-center col-md-2">{{c.create_At}}</td>
+                        <td class="text-center col-md-1" [hidden]="c.isActive==true" style="color: red">
                             Disable
                         </td>
-                        <td class="text-center col-md-1" [hidden]="c.IsActive==false" style="color: green;">
+                        <td class="text-center col-md-1" [hidden]="c.isActive==false" style="color: green;">
                             Active
                         </td>
                         <td class="nowrap text-center action-column col-md-1">

@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
     providedIn: 'root'
 })
 export class CompanyApiService {
-    URL = 'http://localhost:58810/';
+    URL = 'http://localhost:54318/';
     constructor(private httpClient: HttpClient) { }
     
     getAllCompany(isActive: boolean) {
