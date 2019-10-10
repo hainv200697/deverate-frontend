@@ -77,8 +77,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     readExcel() {
-
-
+    return new Promise((resolve, reject) => {
         let fileReader = new FileReader();
         fileReader.onload = (e) => {
 
@@ -91,42 +90,48 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             var first_sheet_name = workbook.SheetNames[0];
             var worksheet = workbook.Sheets[first_sheet_name];
             this.listDataExcel = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-            this.formatExcel(this.listDataExcel);
             
+            
+
+            resolve(this.listDataExcel);
         }
         fileReader.readAsArrayBuffer(this.file);
+    })
     }
 
-    formatExcel(list) {
+    async formatExcel() {
+        try{
+            let list:any;
+            list = await this.readExcel();
+            list.forEach(element => {
+                let questionObj = new QuestionModel();
+                
+                this.listAnswer = [];
+                questionObj.Question1 = element['Question'];
+                questionObj.Status = true;
+                questionObj.CreateBy =1;
+                questionObj.CategoryId = 15;
+                for (var i = 0; i <= 5; i++) {
+                    let answerObj = new AnswerModel();
+                    if (i == 0) {
 
-
-        list.forEach(element => {
-            let questionObj = new QuestionModel();
-            
-            this.listAnswer = [];
-            questionObj.Question = element['Question'];
-            questionObj.Status = true;
-            questionObj.Create_by =1;
-            questionObj.CategoryID = 15;
-            for (var i = 0; i <= 5; i++) {
-                let answerObj = new AnswerModel();
-                if (i == 0) {
-
-                    answerObj.Answer = element['answer'];
-                    answerObj.Point = element['point'];
-                    this.listAnswer.push(answerObj);
-                } else if (element['answer_' + i] != null || element['answer_' + i] != undefined) 
-                {
-                    answerObj.Answer = element['answer_' + i];
-                    answerObj.Point = element['point_' + i];
-                    this.listAnswer.push(answerObj);
+                        answerObj.Answer = element['answer'];
+                        answerObj.Point = element['point'];
+                        this.listAnswer.push(answerObj);
+                    } else if (element['answer_' + i] != null || element['answer_' + i] != undefined) 
+                    {
+                        answerObj.Answer = element['answer_' + i];
+                        answerObj.Point = element['point_' + i];
+                        this.listAnswer.push(answerObj);
+                    }
                 }
-            }
-            questionObj.Answer = this.listAnswer;
-            this.listInsert.push(questionObj);
-            
-        });
-        // console.log(this.listInsert);
+                questionObj.Answer = this.listAnswer;
+                this.listInsert.push(questionObj);
+            });
+        } catch(err) {
+            console.log(err);
+        }
+        
     }
     // End import
     next() {
@@ -208,7 +213,8 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             }
         }
         else {
-            this.readExcel();
+            this.formatExcel();
+            console.log(this.listInsert);
             this.questionService.insertQuestionByExcel(this.listInsert).subscribe(
                 (results) => {
                     console.log(results);
