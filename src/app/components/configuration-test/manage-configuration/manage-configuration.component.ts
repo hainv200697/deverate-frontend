@@ -1,3 +1,4 @@
+import { RankApiService } from './../../../services/rank-api.services';
 import { CatalogueApiService } from './../../../services/catalogue-api.service';
 import { ConfigurationApiService } from './../../../services/configuration-api.service';
 import { CompanyApiService } from '../../../services/company-api.service';
@@ -9,6 +10,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2'
 import Stepper from 'bs-stepper';
 import { from } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 declare var $: any;
 @Component({
   selector: 'manage-configuration',
@@ -23,18 +25,28 @@ export class ManageConfigurationComponent implements OnInit {
     private companyApi: CompanyApiService,
     private configAPi: ConfigurationApiService,
     private catalogueApi: CatalogueApiService,
+    private rankApi: RankApiService,
+    private toast: ToastrService,
   ) {
     this.page = 1;
     this.pageSize = 3;
   }
   startdate: Date = new Date();
-  enddate: Date = new Date();
-  settings = {
+
+  enddate: Date = new Date(this.startdate);
+  settings1 = {
     bigBanner: true,
     timePicker: true,
     format: 'dd-MM-yyyy hh:mm a',
     defaultOpen: false,
-    closeOnSelect: false
+    closeOnSelect: false,
+  }
+  settings2 = {
+    bigBanner: true,
+    timePicker: true,
+    format: 'dd-MM-yyyy hh:mm a',
+    defaultOpen: false,
+    closeOnSelect: true,
   }
   private stepper: Stepper;
   index = 1;
@@ -47,7 +59,7 @@ export class ManageConfigurationComponent implements OnInit {
   Configurations = [];
 
   Account = {};
-  Company: {};
+  ListRank: [];
   a = {};
   catalogueList = [
     {
@@ -75,16 +87,16 @@ export class ManageConfigurationComponent implements OnInit {
   answerForm: FormGroup;
 
   dropdownList = [
-    { "id": 1, "itemName": "India", "mark": 0 },
-    { "id": 2, "itemName": "Singapore", "mark": 0 },
-    { "id": 3, "itemName": "Australia", "mark": 0 },
-    { "id": 4, "itemName": "Canada", "mark": 0 },
-    { "id": 5, "itemName": "South Korea", "mark": 0 },
-    { "id": 6, "itemName": "Germany", "mark": 0 },
-    { "id": 7, "itemName": "France", "mark": 0 },
-    { "id": 8, "itemName": "Russia", "mark": 0 },
-    { "id": 9, "itemName": "Italy", "mark": 0 },
-    { "id": 10, "itemName": "Sweden", "mark": 0 }
+    { "id": 1, "name": "Program Skil" },
+    { "id": 5, "name": "Software Requirement Analysis" },
+    { "id": 2, "name": "Software Design Methods" },
+    { "id": 3, "name": "Technical Lead" },
+    { "id": 4, "name": "Personal Skills" },
+    { "id": 4, "name": "Personal Skills" },
+    { "id": 4, "name": "Personal Skills" },
+    { "id": 4, "name": "Personal Skills" },
+    { "id": 4, "name": "Personal Skills" },
+
   ];
   selectedItems = [];
   dropdownSettings = {
@@ -93,7 +105,10 @@ export class ManageConfigurationComponent implements OnInit {
     selectAllText: 'Select All',
     unSelectAllText: 'UnSelect All',
     enableSearchFilter: true,
-    classes: "myclass custom-class"
+    classes: "form-control form-group",
+    labelKey: "name",
+    maxHeight: 240,
+    showCheckbox: true,
   };
 
 
@@ -105,34 +120,34 @@ export class ManageConfigurationComponent implements OnInit {
   ngOnInit() {
 
 
+    this.getAllRank(true);
 
     this.getConfigurationIsActive(true);
-    this.inputConfiguration['Totalquestion'] = "";
-    this.inputConfiguration['Duration'] = "";
-    this.inputConfiguration['StartDate'] = "";
-    this.inputConfiguration['EndDate'] = "";
+
+    this.dropdownList['id'] = 0;
+    this.dropdownList['itemName'] = ""
+    this.dropdownList['isActive'] = true;
+
+    this.inputConfiguration['Totalquestion'] = 1;
+    this.inputConfiguration['Duration'] = 15;
+    this.inputConfiguration['StartDate'] = this.startdate;
+    this.inputConfiguration['EndDate'] = this.enddate.setDate(this.startdate.getDate() + 1);
   }
 
-  onItemSelect(item: any) {
-    this.selectedItems.push(item);
-  }
+  onItemSelect(item: any) { }
 
-  onDeSelectAll(item: any) {
-    this.selectedItems = [];
-  }
+  onSelectAll(item: any) { }
 
-  OnItemDeSelect(item: any) {
-    if (this.selectedItems.length == 0) {
-      this.selectedItems = [];
-      return;
-    }
-    else
-      for (var i = 0; i < this.selectedItems.length - 1; i++) {
-        if (this.selectedItems[i]['id'] == item['id']) {
-          this.selectedItems.splice(i, 1);
-        }
+  onDeSelectAll(item: any) { }
+
+  OnItemDeSelect(item: any) { }
+
+  removeItem(item) {
+    for (var i = 0; i < this.selectedItems.length; i++) {
+      if (this.selectedItems[i]['id'] == item['id']) {
+        this.selectedItems.splice(i, 1);
       }
-    console.log(this.selectedItems);
+    }
   }
 
   open(content) {
@@ -146,25 +161,52 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   next() {
+    if (this.validateConfiguration() == false) {
+      return;
+    }
     this.stepper.next();
-    console.log(this.selectedItems);
+    this.index = this.index + 1;
+    this.inputConfiguration["StartDate"] = this.startdate;
+    this.inputConfiguration['EndDate'] = this.enddate;
   }
 
   back() {
+    this.index = this.index - 1;
     this.stepper.previous();
   }
 
   closeModal() {
     this.modalService.dismissAll();
+    this.index = 1;
   }
 
+  getAllRank(status: boolean) {
+    this.rankApi.getAllRank(status).subscribe(
+      (data) => {
+        this.ListRank = data['data']['data'];
+      }
+    );
+
+  }
+
+  clickButtonRefresh(refesh) {
+    refesh.classList.add('spin-animation');
+    setTimeout(function () {
+      refesh.classList.remove('spin-animation');
+    }, 500);
+    this.getConfigurationIsActive(true);
+  }
+
+  
   getConfigurationIsActive(status: boolean) {
+    this.iconIsActive = status;
     this.configAPi.getAllConfiguration(status).subscribe(
       (data) => {
         this.Configurations = data['data']['data'];
       }
     );
   }
+  
 
   checkIfAllSelected() {
     this.selectCattalogue = [];
@@ -177,17 +219,63 @@ export class ManageConfigurationComponent implements OnInit {
         this.selectCattalogue.push(this.catalogueList[i])
       }
     }
-    console.log(this.selectCattalogue);
   }
 
   Create() {
-    console.log(this.inputConfiguration);
-    console.log(this.a);
+    let inputAllConfig = [];
     if (this.inputConfiguration['Duration'] == "" || this.inputConfiguration['Totalquestion'] == "") {
       Swal.fire('Error', 'Something went wrong', 'error');
       return;
     }
+    inputAllConfig.push(this.inputConfiguration, this.selectedItems, this.ListRank);
     this.closeModal();
     Swal.fire('Success', 'The configuration has been created', 'success');
+    console.log(inputAllConfig);
+  }
+
+  validateConfiguration() {
+    if (this.inputConfiguration['Totalquestion'] < 1 || this.inputConfiguration['Totalquestion'] > 100) {
+      this.toast.error('Message', 'Total question must be range 1 to 100');
+      return false;
+    }
+    else if (this.inputConfiguration['Duration'] < 15 || this.inputConfiguration['Duration'] > 180) {
+      this.toast.error('Message', 'Duration must be range 15 to 200');
+      return false;
+    }
+    else if (this.selectedItems.length == 0) {
+      this.toast.error('Message', 'Please select the catalogue');
+      return false;
+    }
+    else if ($('#mark').val() == "") {
+      this.toast.error('Message', 'Please input rate of catalogue');
+      return false;
+    }
+    var total = 0;
+    for (var i = 0; i < this.selectedItems.length; i++) {
+      total = this.selectedItems[i]['mark'] + total;
+    }
+    if (total != 1) {
+      console.log(total)
+      this.toast.error('Message', 'Total mark of catalogue must be 1');
+      return false;
+    }
+
+    else if (this.index == 2) {
+      if ($('#rate').val() == "") {
+        this.toast.error('Message', 'Please input rate of rank');
+        return false;
+      }
+      // else {
+      //   var total = 0;
+      //   for (var i = 0; i < this.ListRank.length; i++) {
+      //     total = this.ListRank[i]['rate'] + total;
+      //   }
+      //   if (total != 1) {
+      //     console.log(total)
+      //     this.toast.error('Message', 'Total mark of Rank must be 1');
+      //     return false;
+      //   }
+      // }
+    }
   }
 }
