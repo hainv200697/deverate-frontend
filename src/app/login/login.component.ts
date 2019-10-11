@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
 
     ngOnInit() {
         if (localStorage.getItem('Authorization')) {
-            this.router.navigate(["/dashboard"]);
+            this.router.navigate(["/manage-question"]);
         }
     }
 
@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
             if (res.status.code == 200) {
                 localStorage.setItem('isLoggedin', 'true');
                 localStorage.setItem('Authorization', res.data.data);
-                this.router.navigate(["/dashboard"]);
+                this.router.navigate(["/manage-question"]);
             } else {
                 alert(res.status.message);
             } 
