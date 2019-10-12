@@ -31,9 +31,9 @@ export class ManageConfigurationComponent implements OnInit {
     this.page = 1;
     this.pageSize = 3;
   }
-  startdate: Date = new Date();
+  startDate: Date = new Date();
 
-  enddate: Date = new Date(this.startdate);
+  endDate: Date = new Date(this.startDate);
   settings1 = {
     bigBanner: true,
     timePicker: true,
@@ -57,20 +57,13 @@ export class ManageConfigurationComponent implements OnInit {
   selectedAll: any;
   selectCattalogue = [];
   Configurations = [];
+  ConfigurationsCata = [];
+  inputAllConfig = [];
 
   Account = {};
   ListRank: [];
   a = {};
-  catalogueList = [
-    {
-      "Name": "sss",
-      "selected": false,
-    },
-    {
-      "Name": "ssaaas",
-      "selected": false,
-    }
-  ];
+  catalogueList : any;
   inputConfiguration = {};
   inputManager = {};
 
@@ -86,18 +79,6 @@ export class ManageConfigurationComponent implements OnInit {
   count = 1;
   answerForm: FormGroup;
 
-  dropdownList = [
-    { "id": 1, "name": "Program Skil" },
-    { "id": 5, "name": "Software Requirement Analysis" },
-    { "id": 2, "name": "Software Design Methods" },
-    { "id": 3, "name": "Technical Lead" },
-    { "id": 4, "name": "Personal Skills" },
-    { "id": 4, "name": "Personal Skills" },
-    { "id": 4, "name": "Personal Skills" },
-    { "id": 4, "name": "Personal Skills" },
-    { "id": 4, "name": "Personal Skills" },
-
-  ];
   selectedItems = [];
   dropdownSettings = {
     singleSelection: false,
@@ -107,11 +88,12 @@ export class ManageConfigurationComponent implements OnInit {
     enableSearchFilter: true,
     classes: "form-control form-group",
     labelKey: "name",
+    primaryKey: "CatalogueId",
     maxHeight: 240,
     showCheckbox: true,
   };
 
-
+  
   PageSize(test: number) {
     this.pageSize = test;
   }
@@ -121,20 +103,20 @@ export class ManageConfigurationComponent implements OnInit {
 
 
     this.getAllRank(true);
-
+    this.getAllCatalogue();
     this.getConfigurationIsActive(true);
 
-    this.dropdownList['id'] = 0;
-    this.dropdownList['itemName'] = ""
-    this.dropdownList['isActive'] = true;
-
-    this.inputConfiguration['Totalquestion'] = 1;
-    this.inputConfiguration['Duration'] = 15;
-    this.inputConfiguration['StartDate'] = this.startdate;
-    this.inputConfiguration['EndDate'] = this.enddate.setDate(this.startdate.getDate() + 1);
+    this.inputConfiguration['testOwnerId'] = 1;
+    this.inputConfiguration['totalQuestion'] = 0;
+    this.inputConfiguration['duration'] = 15;
+    this.inputConfiguration['startDate'] = this.startDate;
+    this.inputConfiguration['endDate'] = this.endDate.setDate(this.startDate.getDate() + 1);
   }
 
-  onItemSelect(item: any) { }
+  onItemSelect(item: any) {
+    this.inputConfiguration['totalQuestion'] += 5
+    console.log(this.inputConfiguration['totalQuestion']);
+   }
 
   onSelectAll(item: any) { }
 
@@ -160,14 +142,24 @@ export class ManageConfigurationComponent implements OnInit {
     });
   }
 
+  openDetail(content, id: number){
+    this.GetConfigurationCatalogueByConfigId(id);
+    this.modalService.open(content, { size: 'lg', windowClass: "myCustomModalClass" });
+    var a = document.querySelector('#update');
+    this.stepper = new Stepper(a, {
+      linear: false,
+      animation: true
+    });
+  }
+
   next() {
     if (this.validateConfiguration() == false) {
       return;
     }
     this.stepper.next();
     this.index = this.index + 1;
-    this.inputConfiguration["StartDate"] = this.startdate;
-    this.inputConfiguration['EndDate'] = this.enddate;
+    this.inputConfiguration["startDate"] = this.startDate;
+    this.inputConfiguration['endDate'] = this.endDate;
   }
 
   back() {
@@ -189,6 +181,15 @@ export class ManageConfigurationComponent implements OnInit {
 
   }
 
+  getAllCatalogue() {
+    this.catalogueApi.getAllCatalogue().subscribe(
+        (data) => {
+
+            this.catalogueList = data;
+        }
+    );
+}
+
   clickButtonRefresh(refesh) {
     refesh.classList.add('spin-animation');
     setTimeout(function () {
@@ -207,6 +208,13 @@ export class ManageConfigurationComponent implements OnInit {
     );
   }
   
+  GetConfigurationCatalogueByConfigId(id: number){
+    this.configAPi.GetConfigurationCatalogueByConfigId(id).subscribe(
+      (data) => {
+        this.ConfigurationsCata = data['data']['data'];
+      }
+    );
+  }
 
   checkIfAllSelected() {
     this.selectCattalogue = [];
@@ -222,24 +230,38 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   Create() {
-    let inputAllConfig = [];
-    if (this.inputConfiguration['Duration'] == "" || this.inputConfiguration['Totalquestion'] == "") {
+    
+    if (this.inputConfiguration['duration'] == "" || this.inputConfiguration['totalQuestion'] == "") {
       Swal.fire('Error', 'Something went wrong', 'error');
       return;
     }
-    inputAllConfig.push(this.inputConfiguration, this.selectedItems, this.ListRank);
-    this.closeModal();
-    Swal.fire('Success', 'The configuration has been created', 'success');
-    console.log(inputAllConfig);
+    this.inputConfiguration['catalogueInConfigurations'] = this.selectedItems;
+    this.inputConfiguration['configurationRank'] = this.ListRank;
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'The configuration will be create!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, create it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
+      if (result.value) {
+        this.configAPi.createConfigurartion(this.inputConfiguration);
+        this.closeModal();
+        Swal.fire('Success', 'The configuration has been created', 'success');
+        this.ngOnInit();
+      }
+    })
   }
 
   validateConfiguration() {
-    if (this.inputConfiguration['Totalquestion'] < 1 || this.inputConfiguration['Totalquestion'] > 100) {
+    if (this.inputConfiguration['totalQuestion'] < 1 || this.inputConfiguration['totalQuestion'] > 100) {
       this.toast.error('Message', 'Total question must be range 1 to 100');
       return false;
     }
-    else if (this.inputConfiguration['Duration'] < 15 || this.inputConfiguration['Duration'] > 180) {
-      this.toast.error('Message', 'Duration must be range 15 to 200');
+    else if (this.inputConfiguration['duration'] < 15 || this.inputConfiguration['duration'] > 180) {
+      this.toast.error('Message', 'duration must be range 15 to 200');
       return false;
     }
     else if (this.selectedItems.length == 0) {
@@ -252,7 +274,7 @@ export class ManageConfigurationComponent implements OnInit {
     }
     var total = 0;
     for (var i = 0; i < this.selectedItems.length; i++) {
-      total = this.selectedItems[i]['mark'] + total;
+      total = this.selectedItems[i]['weightPoint'] + total;
     }
     if (total != 1) {
       console.log(total)

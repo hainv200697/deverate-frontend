@@ -12,8 +12,13 @@ export class ConfigurationApiService {
         return this.httpClient.get(this.URL + API + status);
     }
 
+    GetConfigurationCatalogueByConfigId(id: number){
+        const API = 'ConfigurationCatalogue/GetConfigurationCatalogueByConfigId?id=';
+        return this.httpClient.get(this.URL + API + id);
+    }
+
     createConfigurartion(ConfigurationModel) {
-        const API = 'ConfigurationAPI/CreateConfiguration';
+        const API = 'ConfigurationApi/CreateConfiguration';
         return new Promise(resolve => {
             this.httpClient.post(this.URL + API, ConfigurationModel).subscribe(data => {
               resolve(data);
