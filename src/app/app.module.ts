@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthGuard } from './shared';
+import { ToastrModule } from 'ngx-toastr';
 @NgModule({
     imports: [
         CommonModule,
@@ -17,10 +18,11 @@ import { AuthGuard } from './shared';
         LanguageTranslationModule,
         AppRoutingModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        ToastrModule.forRoot()
     ],
     declarations: [
-        AppComponent,
+        AppComponent
     ],
     providers: [AuthGuard],
     bootstrap: [AppComponent]

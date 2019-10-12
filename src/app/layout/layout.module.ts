@@ -9,6 +9,8 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ChangepassComponent } from '../components/changepass/changepass.component';
+import {BreadcrumbModule} from 'angular-crumbs';
+import { RerankingComponent } from '../components/ranking/reranking/reranking.component';
 // import { InsertQuestionComponent } from '../components/question/ins-question/insert-question.component';
 @NgModule({
     imports: [
@@ -17,14 +19,16 @@ import { ChangepassComponent } from '../components/changepass/changepass.compone
         TranslateModule,
         NgbDropdownModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        BreadcrumbModule,
     ],
     declarations: [
         LayoutComponent, 
         SidebarComponent, 
         HeaderComponent, 
         ProfileComponent,
-        ChangepassComponent
+        ChangepassComponent,
+        RerankingComponent
     ]
 })
 export class LayoutModule {}

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { routerTransition } from '../router.animations';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
     selector: 'app-login',
@@ -9,13 +10,34 @@ import { routerTransition } from '../router.animations';
     animations: [routerTransition()]
 })
 export class LoginComponent implements OnInit {
+    username: string;
+    password: string;
     constructor(
-      public router: Router
+      private router: Router,
+      private authenticationService: AuthenticationService
     ) {}
 
-    ngOnInit() {}
+    ngOnInit() {
+        if (localStorage.getItem('Authorization')) {
+            this.router.navigate(["/manage-question"]);
+        }
+    }
 
-    onLoggedin() {
-        localStorage.setItem('isLoggedin', 'true');
+    onLogin() {
+        var account = {
+            username: this.username,
+            password: this.password
+        }
+        this.authenticationService.login(account)
+        .subscribe((res) => {
+            if (res.status.code == 200) {
+                localStorage.setItem('isLoggedin', 'true');
+                localStorage.setItem('Authorization', res.data.data);
+                this.router.navigate(["/manage-question"]);
+            } else {
+                alert(res.status.message);
+            } 
+        })
+        
     }
 }

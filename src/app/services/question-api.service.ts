@@ -12,10 +12,17 @@ export class QuestionApiService {
         return this.httpClient.get(this.URL + API );
     }
     
-    insertQuestion(QuestionModel) {
+    insertQuestion(question:any) {
         const API = 'QuestionAPI/CreatQuestion';
-        return this.httpClient.post(this.URL+API,QuestionModel );
+        return this.httpClient.post(this.URL+API,question );
     }
 
-
+    updateQuestion(question:any) {
+        const API = 'QuestionAPI/UpdateQuestion';
+        return this.httpClient.put(this.URL+API,question );
+    }
+    removeQuestion(question:any) {
+        const API = 'QuestionAPI/RemoveQuestion';
+        return this.httpClient.put(this.URL+API,question);
+    }
 }
