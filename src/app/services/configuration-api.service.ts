@@ -13,7 +13,7 @@ export class ConfigurationApiService {
     }
 
     GetConfigurationCatalogueByConfigId(id: number){
-        const API = 'ConfigurationCatalogue/GetConfigurationCatalogueByConfigId?id=';
+        const API = 'ConfigurationApi/GetConfigurationById?id=';
         return this.httpClient.get(this.URL + API + id);
     }
 

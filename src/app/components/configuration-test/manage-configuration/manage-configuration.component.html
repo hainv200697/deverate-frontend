@@ -110,8 +110,8 @@
                                     </div>
                                     <div class="form-group col-3">
                                         <label>Mark</label>
-                                        <input type="number" [(ngModel)]="rank.weightPoint" class="form-control" step="0.1"
-                                            id="rate" min="0.1" max="1" />
+                                        <input type="number" [(ngModel)]="rank.weightPoint" class="form-control"
+                                            step="0.1" id="rate" min="0.1" max="1" />
                                     </div>
                                 </div>
                             </div>
@@ -220,7 +220,7 @@
                 <div class="step" data-target="#update-l-1">
                     <button class="step-trigger">
                         <span class="bs-stepper-circle">1</span>
-                        <span class="bs-stepper-label">Configuration</span>
+                        <span class="bs-stepper-label">Update Configuration</span>
                     </button>
                 </div>
                 <div class="line"></div>
@@ -245,79 +245,93 @@
             <div class="bs-stepper-content">
 
                 <div id="update-l-1" class="content">
-                    <!-- Add question -->
+                    <!-- update config -->
 
                     <div class="form-content row">
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 row no-padding-no-margin">
                             <div class="col-md-5 row">
-                                <label class="col-md-8" style="text-align: right">Total
-                                    Question:</label>
-                                <input class="col-md-4" type="number" value="1" min="1" style="height: 30px">
+                                <label class="col-md-8" style="text-align: right">Total Question:</label>
+                                <input class="col-md-4" type="number" value="1" min="1" style="height: 30px"
+                                    [(ngModel)]="this.updateConfig['totalQuestion']">
                                 <label class="col-md-12"></label>
                                 <label class="col-md-8" style="text-align: right;">Duration:</label>
                                 <input class="col-md-4" type="number" value="1" step="5" [min]="15"
-                                    style="height: 30px">
+                                    [(ngModel)]="this.updateConfig['duration']" style="height: 30px">
                             </div>
-                            
+                            <div class="col-md-7 row ">
+                                <label class="col-md-4" style="text-align: right">Start Date:</label>
+                                <div class="col-md-7">
+                                    <angular2-date-picker id="datetimepicker" [(ngModel)]="updateConfig['startDate']"
+                                        [settings]="settings1">
+                                    </angular2-date-picker>
+                                </div>
+                                <label class="col-md-12"></label>
+                                <label class="col-md-4" style="text-align: right">End Date:</label>
+                                <div class="col-md-7">
+                                    <angular2-date-picker id="endtimepicker" [(ngModel)]="updateConfig['endDate']"
+                                        [settings]="settings2">
+                                    </angular2-date-picker>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-group col-md-12 row no-padding-no-margin">
                             <label class="col-md-12">Catalogue:</label>
                             <div class="col-md-6">
 
-                                <!-- <angular2-multiselect class="form-control" [data]="catalogueList" style="width: 87%"
+                                <angular2-multiselect class="form-control" [data]="catalogueList" style="width: 87%"
                                     [(ngModel)]="selectedItems" [settings]="dropdownSettings"
                                     (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
                                     (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
-                                </angular2-multiselect> -->
+                                </angular2-multiselect>
                             </div>
                             <div class="col-md-6">
-                                    <div class="form-row" *ngFor="let c of ConfigurationsCata" style="margin-left: -55px;">
-                                        <div class="form-group col-md-8">
-                                            <input type="text" disabled="disabled" class="form-control" style="font-size: 15px"
-                                                [value]="c['catalogue']['name']" />
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <input type="number" min="0.1" max="1" step="0.1" class="form-control" style="font-size: 15px"
-                                            [value]="c['weightPoint']"  />
-                                        </div>
-                                        <div class="form-group col-1" style="position: relative;">
-                                            <button style="position: absolute; bottom: 0;padding: 1em; height: 51px;" type="button "
-                                                class="btn btn-danger" mat-mini-fab color="warn" fxFlex="nogrow"
-                                                (click)="removeItem(c)">
-                                                <span class="fa fa-fw fa-trash-o "></span>
-                                            </button>
-                                        </div>
+                                <div class="form-row" *ngFor="let c of updateConfig['catalogueInConfigurations']"
+                                    style="margin-left: -55px;">
+                                    <div class="form-group col-md-8">
+                                        <input type="text" disabled="disabled" class="form-control"
+                                            style="font-size: 15px" [value]="c['catalogueId']" />
                                     </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- <div id="test-l-2" class="content">
-
-                    <div class="form-content answer-form">
-                        <h4>Configutation Rank Rate</h4>
-
-                        <div class="d-flex justify-content-center col-md-12">
-                            <div class="list-group-item col-md-8 ">
-                                <h5 class="card-title"> </h5>
-                                <div class="form-row" *ngFor="let rank of ListRank">
-                                    <div class="form-group col-8">
-                                        <label>Rank</label>
-                                        <input type="text" disabled="disabled" [value]="rank['name']"
-                                            class="form-control " />
+                                    <div class="form-group col-md-3">
+                                        <input type="number" min="0.1" max="1" step="0.1" class="form-control"
+                                            style="font-size: 15px" [value]="c['weightPoint']" />
                                     </div>
-                                    <div class="form-group col-3">
-                                        <label>Mark</label>
-                                        <input type="number" [(ngModel)]="rank.rate" class="form-control" step="0.1"
-                                            id="rate" min="0.1" max="1" />
+                                    <div class="form-group col-1" style="position: relative;">
+                                        <button style="position: absolute; bottom: 0;padding: 1em; height: 51px;"
+                                            type="button " class="btn btn-danger" mat-mini-fab color="warn"
+                                            fxFlex="nogrow" (click)="removeItem(c)">
+                                            <span class="fa fa-fw fa-trash-o "></span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="test-l-3" class="content">
+                <div id="update-l-2" class="content">
+                    <div class="form-content answer-form">
+                        <h4>Configutation Rank Rate</h4>
+
+                        <div class="d-flex justify-content-center col-md-12">
+                            <div class="list-group-item col-md-8 ">
+                                <h5 class="card-title"> </h5>
+                                <div class="form-row" *ngFor="let rank of updateConfig['configurationRank']">
+                                    <div class="form-group col-8">
+                                        <label>Rank</label>
+                                        <input type="text" disabled="disabled" [value]="rank['rankId']"
+                                            class="form-control " />
+                                    </div>
+                                    <div class="form-group col-3">
+                                        <label>Mark</label>
+                                        <input type="number" [(ngModel)]="rank['weightPoint']" class="form-control"
+                                            step="0.1" id="rate" min="0.1" max="1" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="update-l-3" class="content">
                     <div class="form-content">
                         <div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <table class="table table-striped table-bordered table-hover customtable">
@@ -327,7 +341,7 @@
                                             Total question
                                         </td>
                                         <td class="col-md-9">
-                                            {{inputConfiguration['Totalquestion']}}
+                                            {{updateConfig['totalQuestion']}}
                                         </td>
                                     </tr>
                                     <tr class="col-md-12 row no-padding-no-margin">
@@ -335,7 +349,7 @@
                                             Duration
                                         </td>
                                         <td class="col-md-9">
-                                            {{inputConfiguration['Duration']}}
+                                            {{updateConfig['duration']}}
                                         </td>
                                     </tr>
                                     <tr class="col-md-12 row no-padding-no-margin">
@@ -343,7 +357,7 @@
                                             Start Date
                                         </td>
                                         <td class="col-md-9">
-                                            {{inputConfiguration['StartDate'] | date : 'dd-MM-yyyy hh:mm a'}}
+                                            {{updateConfig['startDate'] | date : 'dd-MM-yyyy hh:mm a'}}
                                         </td>
                                     </tr>
                                     <tr class="col-md-12 row no-padding-no-margin">
@@ -351,7 +365,7 @@
                                             End Date
                                         </td>
                                         <td class="col-md-9">
-                                            {{inputConfiguration['EndDate'] | date : 'dd-MM-yyyy hh:mm a'}}
+                                            {{updateConfig['endDate'] | date : 'dd-MM-yyyy hh:mm a'}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -366,12 +380,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let c of ListRank">
+                                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let c of updateConfig['configurationRank']">
                                         <td class="col-md-9">
-                                            {{c['name']}}
+                                            {{c['rankId']}}
                                         </td>
                                         <td class="col-md-3">
-                                            {{c['rate']}}
+                                            {{c['weightPoint']}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -387,25 +401,25 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let c of selectedItems">
+                                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let c of updateConfig['catalogueInConfigurations']">
                                         <td class="col-md-9">
-                                            {{c['name']}}
+                                            {{c['catalogueId']}}
                                         </td>
                                         <td class="col-md-3">
-                                            {{c['mark']}}
+                                            {{c['weightPoint']}}
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
         </div>
     </div>
     <div class="modal-footer">
         <button class="btn btn-secondary back" (click)="back()" [hidden]="index == 1 ">Back</button>
-        <button (click)="next()" class="btn btn-primary" [hidden]="index == 3">Next</button>
+        <button (click)="nextDetail()" class="btn btn-primary" [hidden]="index == 3">Next</button>
         <button class="btn btn-success save" (click)="Create()" [hidden]="index ==1 || index == 2">Create</button>
     </div>
 </ng-template>

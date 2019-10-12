@@ -63,14 +63,14 @@ export class ManageConfigurationComponent implements OnInit {
   Account = {};
   ListRank: [];
   a = {};
-  catalogueList : any;
+  catalogueList: any;
   inputConfiguration = {};
   inputManager = {};
 
   searchText = '';
 
   updateCompany = {};
-  updateManager = {};
+  updateConfig = {};
   updateStatus = [];
 
   ansForm: FormGroup;
@@ -93,7 +93,7 @@ export class ManageConfigurationComponent implements OnInit {
     showCheckbox: true,
   };
 
-  
+
   PageSize(test: number) {
     this.pageSize = test;
   }
@@ -111,12 +111,14 @@ export class ManageConfigurationComponent implements OnInit {
     this.inputConfiguration['duration'] = 15;
     this.inputConfiguration['startDate'] = this.startDate;
     this.inputConfiguration['endDate'] = this.endDate.setDate(this.startDate.getDate() + 1);
+
+
   }
 
   onItemSelect(item: any) {
     this.inputConfiguration['totalQuestion'] += 5
     console.log(this.inputConfiguration['totalQuestion']);
-   }
+  }
 
   onSelectAll(item: any) { }
 
@@ -142,8 +144,9 @@ export class ManageConfigurationComponent implements OnInit {
     });
   }
 
-  openDetail(content, id: number){
+  openDetail(content, id: number) {
     this.GetConfigurationCatalogueByConfigId(id);
+    console.log(id);
     this.modalService.open(content, { size: 'lg', windowClass: "myCustomModalClass" });
     var a = document.querySelector('#update');
     this.stepper = new Stepper(a, {
@@ -160,6 +163,11 @@ export class ManageConfigurationComponent implements OnInit {
     this.index = this.index + 1;
     this.inputConfiguration["startDate"] = this.startDate;
     this.inputConfiguration['endDate'] = this.endDate;
+    console.log(this.inputConfiguration['endDate'])
+  }
+
+  nextDetail() {
+    this.stepper.next();
   }
 
   back() {
@@ -183,12 +191,12 @@ export class ManageConfigurationComponent implements OnInit {
 
   getAllCatalogue() {
     this.catalogueApi.getAllCatalogue().subscribe(
-        (data) => {
+      (data) => {
 
-            this.catalogueList = data;
-        }
+        this.catalogueList = data;
+      }
     );
-}
+  }
 
   clickButtonRefresh(refesh) {
     refesh.classList.add('spin-animation');
@@ -198,7 +206,7 @@ export class ManageConfigurationComponent implements OnInit {
     this.getConfigurationIsActive(true);
   }
 
-  
+
   getConfigurationIsActive(status: boolean) {
     this.iconIsActive = status;
     this.configAPi.getAllConfiguration(status).subscribe(
@@ -207,11 +215,19 @@ export class ManageConfigurationComponent implements OnInit {
       }
     );
   }
-  
-  GetConfigurationCatalogueByConfigId(id: number){
+
+  GetConfigurationCatalogueByConfigId(id: number) {
     this.configAPi.GetConfigurationCatalogueByConfigId(id).subscribe(
       (data) => {
-        this.ConfigurationsCata = data['data']['data'];
+        this.updateConfig['totalQuestion'] = data['data']['data']['totalQuestion'];
+        this.updateConfig['createDate'] = data['data']['data']['createDate'];
+        this.updateConfig['startDate'] = data['data']['data']['startDate'];
+        this.updateConfig['endDate'] = data['data']['data']['endDate'];
+        this.updateConfig['duration'] = data['data']['data']['duration'];
+        this.updateConfig['isActive'] = data['data']['data']['isActive'];
+        this.updateConfig['catalogueInConfigurations'] = data['data']['data']['catalogueInConfigurations'];
+        this.updateConfig['configurationRank'] = data['data']['data']['configurationRank']
+        console.log(this.updateConfig);
       }
     );
   }
@@ -230,7 +246,7 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   Create() {
-    
+
     if (this.inputConfiguration['duration'] == "" || this.inputConfiguration['totalQuestion'] == "") {
       Swal.fire('Error', 'Something went wrong', 'error');
       return;
@@ -247,10 +263,10 @@ export class ManageConfigurationComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
-        this.configAPi.createConfigurartion(this.inputConfiguration);
+        // this.configAPi.createConfigurartion(this.inputConfiguration);
+        console.log(this.inputConfiguration);
         this.closeModal();
-        Swal.fire('Success', 'The configuration has been created', 'success');
-        this.ngOnInit();
+        Swal.fire('Success', 'The configuration has been created', 'success'); 
       }
     })
   }
