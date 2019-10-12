@@ -215,13 +215,16 @@ export class InsertCompanyComponent implements OnInit {
   Save() {
     // this.companyApi.insertCompany(this.inputCompany);
     // this.closeModal();
-    console.log(this.inputCompany);
-    console.log(this.inputManager);
+    var inputCompanyData = {};
+    inputCompanyData['companyDTO'] = this.inputCompany;
+    inputCompanyData['accountDTO'] = this.inputManager;
+    console.log(inputCompanyData);
 
     if (this.inputCompany['Name'] == "" || this.inputCompany['Address'] == "" || this.inputManager['Fullname'].length < 3) {
-      this.toast.error('Message', 'Question can not be blank!');
+      this.toast.error('Message', 'SOmething wrong');
       return;
     }
+    this.companyApi.insertCompany(inputCompanyData);
     this.closeModal();
     Swal.fire('Success', 'The company has been created', 'success');
     this.getCompanyIsActive(true);

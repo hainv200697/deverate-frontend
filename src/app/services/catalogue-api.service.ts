@@ -5,13 +5,13 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class CatalogueApiService {
-    URL = 'http://localhost:58810/';
+    URL = 'http://localhost:54318/';
     constructor(
         private httpClient: HttpClient,
     ) { }
     
     getAllCatalogue(){
-        const API = 'CatelogueAPI/GetAllCatelogue';
+        const API = 'api/Catalogue/GetAllCatelogue';
         return this.httpClient.get(this.URL + API);
     }
     
