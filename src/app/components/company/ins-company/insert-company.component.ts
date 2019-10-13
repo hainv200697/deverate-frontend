@@ -1,3 +1,4 @@
+import { GloblaService } from './../../../../assets/service/global.service';
 import { CompanyApiService } from './../../../services/company-api.service';
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
@@ -22,10 +23,12 @@ export class InsertCompanyComponent implements OnInit {
     private companyApi: CompanyApiService,
     private accountApi: AccountApiService,
     private toast: ToastrService,
+    private globalservice: GloblaService,
   ) {
     this.page = 1;
-    this.pageSize = 3;
+    this.pageSize = 5;
   }
+  public loading = false;
   iconIsActive: boolean;
   page: number;
   pageSize: number;
@@ -50,10 +53,10 @@ export class InsertCompanyComponent implements OnInit {
 
   ngOnInit() {
     this.getCompanyIsActive(true);
-    this.inputCompany['name'] = '';
-    this.inputCompany['address'] = '';
-    this.inputCompany['phone'] = '';
-    this.inputCompany['fax'] = '';
+    this.inputCompany['Name'] = '';
+    this.inputCompany['Address'] = '';
+    this.inputCompany['Phone'] = '';
+    this.inputCompany['Fax'] = '';
     this.inputCompany['isActive'] = true;
 
     this.inputManager['Fullname'] = "";
@@ -64,7 +67,7 @@ export class InsertCompanyComponent implements OnInit {
   }
 
   open(content) {
-        this.modalService.open(content, { size: 'lg',   ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+    this.modalService.open(content, { size: 'lg', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
 
     });
   }
@@ -75,16 +78,16 @@ export class InsertCompanyComponent implements OnInit {
 
   openDetail(content, c) {
     this.getAccountManager(c['companyId'])
-
-    this.updateCompany['companyId'] = c['companyId'];
+    this.updateCompany['CompanyId'] = c['CompanyId'];
     this.updateCompany['name'] = c['name'];
     this.updateCompany['address'] = c['address'];
     this.updateCompany['isActive'] = c['isActive'];
     this.updateCompany['phone'] = c['phone'];
     this.updateCompany['fax'] = c['fax'];
 
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
 
-    this.open(content);
+    });
   }
 
   selectAll() {
@@ -104,61 +107,55 @@ export class InsertCompanyComponent implements OnInit {
   }
 
   clickButtonChangeStatus(status: boolean) {
-    if(status==false){
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'The company will be delete!',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, keep it'
-    }).then((result) => {
-      if (result.value) {
-        for (var i = 0; i < this.updateStatus.length; i++) {
-          this.updateStatus[i].IsActive = status;
+    if (status == false) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'The company will be delete!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, keep it'
+      }).then((result) => {
+        if (result.value) {
+          for (var i = 0; i < this.updateStatus.length; i++) {
+            this.updateStatus[i].IsActive = status;
+          }
+          this.companyApi.disableCompany(this.updateStatus).subscribe(data => {
+            this.getCompanyIsActive(status);
+            this.closeModal();
+            Swal.fire('Success', 'The company has been deleted', 'success');
+          });;
         }
-        this.companyApi.disableCompany(this.updateStatus);
-        this.getCompanyIsActive(true);
-        Swal.fire(
-          'Deleted',
-          '',
-          'success'
-        )
-
-      }
-    })
-  }
-  else{
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'The company will be enable!',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, enable it!',
-      cancelButtonText: 'No, keep it'
-    }).then((result) => {
-      if (result.value) {
-        for (var i = 0; i < this.updateStatus.length; i++) {
-          this.updateStatus[i].IsActive = status;
+        else if (result.dismiss === Swal.DismissReason.cancel) {
+          this.updateStatus = [];
+          this.closeModal();
         }
-        this.companyApi.disableCompany(this.updateStatus);
-        this.getCompanyIsActive(true);
-        Swal.fire(
-          'Enabled',
-          '',
-          'success'
-        )
-
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.updateStatus = [];
-        Swal.fire(
-          'Cancelled',
-          '',
-          'error'
-        )
-      }
-    })
-  }
+      })
+    }
+    else {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'The company will be enable!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, enable it!',
+        cancelButtonText: 'No, keep it'
+      }).then((result) => {
+        if (result.value) {
+          for (var i = 0; i < this.updateStatus.length; i++) {
+            this.updateStatus[i].IsActive = status;
+          }
+          this.companyApi.disableCompany(this.updateStatus).subscribe(data => {
+            this.getCompanyIsActive(status);
+            this.closeModal();
+            Swal.fire('Success', 'The company has been enabled', 'success');
+          });;
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          this.updateStatus = [];
+          this.closeModal();
+        }
+      })
+    }
   }
 
   ChangeStatus(status: boolean, companyModel) {
@@ -183,9 +180,12 @@ export class InsertCompanyComponent implements OnInit {
 
   getCompanyIsActive(isActive: boolean) {
     this.iconIsActive = isActive;
+    this.loading = true;
     this.companyApi.getAllCompany(isActive).subscribe(
       (data) => {
+        this.loading = false;
         this.Companies = data['data']['data'];
+
       }
     );
   }
@@ -213,21 +213,40 @@ export class InsertCompanyComponent implements OnInit {
   }
 
   Save() {
-    // this.companyApi.insertCompany(this.inputCompany);
-    // this.closeModal();
+    if(this.validdate() == false){
+      console.log(this.validdate())
+      console.log(this.inputCompany);
+      return;
+    }
+    else{
+    this.loading = false;
     var inputCompanyData = {};
     inputCompanyData['companyDTO'] = this.inputCompany;
     inputCompanyData['accountDTO'] = this.inputManager;
-    console.log(inputCompanyData);
+    
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'The company will be create!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, create it!',
+      cancelButtonText: 'No, don not create '
+    }).then((result) => {
+      if (result.value) {
+        this.loading = true;
+        console.log(inputCompanyData)
+        this.companyApi.insertCompany(inputCompanyData).subscribe(data => {
+          this.getCompanyIsActive(true);
+          this.closeModal();
+          Swal.fire('Success', 'The company has been created', 'success');
+        });
 
-    if (this.inputCompany['Name'] == "" || this.inputCompany['Address'] == "" || this.inputManager['Fullname'].length < 3) {
-      this.toast.error('Message', 'SOmething wrong');
-      return;
-    }
-    this.companyApi.insertCompany(inputCompanyData);
-    this.closeModal();
-    Swal.fire('Success', 'The company has been created', 'success');
-    this.getCompanyIsActive(true);
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.updateStatus = [];
+        this.closeModal();
+      }
+    })
+  }
   }
 
   Update() {
@@ -235,6 +254,7 @@ export class InsertCompanyComponent implements OnInit {
       Swal.fire('Error', 'Something went wrong', 'error');
       return;
     }
+    this.loading = false;
     Swal.fire({
       title: 'Are you sure?',
       text: 'The company will be update!',
@@ -244,21 +264,52 @@ export class InsertCompanyComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
-        this.companyApi.updateCompany(this.updateCompany);
-        this.closeModal();
-        Swal.fire('Success', 'The company has been updated', 'success');
-        this.getCompanyIsActive(true);
+        this.loading = true;
+        this.companyApi.updateCompany(this.updateCompany).subscribe(data => {
+          this.getCompanyIsActive(true);
+          this.closeModal();
+          Swal.fire('Success', 'The company has been updated', 'success');
+        });
+
 
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         this.updateStatus = [];
-        Swal.fire(
-          'Cancelled',
-          '',
-          'error'
-        )
+        this.closeModal();
       }
     })
   }
 
+  validdate(){
+    if (this.inputCompany['Name'] == "") {
+      this.toast.error('Message', 'Please input company name');
+      return false;
+    }
+    else if (this.inputCompany['Address'] == "") {
+      this.toast.error("Message", "Please input company's address");
+      return false;
+    }
+    else if (this.inputCompany['Phone'] == "") {
+      this.toast.error("Message", "Please input company's phone");
+      return false;
+    }
+    else if (this.inputCompany['Fax'] == "") {
+      this.toast.error("Message", "Please input company's fax");
+      return false;
+    }
+    
+    else if (this.inputManager['Fullname'] == "" ) {
+      this.toast.error("Message", "Please input manager name");
+      return false;
+    }
+    else if(this.inputManager['Fullname'].length < 3 ){
+      this.toast.error("Message", "Please input manager name min 3 letter");
+      return false;
+    }
+    
+    else if(!this.globalservice.checkMail.test(String(this.inputManager['Email']).toUpperCase())){
+      this.toast.error("Message", "Email wrong format");
+      return false;
+    }
+  }
 
 }

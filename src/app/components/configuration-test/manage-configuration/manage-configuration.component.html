@@ -218,7 +218,7 @@
         <div class="modal-header header-custom">
             <div class="bs-stepper-header col-md-12">
                 <div class="step" data-target="#update-l-1">
-                    <button class="step-trigger">
+                    <button class="step-trigger" [disabled]="indexDetail != 1">
                         <span class="bs-stepper-circle">1</span>
                         <span class="bs-stepper-label">Update Configuration</span>
                     </button>
@@ -226,7 +226,7 @@
                 <div class="line"></div>
                 <div class="line"></div>
                 <div class="step" data-target="#update-l-2">
-                    <button class="step-trigger">
+                    <button class="step-trigger" [disabled]="indexDetail != 2">
                         <span class="bs-stepper-circle">2</span>
                         <span class="bs-stepper-label">Configuration Rank</span>
                     </button>
@@ -234,7 +234,7 @@
                 <div class="line"></div>
                 <div class="line"></div>
                 <div class="step" data-target="#update-l-3">
-                    <button class="step-trigger">
+                    <button class="step-trigger" [disabled]="indexDetail != 3">
                         <span class="bs-stepper-circle">3</span>
                         <span class="bs-stepper-label">View Configuration Test</span>
                     </button>
@@ -290,11 +290,11 @@
                                     style="margin-left: -55px;">
                                     <div class="form-group col-md-8">
                                         <input type="text" disabled="disabled" class="form-control"
-                                            style="font-size: 15px" [value]="c['catalogueId']" />
+                                            style="font-size: 15px" [(ngModel)]="c['catalogueId']" />
                                     </div>
                                     <div class="form-group col-md-3">
                                         <input type="number" min="0.1" max="1" step="0.1" class="form-control"
-                                            style="font-size: 15px" [value]="c['weightPoint']" />
+                                            style="font-size: 15px" [(ngModel)]="c['weightPoint']" />
                                     </div>
                                     <div class="form-group col-1" style="position: relative;">
                                         <button style="position: absolute; bottom: 0;padding: 1em; height: 51px;"
@@ -380,7 +380,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let c of updateConfig['configurationRank']">
+                                    <tr class="col-md-12 row no-padding-no-margin"
+                                        *ngFor="let c of updateConfig['configurationRank']">
                                         <td class="col-md-9">
                                             {{c['rankId']}}
                                         </td>
@@ -401,7 +402,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let c of updateConfig['catalogueInConfigurations']">
+                                    <tr class="col-md-12 row no-padding-no-margin"
+                                        *ngFor="let c of updateConfig['catalogueInConfigurations']">
                                         <td class="col-md-9">
                                             {{c['catalogueId']}}
                                         </td>
@@ -418,9 +420,10 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-secondary back" (click)="back()" [hidden]="index == 1 ">Back</button>
-        <button (click)="nextDetail()" class="btn btn-primary" [hidden]="index == 3">Next</button>
-        <button class="btn btn-success save" (click)="Create()" [hidden]="index ==1 || index == 2">Create</button>
+        <button class="btn btn-secondary back" (click)="backDetail()" [hidden]="indexDetail == 1 ">Back</button>
+        <button (click)="nextDetail()" class="btn btn-primary" [hidden]="indexDetail == 3">Next</button>
+        <button class="btn btn-success save" (click)="Update()"
+            [hidden]="indexDetail ==1 || indexDetail == 2">Update</button>
     </div>
 </ng-template>
 
@@ -438,11 +441,20 @@
 </div>
 <hr>
 
+<ng-template #customLoadingTemplate>
+        <div class="custom-class">
+
+        </div>
+    </ng-template>
+
+    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
+    </ngx-loading>
 <!-- Search -->
 
 <!-- Table question -->
 
 <div class="insert-form col-md-12">
+    
     <div class="card mb-3 shadow-card">
         <div class="card-header" style="color: white">
             Configuration
@@ -461,11 +473,11 @@
                     <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
                         aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
                 </button>
-                <button [hidden]="iconIsActive==false" (click)="clickButtonChangeStatus(false);" class="icon-btn"
+                <button [hidden]="iconIsActive==false" (click)="DisableConfiguration(false);" class="icon-btn"
                     style="padding-left: 24px;">
                     <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
                 </button>
-                <button [hidden]="iconIsActive==true" (click)="clickButtonChangeStatus(true);" class="icon-btn"
+                <button [hidden]="iconIsActive==true" (click)="DisableConfiguration(true);" class="icon-btn"
                     style="padding-left: 24px;">
                     <i class="fa fa-check" tooltip="{{'active' | translate}}" placement="top"></i>
                 </button>
@@ -473,8 +485,9 @@
                 <div ngbDropdown class="col-md-11 d-flex justify-content-end d-inline-block dropdown">
                     <button class="btn icon-btn border" ngbDropdownToggle>Item</button>
                     <div ngbDropdownMenu>
-                        <button class="dropdown-item" (click)="PageSize(3)">3</button>
-                        <button class="dropdown-item" (click)="PageSize(4)">4</button>
+                        <button class="dropdown-item" (click)="PageSize(5)">5</button>
+                        <button class="dropdown-item" (click)="PageSize(25)">25</button>
+                        <button class="dropdown-item" (click)="PageSize(50)">50</button>
                     </div>
                 </div>
 
@@ -538,7 +551,7 @@
                         <!-- <td class="text-center col-md-1">{{i+1}}</td> -->
                         <td class="text-center col-md-1">{{c.testOwnerId}}</td>
                         <td class="text-center col-md-1">{{c.totalQuestion}}</td>
-                        <td class="text-center col-md-2">{{c.createDate}}</td>
+                        <td class="text-center col-md-2">{{c.createDate.split('T')[0]}}</td>
                         <td class="text-center col-md-2">{{c.startDate}}</td>
                         <td class="text-center col-md-2">{{c.endDate}}</td>
                         <td class="text-center col-md-1">{{c.duration}}</td>

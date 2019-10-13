@@ -29,8 +29,9 @@ export class ManageConfigurationComponent implements OnInit {
     private toast: ToastrService,
   ) {
     this.page = 1;
-    this.pageSize = 3;
+    this.pageSize = 5;
   }
+  public loading = false;
   startDate: Date = new Date();
 
   endDate: Date = new Date(this.startDate);
@@ -50,12 +51,13 @@ export class ManageConfigurationComponent implements OnInit {
   }
   private stepper: Stepper;
   index = 1;
+  indexDetail = 1;
   iconIsActive: boolean;
   page: number;
   pageSize: number;
   element: HTMLElement;
   selectedAll: any;
-  selectCattalogue = [];
+  selectConfiguration = [];
   Configurations = [];
   ConfigurationsCata = [];
   inputAllConfig = [];
@@ -106,13 +108,6 @@ export class ManageConfigurationComponent implements OnInit {
     this.getAllCatalogue();
     this.getConfigurationIsActive(true);
 
-    this.inputConfiguration['testOwnerId'] = 1;
-    this.inputConfiguration['totalQuestion'] = 0;
-    this.inputConfiguration['duration'] = 15;
-    this.inputConfiguration['startDate'] = this.startDate;
-    this.inputConfiguration['endDate'] = this.endDate.setDate(this.startDate.getDate() + 1);
-
-
   }
 
   onItemSelect(item: any) {
@@ -136,6 +131,13 @@ export class ManageConfigurationComponent implements OnInit {
 
   open(content) {
     this.index = 1;
+    this.inputConfiguration['testOwnerId'] = 1;
+    this.inputConfiguration['totalQuestion'] = 0;
+    this.inputConfiguration['duration'] = 15;
+    this.inputConfiguration['startDate'] = this.startDate;
+    this.inputConfiguration['endDate'] = this.endDate.setDate(this.startDate.getDate() + 1);
+    this.selectedItems = [];
+    this.getAllRank(true);
     this.modalService.open(content, { size: 'lg', windowClass: "myCustomModalClass" });
     var a = document.querySelector('#stepper1');
     this.stepper = new Stepper(a, {
@@ -145,6 +147,7 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   openDetail(content, id: number) {
+    this.indexDetail = 1
     this.GetConfigurationCatalogueByConfigId(id);
     console.log(id);
     this.modalService.open(content, { size: 'lg', windowClass: "myCustomModalClass" });
@@ -168,10 +171,16 @@ export class ManageConfigurationComponent implements OnInit {
 
   nextDetail() {
     this.stepper.next();
+    this.indexDetail += 1;
   }
 
   back() {
     this.index = this.index - 1;
+    this.stepper.previous();
+  }
+
+  backDetail() {
+    this.indexDetail = this.indexDetail - 1;
     this.stepper.previous();
   }
 
@@ -208,17 +217,22 @@ export class ManageConfigurationComponent implements OnInit {
 
 
   getConfigurationIsActive(status: boolean) {
+    this.loading = true;
     this.iconIsActive = status;
     this.configAPi.getAllConfiguration(status).subscribe(
       (data) => {
+        this.loading = false;
         this.Configurations = data['data']['data'];
       }
     );
   }
 
   GetConfigurationCatalogueByConfigId(id: number) {
+    this.loading = true;
     this.configAPi.GetConfigurationCatalogueByConfigId(id).subscribe(
       (data) => {
+        this.updateConfig['ConfigId'] = data['data']['data']['ConfigId'];
+        this.updateConfig['testOwnerId'] = data['data']['data']['testOwnerId'];
         this.updateConfig['totalQuestion'] = data['data']['data']['totalQuestion'];
         this.updateConfig['createDate'] = data['data']['data']['createDate'];
         this.updateConfig['startDate'] = data['data']['data']['startDate'];
@@ -227,26 +241,35 @@ export class ManageConfigurationComponent implements OnInit {
         this.updateConfig['isActive'] = data['data']['data']['isActive'];
         this.updateConfig['catalogueInConfigurations'] = data['data']['data']['catalogueInConfigurations'];
         this.updateConfig['configurationRank'] = data['data']['data']['configurationRank']
+        this.selectedItems = data['data']['data']['catalogueInConfigurations'];
+        this.loading = false;
         console.log(this.updateConfig);
       }
     );
   }
 
-  checkIfAllSelected() {
-    this.selectCattalogue = [];
-    this.selectedAll = this.catalogueList.every(function (item: any) {
-      return item.selected == true;
+  selectAll() {
+    this.selectConfiguration = [];
+    for (var i = 0; i < this.Configurations.length; i++) {
+      this.Configurations[i].selected = this.selectedAll;
+      this.selectConfiguration.push(this.Configurations[i])
+    }
+  }
 
+  checkIfAllSelected() {
+    this.selectConfiguration = [];
+    this.selectedAll = this.Configurations.every(function (item: any) {
+      return item.selected == true;
     })
-    for (var i = 0; i < this.catalogueList.length; i++) {
-      if (this.catalogueList[i].selected == true) {
-        this.selectCattalogue.push(this.catalogueList[i])
+    for (var i = 0; i < this.Configurations.length; i++) {
+      if (this.Configurations[i].selected == true) {
+        this.selectConfiguration.push(this.Configurations[i])
       }
     }
   }
 
   Create() {
-
+    this.loading = false;
     if (this.inputConfiguration['duration'] == "" || this.inputConfiguration['totalQuestion'] == "") {
       Swal.fire('Error', 'Something went wrong', 'error');
       return;
@@ -263,12 +286,96 @@ export class ManageConfigurationComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
-        // this.configAPi.createConfigurartion(this.inputConfiguration);
-        console.log(this.inputConfiguration);
-        this.closeModal();
+        this.loading = true;
+        console.log(this.inputConfiguration)
+        this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
+          this.getConfigurationIsActive(true);
+          this.closeModal();
+          this.index = 1;
         Swal.fire('Success', 'The configuration has been created', 'success'); 
+        });
       }
     })
+  }
+
+  Update(){
+    this.loading = false;
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'The configuration will be update!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, update it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
+      if (result.value) {
+        this.loading = true;
+        console.log(this.updateConfig);
+        this.configAPi.updateConfiguration(this.updateConfig).subscribe(data => {
+          this.getConfigurationIsActive(true);
+          this.closeModal();
+          this.indexDetail = 1;
+        Swal.fire('Success', 'The configuration has been updated', 'success'); 
+        });
+      }
+    })
+    
+  }
+
+  DisableConfiguration(status: boolean){
+    this.loading = false;
+    if (status == false) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'The company will be delete!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, keep it'
+      }).then((result) => {
+        if (result.value) {
+          this.loading = true;
+          for (var i = 0; i < this.selectConfiguration.length; i++) {
+            this.selectConfiguration[i].isActive = status;
+          }
+          this.configAPi.changeStatusConfiguration(this.selectConfiguration).subscribe(data => {
+            this.getConfigurationIsActive(status);
+            this.closeModal();
+            Swal.fire('Success', 'The configuration has been deleted', 'success');
+          });;
+        }
+        else if (result.dismiss === Swal.DismissReason.cancel) {
+          this.updateStatus = [];
+          this.closeModal();
+        }
+      })
+    }
+    else {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'The configuration will be enable!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, enable it!',
+        cancelButtonText: 'No, keep it'
+      }).then((result) => {
+        if (result.value) {
+          this.loading = true;
+          for (var i = 0; i < this.selectConfiguration.length; i++) {
+            this.selectConfiguration[i].isActive = status;
+          }
+          this.configAPi.changeStatusConfiguration(this.selectConfiguration).subscribe(data => {
+            this.getConfigurationIsActive(status);
+            this.closeModal();
+            Swal.fire('Success', 'The configuration has been enabled', 'success');
+          });;
+        }
+        else if (result.dismiss === Swal.DismissReason.cancel) {
+          this.updateStatus = [];
+          this.closeModal();
+        }
+      })
+    }
   }
 
   validateConfiguration() {
