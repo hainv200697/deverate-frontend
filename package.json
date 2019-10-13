@@ -38,6 +38,7 @@
     "jquery": "^3.4.1",
     "ng-angular8-datatable": "^0.9.11",
     "ng2-charts": "2.3.0",
+    "ngx-loading": "^8.0.0",
     "ngx-toastr": "^11.1.0",
     "ngx-tooltip": "0.0.9",
     "rxjs": "6.5.2",

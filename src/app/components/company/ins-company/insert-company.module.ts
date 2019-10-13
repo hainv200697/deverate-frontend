@@ -11,6 +11,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { DataTableModule } from 'ng-angular8-datatable';
 import { CompanyFilterPipe } from './company-filter.pipe';
 import { ToastrModule } from 'ngx-toastr';
+import { NgxLoadingModule } from 'ngx-loading';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { ToastrModule } from 'ngx-toastr';
     SweetAlert2Module,
     SweetAlert2Module.forChild({}),
     DataTableModule,
-    ToastrModule.forRoot() 
+    ToastrModule.forRoot(),
+    NgxLoadingModule.forRoot({})
   ],
   
   declarations: [InsertCompanyComponent,CompanyFilterPipe]

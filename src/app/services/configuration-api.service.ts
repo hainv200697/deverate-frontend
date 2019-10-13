@@ -19,10 +19,17 @@ export class ConfigurationApiService {
 
     createConfigurartion(ConfigurationModel) {
         const API = 'ConfigurationApi/CreateConfiguration';
-        return new Promise(resolve => {
-            this.httpClient.post(this.URL + API, ConfigurationModel).subscribe(data => {
-              resolve(data);
-            })
-        });
+        return this.httpClient.post(this.URL + API, ConfigurationModel)
+
+    }
+
+    updateConfiguration(ConfigurationModel){
+        const API = 'ConfigurationApi/UpdateConfiguration';
+        return this.httpClient.put(this.URL + API, ConfigurationModel)
+    }
+
+    changeStatusConfiguration(ConfigurationModel){
+        const API = 'ConfigurationApi/ChangeStatusConfiguration';
+        return this.httpClient.put(this.URL + API, ConfigurationModel);
     }
 }

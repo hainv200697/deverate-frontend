@@ -19,7 +19,7 @@
                         <div class="input-icon"><i class="fa fa-map-marker"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Phone" [(ngModel)]="inputCompany['Phone']"
+                        <input type="number" placeholder="Phone" [(ngModel)]="inputCompany['Phone']"
                             name="ins_company_phone" id="">
                         <div class="input-icon"><i class="fa fa-phone"></i></div>
                     </div>
@@ -45,7 +45,7 @@
                         <div class="input-icon"><i class="fa fa-envelope"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Phone" [(ngModel)]="inputManager['Phone']"
+                        <input type="number" placeholder="Phone" [(ngModel)]="inputManager['Phone']"
                             name="ins_manager_phone">
                         <div class="input-icon"><i class="fa fa-mobile"></i></div>
                     </div>
@@ -86,66 +86,31 @@
     </div>
     <div class="modal-body modal-basic-title col-md-12 row no-padding-no-margin">
         <form class="col-md-12 no-padding-no-margin row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-12">
                 <label>Company Information: </label>
 
                 <div class="">
                     <div class="input-group input-group-icon">
-                        <input type="text" [(ngModel)]="updateCompany['Name']" name="update_company_name" id=""
+                        <input type="text" [(ngModel)]="updateCompany['name']" name="update_company_name" id=""
                             placeholder="{{ 'Name' | translate }}">
                         <div class="input-icon"><i class="fa fa-institution"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Address" [(ngModel)]="updateCompany['Address']"
+                        <input type="text" placeholder="Address" [(ngModel)]="updateCompany['address']"
                             name="update_company_address" id="">
                         <div class="input-icon"><i class="fa fa-map-marker"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Phone" [(ngModel)]="updateCompany['Phone']"
+                        <input type="text" placeholder="Phone" [(ngModel)]="updateCompany['phone']"
                             name="update_company_phone" id="">
                         <div class="input-icon"><i class="fa fa-phone"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Fax" [(ngModel)]="updateCompany['Fax']"
+                        <input type="text" placeholder="Fax" [(ngModel)]="updateCompany['fax']"
                             name="update_company_fax" id="">
                         <div class="input-icon"><i class="fa fa-fax"></i></div>
                     </div>
                 </div>
-            </div>
-
-            <div class="form-group col-md-6">
-                <label>Manager Information: </label>
-                <div class="">
-                    <div class="input-group input-group-icon">
-                        <input type="text" placeholder="FullName" minlength="3" value="{{Account.Fullname}}"
-                            name="ins_manager_fullname">
-                        <div class="input-icon"><i class="fa fa-user"></i></div>
-                    </div>
-                    <div class="input-group input-group-icon">
-                        <input type="email" placeholder="Email" value="{{Account.Email}}" name="ins_manager_email">
-                        <div class="input-icon"><i class="fa fa-envelope"></i></div>
-                    </div>
-                    <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Phone" value="{{Account.Phone}}" name="ins_manager_phone">
-                        <div class="input-icon"><i class="fa fa-mobile"></i></div>
-                    </div>
-                    <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Address" value="{{Account.Address}}" name="ins_manager_address">
-                        <div class="input-icon"><i class="fa fa-home"></i></div>
-                    </div>
-                    <div class="col-half">
-                        <label> Gender</label>
-                        <div class="input-group">
-                            <input type="radio" name="Gender" [(ngModel)]="inputManager['Gender']" value="true"
-                                checked="checked" id="gender-male" />
-                            <label for="gender-male">Male</label>
-                            <input type="radio" [ngModel]="inputManager['Gender']" value="false" name="Gender"
-                                id="gender-female" />
-                            <label for="gender-female">Female</label>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </form>
     </div>
@@ -159,6 +124,15 @@
         <th class="text-center col-md-12" scope="col">No data</th>
     </tr>
 </ng-template>
+
+<ng-template #customLoadingTemplate>
+    <div class="custom-class">
+
+    </div>
+</ng-template>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
+</ngx-loading>
 
 <div class="col-md-12 col-lg-12 d-flex justify-content-end">
     <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
@@ -202,8 +176,9 @@
                 <div ngbDropdown class="col-md-11 d-flex justify-content-end d-inline-block dropdown">
                     <button class="btn icon-btn border" ngbDropdownToggle>Item</button>
                     <div ngbDropdownMenu>
-                        <button class="dropdown-item" (click)="PageSize(3)">3</button>
-                        <button class="dropdown-item" (click)="PageSize(4)">4</button>
+                        <button class="dropdown-item" (click)="PageSize(5)">5</button>
+                        <button class="dropdown-item" (click)="PageSize(25)">25</button>
+                        <button class="dropdown-item" (click)="PageSize(50)">50</button>
                     </div>
                 </div>
 
@@ -211,8 +186,7 @@
 
 
 
-            <table [svData]="Companies" #sv="svDataTable" svSortBy="name" svSortOrder="asc"
-                *ngIf="Companies.length != 0; else searchNull">
+            <table [svData]="Companies" #sv="svDataTable" *ngIf="Companies.length != 0; else searchNull">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin pt-3" style="color: white">
                         <th class="text-center col-md-1" scope="col"><input class="btn" type="checkbox" value=""
@@ -280,4 +254,3 @@
     <ngb-pagination [collectionSize]="Companies.length" [(page)]="page" [pageSize]="pageSize" [boundaryLinks]="true">
     </ngb-pagination>
 </div>
-            
