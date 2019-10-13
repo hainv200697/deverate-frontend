@@ -1,6 +1,6 @@
 <nav class="sidebar" [ngClass]="{sidebarPushRight: isActive, collapsed: collapsed}">
     <div class="list-group">
-        <a routerLink="/dashboard" [routerLinkActive]="['router-link-active']" class="list-group-item">
+        <!-- <a routerLink="/dashboard" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-fw fa-dashboard"></i>&nbsp;
             <span>{{ 'Dashboard' | translate }}</span>
         </a>
@@ -27,7 +27,7 @@
         <a [routerLink]="['/components']" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-th-list"></i>&nbsp;
             <span>{{ 'Component' | translate }}</span>
-        </a>
+        </a> -->
         <a [routerLink]="['/manage-question']" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-th-list"></i>&nbsp;
             <span>{{ 'Manage Question' | translate }}</span>
@@ -40,42 +40,46 @@
             <i class="fa fa-th-list"></i>&nbsp;
             <span>{{ 'Manage Company' | translate }}</span>
         </a>
+        <a [routerLink]="['/manage-configuration']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-cog"></i>&nbsp;
+            <span>{{ 'Manage Configuration' | translate }}</span>
+        </a>
         <div class="nested-menu">
             <a class="list-group-item" (click)="addExpandClass('pages')">
                 <i class="fa fa-plus"></i>&nbsp;
-                <span>{{ 'Menu' | translate }}</span>
+                <span>{{ 'Ranking' | translate }}</span>
             </a>
             <li class="nested" [class.expand]="showMenu === 'pages'">
                 <ul class="submenu">
                     <li>
-                        <a href="javascript:void(0)">
+                        <a [routerLink]="['/reranking']" [routerLinkActive]="['router-link-active']">
                             <i class="fa fa-monument"></i>&nbsp;
-                            <span>{{ 'Submenu' | translate }}</span>
+                            <span>{{ 'Reranking' | translate }}</span>
                         </a>
                     </li>
                     <li>
+                        <a>
+                            <i class="fa fa-monument"></i>&nbsp;
+                            <span>{{ 'Statistical' | translate }}</span>
+                        </a>
+                    </li>
+                    <!-- <li>
                         <a href="javascript:void(0)">
                             <i class="fa fa-monument"></i>&nbsp;
                             <span>{{ 'Submenu' | translate }}</span>
                         </a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)">
-                            <i class="fa fa-monument"></i>&nbsp;
-                            <span>{{ 'Submenu' | translate }}</span>
-                        </a>
-                    </li>
+                    </li> -->
                 </ul>
             </li>
         </div>
-        <a [routerLink]="['/blank-page']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+        <!-- <a [routerLink]="['/blank-page']" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-file-o"></i>&nbsp;
             <span>{{ 'Blank Page' | translate }}</span>
         </a>
         <a href="http://www.strapui.com/" class="list-group-item">
             <i class="fa fa-caret-down"></i>&nbsp;
             <span>{{ 'More Themes' | translate }}</span>
-        </a>
+        </a> -->
 
         <div class="header-fields">
             <a (click)="rltAndLtr()" class="list-group-item">

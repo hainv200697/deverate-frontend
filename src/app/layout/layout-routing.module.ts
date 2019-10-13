@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LayoutComponent } from './layout.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ChangepassComponent } from '../components/changepass/changepass.component';
+import { RerankingComponent } from '../components/ranking/reranking/reranking.component';
 // import { InsertQuestionComponent } from '../components/question/ins-question/insert-question.component';
 
 const routes: Routes = [
@@ -23,7 +24,9 @@ const routes: Routes = [
             { path: 'changepass', component: ChangepassComponent },
             { path: 'catalogue', loadChildren: () => import('../components/catalogue/catalogue.module').then(m => m.CatalogueModule)},
             { path: 'manage-question', loadChildren: () => import('../components/question/ins-question/insert-question.module').then(m => m.InsertQuestionModule) },
-            { path: 'manage-company', loadChildren: () => import('../components/company/ins-company/insert-company.module').then(m => m.InsertCompanyModule) }
+            { path: 'manage-company', loadChildren: () => import('../components/company/ins-company/insert-company.module').then(m => m.InsertCompanyModule) },
+            { path: 'manage-configuration', loadChildren: () => import('../components/configuration-test/manage-configuration/manage-configuration.module').then(m => m.ManageConfigurationModule)},
+            { path: 'reranking', component: RerankingComponent}
         ]
     }
 ];
