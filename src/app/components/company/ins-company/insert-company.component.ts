@@ -53,17 +53,17 @@ export class InsertCompanyComponent implements OnInit {
 
   ngOnInit() {
     this.getCompanyIsActive(true);
-    this.inputCompany['Name'] = '';
-    this.inputCompany['Address'] = '';
-    this.inputCompany['Phone'] = '';
-    this.inputCompany['Fax'] = '';
+    this.inputCompany['name'] = '';
+    this.inputCompany['address'] = '';
+    this.inputCompany['phone'] = '';
+    this.inputCompany['fax'] = '';
     this.inputCompany['isActive'] = true;
 
-    this.inputManager['Fullname'] = "";
-    this.inputManager['Phone'] = "";
-    this.inputManager['Email'] = "";
-    this.inputManager['Address'] = "";
-    this.inputManager['Gender'] = true;
+    this.inputManager['fullname'] = "";
+    this.inputManager['phone'] = "";
+    this.inputManager['email'] = "";
+    this.inputManager['email'] = "";
+    this.inputManager['gender'] = true;
   }
 
   open(content) {
@@ -77,8 +77,7 @@ export class InsertCompanyComponent implements OnInit {
   }
 
   openDetail(content, c) {
-    this.getAccountManager(c['companyId'])
-    this.updateCompany['CompanyId'] = c['CompanyId'];
+    this.updateCompany['companyId'] = c['companyId'];
     this.updateCompany['name'] = c['name'];
     this.updateCompany['address'] = c['address'];
     this.updateCompany['isActive'] = c['isActive'];
@@ -250,7 +249,7 @@ export class InsertCompanyComponent implements OnInit {
   }
 
   Update() {
-    if (this.updateCompany['Name'] == "" || this.updateCompany['Address'] == "") {
+    if (this.updateCompany['name'] == "" || this.updateCompany['address'] == "") {
       Swal.fire('Error', 'Something went wrong', 'error');
       return;
     }
@@ -280,33 +279,33 @@ export class InsertCompanyComponent implements OnInit {
   }
 
   validdate(){
-    if (this.inputCompany['Name'] == "") {
+    if (this.inputCompany['name'] == "") {
       this.toast.error('Message', 'Please input company name');
       return false;
     }
-    else if (this.inputCompany['Address'] == "") {
+    else if (this.inputCompany['address'] == "") {
       this.toast.error("Message", "Please input company's address");
       return false;
     }
-    else if (this.inputCompany['Phone'] == "") {
+    else if (this.inputCompany['phone'] == "") {
       this.toast.error("Message", "Please input company's phone");
       return false;
     }
-    else if (this.inputCompany['Fax'] == "") {
+    else if (this.inputCompany['fax'] == "") {
       this.toast.error("Message", "Please input company's fax");
       return false;
     }
     
-    else if (this.inputManager['Fullname'] == "" ) {
+    else if (this.inputManager['fullname'] == "" ) {
       this.toast.error("Message", "Please input manager name");
       return false;
     }
-    else if(this.inputManager['Fullname'].length < 3 ){
+    else if(this.inputManager['fullname'].length < 3 ){
       this.toast.error("Message", "Please input manager name min 3 letter");
       return false;
     }
     
-    else if(!this.globalservice.checkMail.test(String(this.inputManager['Email']).toUpperCase())){
+    else if(!this.globalservice.checkMail.test(String(this.inputManager['email']).toUpperCase())){
       this.toast.error("Message", "Email wrong format");
       return false;
     }

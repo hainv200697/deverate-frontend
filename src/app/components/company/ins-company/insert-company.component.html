@@ -9,22 +9,22 @@
 
                 <div class="">
                     <div class="input-group input-group-icon">
-                        <input type="text" [(ngModel)]="inputCompany['Name']" name="ins_company_name" id=""
+                        <input type="text" [(ngModel)]="inputCompany['name']" name="ins_company_name" id=""
                             placeholder="{{ 'Name' | translate }}">
                         <div class="input-icon"><i class="fa fa-institution"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Address" [(ngModel)]="inputCompany['Address']"
+                        <input type="text" placeholder="Address" [(ngModel)]="inputCompany['address']"
                             name="ins_company_address" id="">
                         <div class="input-icon"><i class="fa fa-map-marker"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="number" placeholder="Phone" [(ngModel)]="inputCompany['Phone']"
+                        <input type="number" placeholder="Phone" [(ngModel)]="inputCompany['phone']"
                             name="ins_company_phone" id="">
                         <div class="input-icon"><i class="fa fa-phone"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Fax" [(ngModel)]="inputCompany['Fax']" name="ins_company_fax"
+                        <input type="text" placeholder="Fax" [(ngModel)]="inputCompany['fax']" name="ins_company_fax"
                             id="">
                         <div class="input-icon"><i class="fa fa-fax"></i></div>
                     </div>
@@ -35,32 +35,32 @@
                 <label>Manager Information: </label>
                 <div class="">
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="FullName" minlength="3" [(ngModel)]="inputManager['Fullname']"
+                        <input type="text" placeholder="FullName" minlength="3" [(ngModel)]="inputManager['fullname']"
                             name="ins_manager_fullname">
                         <div class="input-icon"><i class="fa fa-user"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="email" placeholder="Email" [(ngModel)]="inputManager['Email']"
+                        <input type="email" placeholder="Email" [(ngModel)]="inputManager['email']"
                             name="ins_manager_email">
                         <div class="input-icon"><i class="fa fa-envelope"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="number" placeholder="Phone" [(ngModel)]="inputManager['Phone']"
+                        <input type="number" placeholder="Phone" [(ngModel)]="inputManager['phone']"
                             name="ins_manager_phone">
                         <div class="input-icon"><i class="fa fa-mobile"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Address" [(ngModel)]="inputManager['Address']"
+                        <input type="text" placeholder="Address" [(ngModel)]="inputManager['address']"
                             name="ins_manager_address">
                         <div class="input-icon"><i class="fa fa-home"></i></div>
                     </div>
                     <div class="col-half">
                         <label> Gender</label>
                         <div class="input-group">
-                            <input type="radio" name="Gender" [(ngModel)]="inputManager['Gender']" value="true"
+                            <input type="radio" name="Gender" [(ngModel)]="inputManager['gender']" value="true"
                                 checked="checked" id="gender-male" />
                             <label for="gender-male">Male</label>
-                            <input type="radio" [ngModel]="inputManager['Gender']" value="false" name="Gender"
+                            <input type="radio" [ngModel]="inputManager['gender']" value="false" name="Gender"
                                 id="gender-female" />
                             <label for="gender-female">Female</label>
                         </div>
