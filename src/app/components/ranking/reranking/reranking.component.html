@@ -5,3 +5,12 @@
       </div>
   </div>
 </div>
+<button (click)="open()">TEST</button>
+<ng-template #quiznow let-modal>
+  <div class="modal-header">
+      <h4 class="modal-title modal-header" id="modal-basic-title">Insert Company</h4>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-success save shadow-card" (click)="Save()">Create</button>
+  </div>
+</ng-template>
