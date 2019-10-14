@@ -34,7 +34,7 @@ export class ManageConfigurationComponent implements OnInit {
   public loading = false;
   startDate: Date = new Date();
 
-  endDate: Date = new Date(this.startDate);
+  endDate: Date = new Date();
   settings1 = {
     bigBanner: true,
     timePicker: true,
@@ -119,7 +119,7 @@ export class ManageConfigurationComponent implements OnInit {
     this.getAllRank(true);
     this.getAllCatalogue();
     this.getConfigurationIsActive(true);
-
+    
   }
 
   onItemSelect(item: any) {
@@ -147,8 +147,12 @@ export class ManageConfigurationComponent implements OnInit {
 
   open(content) {
     this.index = 1;
+    this.startDate = new Date();
+
+    this.endDate = new Date();
     this.inputConfiguration['testOwnerId'] = 1;
     this.inputConfiguration['totalQuestion'] = 0;
+    this.inputConfiguration['title'] = "";
     this.inputConfiguration['duration'] = 15;
     this.inputConfiguration['startDate'] = this.startDate;
     this.inputConfiguration['endDate'] = this.endDate.setDate(this.startDate.getDate() + 1);
@@ -182,6 +186,7 @@ export class ManageConfigurationComponent implements OnInit {
     this.index = this.index + 1;
     this.inputConfiguration["startDate"] = this.startDate;
     this.inputConfiguration['endDate'] = this.endDate;
+    console.log(this.inputConfiguration['startDate'])
     console.log(this.inputConfiguration['endDate'])
   }
 
@@ -249,6 +254,7 @@ export class ManageConfigurationComponent implements OnInit {
       (data) => {
         this.updateConfig['ConfigId'] = data['data']['data']['ConfigId'];
         this.updateConfig['testOwnerId'] = data['data']['data']['testOwnerId'];
+        this.updateConfig['title'] = data['data']['data']['title'];
         this.updateConfig['totalQuestion'] = data['data']['data']['totalQuestion'];
         this.updateConfig['createDate'] = data['data']['data']['createDate'];
         this.updateConfig['startDate'] = data['data']['data']['startDate'];
@@ -304,6 +310,8 @@ export class ManageConfigurationComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.loading = true;
+        this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
+        this.inputConfiguration['endDate'] = new Date(this.inputConfiguration['endDate']);
         console.log(this.inputConfiguration)
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
           this.getConfigurationIsActive(true);
