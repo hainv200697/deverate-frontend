@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { AppSettings } from '../appsetting';
 @Injectable({
     providedIn: 'root'
 })
 export class CompanyApiService {
-    URL = 'http://localhost:54318/';
+    // URL = 'http://localhost:54318/';
+    URL = AppSettings.BASEURL;
+    routes = 'resource/';
     constructor(private httpClient: HttpClient) { }
 
     getAllCompany(isActive: boolean) {
         const API = 'CompanyAPI/GetAllCompany?isActive=';
-        return this.httpClient.get(this.URL + API + isActive);
+        return this.httpClient.get(this.URL + this.routes + API + isActive);
     }
 
     getCompanyById(id: number) {
@@ -29,11 +32,11 @@ export class CompanyApiService {
 
     updateCompany(CompanyModel) {
         const API = 'CompanyAPI/UpdateCompany';
-        return this.httpClient.put(this.URL + API, CompanyModel)
+        return this.httpClient.put(this.URL + API, CompanyModel);
     }
 
     disableCompany(CompanyModel) {
         const API = 'CompanyAPI/DisableCompany';
-        return this.httpClient.put(this.URL + API, CompanyModel)
+        return this.httpClient.put(this.URL + API, CompanyModel);
     }
 }
