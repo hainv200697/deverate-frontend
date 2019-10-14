@@ -4,7 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PageHeaderModule } from '../../../shared';
-import {TooltipModule} from "ngx-tooltip";
+import {TooltipModule} from 'ngx-tooltip';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { DataTableModule } from 'ng-angular8-datatable';
 import { ToastrModule } from 'ngx-toastr';
@@ -25,9 +25,8 @@ import { RerankingRoutingModule } from './reranking-routing.module';
     SweetAlert2Module,
     SweetAlert2Module.forChild({}),
     DataTableModule,
-    ToastrModule.forRoot() 
+    ToastrModule.forRoot()
   ],
-  
   declarations: [RerankingComponent]
 })
-export class RerankingModule { }
+export class RerankingModule {}
