@@ -40,10 +40,13 @@
                         <th class="col-md-4 text-center" scope="col">
                             <sv-default-sorter by='Description'>Description</sv-default-sorter>
                         </th>
+                        <th class="col-md-1 text-center" scope="col">
+                            <sv-default-sorter by='quescount'>Question</sv-default-sorter>
+                        </th>
                         <th class="col-md-2 text-center" scope="col">
                             Status
                         </th>
-                        <th class="col-md-2 text-center" scope="col">Action</th>
+                        <th class="col-md-1 text-center" scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,14 +58,15 @@
                         </td>
                         <td class="col-md-3 text-left">{{ item.name }}</td>
                         <td class="col-md-4 text-left">{{ item.description }}</td>
-                        <td class="col-md-2 text-center" [hidden]="item.IsActive==true" style="color: red">
+                        <td class="col-md-1 text-center">{{ item.quescount }}</td>
+                        <td class="col-md-2 text-center" [hidden]="item.isActive==true" style="color: red">
                             Disable
                         </td>
-                        <td class="col-md-2 text-center" [hidden]="item.IsActive==false" style="color: green;">
+                        <td class="col-md-2 text-center" [hidden]="item.isActive==false" style="color: green;">
                             Active
                         </td>
-                        <td class="col-md-2 text-center nowrap text-center action-column" style="color: red;">
-                            <a [routerLink]="['/manage-question']" class="btn-sm btn-link cursor-pointer" (click)="viewCatalog(item);" tooltip="View">
+                        <td class="col-md-1 text-center nowrap text-center action-column" style="color: red;">
+                            <a class="btn-sm btn-link cursor-pointer" (click)="viewCatalog(item);" tooltip="View">
                                 <i class="fa fa fa-eye"></i>
                             </a>
                             <a class="btn-sm btn-link cursor-pointer" (click)="openUpdateModal(item,update);" tooltip="Update">
@@ -127,13 +131,13 @@
                         <div class="form-content row">
                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                 <label>Catalog:</label>
-                                <input type="text" [(ngModel)]="updCatalogue['Name']" name="ins_Catalogue" class="form-control input-underline input-lg"
-                                    id="" placeholder="{{ 'catalogue' | translate }}">
+                                <input type="text" [(ngModel)]="updCatalogue['Name']" name="upd_Catalogue_name" class="form-control input-underline input-lg"
+                                    id="" placeholder="{{ 'Catalogue' | translate }}">
                             </div>
                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                <label>Question:</label>
-                                <textarea class="form-control" rows="3" [(ngModel)]="updCatalogue['Description']" placeholder="{{ 'catalogue' | translate }}"
-                                    name="ins_Catalogue"></textarea>
+                                <label>Description:</label>
+                                <textarea class="form-control" rows="3" [(ngModel)]="updCatalogue['Description']" placeholder="{{ 'description' | translate }}"
+                                    name="upd_Catalogue_description"></textarea>
                             </div>
                         </div>
                     </form>

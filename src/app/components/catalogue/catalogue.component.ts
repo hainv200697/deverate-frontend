@@ -16,7 +16,7 @@ export class CatalogueComponent implements OnInit {
         private translate: TranslateService,
         public router: Router,
         private modalService: NgbModal,
-        private catelogueService: CatalogueApiService,
+        private catelogueService: CatalogueApiService
     ) {
     }
     selectedAll: any;
@@ -44,9 +44,9 @@ export class CatalogueComponent implements OnInit {
     updateModal(item) {
         if (item != null) {
             this.updCatalogue['CatalogueId'] = item['CatalogueId'];
-            this.updCatalogue['Name'] = item['Name'];
-            this.updCatalogue['Description'] = item['Description'];
-            this.updCatalogue['IsActive'] = item['IsActive'];
+            this.updCatalogue['Name'] = item['name'];
+            this.updCatalogue['Description'] = item['description'];
+            this.updCatalogue['IsActive'] = item['isActive'];
         }
 
     }
@@ -62,8 +62,10 @@ export class CatalogueComponent implements OnInit {
     // Get all catalogue
     getAllCatalogue() {
         this.catelogueService.getAllCatalogue().subscribe(
-            (data) => {
+            (data :any[]) => {
+
                 this.catalogueList = data;
+                console.log(this.catalogueList);
             }
         );
     }
@@ -120,14 +122,13 @@ export class CatalogueComponent implements OnInit {
     updateCatalogueSubmit() {
         this.updCata();
         this.closeModal();
-        this.getAllCatalogue();
+        // this.getAllCatalogue();  
     }
 
     updCata() {
-        console.log(this.updCatalogue);
         this.catelogueService.updateCatalogue(this.updCatalogue).subscribe(
-            (results) => {
-                console.log(results);
+            (data:any) => {
+                console.log(data['message']);
             }
         );
     }
@@ -145,27 +146,27 @@ export class CatalogueComponent implements OnInit {
                 for (let i = 0; i < this.updateStatus.length; i++) {
                     this.updateStatus[i].IsActive = status;
                 }
-                this.catelogueService.removeCatalogue(this.updateStatus).subscribe(
-                    (results) => {
-                        console.log(results);
-                    }
-                );
+            );
+            
+            Swal.fire(
+              'Deleted',
+              '',
+              'success'
+            )
+            
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            this.updateStatus = [];
+            Swal.fire(
+              'Cancelled',
+              '',
+              'error'
+            )
+          }
+        })
+    }
 
-                Swal.fire(
-                    'Deleted',
-                    '',
-                    'success'
-                );
-
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                this.updateStatus = [];
-                Swal.fire(
-                    'Cancelled',
-                    '',
-                    'error'
-                );
-            }
-        });
+    viewCatalog(item){
+        this.router.navigate(['/manage-question/', item['CatalogueId']]);
     }
 
 }

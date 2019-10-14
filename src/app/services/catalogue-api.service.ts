@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient,HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AppSettings } from '../appsetting';
 @Injectable({
@@ -19,19 +19,25 @@ export class CatalogueApiService {
     }
 
     insertCatalogue(catalogue) {
-        console.log(catalogue);
-        const API = 'CatelogueAPI/CreateCatalogue';
-        return this.httpClient.post(this.URL + API, catalogue);
+        const API = 'api/Catalogue/CreateCatalogue';
+        return this.httpClient.post(this.URL + this.routes + API, catalogue);
     }
 
     updateCatalogue(Catalogue) {
-        const API = 'CatelogueAPI/UpdateCatalogue';
-        return this.httpClient.put(this.URL + API, Catalogue);
+        const API = 'api/Catalogue/UpdateCatalogue';
+        return this.httpClient.put(this.URL + this.routes + API,Catalogue, this.httpOptions);
     }
 
     removeCatalogue(Catalogue) {
-        const API = 'CatelogueAPI/RemoveCatalogue';
-        return this.httpClient.put(this.URL + API, Catalogue);
+        const API = 'CatalogueAPI/RemoveCatalogue';
+        return this.httpClient.put(this.URL + this.routes + API,Catalogue);
+    }
+    
+    getCatalogueById(id){
+        console.log(id);
+        let param = new HttpParams().set('id',id);
+        const API = 'api/Catalogue/GetCatalogueById';
+        return this.httpClient.get(this.URL + this.routes + API,{params:param});
     }
 
 

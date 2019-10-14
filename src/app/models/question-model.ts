@@ -1,7 +1,10 @@
+import { AnswerModel } from './answer-model';
+
 export class QuestionModel{
-    QuestionID : number
-    CategoryID : number
-    Question : string
-    Status : string
-    Create_by: number
+    QuestionId : number
+    catalogueId : number
+    question1 : string
+    isActive : boolean
+    createBy: number
+    answer :Array<AnswerModel> = []
 }

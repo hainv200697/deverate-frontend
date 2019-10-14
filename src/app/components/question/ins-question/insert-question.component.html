@@ -12,16 +12,9 @@
                     </div>
                     <div class="line"></div>
                     <div class="step" data-target="#test-l-2">
-                        <button [disabled]="index != 2" class="step-trigger">
+                        <button [disabled]="index != 2 " class="step-trigger">
                             <span class="bs-stepper-circle">2</span>
                             <span class="bs-stepper-label">View Question and Answer</span>
-                        </button>
-                    </div>
-                    <div class="line"></div>
-                    <div class="step" data-target="#test-l-3">
-                        <button [disabled]="index != 3" class="step-trigger">
-                            <span class="bs-stepper-circle">3</span>
-                            <span class="bs-stepper-label">Save Change</span>
                         </button>
                     </div>
                 </div>
@@ -30,61 +23,67 @@
                 <div class="bs-stepper-content">
                     <form (ngSubmit)="onSubmit()">
                         <div id="test-l-1" class="content">
-                            <!-- Add question -->
-                            <div class="form-content row">
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                    <h4>Create Question</h4>
-                                </div>
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                            <div class="create-default">
+                                
+                                <!-- Add question -->
+                                <div class="form-content row">
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                        <h4>Create Question</h4>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
 
-                                    <label>Catalog:</label>
-                                    <select id="ins_question_cate_id" name="ins_question_cate_id" class="form-control" [(ngModel)]="insQuestion['CatalogueId']">
-                                        <option [value]="item.CatalogueId" *ngFor="let item of catalogue">{{item.Name}}</option>
-                                    </select>
-
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                        <label>Question:</label>
+                                        <input type="text" [(ngModel)]="insQuestion['question1']"
+                                            name="ins_question_question" class="form-control input-underline input-lg"
+                                            id="ins_question_question" placeholder="{{ 'Question' | translate }}">
+                                    </div>
                                 </div>
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                    <label>Question:</label>
-                                    <input type="text" [(ngModel)]="insQuestion['question']" name="ins_question_question" class="form-control input-underline input-lg"
-                                        id="ins_question_question" placeholder="{{ 'Question' | translate }}">
+                                <!--Add answer  -->
+                                <div class="form-content answer-form">
+                                    <h4>Create Answer</h4>
+
+                                    <form [formGroup]="answerForm" (ngSubmit)="next()">
+                                        <div class="form-row" style="padding-top: 20px;">
+                                            <div class="col align-self-start form-group">
+                                                <button type="button" class="btn btn-primary"
+                                                    (click)="onAddAnswers()">Add answers</button>
+                                            </div>
+                                            <div class="col align-self-end form-group">
+                                                <p class="text-right">Number of answers : {{count}}</p>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="list-group-item "
+                                            *ngFor="let answer of answerForm.controls.answers.controls; let i=index">
+                                            <h5 class="card-title">Answer {{i + 1}}</h5>
+                                            <div [formGroup]="answer" class="form-row">
+                                                <div class="form-group col-10">
+                                                    <label>Answer</label>
+                                                    <input type="text" formControlName="answer1"
+                                                        class="form-control ans-{{i}}" />
+                                                </div>
+                                                <div class="form-group col-1">
+                                                    <label>Mark</label>
+                                                    <input type="number" formControlName="point"
+                                                        class="form-control mark-{{i}}" />
+                                                </div>
+                                                <div class="form-group col-1" style="position: relative;">
+                                                    <button style="position: absolute; bottom: 0;" type="button "
+                                                        class="btn btn-danger" mat-mini-fab color="warn" fxFlex="nogrow"
+                                                        *ngIf="answerForm.controls.answers.controls.length > 3"
+                                                        (click)="removeUnit(i)">
+                                                        <span class="fa fa-fw fa-trash-o "></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
-                            <!--Add answer  -->
-                            <div class="form-content answer-form">
-                                <h4>Create Answer</h4>
 
-                                <form [formGroup]="answerForm" (ngSubmit)="next()">
-                                    <div class="form-row" style="padding-top: 20px;">
-                                        <div class="col align-self-start form-group">
-                                            <button type="button" class="btn btn-primary" (click)="onAddAnswers()">Add answers</button>
-                                        </div>
-                                        <div class="col align-self-end form-group">
-                                            <p class="text-right">Number of answers : {{count}}</p>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="list-group-item " *ngFor="let answer of answerForm.controls.answers.controls; let i=index">
-                                        <h5 class="card-title">Answer {{i + 1}}</h5>
-                                        <div [formGroup]="answer" class="form-row">
-                                            <div class="form-group col-10">
-                                                <label>Answer</label>
-                                                <input type="text" formControlName="Answer" class="form-control ans-{{i}}" />
-                                            </div>
-                                            <div class="form-group col-1">
-                                                <label>Mark</label>
-                                                <input type="number" formControlName="mark" class="form-control mark-{{i}}" />
-                                            </div>
-                                            <div class="form-group col-1" style="position: relative;">
-                                                <button style="position: absolute; bottom: 0;" type="button " class="btn btn-danger" mat-mini-fab color="warn" fxFlex="nogrow"
-                                                    *ngIf="answerForm.controls.answers.controls.length > 3" (click)="removeUnit(i)">
-                                                    <span class="fa fa-fw fa-trash-o "></span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
                         </div>
                         <div id="test-l-2" class="content">
                             <div class="form-content">
@@ -96,7 +95,7 @@
                                                     Catalogue
                                                 </td>
                                                 <td class="col-md-9">
-                                                    {{insQuestion['catalogue_name']}}
+                                                    {{catalog['name']}}
                                                 </td>
                                             </tr>
                                             <tr class="col-md-12 row no-padding-no-margin">
@@ -104,7 +103,7 @@
                                                     Question
                                                 </td>
                                                 <td class="col-md-9">
-                                                    {{insQuestion['question']}}
+                                                    {{insQuestion['question1']}}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -121,19 +120,16 @@
                                         <tbody>
                                             <tr class="col-md-12 row no-padding-no-margin" *ngFor="let q of insAnswer">
                                                 <td class="col-md-9">
-                                                    {{q.Answer}}
+                                                    {{q.answer1}}
                                                 </td>
                                                 <td class="col-md-3">
-                                                    {{q.mark}}
+                                                    {{q.point}}
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                        </div>
-                        <div id="test-l-3" class="content text-center">
-                            <button type="submit" class="btn btn-primary mt-5">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -142,11 +138,34 @@
     </div>
     <div class="modal-footer">
         <button class="btn btn-secondary back" [hidden]="index==1" (click)="back()">Back</button>
-        <button (click)="next()" [hidden]="index==3" class="btn btn-primary">Next</button>
-        <button class="btn btn-success save" [hidden]="index != 3" (click)="insertQuestionSubmit()">Create</button>
+        <button (click)="next('ins')" [hidden]="index==2" class="btn btn-primary">Next</button>
+        <button class="btn btn-success save" [hidden]="index != 2" (click)="insertQuestionSubmit('default')">Create</button>
         <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
     </div>
 </ng-template>
+
+<!-- Insert by Excel -->
+<ng-template #excel let-modal>
+    <div class="container">
+        <div id="stepper1" class="bs-stepper">
+            <div class="modal-header header-custom">
+                <h3>Insert by Excel</h3>
+            </div>
+            <div class="modal-body">
+                <div class="create-file">
+                    <button class="btn btn-primary" (click)="changeIns(0)">Insert default</button>
+                    <input type="file" style="display: inline-block;" (change)="incomingfile($event)"
+                        placeholder="Upload file" accept=".xlsx">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success save" (click)="insertQuestionSubmit('excel')">Create</button>
+        <button type="button" class="btn btn-danger" (click)="closeExcel()">Close</button>
+    </div>
+</ng-template>
+
 
 <!-- Modal update -->
 <ng-template #update let-modal>
@@ -187,15 +206,11 @@
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12">
 
-                                    <label>Catalog:</label>
-                                    <select id="upd_question_cate_id" name="upd_question_cate_id" class="form-control" [(ngModel)]="updQuestion['CatalogueId']">
-                                        <option [value]="item.CatalogueId" *ngFor="let item of catalogue">{{item.Name}}</option>
-                                    </select>
-
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                     <label>Question:</label>
-                                    <input type="text" [(ngModel)]="updQuestion['Question']" name="upd_question_question" class="form-control input-underline input-lg"
+                                    <input type="text" [(ngModel)]="updQuestion['question1']"
+                                        name="upd_question_question" class="form-control input-underline input-lg"
                                         id="upd_question_question" placeholder="{{ 'Question' | translate }}">
                                 </div>
                             </div>
@@ -206,7 +221,8 @@
                                 <form [formGroup]="answerForm" (ngSubmit)="next()">
                                     <div class="form-row" style="padding-top: 20px;">
                                         <div class="col align-self-start form-group">
-                                            <button type="button" class="btn btn-primary" (click)="onAddAnswers()">Add answers</button>
+                                            <button type="button" class="btn btn-primary" (click)="onAddAnswers()">Add
+                                                answers</button>
                                         </div>
                                         <div class="col align-self-end form-group">
                                             <p class="text-right">Number of answers : {{count}}</p>
@@ -214,20 +230,25 @@
                                     </div>
 
 
-                                    <div class="list-group-item " *ngFor="let answer of answerForm.controls.answers.controls; let i=index">
+                                    <div class="list-group-item "
+                                        *ngFor="let answer of answerForm.controls.answers.controls; let i=index">
                                         <h5 class="card-title">Answer {{i + 1}}</h5>
                                         <div [formGroup]="answer" class="form-row">
                                             <div class="form-group col-10">
                                                 <label>Answer</label>
-                                                <input type="text" formControlName="Answer" class="form-control ans-{{i}}" />
+                                                <input type="text" formControlName="answer1"
+                                                    class="form-control ans-{{i}}" />
                                             </div>
                                             <div class="form-group col-1">
                                                 <label>Mark</label>
-                                                <input type="number" formControlName="mark" class="form-control mark-{{i}}" />
+                                                <input type="number" formControlName="point"
+                                                    class="form-control mark-{{i}}" />
                                             </div>
                                             <div class="form-group col-1" style="position: relative;">
-                                                <button style="position: absolute; bottom: 0;" type="button " class="btn btn-danger" mat-mini-fab color="warn" fxFlex="nogrow"
-                                                    *ngIf="answerForm.controls.answers.controls.length > 3" (click)="removeUnit(i)">
+                                                <button style="position: absolute; bottom: 0;" type="button "
+                                                    class="btn btn-danger" mat-mini-fab color="warn" fxFlex="nogrow"
+                                                    *ngIf="answerForm.controls.answers.controls.length > 3"
+                                                    (click)="removeUnit(i)">
                                                     <span class="fa fa-fw fa-trash-o "></span>
                                                 </button>
                                             </div>
@@ -246,7 +267,7 @@
                                                     Catalogue
                                                 </td>
                                                 <td class="col-md-9">
-                                                    {{updQuestion['catalogue_name']}}
+                                                    {{catalog['name']}}
                                                 </td>
                                             </tr>
                                             <tr class="col-md-12 row no-padding-no-margin">
@@ -254,7 +275,7 @@
                                                     Question
                                                 </td>
                                                 <td class="col-md-9">
-                                                    {{updQuestion['question']}}
+                                                    {{updQuestion['question1']}}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -271,10 +292,10 @@
                                         <tbody>
                                             <tr class="col-md-12 row no-padding-no-margin" *ngFor="let q of updAnswer">
                                                 <td class="col-md-9">
-                                                    {{q.Answer}}
+                                                    {{q.answer1}}
                                                 </td>
                                                 <td class="col-md-3">
-                                                    {{q.mark}}
+                                                    {{q.point}}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -292,7 +313,7 @@
     </div>
     <div class="modal-footer">
         <button class="btn btn-secondary back" [hidden]="index==1" (click)="back()">Back</button>
-        <button (click)="next()" class="btn btn-primary">Next</button>
+        <button (click)="next('upd')" class="btn btn-primary">Next</button>
         <button class="btn btn-success save" *ngIf="index == 3" (click)="updateQuestionSubmit()">Update</button>
         <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
     </div>
@@ -300,7 +321,7 @@
 
 <!-- Grid view -->
 <button class="btn btn-lg btn-outline-primary" (click)="open(content)">
-    <i class="fa fa-fw fa-plus"></i>
+        <i class="fa fa-fw fa-plus"></i>
     Create Question
 </button>
 
@@ -318,56 +339,72 @@
             <div class="row mb-1">
                 <div class="col">
                     <div class="form-group">
-                        <div class="input-group mb-3">
-                            <input type="text" placeholder="{{'Enter your key word' | translate}}" class="form-control" [(ngModel)]="searchText">
+                        <input type="text" placeholder="Enter your key word" name="searchText" class="form-control"
+                            [(ngModel)]="searchText" />
 
-                        </div>
-                        <button (click)="clickButtonChangeStatus(false);" class="icon-btn" style="padding-left: 24px;">
-                                <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
-                            </button>
-                            <button (click)="clickButtonRefresh(refesh)" class="icon-btn">
-                                <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top" aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
-                        </button>
                     </div>
+                    <button (click)="clickButtonChangeStatus(false);" class="icon-btn" style="padding-left: 24px;">
+                        <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
+                    </button>
+                    <button (click)="openModalExcel(excel);" class="icon-btn" style="padding-left: 24px;">
+                            <i class="fa fa-file-excel-o"></i>
+                        </button>
+                    <button (click)="clickButtonRefresh(refesh)" class="icon-btn" style="padding-left: 24px;">
+                        <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
+                            aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                    </button>
                 </div>
             </div>
 
-            <table class="table table-striped table-bordered table-hover customtable" [svData]="allQuestions" #sv="svDataTable" [svRowsOnPage]="5"
-                svSortBy="name" svSortOrder="asc">
+            <table class="table table-striped table-bordered table-hover customtable" [svData]="allQuestions"
+                #sv="svDataTable" [svRowsOnPage]="5" svSortBy="name" svSortOrder="asc">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin">
                         <th class="text-center col-md-1" scope="col">
-                            <input class="btn" type="checkbox" value="" [(ngModel)]="selectedAll" (change)="selectAll();">
+                            <input class="btn" type="checkbox" value="" [(ngModel)]="selectedAll"
+                                (change)="selectAll();">
                         </th>
                         <th class="col-md-3 text-center" scope="col">
-                            <sv-default-sorter by='catalogue_name'>Catalog</sv-default-sorter>
+                            <sv-default-sorter by='catalogueName'>Catalog</sv-default-sorter>
                         </th>
                         <th class="col-md-3 text-center" scope="col">
-                            <sv-default-sorter by='Question'>Question</sv-default-sorter>
+                            <sv-default-sorter by='question1'>Question</sv-default-sorter>
                         </th>
-                        <th class="col-md-2 text-center" scope="col">Create By</th>
-                        <th class="col-md-2 text-center" scope="col">Status</th>
+                        <th class="col-md-2 text-center" scope="col">
+                            <sv-default-sorter by='createBy'>Create By</sv-default-sorter>
+                        </th>
+                        <th class="text-center col-md-2" scope="col">Status
+                            <div ngbDropdown class="d-inline-block dropdown">
+                                <button class=" icon-btn" ngbDropdownToggle style="color: white"></button>
+                                <div ngbDropdownMenu>
+                                    <button class="dropdown-item" (click)="getQuestionStatus(true)">Active</button>
+                                    <button class="dropdown-item" (click)="getQuestionStatus(false)">Disable</button>
+                                </div>
+                            </div>
+                        </th>
                         <th class="col-md-1 text-center" scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let q of sv.data">
+                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let q of sv.data  ">
                         <td class="text-center col-md-1">
                             <label>
-                                <input type="checkbox" value="" [(ngModel)]="q.selected" class="btn" (change)="checkIfAllSelected();">
+                                <input type="checkbox" value="" [(ngModel)]="q.selected" class="btn"
+                                    (change)="checkIfAllSelected();">
                             </label>
                         </td>
-                        <td class="text-center col-md-3">{{q.catalogue_name}}</td>
-                        <td class="text-center col-md-3">{{q.Question}}</td>
-                        <td class="text-center col-md-2">{{q.create_by}}</td>
-                        <td class="text-center col-md-2" [hidden]="q.IsActive==true" style="color: red">
+                        <td class="text-center col-md-3">{{q.catalogueName}}</td>
+                        <td class="text-center col-md-3">{{q.question1}}</td>
+                        <td class="text-center col-md-2">{{q.createBy}}</td>
+                        <td class="text-center col-md-2" [hidden]="q.isActive==true" style="color: red">
                             Disable
                         </td>
-                        <td class="text-center col-md-2" [hidden]="q.IsActive==false" style="color: green;">
+                        <td class="text-center col-md-2" [hidden]="q.isActive==false" style="color: green;">
                             Active
                         </td>
                         <td class="col-md-1 nowrap text-center action-column" style="color: red;">
-                            <a class="btn-sm btn-link cursor-pointer" (click)="openUpdate(q,update);" tooltip="{{'common_modify' | translate}}">
+                            <a class="btn-sm btn-link cursor-pointer" (click)="openUpdate(q,update);"
+                                tooltip="{{'common_modify' | translate}}">
                                 <i class="fa fa-edit edit-icon"></i>
                             </a>
                         </td>
