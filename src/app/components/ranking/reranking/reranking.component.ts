@@ -17,8 +17,10 @@ export class RerankingComponent implements OnInit {
   endDate;
   duration;
   key;
+  message;
   questions;
   configId;
+  test= true;
   error = false;
   ngOnInit() {
     const accountId = sessionStorage.getItem('AccountId');
@@ -53,7 +55,10 @@ export class RerankingComponent implements OnInit {
     this.testService.getAllQuestion(testInfo)
     .subscribe((res) => {
       console.log(res);
+      this.message = res;
       this.closeModal();
+      this.test = false;
+      console.log(this.test);
     },
     (error) => {
       this.error = true;
