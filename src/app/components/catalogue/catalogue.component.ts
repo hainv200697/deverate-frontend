@@ -16,7 +16,7 @@ export class CatalogueComponent implements OnInit {
         private translate: TranslateService,
         public router: Router,
         private modalService: NgbModal,
-        private catelogueService: CatalogueApiService,
+        private catelogueService: CatalogueApiService
     ) {
     }
     selectedAll: any;
@@ -45,9 +45,9 @@ export class CatalogueComponent implements OnInit {
     updateModal(item) {
         if (item != null) {
             this.updCatalogue['CatalogueId'] = item['CatalogueId'];
-            this.updCatalogue['Name'] = item['Name'];
-            this.updCatalogue['Description'] = item['Description'];
-            this.updCatalogue['IsActive'] = item['IsActive'];
+            this.updCatalogue['Name'] = item['name'];
+            this.updCatalogue['Description'] = item['description'];
+            this.updCatalogue['IsActive'] = item['isActive'];
         }
 
     }
@@ -63,9 +63,9 @@ export class CatalogueComponent implements OnInit {
     // Get all catalogue
     getAllCatalogue() {
         this.catelogueService.getAllCatalogue().subscribe(
-            (data) => {
+            (data :any[]) => {
 
-                this.catalogueList = data['data']['data'];
+                this.catalogueList = data;
                 console.log(this.catalogueList);
             }
         );
@@ -123,14 +123,13 @@ export class CatalogueComponent implements OnInit {
     updateCatalogueSubmit() {
         this.updCata();
         this.closeModal();
-        this.getAllCatalogue();
+        // this.getAllCatalogue();  
     }
 
     updCata() {
-        console.log(this.updCatalogue);
         this.catelogueService.updateCatalogue(this.updCatalogue).subscribe(
-            (results) => {
-                console.log(results);
+            (data:any) => {
+                console.log(data['message']);
             }
         );
     }
@@ -171,8 +170,8 @@ export class CatalogueComponent implements OnInit {
         })
     }
 
-    // viewCatalog(item){
-    //     this.check = 1;
-    // }
+    viewCatalog(item){
+        this.router.navigate(['/manage-question/', item['CatalogueId']]);
+    }
 
 }
