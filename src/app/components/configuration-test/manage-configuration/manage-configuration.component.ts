@@ -94,6 +94,18 @@ export class ManageConfigurationComponent implements OnInit {
     maxHeight: 240,
     showCheckbox: true,
   };
+  dropdownSettingsDetail = {
+    singleSelection: false,
+    text: "Select Catalogue",
+    selectAllText: 'Select All',
+    unSelectAllText: 'UnSelect All',
+    enableSearchFilter: true,
+    classes: "form-control form-group",
+    labelKey: "name",
+    primaryKey: "catalogueId",
+    maxHeight: 240,
+    showCheckbox: true,
+  };
 
 
   PageSize(test: number) {
@@ -113,15 +125,19 @@ export class ManageConfigurationComponent implements OnInit {
   onItemSelect(item: any) {
     this.inputConfiguration['totalQuestion'] += 5
     console.log(this.inputConfiguration['totalQuestion']);
+    console.log(this.selectedItems);
   }
 
   onSelectAll(item: any) { }
 
   onDeSelectAll(item: any) { }
 
-  OnItemDeSelect(item: any) { }
+  OnItemDeSelect(item: any) { 
+    console.log(this.selectedItems);
+  }
 
   removeItem(item) {
+
     for (var i = 0; i < this.selectedItems.length; i++) {
       if (this.selectedItems[i]['id'] == item['id']) {
         this.selectedItems.splice(i, 1);
@@ -244,6 +260,7 @@ export class ManageConfigurationComponent implements OnInit {
         this.selectedItems = data['data']['data']['catalogueInConfigurations'];
         this.loading = false;
         console.log(this.updateConfig);
+        console.log(this.selectedItems);
       }
     );
   }
