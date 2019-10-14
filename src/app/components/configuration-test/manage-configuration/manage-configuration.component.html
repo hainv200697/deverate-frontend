@@ -38,7 +38,7 @@
                                 <label class="col-md-8" style="text-align: right">Total
                                     Question:</label>
                                 <input class="col-md-4" type="number" [(ngModel)]="inputConfiguration['totalQuestion']"
-                                    name="ins_config_totalquestion" min="1" style="height: 30px">
+                                    name="ins_config_totalquestion" [min]="5" style="height: 30px">
                                 <label class="col-md-12"></label>
                                 <label class="col-md-8" style="text-align: right;">Duration:</label>
                                 <input class="col-md-4" type="number" [(ngModel)]="inputConfiguration['duration']"
@@ -280,7 +280,7 @@
                             <div class="col-md-6">
 
                                 <angular2-multiselect class="form-control" [data]="catalogueList" style="width: 87%"
-                                    [(ngModel)]="selectedItems" [settings]="dropdownSettings"
+                                    [(ngModel)]="selectedItems" [settings]="dropdownSettingsDetail"
                                     (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
                                     (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
                                 </angular2-multiselect>
@@ -549,7 +549,7 @@
                                 (change)="checkIfAllSelected();">
                         </td>
                         <!-- <td class="text-center col-md-1">{{i+1}}</td> -->
-                        <td class="text-center col-md-1">{{c.testOwnerId}}</td>
+                        <td class="text-center col-md-1">{{c.testOwnerName}}</td>
                         <td class="text-center col-md-1">{{c.totalQuestion}}</td>
                         <td class="text-center col-md-2">{{c.createDate.split('T')[0]}}</td>
                         <td class="text-center col-md-2">{{c.startDate}}</td>
