@@ -22,7 +22,7 @@ export class CatalogueComponent implements OnInit {
     selectedAll: any;
     check = 0;
     catalogueList = [];
-    searchText :string;
+    searchText: string;
     insCatalogue = {};
     updCatalogue = {};
     updateStatus = [];
@@ -30,13 +30,12 @@ export class CatalogueComponent implements OnInit {
         this.getAllCatalogue();
     }
 
-    //Open modal 
+    // Open modal
     open(create) {
         this.modalService.open(create, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
     }
 
     openUpdateModal(item, update) {
-        console.log(item);
         this.updateModal(item);
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
 
@@ -64,19 +63,17 @@ export class CatalogueComponent implements OnInit {
     getAllCatalogue() {
         this.catelogueService.getAllCatalogue().subscribe(
             (data) => {
-
-                this.catalogueList = data['data']['data'];
-                console.log(this.catalogueList);
+                this.catalogueList = data;
             }
         );
     }
-    
+
 
     clickButtonRefresh(refesh) {
         refesh.classList.add('spin-animation');
         setTimeout(function () {
             refesh.classList.remove('spin-animation');
-        }, 500)
+        }, 500);
         this.getAllCatalogue();
     }
 
@@ -100,26 +97,26 @@ export class CatalogueComponent implements OnInit {
 
     selectAll() {
         this.updateStatus = [];
-        for (var i = 0; i < this.catalogueList.length; i++) {
+        for (let i = 0; i < this.catalogueList.length; i++) {
             this.catalogueList[i].selected = this.selectedAll;
-            this.updateStatus.push(this.catalogueList[i])
+            this.updateStatus.push(this.catalogueList[i]);
         }
     }
 
     checkIfAllSelected() {
         this.updateStatus = [];
         this.selectedAll = this.catalogueList.every(function (item: any) {
-            return item.selected == true;
+            return item.selected === true;
 
-        })
-        for (var i = 0; i < this.catalogueList.length; i++) {
-            if (this.catalogueList[i].selected == true) {
-                this.updateStatus.push(this.catalogueList[i])
+        });
+        for (let i = 0; i < this.catalogueList.length; i++) {
+            if (this.catalogueList[i].selected === true) {
+                this.updateStatus.push(this.catalogueList[i]);
             }
         }
 
     }
-    // Update catalogue 
+    // Update catalogue
     updateCatalogueSubmit() {
         this.updCata();
         this.closeModal();
@@ -135,44 +132,40 @@ export class CatalogueComponent implements OnInit {
         );
     }
 
-    clickButtonChangeStatus(status: boolean){
+    clickButtonChangeStatus(status: boolean) {
         Swal.fire({
-          title: 'Are you sure?',
-          text: 'This catalogue will be delete!',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Yes, delete it!',
-          cancelButtonText: 'No, keep it'
+            title: 'Are you sure?',
+            text: 'This catalogue will be delete!',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, keep it'
         }).then((result) => {
-          if (result.value) {
-            for(var i =0; i< this.updateStatus.length; i++){
-              this.updateStatus[i].IsActive = status;
-            }
-            this.catelogueService.removeCatalogue(this.updateStatus).subscribe(
-                (results) => {
-                    console.log(results);
+            if (result.value) {
+                for (let i = 0; i < this.updateStatus.length; i++) {
+                    this.updateStatus[i].IsActive = status;
                 }
-            );
-            
-            Swal.fire(
-              'Deleted',
-              '',
-              'success'
-            )
-            
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            this.updateStatus = [];
-            Swal.fire(
-              'Cancelled',
-              '',
-              'error'
-            )
-          }
-        })
-    }
+                this.catelogueService.removeCatalogue(this.updateStatus).subscribe(
+                    (results) => {
+                        console.log(results);
+                    }
+                );
 
-    // viewCatalog(item){
-    //     this.check = 1;
-    // }
+                Swal.fire(
+                    'Deleted',
+                    '',
+                    'success'
+                );
+
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                this.updateStatus = [];
+                Swal.fire(
+                    'Cancelled',
+                    '',
+                    'error'
+                );
+            }
+        });
+    }
 
 }

@@ -53,8 +53,8 @@
                                 <input type="checkbox" value="" [(ngModel)]="item.selected" class="btn" (change)="checkIfAllSelected();">
                             </label>
                         </td>
-                        <td class="col-md-3 text-left">{{ item.Name }}</td>
-                        <td class="col-md-4 text-left">{{ item.Description }}</td>
+                        <td class="col-md-3 text-left">{{ item.name }}</td>
+                        <td class="col-md-4 text-left">{{ item.description }}</td>
                         <td class="col-md-2 text-center" [hidden]="item.IsActive==true" style="color: red">
                             Disable
                         </td>
@@ -95,7 +95,7 @@
                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                 <label>Catalog:</label>
                                 <input type="text" [(ngModel)]="insCatalogue['Name']" name="ins_Catalogue" class="form-control input-underline input-lg"
-                                    id="" placeholder="{{ 'Catalogue' | translate }}">
+                                    id="" placeholder="{{ 'catalogue' | translate }}">
                             </div>
                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                 <label>Question:</label>
@@ -128,11 +128,11 @@
                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                 <label>Catalog:</label>
                                 <input type="text" [(ngModel)]="updCatalogue['Name']" name="ins_Catalogue" class="form-control input-underline input-lg"
-                                    id="" placeholder="{{ 'Catalogue' | translate }}">
+                                    id="" placeholder="{{ 'catalogue' | translate }}">
                             </div>
                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                 <label>Question:</label>
-                                <textarea class="form-control" rows="3" [(ngModel)]="updCatalogue['Description']" placeholder="{{ 'Catalogue' | translate }}"
+                                <textarea class="form-control" rows="3" [(ngModel)]="updCatalogue['Description']" placeholder="{{ 'catalogue' | translate }}"
                                     name="ins_Catalogue"></textarea>
                             </div>
                         </div>
