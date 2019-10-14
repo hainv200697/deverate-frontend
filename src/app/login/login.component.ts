@@ -18,26 +18,26 @@ export class LoginComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        if (localStorage.getItem('Authorization')) {
-            this.router.navigate(["/manage-question"]);
+        if (sessionStorage.getItem('Authorization')) {
+            this.router.navigate(['/manage-question']);
         }
     }
 
     onLogin() {
-        var account = {
+        const account = {
             username: this.username,
             password: this.password
-        }
+        };
         this.authenticationService.login(account)
         .subscribe((res) => {
-            if (res.status.code == 200) {
-                localStorage.setItem('isLoggedin', 'true');
-                localStorage.setItem('Authorization', res.data.data);
-                this.router.navigate(["/manage-question"]);
+            if (res.status.code === 200) {
+                sessionStorage.setItem('isLoggedin', 'true');
+                sessionStorage.setItem('Authorization', res.data.data);
+                this.router.navigate(['/manage-question']);
             } else {
                 alert(res.status.message);
-            } 
-        })
-        
+            }
+        });
+
     }
 }
