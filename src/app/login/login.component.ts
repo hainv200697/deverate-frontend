@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
             if (res.status.code === 200) {
                 sessionStorage.setItem('isLoggedin', 'true');
                 sessionStorage.setItem('Authorization', res.data.data);
+                sessionStorage.setItem('AccountId', '23');
                 this.router.navigate(['/manage-question']);
             } else {
                 alert(res.status.message);

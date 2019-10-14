@@ -62,7 +62,7 @@ export class CatalogueComponent implements OnInit {
     // Get all catalogue
     getAllCatalogue() {
         this.catelogueService.getAllCatalogue().subscribe(
-            (data :any[]) => {
+            (data: any[]) => {
 
                 this.catalogueList = data;
                 console.log(this.catalogueList);
@@ -122,12 +122,12 @@ export class CatalogueComponent implements OnInit {
     updateCatalogueSubmit() {
         this.updCata();
         this.closeModal();
-        // this.getAllCatalogue();  
+        // this.getAllCatalogue();
     }
 
     updCata() {
         this.catelogueService.updateCatalogue(this.updCatalogue).subscribe(
-            (data:any) => {
+            (data: any) => {
                 console.log(data['message']);
             }
         );
@@ -146,26 +146,24 @@ export class CatalogueComponent implements OnInit {
                 for (let i = 0; i < this.updateStatus.length; i++) {
                     this.updateStatus[i].IsActive = status;
                 }
-            );
-            
-            Swal.fire(
-              'Deleted',
-              '',
-              'success'
-            )
-            
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            this.updateStatus = [];
-            Swal.fire(
-              'Cancelled',
-              '',
-              'error'
-            )
-          }
-        })
+                Swal.fire(
+                    'Deleted',
+                    '',
+                    'success'
+                );
+
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                this.updateStatus = [];
+                Swal.fire(
+                    'Cancelled',
+                    '',
+                    'error'
+                );
+            }
+        });
     }
 
-    viewCatalog(item){
+    viewCatalog(item) {
         this.router.navigate(['/manage-question/', item['CatalogueId']]);
     }
 

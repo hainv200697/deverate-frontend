@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient,HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AppSettings } from '../appsetting';
 @Injectable({
@@ -25,19 +25,19 @@ export class CatalogueApiService {
 
     updateCatalogue(Catalogue) {
         const API = 'api/Catalogue/UpdateCatalogue';
-        return this.httpClient.put(this.URL + this.routes + API,Catalogue, this.httpOptions);
+        return this.httpClient.put(this.URL + this.routes + API, Catalogue);
     }
 
     removeCatalogue(Catalogue) {
-        const API = 'CatalogueAPI/RemoveCatalogue';
-        return this.httpClient.put(this.URL + this.routes + API,Catalogue);
+        const API = 'api/Catalogue/RemoveCatalogue';
+        return this.httpClient.put(this.URL + this.routes + API, Catalogue);
     }
-    
-    getCatalogueById(id){
+
+    getCatalogueById(id) {
         console.log(id);
-        let param = new HttpParams().set('id',id);
+        const param = new HttpParams().set('id', id);
         const API = 'api/Catalogue/GetCatalogueById';
-        return this.httpClient.get(this.URL + this.routes + API,{params:param});
+        return this.httpClient.get(this.URL + this.routes + API, { params: param });
     }
 
 
