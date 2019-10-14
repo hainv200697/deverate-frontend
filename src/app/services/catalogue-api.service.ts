@@ -14,7 +14,7 @@ export class CatalogueApiService {
     ) { }
 
     getAllCatalogue() {
-        const API = 'api/Catalogue/GetAllCatelogue';
+        const API = 'api/Catalogue/GetAllCatalogue';
         return this.httpClient.get<any[]>(this.URL + this.routes + API);
     }
 
