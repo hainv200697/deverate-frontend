@@ -7,8 +7,10 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class QuestionApiService {
-    URL = AppSettings.BASEURL;
-    routes = 'resource/';
+    // URL = AppSettings.BASEURL;
+    URL ='http://localhost:54318/';
+    // routes = 'resource/';
+    routes = '';
     httpOptions = {
         headers: new HttpHeaders({
           'Content-Type': 'application/json'
@@ -18,7 +20,7 @@ export class QuestionApiService {
     
     getQuestion(id:any) {
         let param= new HttpParams().set('id',id);
-        const API = 'api/Question/GetQuestionByCatalogue/';
+        const API = 'api/Question/GetQuestionByCatalogue';
         return this.httpClient.get(this.URL + this.routes + API,{params :param} );
     }
     

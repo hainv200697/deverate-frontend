@@ -1,0 +1,27 @@
+.btn-status{
+    border-radius: 25%;
+}
+.btn-circle{
+width: 40px;
+height: 40px;
+border-radius: 50%;
+}
+
+.badge-pill{
+    height: 30px;
+    align-items: center;
+    // padding-left: 25%;
+    font-size: 18px;
+    
+}
+.shadow-item{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.text-nowrap>span{
+display: none;
+}
+.answer-input{
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+}

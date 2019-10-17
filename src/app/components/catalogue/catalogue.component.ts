@@ -19,6 +19,7 @@ export class CatalogueComponent implements OnInit {
         private catelogueService: CatalogueApiService
     ) {
     }
+    public loading = false;
     selectedAll: any;
     check = 0;
     catalogueList = [];
@@ -61,9 +62,10 @@ export class CatalogueComponent implements OnInit {
 
     // Get all catalogue
     getAllCatalogue() {
+        this.loading = true;
         this.catelogueService.getAllCatalogue().subscribe(
             (data :any[]) => {
-
+                this.loading = false;
                 this.catalogueList = data;
                 console.log(this.catalogueList);
             }
@@ -74,6 +76,7 @@ export class CatalogueComponent implements OnInit {
     clickButtonRefresh(refesh) {
         refesh.classList.add('spin-animation');
         setTimeout(function () {
+            
             refesh.classList.remove('spin-animation');
         }, 500);
         this.getAllCatalogue();
@@ -89,9 +92,10 @@ export class CatalogueComponent implements OnInit {
 
     insCata() {
         this.insCatalogue['IsActive'] = true;
-        console.log(this.insCatalogue);
+        this.loading = true;
         this.catelogueService.insertCatalogue(this.insCatalogue).subscribe(
             (results) => {
+                this.loading = false;
                 console.log(results);
             }
         );
@@ -126,8 +130,10 @@ export class CatalogueComponent implements OnInit {
     }
 
     updCata() {
+        this.loading = true;
         this.catelogueService.updateCatalogue(this.updCatalogue).subscribe(
             (data:any) => {
+                this.loading = false;
                 console.log(data['message']);
             }
         );
@@ -146,7 +152,7 @@ export class CatalogueComponent implements OnInit {
                 for (let i = 0; i < this.updateStatus.length; i++) {
                     this.updateStatus[i].IsActive = status;
                 }
-            );
+            ;
             
             Swal.fire(
               'Deleted',
