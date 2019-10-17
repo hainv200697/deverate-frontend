@@ -7,10 +7,11 @@ import { Router, NavigationEnd } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 import Stepper from 'bs-stepper';
 import { from } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 declare var $: any;
 @Component({
   selector: 'manage-configuration',
@@ -41,14 +42,14 @@ export class ManageConfigurationComponent implements OnInit {
     format: 'dd-MM-yyyy hh:mm a',
     defaultOpen: false,
     closeOnSelect: false,
-  }
+  };
   settings2 = {
     bigBanner: true,
     timePicker: true,
     format: 'dd-MM-yyyy hh:mm a',
     defaultOpen: false,
     closeOnSelect: true,
-  }
+  };
   private stepper: Stepper;
   index = 1;
   indexDetail = 1;
@@ -65,7 +66,7 @@ export class ManageConfigurationComponent implements OnInit {
   Account = {};
   ListRank: [];
   a = {};
-  catalogueList: any;
+  catalogueList: [];
   inputConfiguration = {};
   inputManager = {};
 
@@ -84,25 +85,25 @@ export class ManageConfigurationComponent implements OnInit {
   selectedItems = [];
   dropdownSettings = {
     singleSelection: false,
-    text: "Select Catalogue",
+    text: 'Select Catalogue',
     selectAllText: 'Select All',
     unSelectAllText: 'UnSelect All',
     enableSearchFilter: true,
-    classes: "form-control form-group",
-    labelKey: "name",
-    primaryKey: "CatalogueId",
+    classes: 'form-control form-group',
+    labelKey: 'name',
+    primaryKey: 'CatalogueId',
     maxHeight: 240,
     showCheckbox: true,
   };
   dropdownSettingsDetail = {
     singleSelection: false,
-    text: "Select Catalogue",
+    text: 'Select Catalogue',
     selectAllText: 'Select All',
     unSelectAllText: 'UnSelect All',
     enableSearchFilter: true,
-    classes: "form-control form-group",
-    labelKey: "name",
-    primaryKey: "catalogueId",
+    classes: 'form-control form-group',
+    labelKey: 'name',
+    primaryKey: 'catalogueId',
     maxHeight: 240,
     showCheckbox: true,
   };
@@ -119,11 +120,10 @@ export class ManageConfigurationComponent implements OnInit {
     this.getAllRank(true);
     this.getAllCatalogue();
     this.getConfigurationIsActive(true);
-    
   }
 
   onItemSelect(item: any) {
-    this.inputConfiguration['totalQuestion'] += 5
+    this.inputConfiguration['totalQuestion'] += 5;
     console.log(this.inputConfiguration['totalQuestion']);
     console.log(this.selectedItems);
   }
@@ -132,14 +132,18 @@ export class ManageConfigurationComponent implements OnInit {
 
   onDeSelectAll(item: any) { }
 
-  OnItemDeSelect(item: any) { 
+  OnItemDeSelect(item: any) {
     console.log(this.selectedItems);
+  }
+
+  onDateSelect(item: any) {
+    console.log(item);
   }
 
   removeItem(item) {
 
-    for (var i = 0; i < this.selectedItems.length; i++) {
-      if (this.selectedItems[i]['id'] == item['id']) {
+    for (let i = 0; i < this.selectedItems.length; i++) {
+      if (this.selectedItems[i]['id'] === item['id']) {
         this.selectedItems.splice(i, 1);
       }
     }
@@ -150,16 +154,17 @@ export class ManageConfigurationComponent implements OnInit {
     this.startDate = new Date();
 
     this.endDate = new Date();
+    this.inputConfiguration['title'] = "";
     this.inputConfiguration['testOwnerId'] = 1;
     this.inputConfiguration['totalQuestion'] = 0;
-    this.inputConfiguration['title'] = "";
+    this.inputConfiguration['title'] = '';
     this.inputConfiguration['duration'] = 15;
     this.inputConfiguration['startDate'] = this.startDate;
     this.inputConfiguration['endDate'] = this.endDate.setDate(this.startDate.getDate() + 1);
     this.selectedItems = [];
     this.getAllRank(true);
-    this.modalService.open(content, { size: 'lg', windowClass: "myCustomModalClass" });
-    var a = document.querySelector('#stepper1');
+    this.modalService.open(content, { size: 'lg', windowClass: 'myCustomModalClass' });
+    const a = document.querySelector('#stepper1');
     this.stepper = new Stepper(a, {
       linear: false,
       animation: true
@@ -167,11 +172,11 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   openDetail(content, id: number) {
-    this.indexDetail = 1
+    this.indexDetail = 1;
     this.GetConfigurationCatalogueByConfigId(id);
     console.log(id);
-    this.modalService.open(content, { size: 'lg', windowClass: "myCustomModalClass" });
-    var a = document.querySelector('#update');
+    this.modalService.open(content, { size: 'lg', windowClass: 'myCustomModalClass' });
+    const a = document.querySelector('#update');
     this.stepper = new Stepper(a, {
       linear: false,
       animation: true
@@ -179,15 +184,15 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   next() {
-    if (this.validateConfiguration() == false) {
+    if (this.validateConfiguration() === false) {
       return;
     }
     this.stepper.next();
     this.index = this.index + 1;
-    this.inputConfiguration["startDate"] = this.startDate;
+    this.inputConfiguration['startDate'] = this.startDate;
     this.inputConfiguration['endDate'] = this.endDate;
-    console.log(this.inputConfiguration['startDate'])
-    console.log(this.inputConfiguration['endDate'])
+    console.log(this.inputConfiguration['startDate']);
+    console.log(this.inputConfiguration['endDate']);
   }
 
   nextDetail() {
@@ -220,10 +225,16 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   getAllCatalogue() {
+    let tmp: any;
     this.catalogueApi.getAllCatalogue().subscribe(
       (data) => {
-
-        this.catalogueList = data;
+        tmp = data;
+        for (let i = 0; i < tmp.length; i++) {
+          if (tmp[i]['quescount'] === 0) {
+            tmp.splice(i, 1);
+          }
+        }
+        this.catalogueList = tmp;
       }
     );
   }
@@ -262,7 +273,7 @@ export class ManageConfigurationComponent implements OnInit {
         this.updateConfig['duration'] = data['data']['data']['duration'];
         this.updateConfig['isActive'] = data['data']['data']['isActive'];
         this.updateConfig['catalogueInConfigurations'] = data['data']['data']['catalogueInConfigurations'];
-        this.updateConfig['configurationRank'] = data['data']['data']['configurationRank']
+        this.updateConfig['configurationRank'] = data['data']['data']['configurationRank'];
         this.selectedItems = data['data']['data']['catalogueInConfigurations'];
         this.loading = false;
         console.log(this.updateConfig);
@@ -273,27 +284,27 @@ export class ManageConfigurationComponent implements OnInit {
 
   selectAll() {
     this.selectConfiguration = [];
-    for (var i = 0; i < this.Configurations.length; i++) {
+    for (let i = 0; i < this.Configurations.length; i++) {
       this.Configurations[i].selected = this.selectedAll;
-      this.selectConfiguration.push(this.Configurations[i])
+      this.selectConfiguration.push(this.Configurations[i]);
     }
   }
 
   checkIfAllSelected() {
     this.selectConfiguration = [];
     this.selectedAll = this.Configurations.every(function (item: any) {
-      return item.selected == true;
-    })
-    for (var i = 0; i < this.Configurations.length; i++) {
-      if (this.Configurations[i].selected == true) {
-        this.selectConfiguration.push(this.Configurations[i])
+      return item.selected === true;
+    });
+    for (let i = 0; i < this.Configurations.length; i++) {
+      if (this.Configurations[i].selected === true) {
+        this.selectConfiguration.push(this.Configurations[i]);
       }
     }
   }
 
   Create() {
     this.loading = false;
-    if (this.inputConfiguration['duration'] == "" || this.inputConfiguration['totalQuestion'] == "") {
+    if (this.inputConfiguration['duration'] === '' || this.inputConfiguration['totalQuestion'] === '') {
       Swal.fire('Error', 'Something went wrong', 'error');
       return;
     }
@@ -312,18 +323,18 @@ export class ManageConfigurationComponent implements OnInit {
         this.loading = true;
         this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
         this.inputConfiguration['endDate'] = new Date(this.inputConfiguration['endDate']);
-        console.log(this.inputConfiguration)
+        console.log(this.inputConfiguration);
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
           this.getConfigurationIsActive(true);
           this.closeModal();
           this.index = 1;
-        Swal.fire('Success', 'The configuration has been created', 'success'); 
+        Swal.fire('Success', 'The configuration has been created', 'success');
         });
       }
-    })
+    });
   }
 
-  Update(){
+  Update() {
     this.loading = false;
     Swal.fire({
       title: 'Are you sure?',
@@ -340,16 +351,16 @@ export class ManageConfigurationComponent implements OnInit {
           this.getConfigurationIsActive(true);
           this.closeModal();
           this.indexDetail = 1;
-        Swal.fire('Success', 'The configuration has been updated', 'success'); 
+        Swal.fire('Success', 'The configuration has been updated', 'success');
         });
       }
-    })
-    
+    });
+
   }
 
-  DisableConfiguration(status: boolean){
+  DisableConfiguration(status: boolean) {
     this.loading = false;
-    if (status == false) {
+    if (status === false) {
       Swal.fire({
         title: 'Are you sure?',
         text: 'The company will be delete!',
@@ -360,22 +371,20 @@ export class ManageConfigurationComponent implements OnInit {
       }).then((result) => {
         if (result.value) {
           this.loading = true;
-          for (var i = 0; i < this.selectConfiguration.length; i++) {
+          for (let i = 0; i < this.selectConfiguration.length; i++) {
             this.selectConfiguration[i].isActive = status;
           }
           this.configAPi.changeStatusConfiguration(this.selectConfiguration).subscribe(data => {
             this.getConfigurationIsActive(status);
             this.closeModal();
             Swal.fire('Success', 'The configuration has been deleted', 'success');
-          });;
-        }
-        else if (result.dismiss === Swal.DismissReason.cancel) {
+          });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
           this.updateStatus = [];
           this.closeModal();
         }
-      })
-    }
-    else {
+      });
+    } else {
       Swal.fire({
         title: 'Are you sure?',
         text: 'The configuration will be enable!',
@@ -386,20 +395,19 @@ export class ManageConfigurationComponent implements OnInit {
       }).then((result) => {
         if (result.value) {
           this.loading = true;
-          for (var i = 0; i < this.selectConfiguration.length; i++) {
+          for (let i = 0; i < this.selectConfiguration.length; i++) {
             this.selectConfiguration[i].isActive = status;
           }
           this.configAPi.changeStatusConfiguration(this.selectConfiguration).subscribe(data => {
             this.getConfigurationIsActive(status);
             this.closeModal();
             Swal.fire('Success', 'The configuration has been enabled', 'success');
-          });;
-        }
-        else if (result.dismiss === Swal.DismissReason.cancel) {
+          });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
           this.updateStatus = [];
           this.closeModal();
         }
-      })
+      });
     }
   }
 
@@ -407,31 +415,26 @@ export class ManageConfigurationComponent implements OnInit {
     if (this.inputConfiguration['totalQuestion'] < 1 || this.inputConfiguration['totalQuestion'] > 100) {
       this.toast.error('Message', 'Total question must be range 1 to 100');
       return false;
-    }
-    else if (this.inputConfiguration['duration'] < 15 || this.inputConfiguration['duration'] > 180) {
+    } else if (this.inputConfiguration['duration'] < 15 || this.inputConfiguration['duration'] > 180) {
       this.toast.error('Message', 'duration must be range 15 to 200');
       return false;
-    }
-    else if (this.selectedItems.length == 0) {
+    } else if (this.selectedItems.length === 0) {
       this.toast.error('Message', 'Please select the catalogue');
       return false;
-    }
-    else if ($('#mark').val() == "") {
+    } else if ($('#mark').val() === '') {
       this.toast.error('Message', 'Please input rate of catalogue');
       return false;
     }
-    var total = 0;
-    for (var i = 0; i < this.selectedItems.length; i++) {
+    let total = 0;
+    for (let i = 0; i < this.selectedItems.length; i++) {
       total = this.selectedItems[i]['weightPoint'] + total;
     }
-    if (total != 1) {
-      console.log(total)
+    if (total !== 1) {
+      console.log(total);
       this.toast.error('Message', 'Total mark of catalogue must be 1');
       return false;
-    }
-
-    else if (this.index == 2) {
-      if ($('#rate').val() == "") {
+    } else if (this.index === 2) {
+      if ($('#rate').val() === '') {
         this.toast.error('Message', 'Please input rate of rank');
         return false;
       }
@@ -448,4 +451,23 @@ export class ManageConfigurationComponent implements OnInit {
       // }
     }
   }
+
+  sendMail() {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'The mail will be send to employee!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, send it!',
+        cancelButtonText: 'No, keep it'
+      }).then((result) => {
+        if (result.value) {
+          this.closeModal();
+          Swal.fire('Success', 'The mail has been send', 'success');
+
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          this.closeModal();
+        }
+      });
+    }
 }

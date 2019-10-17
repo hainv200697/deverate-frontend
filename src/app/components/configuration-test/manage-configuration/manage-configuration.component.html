@@ -34,6 +34,14 @@
 
                     <div class="form-content row">
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 row no-padding-no-margin">
+
+                            <div class="col-md-12 row">
+                                <label class="col-md-3" style="text-align: right">Title:</label>
+                                <input class="col-md-9" type="text" [(ngModel)]="inputConfiguration['title']"
+                                    name="ins_config_title" style="height: 30px">
+                            </div>
+
+                            <label class="col-md-12"></label>
                             <div class="col-md-5 row">
                                 <label class="col-md-8" style="text-align: right">Total
                                     Question:</label>
@@ -47,8 +55,8 @@
                             <div class="col-md-7 row ">
                                 <label class="col-md-4" style="text-align: right">Start Date:</label>
                                 <div class="col-md-7">
-                                    <angular2-date-picker id="datetimepicker" [(ngModel)]="startDate"
-                                        [settings]="settings1">
+                                    <angular2-date-picker id="datetimepicker" [(ngModel)]="startDate" name="mydate"
+                                        (dateChanged)="onDateChanged($event)" [settings]="settings1">
                                     </angular2-date-picker>
                                 </div>
                                 <label class="col-md-12"></label>
@@ -123,6 +131,14 @@
                         <div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <table class="table table-striped table-bordered table-hover customtable">
                                 <tbody>
+                                    <tr class="col-md-12 row no-padding-no-margin">
+                                        <td class="col-md-3" style="font-weight: bold">
+                                            Title
+                                        </td>
+                                        <td class="col-md-9">
+                                            {{inputConfiguration['title']}}
+                                        </td>
+                                    </tr>
                                     <tr class="col-md-12 row no-padding-no-margin">
                                         <td class="col-md-3" style="font-weight: bold">
                                             Total question
@@ -249,6 +265,13 @@
 
                     <div class="form-content row">
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 row no-padding-no-margin">
+                            <div class="col-md-12 row">
+                                <label class="col-md-3" style="text-align: right">Title:</label>
+                                <input class="col-md-9" type="text" [(ngModel)]="updateConfig['title']"
+                                    name="up_config_title" style="height: 30px">
+                            </div>
+
+                            <label class="col-md-12"></label>
                             <div class="col-md-5 row">
                                 <label class="col-md-8" style="text-align: right">Total Question:</label>
                                 <input class="col-md-4" type="number" value="1" min="1" style="height: 30px"
@@ -442,19 +465,19 @@
 <hr>
 
 <ng-template #customLoadingTemplate>
-        <div class="custom-class">
+    <div class="custom-class">
 
-        </div>
-    </ng-template>
+    </div>
+</ng-template>
 
-    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
-    </ngx-loading>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
+</ngx-loading>
 <!-- Search -->
 
 <!-- Table question -->
 
 <div class="insert-form col-md-12">
-    
+
     <div class="card mb-3 shadow-card">
         <div class="card-header" style="color: white">
             Configuration
@@ -561,10 +584,13 @@
                         <td class="text-center col-md-1" [hidden]="c.isActive==false" style="color: green;">
                             Active
                         </td>
-                        <td class="nowrap text-center action-column col-md-1">
-                            <button class="icon-btn" (click)="openDetail(update, c.ConfigId)"
+                        <td class="nowrap text-center action-column col-md-1 row no-padding-no-margin">
+                            <button class="btn btn-success" (click)="openDetail(update, c.configId)"
                                 tooltip="{{'common_modify' | translate}}">
-                                <i class="fa fa-edit edit-icon"></i>
+                                <i class="fa fa-edit"></i>
+                            </button>|
+                            <button class="btn btn-success" (click)="sendMail()" tooltip="{{'mail' | translate}}">
+                                <i class="fa fa-envelope"></i>
                             </button>
                         </td>
                     </tr>
