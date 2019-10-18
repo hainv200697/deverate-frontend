@@ -1,0 +1,69 @@
+<div>
+
+    <div class="row">
+        <div class="col col-sm-6">
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="col-md-12 row no-padding-no-margin pt-4">
+                        
+                        <th class="text-left col-md-1 no-padding-no-margin">
+                            No.
+                        </th>
+                        <th class="text-center col-md-7">
+                            Criteria
+                            
+                        </th>
+                        <th class="text-left col-md-4">
+                            Assessment Result
+                        </th>
+                        
+                       
+                    </tr>
+                </thead>
+                <tbody style="background-color: white;">
+                    <tr class="col-md-12 row no-padding-no-margin pt-2" style="font-size: 18px">
+                        
+                        <td class="text-center col-md-1">1</td>
+                        <td class="text-center col-md-7">Software Requirement Analysis</td>
+                        <td class="text-center col-md-1">0</td>
+                        <td class="text-center col-md-3">a</td>
+                        
+                        <td class="text-center col-md-1">2</td>
+                        <td class="text-center col-md-7">Software Requirement Analysis</td>
+                        <td class="text-center col-md-1">0</td>
+                        <td class="text-center col-md-3">a</td>
+                        
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col col-sm-6">
+            <div class="card mb-3">
+                <div class="card-header">
+                    Gauge Chart
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-cente" id="power-gauge"
+                        style="zoom: 2; height: 187px; width: 290px;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col col-sm-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    Radar Chart
+                </div>
+                <div class="card-body">
+                    <canvas baseChart height="100px" [datasets]="radarChartData" [labels]="radarChartLabels"
+                        [chartType]="radarChartType" (chartHover)="chartHovered($event)"
+                        (chartClick)="chartClicked($event)">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
