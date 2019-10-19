@@ -6,6 +6,7 @@ import { AppSettings } from '../appsetting';
 })
 export class CompanyApiService {
     // URL = 'http://localhost:54318/';
+    // routes = '';
     URL = AppSettings.BASEURL;
     routes = 'resource/';
     constructor(private httpClient: HttpClient) { }
@@ -17,26 +18,26 @@ export class CompanyApiService {
 
     getCompanyById(id: number) {
         const API = 'CompanyAPI/GetCompanyById?id=';
-        return this.httpClient.get(this.URL + API + id);
+        return this.httpClient.get(this.URL + this.routes + API + id);
     }
 
     getCompanyByName(name: string) {
         const API = 'CompanyAPI/GetCompanyByName?name=';
-        return this.httpClient.get(this.URL + API + name);
+        return this.httpClient.get(this.URL + this.routes + API + name);
     }
 
     insertCompany(CompanyModel) {
         const API = 'CompanyAPI/CreateCompany';
-        return this.httpClient.post(this.URL + API, CompanyModel);
+        return this.httpClient.post(this.URL + this.routes + API, CompanyModel);
     }
 
     updateCompany(CompanyModel) {
         const API = 'CompanyAPI/UpdateCompany';
-        return this.httpClient.put(this.URL + API, CompanyModel);
+        return this.httpClient.put(this.URL + this.routes + API, CompanyModel);
     }
 
     disableCompany(CompanyModel) {
         const API = 'CompanyAPI/DisableCompany';
-        return this.httpClient.put(this.URL + API, CompanyModel);
+        return this.httpClient.put(this.URL + this.routes + API, CompanyModel);
     }
 }
