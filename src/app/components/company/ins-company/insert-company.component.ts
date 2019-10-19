@@ -212,40 +212,40 @@ export class InsertCompanyComponent implements OnInit {
   }
 
   Save() {
-    if(this.validdate() == false){
+    if (this.validdate() == false) {
       console.log(this.validdate())
       console.log(this.inputCompany);
       return;
     }
-    else{
-    this.loading = false;
-    var inputCompanyData = {};
-    inputCompanyData['companyDTO'] = this.inputCompany;
-    inputCompanyData['accountDTO'] = this.inputManager;
-    
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'The company will be create!',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, create it!',
-      cancelButtonText: 'No, don not create '
-    }).then((result) => {
-      if (result.value) {
-        this.loading = true;
-        console.log(inputCompanyData)
-        this.companyApi.insertCompany(inputCompanyData).subscribe(data => {
-          this.getCompanyIsActive(true);
-          this.closeModal();
-          Swal.fire('Success', 'The company has been created', 'success');
-        });
+    else {
+      this.loading = false;
+      var inputCompanyData = {};
+      inputCompanyData['companyDTO'] = this.inputCompany;
+      inputCompanyData['accountDTO'] = this.inputManager;
 
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.updateStatus = [];
-        this.closeModal();
-      }
-    })
-  }
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'The company will be create!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, create it!',
+        cancelButtonText: 'No, don not create '
+      }).then((result) => {
+        if (result.value) {
+          this.loading = true;
+          console.log(inputCompanyData)
+          this.companyApi.insertCompany(inputCompanyData).subscribe(data => {
+            this.getCompanyIsActive(true);
+            this.closeModal();
+            Swal.fire('Success', 'The company has been created', 'success');
+          });
+
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          this.updateStatus = [];
+          this.closeModal();
+        }
+      })
+    }
   }
 
   Update() {
@@ -278,7 +278,7 @@ export class InsertCompanyComponent implements OnInit {
     })
   }
 
-  validdate(){
+  validdate() {
     if (this.inputCompany['name'] == "") {
       this.toast.error('Message', 'Please input company name');
       return false;
@@ -292,21 +292,18 @@ export class InsertCompanyComponent implements OnInit {
       return false;
     }
     else if (this.inputCompany['fax'] == "") {
-      this.toast.error("Message", "Please input company's fax");
+      this.toast.error("Message", 'Please input company\'s fax');
       return false;
     }
-    
-    else if (this.inputManager['fullname'] == "" ) {
-      this.toast.error("Message", "Please input manager name");
+
+    else if (this.inputManager['fullname'] == '') {
+      this.toast.error('Message', 'Please input manager name');
       return false;
-    }
-    else if(this.inputManager['fullname'].length < 3 ){
-      this.toast.error("Message", "Please input manager name min 3 letter");
+    } else if (this.inputManager['fullname'].length < 3) {
+      this.toast.error('Message', 'Please input manager name min 3 letter');
       return false;
-    }
-    
-    else if(!this.globalservice.checkMail.test(String(this.inputManager['email']).toUpperCase())){
-      this.toast.error("Message", "Email wrong format");
+    } else if (!this.globalservice.checkMail.test(String(this.inputManager['email']).toUpperCase())) {
+      this.toast.error('Message', 'Email wrong format');
       return false;
     }
   }

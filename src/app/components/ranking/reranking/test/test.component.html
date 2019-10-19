@@ -1,0 +1,18 @@
+<div class="text-center">
+    <h2 style="color: red;">Doing Test</h2>
+</div>
+
+<div class="card mb-3 shadow-card">
+    <div class="col-md-12" *ngFor="let item of message" >
+        <div class="col-md-12">
+            <div class="question">
+                <h5>{{item['question']}}</h5>
+            </div>
+            <div class="answer" *ngFor="let ans of item['answers']; let i = index">
+                <label  style="padding-top: 5px;">
+                        <input type="radio" name="optionsRadios" id="optionsRadios1" [value]="ans['answerId']" checked=""> {{ans['answer']}}
+                    </label>
+            </div>
+        </div>
+    </div>
+</div>

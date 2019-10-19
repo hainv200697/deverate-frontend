@@ -1,4 +1,4 @@
-@import "../../../styles/style.scss";
+@import '../../../styles/custom.scss';
 @mixin animation-name($name){
     animation-name: $name;
     -webkit-animation-name: $name;
