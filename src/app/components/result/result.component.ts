@@ -1,6 +1,7 @@
 
 declare var d3: any;
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { RankApiService } from 'src/app/services/rank-api.services';
 
 @Component({
   selector: 'app-result',
@@ -10,7 +11,32 @@ import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 export class ResultComponent implements OnInit {
   gaugemap = {};
   public powerGauge: any;
+  ListRank: [];
+  selectedDevice = "";
     
+  constructor(private rankApi: RankApiService,
+    ) {}
+  
+  ngOnInit() {
+  
+      this.radarChartType = 'radar';
+      this.getAllRank(true);
+      this.draw();
+      this.onChangeRank(3);
+  }
+  getAllRank(status: boolean) {
+    this.rankApi.getAllRank(status).subscribe(
+      (data) => {
+        this.ListRank = data['data']['data'];
+      }
+    );
+
+  }
+
+  onChangeRank(newValue) {
+    console.log(newValue);
+    this.selectedDevice = newValue;}
+
 // Radar
 public radarChartLabels: string[] = [
     'Software Requirement Analysis',
@@ -73,13 +99,7 @@ public chartHovered(e: any): void {
 
 
 
-constructor() {}
 
-ngOnInit() {
-
-    this.radarChartType = 'radar';
-    this.draw();
-}
 draw() {
   var self = this;
  var gauge = function (container, configuration) {
@@ -91,8 +111,8 @@ draw() {
      ringInset: 20,
      ringWidth: 20,
 
-     pointerWidth: 10,
-     pointerTailLength: 5,
+     pointerWidth: 4,
+     pointerTailLength: 2,
      pointerHeadLengthPercent: 0.9,
 
      minValue: 0,
@@ -250,11 +270,11 @@ draw() {
 
  this.powerGauge = gauge('#power-gauge', {
    size: 300,
-   clipWidth: 300,
+   clipWidth: 400,
    clipHeight: 300,
    ringWidth: 60,
    maxValue: 10,
-   transitionMs: 4000,
+   transitionMs: 3000,
  });
 // powerGauge.render(6);
  this.powerGauge.render();

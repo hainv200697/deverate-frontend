@@ -21,6 +21,14 @@
                 <div class="step" data-target="#test-l-3">
                     <button [disabled]="index != 3" class="step-trigger">
                         <span class="bs-stepper-circle">3</span>
+                        <span class="bs-stepper-label">Catalogue In Rank</span>
+                    </button>
+                </div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="step" data-target="#test-l-4">
+                    <button [disabled]="index != 4" class="step-trigger">
+                        <span class="bs-stepper-circle">4</span>
                         <span class="bs-stepper-label">View Configuration Test</span>
                     </button>
                 </div>
@@ -127,6 +135,31 @@
                     </div>
                 </div>
                 <div id="test-l-3" class="content">
+
+                    <!--Add rank rate  -->
+                    <div class="form-content answer-form">
+                        <h4>Configutation Rank Rate</h4>
+
+                        <div class="d-flex justify-content-center col-md-12">
+                            <div class="list-group-item col-md-8 ">
+                                <h5 class="card-title"> </h5>
+                                <div class="form-row" *ngFor="let rank of ListRank">
+                                    <div class="form-group col-8">
+                                        <label>Rank</label>
+                                        <input type="text" disabled="disabled" [value]="rank['name']"
+                                            class="form-control " />
+                                    </div>
+                                    <div class="form-group col-3">
+                                        <label>Mark</label>
+                                        <input type="number" [(ngModel)]="rank.weightPoint" class="form-control"
+                                            step="0.1" id="rate" min="0.1" max="1" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="test-l-4" class="content">
                     <div class="form-content">
                         <div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <table class="table table-striped table-bordered table-hover customtable">
