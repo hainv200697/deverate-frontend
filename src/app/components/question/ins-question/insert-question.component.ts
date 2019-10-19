@@ -42,7 +42,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     file: File;
     create = 0;
     listDataExcel = [];
-    eachAnswer = {}
+    eachAnswer = {};
     listAnswer: Array<AnswerModel> = [];
     // stepper
     private stepper: Stepper;
@@ -80,25 +80,25 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
     readExcel() {
         return new Promise((resolve, reject) => {
-            let fileReader = new FileReader();
+            const fileReader = new FileReader();
             fileReader.onload = (e) => {
 
                 this.arrayBuffer = fileReader.result;
-                var data = new Uint8Array(this.arrayBuffer);
-                var arr = new Array();
-                for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
-                var bstr = arr.join("");
-                var workbook = XLSX.read(bstr, { type: "binary" });
-                var first_sheet_name = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[first_sheet_name];
+                let data = new Uint8Array(this.arrayBuffer);
+                let arr = new Array();
+                for (let i = 0; i != data.length; ++i) { arr[i] = String.fromCharCode(data[i]); }
+                const bstr = arr.join('');
+                const workbook = XLSX.read(bstr, { type: 'binary' });
+                const first_sheet_name = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[first_sheet_name];
                 this.listDataExcel = XLSX.utils.sheet_to_json(worksheet, { raw: true });
 
 
 
                 resolve(this.listDataExcel);
-            }
+            };
             fileReader.readAsArrayBuffer(this.file);
-        })
+        });
     }
 
     async formatExcel() {
@@ -106,22 +106,22 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             let list: any;
             list = await this.readExcel();
             list.forEach(element => {
-                let questionObj = new QuestionModel();
+                const questionObj = new QuestionModel();
 
                 this.listAnswer = [];
                 questionObj.question1 = element['Question'];
                 questionObj.isActive = true;
                 questionObj.createBy = 1;
                 questionObj.catalogueId = this.id;
-                for (var i = 0; i <= 5; i++) {
-                    let answerObj = new AnswerModel();
-                    if (i == 0) {
+                for (let i = 0; i <= 5; i++) {
+                    const answerObj = new AnswerModel();
+                    if (i === 0) {
 
                         answerObj.answer1 = element['answer'];
                         answerObj.point = element['point'];
                         answerObj.isActive = true;
                         this.listAnswer.push(answerObj);
-                    } else if (element['answer_' + i] != null || element['answer_' + i] != undefined) {
+                    } else if (element['answer_' + i] != null || element['answer_' + i] !== undefined) {
                         answerObj.answer1 = element['answer_' + i];
                         answerObj.point = element['point_' + i];
                         answerObj.isActive = true;
@@ -153,7 +153,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 return;
             }
             const question = this.insQuestion['question1'];
-            if (question === "" || question === undefined || question === null) {
+            if (question === '' || question === undefined || question === null) {
                 this.toastr.error('Message', 'Question can not be blank!');
                 $('#ins_question_question').css('border-color', 'red');
                 $('#ins_question_question').focus();
@@ -178,9 +178,9 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             let i = -1;
             this.insAnswer.forEach(element => {
                 i++;
-                if (check == true) {
-                    var ans = element['answer1'];
-                    if (ans === "" || ans.length < 5) {
+                if (check === true) {
+                    const ans = element['answer1'];
+                    if (ans === '' || ans.length < 5) {
                         this.toastr.error('Message', 'Answer must be more than 5 characters!');
                         check = false;
                         $('.ans-' + i).css('border-color', 'red');
@@ -209,18 +209,16 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                         $('.mark-' + i).focus();
                         return;
                     }
-                }
-                else {
+                } else {
                     return;
                 }
             });
-            if (check == true) {
+            if (check === true) {
                 this.stepper.next();
                 this.index++;
             }
 
-        }
-        else {
+        } else {
             this.updAnswer = this.answerForm.controls['answers'].value;
             let check = true;
             this.updQuestion['MaxPoint'] = Math.max.apply(Math, this.updAnswer.map(function(o) { return o.point; }));
@@ -233,7 +231,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 return;
             }
             const question = this.updQuestion['question1'];
-            if (question === "" || question === undefined || question === null) {
+            if (question === '' || question === undefined || question === null) {
                 this.toastr.error('Message', 'Question can not be blank!');
                 $('#upd_question_question').css('border-color', 'red');
                 $('#upd_question_question').focus();
@@ -258,9 +256,9 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             let i = -1;
             this.updAnswer.forEach(element => {
                 i++;
-                if (check == true) {
-                    var ans = element['answer1'];
-                    if (ans === "" || ans.length < 5) {
+                if (check === true) {
+                    const ans = element['answer1'];
+                    if (ans === '' || ans.length < 5) {
                         this.toastr.error('Message', 'Answer must be more than 5 characters!');
                         check = false;
                         $('.ans-' + i).css('border-color', 'red');
@@ -289,12 +287,11 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                         $('.mark-' + i).focus();
                         return;
                     }
-                }
-                else {
+                } else {
                     return;
                 }
             });
-            if (check == true) {
+            if (check === true) {
                 this.stepper.next();
                 this.index++;
             }
@@ -339,8 +336,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.count++;
         if (this.count < 6) {
             (<FormArray>this.answerForm.controls['answers']).push(this.addAnswerForm());
-        }
-        else {
+        } else {
             this.toastr.error('Message', 'Can not create more than 5 answers!');
         }
 
@@ -371,13 +367,13 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         (<FormArray>this.answerForm.controls['answers']).push(this.updateAnswerForm());
     }
 
-    //Endynamic form 
+    // Endynamic form
 
-    //Open modal 
+    // Open modal
     open(content) {
         this.index = 1;
-        this.modalService.open(content, { size: 'lg', windowClass: "myCustomModalClass" });
-        var a = document.querySelector('#stepper1');
+        this.modalService.open(content, { size: 'lg', windowClass: 'myCustomModalClass' });
+        const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
             linear: false,
             animation: true
@@ -386,7 +382,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
     openModalExcel(excel) {
         this.index = 1;
-        this.modalService.open(excel, { size: 'lg', windowClass: "myCustomModalClass" });
+        this.modalService.open(excel, { size: 'lg', windowClass: 'myCustomModalClass' });
     }
     closeModal() {
         this.modalService.dismissAll();
@@ -409,7 +405,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.updQuestion['createBy'] = 1;
         console.log(this.updQuestion);
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
-        var a = document.querySelector('#stepper1');
+        const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
             linear: false,
             animation: true
@@ -429,21 +425,21 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     // checkbox
     selectAll() {
         this.updateStatus = [];
-        for (var i = 0; i < this.allQuestions.length; i++) {
+        for (let i = 0; i < this.allQuestions.length; i++) {
             this.allQuestions[i].selected = this.selectedAll;
-            this.updateStatus.push(this.allQuestions[i])
+            this.updateStatus.push(this.allQuestions[i]);
         }
     }
 
     checkIfAllSelected() {
         this.updateStatus = [];
         this.selectedAll = this.allQuestions.every(function (item: any) {
-            return item.selected == true;
+            return item.selected === true;
 
-        })
-        for (var i = 0; i < this.allQuestions.length; i++) {
-            if (this.allQuestions[i].selected == true) {
-                this.updateStatus.push(this.allQuestions[i])
+        });
+        for (let i = 0; i < this.allQuestions.length; i++) {
+            if (this.allQuestions[i].selected === true) {
+                this.updateStatus.push(this.allQuestions[i]);
             }
         }
 
@@ -459,7 +455,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             cancelButtonText: 'No, keep it'
         }).then((result) => {
             if (result.value) {
-                for (var i = 0; i < this.updateStatus.length; i++) {
+                for (let i = 0; i < this.updateStatus.length; i++) {
                     this.updateStatus[i].IsActive = status;
                 }
                 console.log(this.updateStatus);
@@ -474,7 +470,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                     'Deleted',
                     '',
                     'success'
-                )
+                );
 
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 this.updateStatus = [];
@@ -482,17 +478,17 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                     'Cancelled',
                     '',
                     'error'
-                )
+                );
             }
-        })
+        });
     }
 
 
     // end Modal
     insertQuestionSubmit(key) {
-        if(key === 'excel'){
+        if (key === 'excel') {
             this.addQuestionByExcel();
-        }else{
+        } else {
             this.addQuestion();
         }
         this.closeModal();
@@ -502,7 +498,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         refesh.classList.add('spin-animation');
         setTimeout(function () {
             refesh.classList.remove('spin-animation');
-        }, 500)
+        }, 500);
         this.getQuestionById();
     }
 
@@ -525,7 +521,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             (results) => {
                 this.getQuestionById();
             }
-        );;
+        );
     }
 
     updateQuestionSubmit() {
@@ -573,9 +569,9 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.updQuestion['answer'].forEach(item => {
             this.ansForm = this.updateAnswerForm();
             this.ansForm.setValue({
-                "answer1": item['answer1'],
-                "point": item['point'],
-                "answerId": item['answerId']
+                'answer1': item['answer1'],
+                'point': item['point'],
+                'answerId': item['answerId']
             });
             (<FormArray>this.answerForm.controls['answers']).push(this.ansForm);
             this.count++;
@@ -602,7 +598,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         $('input').focusout(function () {
-            $(this).css("border-color", "#ced4da");;
+            $(this).css('border-color', '#ced4da');
         });
 
     }

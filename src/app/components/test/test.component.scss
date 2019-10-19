@@ -1,0 +1,26 @@
+.card {
+    float: right;
+}
+.timer {
+    float: left;
+    position: fixed;
+    top: 45px;
+    left: 5px;
+    z-index: 100;
+    background-color: #E0E0E0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 3px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 10pt;
+    opacity: 0.9;
+    text-align: center;
+}
+
+.close-counter {
+    font-size: 9pt;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}

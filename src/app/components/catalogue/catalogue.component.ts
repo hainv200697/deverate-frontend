@@ -126,7 +126,7 @@ export class CatalogueComponent implements OnInit {
     updateCatalogueSubmit() {
         this.updCata();
         this.closeModal();
-        // this.getAllCatalogue();  
+        // this.getAllCatalogue();
     }
 
     updCata() {
@@ -151,9 +151,8 @@ export class CatalogueComponent implements OnInit {
             if (result.value) {
                 for (let i = 0; i < this.updateStatus.length; i++) {
                     this.updateStatus[i].IsActive = status;
+                
                 }
-            ;
-            
             Swal.fire(
               'Deleted',
               '',
