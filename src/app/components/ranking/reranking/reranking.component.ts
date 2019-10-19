@@ -20,15 +20,14 @@ export class RerankingComponent implements OnInit {
   message;
   questions;
   configId;
-  test= true;
+  test = true;
   error = false;
   ngOnInit() {
     const accountId = sessionStorage.getItem('AccountId');
-    this.testService.getAllCompany(accountId)
+    this.testService.getAllTestInfo(accountId)
       .subscribe(res => {
-        if (res.status.code === 200) {
-          this.configs = res.data.data;
-        }
+        console.log(res);
+        this.configs = res;
       });
   }
 
@@ -53,16 +52,16 @@ export class RerankingComponent implements OnInit {
       code: this.key
     };
     this.testService.getAllQuestion(testInfo)
-    .subscribe((res) => {
-      console.log(res);
-      this.message = res;
-      this.closeModal();
-      this.test = false;
-      console.log(this.test);
-    },
-    (error) => {
-      this.error = true;
-    });
+      .subscribe((res) => {
+        console.log(res);
+        this.message = res;
+        this.closeModal();
+        this.test = false;
+        console.log(this.test);
+      },
+        (error) => {
+          this.error = true;
+        });
   }
 
 }

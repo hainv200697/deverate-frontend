@@ -1,4 +1,4 @@
-<div [hidden]="!test">
+<div>
     <div class="insert-form col-md-12">
         <div class="card mb-3 shadow-card">
             <div class="card-header" style="color: white">
@@ -7,35 +7,6 @@
         </div>
         </div>
         <div *ngFor="let config of configs, let i=index">
-            <h3 (click)="open(quiznow, i)">Reranking October 2019</h3>
+            <a [routerLink]="['/test/',config.testId]"><h3>{{config.title}}</h3></a>
         </div>
-        <ng-template #quiznow let-modal>
-        <div class="modal-header">
-            <h4 class="modal-title modal-header" id="modal-basic-title">Reranking October 2019</h4>
-        </div>
-        <div class="modal-body modal-basic-title col-md-12 row no-padding-no-margin">
-                <div class="form-group col-md-12">
-                    <div>
-                        <div>
-                        <p>This test opened at {{startDate}}</p>
-                        <p>This test will close at {{endDate}}</p>
-                        <p>To attempt this test you need to know the test password</p>
-                        <p>Time limit: {{duration}} mins</p>
-                        </div>
-                        <div class="input-group input-group-icon col-md-9">
-                            <input type="password" placeholder="Key" [(ngModel)]="key">
-                            <div class="input-icon"><i class="fa fa-key"></i></div>
-                            <br/>
-                            <p [hidden]="!error" style="color: red;">Code invalid</p>
-                        </div>
-                    </div>
-                </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-success save shadow-card" (click)="quiz()">Quiz Now</button>
-        </div>
-    </ng-template>
-</div>
-<div [hidden]="test">
-    <app-test [message]= "message"></app-test>
 </div>
