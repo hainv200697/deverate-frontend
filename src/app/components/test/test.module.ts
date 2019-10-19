@@ -14,4 +14,4 @@ import { TestComponent } from './test.component';
   ],
   declarations: [TestComponent]
 })
-export class TestModule {}
+export class TestModule { }

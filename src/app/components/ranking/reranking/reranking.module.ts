@@ -10,7 +10,6 @@ import { DataTableModule } from 'ng-angular8-datatable';
 import { ToastrModule } from 'ngx-toastr';
 import { RerankingComponent } from './reranking.component';
 import { RerankingRoutingModule } from './reranking-routing.module';
-import { TestComponent } from './test/test.component';
 
 @NgModule({
   imports: [
@@ -28,6 +27,6 @@ import { TestComponent } from './test/test.component';
     DataTableModule,
     ToastrModule.forRoot()
   ],
-  declarations: [RerankingComponent,TestComponent]
+  declarations: [RerankingComponent]
 })
 export class RerankingModule {}
