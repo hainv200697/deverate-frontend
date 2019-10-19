@@ -62,7 +62,8 @@
                                             <div [formGroup]="answer" class="form-row">
                                                 <div class="form-group col-10">
                                                     <label>Answer</label>
-                                                    <input type="text" formControlName="answer1" placeholder="Input answer {{i+1}}"
+                                                    <input type="text" formControlName="answer1"
+                                                        placeholder="Input answer {{i+1}}"
                                                         class="answer-input form-control ans-{{i}}" />
                                                 </div>
                                                 <div class="form-group col-1">
@@ -332,12 +333,13 @@
         <div class="card-header">
             <h5>Question</h5>
         </div>
-        <div class="table-responsive col-md-12 datatable" >
+        <div class="table-responsive col-md-12 datatable">
             <div class="row mb-1">
-                <div class="col" >
+                <div class="col">
                     <div class=" row justify-content-between" style="margin-top: 20px;">
                         <div class="form-group input-group col-md-6">
-                            <input type="text" class="form-control" placeholder="Enter your key word" name="searchText" [(ngModel)]="searchText">
+                            <input type="text" class="form-control" placeholder="Enter your key word" name="searchText"
+                                [(ngModel)]="searchText">
                             <div class="input-group-append">
                                 <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
                             </div>
@@ -348,21 +350,24 @@
                         </button>
                     </div>
                     <div class="row justify-content-end" style="margin-top: 20px;">
-                        <button style="margin-right: 10px;" (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger" data-toggle="button" >
+                        <button style="margin-right: 10px;" (click)="clickButtonChangeStatus(false);"
+                            class="btn btn-lg btn-danger" data-toggle="button">
                             <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
                         </button>
-                        <button style="margin-right: 10px;" (click)="openModalExcel(excel);" class="btn btn-lg btn-success " data-toggle="button">
+                        <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
+                            class="btn btn-lg btn-success " data-toggle="button">
                             <i class="fa fa-file-excel-o"></i>
                         </button>
-                        <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)" class="btn btn-lg btn-primary" data-toggle="button" >
+                        <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
+                            class="btn btn-lg btn-primary" data-toggle="button">
                             <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
                                 aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
                         </button>
                     </div>
                 </div>
             </div>
-            <table style="margin-top: 20px;" class="table  table-hover customtable" [svData]="allQuestions" #sv="svDataTable"
-                [svRowsOnPage]="5" svSortBy="name" svSortOrder="asc">
+            <table style="margin-top: 20px;" class="table  table-hover customtable" [svData]="allQuestions"
+                #sv="svDataTable" [svRowsOnPage]="5" svSortBy="name" svSortOrder="asc">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin">
                         <th class="text-center col-md-1" scope="col">
@@ -375,9 +380,12 @@
                         <th class="col-md-3 text-center" scope="col">
                             <sv-default-sorter by='question1'>Question</sv-default-sorter>
                         </th>
-                        <th class="col-md-2 text-center" scope="col">
+                        <th class="col-md-1 text-center" scope="col">
                             <sv-default-sorter by='createBy'>Create By</sv-default-sorter>
                         </th>
+                        <th class="col-md-1 text-center" scope="col">
+                                <sv-default-sorter by='maxPoint'>Max Point</sv-default-sorter>
+                            </th>
                         <th class="text-center col-md-1" scope="col">Status
                             <div ngbDropdown class="d-inline-block dropdown">
                                 <button class=" icon-btn" ngbDropdownToggle></button>
@@ -400,7 +408,8 @@
                         </td>
                         <td class="text-center col-md-3">{{q.catalogueName}}</td>
                         <td class="text-center col-md-3">{{q.question1}}</td>
-                        <td class="text-center col-md-2">{{q.createBy}}</td>
+                        <td class="text-center col-md-1">{{q.createBy}}</td>
+                        <td class="text-center col-md-1">{{q.maxPoint}}</td>
                         <td class="text-center col-md-1" [hidden]="q.isActive==true">
                             <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
                         </td>
@@ -408,6 +417,10 @@
                             <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
                         </td>
                         <td class="col-md-2 nowrap text-center action-column">
+                            <button class="btn-primary btn btn-circle shadow-item" (click)="viewAnswer(item);"
+                                tooltip="view">
+                                <i class="fa fa fa-eye"></i>
+                            </button>
                             <button class="btn-warning btn btn-circle shadow-item" (click)="openUpdate(q,update);"
                                 tooltip="{{'common_modify' | translate}}">
                                 <i class="fa fa-edit edit-icon"></i>
