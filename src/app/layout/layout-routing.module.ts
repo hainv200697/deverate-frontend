@@ -26,7 +26,8 @@ const routes: Routes = [
             { path: 'manage-question/:id', loadChildren: () => import('../components/question/ins-question/insert-question.module').then(m => m.InsertQuestionModule) },
             { path: 'manage-company', loadChildren: () => import('../components/company/ins-company/insert-company.module').then(m => m.InsertCompanyModule) },
             { path: 'manage-configuration', loadChildren: () => import('../components/configuration-test/manage-configuration/manage-configuration.module').then(m => m.ManageConfigurationModule)},
-            { path: 'reranking', loadChildren: () => import('../components/ranking/reranking/reranking.module').then(m => m.RerankingModule) },
+            { path: 'manage-result', loadChildren: () => import('../components/result/result.module').then(m => m.ResultModule)},
+            { path: 'reranking', component: RerankingComponent}
         ]
     }
 ];
