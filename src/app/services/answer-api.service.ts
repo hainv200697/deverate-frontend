@@ -6,31 +6,32 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class AnswerApiService {
-    // URL = 'http://localhost:54318/';
-    URL = AppSettings.BASEURL;
-    routes = 'resource/';
+    URL = 'http://localhost:54318/';
+    // URL = AppSettings.BASEURL;
+    // routes = 'resource/';
+    routes = '';
     constructor(
         private httpClient: HttpClient,
     ) { }
 
-    getAllAnswerByQuestioId(questionId: string) {
-        const API = 'AnswerAPI/GetAnswerByQuestionId';
+    getAllAnswerByQuestioId(questionId) {
+        const API = 'api/Answer/GetAnswerByQuestion';
         const param = new HttpParams().set('id', questionId);
         return this.httpClient.get(this.URL + this.routes + API, { params: param });
     }
 
     insertAnswer(answer: any) {
-        const API = 'AnswerAPI/CreateAnswerAPI';
+        const API = 'api/Answer/CreateAnswer';
         return this.httpClient.post(this.URL + API, answer);
     }
 
     updateAnswer(answer: any) {
-        const API = 'AnswerAPI/UpdateAnswer';
+        const API = 'api/Answer/UpdateAnswer';
         return this.httpClient.put(this.URL + API, answer);
     }
 
     disableAnswer(AnswerId: any) {
-        const API = 'AnswerAPI/DisableAnswer';
+        const API = 'api/Answer/RemoveAnswer';
         return this.httpClient.put(this.URL + API, AnswerId);
     }
 

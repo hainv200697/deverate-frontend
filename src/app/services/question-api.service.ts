@@ -25,6 +25,7 @@ export class QuestionApiService {
     }
     
     insertQuestion(question:any) {
+        
         const API = 'api/Question/CreateQuestion';
         return this.httpClient.post(this.URL + this.routes + API,question );
     }
