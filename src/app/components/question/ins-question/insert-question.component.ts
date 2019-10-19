@@ -128,6 +128,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                         this.listAnswer.push(answerObj);
                     }
                 }
+                questionObj.maxPoint =  Math.max.apply(Math, this.listAnswer.map(function(o) { return o.point; }));
                 questionObj.answer = this.listAnswer;
                 this.listInsert.push(questionObj);
             });
@@ -142,6 +143,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
             this.insAnswer = this.answerForm.controls['answers'].value;
             let check = true;
+            this.insQuestion['MaxPoint'] = Math.max.apply(Math, this.insAnswer.map(function(o) { return o.point; }));
             this.insQuestion['Answer'] = this.insAnswer;
             const catalog = this.id;
             if (catalog === undefined || catalog === null) {
@@ -219,6 +221,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         } else {
             this.updAnswer = this.answerForm.controls['answers'].value;
             let check = true;
+            this.updQuestion['MaxPoint'] = Math.max.apply(Math, this.updAnswer.map(function(o) { return o.point; }));
             this.updQuestion['answer'] = this.updAnswer;
             const catalog = this.id;
             if (catalog === undefined || catalog === null) {
@@ -502,7 +505,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     addQuestion() {
         this.insQuestion['isActive'] = true;
         this.insQuestion['createBy'] = 1;
-        console.log(this.insQuestion);
         this.questionService.insertQuestion(this.insQuestion).subscribe(
             (results) => {
                 this.getQuestionById();
@@ -609,5 +611,8 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 this.allQuestions = data;
             }
         );
+    }
+    viewAnswer(item){
+        this.router.navigate(['/manage-answer/', item['QuestionId']]);
     }
 }

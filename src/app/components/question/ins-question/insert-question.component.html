@@ -24,7 +24,7 @@
                     <form (ngSubmit)="onSubmit()">
                         <div id="test-l-1" class="content">
                             <div class="create-default">
-                                
+
                                 <!-- Add question -->
                                 <div class="form-content row">
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12">
@@ -63,12 +63,13 @@
                                                 <div class="form-group col-10">
                                                     <label>Answer</label>
                                                     <input type="text" formControlName="answer1"
-                                                        class="form-control ans-{{i}}" />
+                                                        placeholder="Input answer {{i+1}}"
+                                                        class="answer-input form-control ans-{{i}}" />
                                                 </div>
                                                 <div class="form-group col-1">
                                                     <label>Mark</label>
                                                     <input type="number" formControlName="point"
-                                                        class="form-control mark-{{i}}" />
+                                                        class="form-control answer-input mark-{{i}}" />
                                                 </div>
                                                 <div class="form-group col-1" style="position: relative;">
                                                     <button style="position: absolute; bottom: 0;" type="button "
@@ -137,10 +138,11 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-secondary back" [hidden]="index==1" (click)="back()">Back</button>
-        <button (click)="next('ins')" [hidden]="index==2" class="btn btn-primary">Next</button>
-        <button class="btn btn-success save" [hidden]="index != 2" (click)="insertQuestionSubmit('default')">Create</button>
-        <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
+        <button class="shadow-item btn btn-secondary back" [hidden]="index==1" (click)="back()">Back</button>
+        <button (click)="next('ins')" [hidden]="index==2" class="shadow-item btn btn-primary">Next</button>
+        <button class="shadow-item btn btn-success save" [hidden]="index != 2"
+            (click)="insertQuestionSubmit('default')">Create</button>
+        <button type="button" class="shadow-item btn btn-danger" (click)="closeModal()">Close</button>
     </div>
 </ng-template>
 
@@ -320,43 +322,51 @@
 </ng-template>
 
 <!-- Grid view -->
-<button class="btn btn-lg btn-outline-primary" (click)="open(content)">
-        <i class="fa fa-fw fa-plus"></i>
-    Create Question
-</button>
 
-<hr>
+
 
 <!-- Search -->
 
 <!-- Table question -->
-<div class="insert-form col-md-12">
-    <div class="card mb-3">
+<div class=" insert-form col-md-12">
+    <div class="shadow-item card mb-3">
         <div class="card-header">
             <h5>Question</h5>
         </div>
         <div class="table-responsive col-md-12 datatable">
             <div class="row mb-1">
                 <div class="col">
-                    <div class="form-group">
-                        <input type="text" placeholder="Enter your key word" name="searchText" class="form-control"
-                            [(ngModel)]="searchText" />
-
+                    <div class=" row justify-content-between" style="margin-top: 20px;">
+                        <div class="form-group input-group col-md-6">
+                            <input type="text" class="form-control" placeholder="Enter your key word" name="searchText"
+                                [(ngModel)]="searchText">
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary col-md-3 " (click)="open(content)">
+                            <i class="fa fa-fw fa-plus"></i>
+                            Create Question
+                        </button>
                     </div>
-                    <button (click)="clickButtonChangeStatus(false);" class="icon-btn" style="padding-left: 24px;">
-                        <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
-                    </button>
-                    <button (click)="openModalExcel(excel);" class="icon-btn" style="padding-left: 24px;">
+                    <div class="row justify-content-end" style="margin-top: 20px;">
+                        <button style="margin-right: 10px;" (click)="clickButtonChangeStatus(false);"
+                            class="btn btn-lg btn-danger" data-toggle="button">
+                            <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
+                        </button>
+                        <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
+                            class="btn btn-lg btn-success " data-toggle="button">
                             <i class="fa fa-file-excel-o"></i>
                         </button>
-                    <button (click)="clickButtonRefresh(refesh)" class="icon-btn" style="padding-left: 24px;">
-                        <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
-                            aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
-                    </button>
+                        <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
+                            class="btn btn-lg btn-primary" data-toggle="button">
+                            <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
+                                aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
-
-            <table class="table table-striped table-bordered table-hover customtable" [svData]="allQuestions"
+            <table style="margin-top: 20px;" class="table  table-hover customtable" [svData]="allQuestions"
                 #sv="svDataTable" [svRowsOnPage]="5" svSortBy="name" svSortOrder="asc">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin">
@@ -370,19 +380,22 @@
                         <th class="col-md-3 text-center" scope="col">
                             <sv-default-sorter by='question1'>Question</sv-default-sorter>
                         </th>
-                        <th class="col-md-2 text-center" scope="col">
+                        <th class="col-md-1 text-center" scope="col">
                             <sv-default-sorter by='createBy'>Create By</sv-default-sorter>
                         </th>
-                        <th class="text-center col-md-2" scope="col">Status
+                        <th class="col-md-1 text-center" scope="col">
+                                <sv-default-sorter by='maxPoint'>Max Point</sv-default-sorter>
+                            </th>
+                        <th class="text-center col-md-1" scope="col">Status
                             <div ngbDropdown class="d-inline-block dropdown">
-                                <button class=" icon-btn" ngbDropdownToggle style="color: white"></button>
+                                <button class=" icon-btn" ngbDropdownToggle></button>
                                 <div ngbDropdownMenu>
                                     <button class="dropdown-item" (click)="getQuestionStatus(true)">Active</button>
                                     <button class="dropdown-item" (click)="getQuestionStatus(false)">Disable</button>
                                 </div>
                             </div>
                         </th>
-                        <th class="col-md-1 text-center" scope="col">Action</th>
+                        <th class="col-md-2 text-center" scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -395,18 +408,23 @@
                         </td>
                         <td class="text-center col-md-3">{{q.catalogueName}}</td>
                         <td class="text-center col-md-3">{{q.question1}}</td>
-                        <td class="text-center col-md-2">{{q.createBy}}</td>
-                        <td class="text-center col-md-2" [hidden]="q.isActive==true" style="color: red">
-                            Disable
+                        <td class="text-center col-md-1">{{q.createBy}}</td>
+                        <td class="text-center col-md-1">{{q.maxPoint}}</td>
+                        <td class="text-center col-md-1" [hidden]="q.isActive==true">
+                            <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
                         </td>
-                        <td class="text-center col-md-2" [hidden]="q.isActive==false" style="color: green;">
-                            Active
+                        <td class="text-center col-md-1" [hidden]="q.isActive==false">
+                            <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
                         </td>
-                        <td class="col-md-1 nowrap text-center action-column" style="color: red;">
-                            <a class="btn-sm btn-link cursor-pointer" (click)="openUpdate(q,update);"
+                        <td class="col-md-2 nowrap text-center action-column">
+                            <button class="btn-primary btn btn-circle shadow-item" (click)="viewAnswer(item);"
+                                tooltip="view">
+                                <i class="fa fa fa-eye"></i>
+                            </button>
+                            <button class="btn-warning btn btn-circle shadow-item" (click)="openUpdate(q,update);"
                                 tooltip="{{'common_modify' | translate}}">
                                 <i class="fa fa-edit edit-icon"></i>
-                            </a>
+                            </button>
                         </td>
                     </tr>
                 </tbody>
