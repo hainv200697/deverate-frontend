@@ -9,6 +9,8 @@ import { ResultRoutingModule } from './result-routing.module';
 
 import { ChartsModule as Ng2Charts } from 'ng2-charts';
 import { GaugeModule } from 'angular-gauge';
+import { NgxGaugeModule } from 'ngx-gauge';
+import { NgxLoadingModule } from 'ngx-loading';
 import 'd3';
 import 'nvd3';
 
@@ -23,7 +25,9 @@ import 'nvd3';
     ReactiveFormsModule,
     ResultRoutingModule,
     Ng2Charts,
-    GaugeModule.forRoot()
+    NgxGaugeModule,
+    GaugeModule.forRoot(),
+    NgxLoadingModule.forRoot({})
   ],
   
   declarations: [ResultComponent]

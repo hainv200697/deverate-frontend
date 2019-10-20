@@ -5,10 +5,10 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class ConfigurationApiService {
-    // URL = 'http://localhost:54318/';
-    // routes = '';
-    URL = AppSettings.BASEURL;
-    routes = 'resource/';
+    URL = 'http://localhost:54318/';
+    routes = '';
+    // URL = AppSettings.BASEURL;
+    // routes = 'resource/';
     constructor(private httpClient: HttpClient) { }
 
     getAllConfiguration(status: boolean) {
