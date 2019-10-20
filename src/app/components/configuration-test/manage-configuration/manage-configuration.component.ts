@@ -19,6 +19,7 @@ declare var $: any;
   styleUrls: ['./manage-configuration.component.scss']
 })
 export class ManageConfigurationComponent implements OnInit {
+  public rateCataOfRank: number[] = []
   constructor(
     private translate: TranslateService,
     public router: Router,
@@ -58,13 +59,16 @@ export class ManageConfigurationComponent implements OnInit {
   pageSize: number;
   element: HTMLElement;
   selectedAll: any;
+  selectedAllRank: any;
+  selectRank = [];
   selectConfiguration = [];
   Configurations = [];
   ConfigurationsCata = [];
   inputAllConfig = [];
+  catalogueInRank = [];
 
   Account = {};
-  ListRank: [];
+  ListRank = [];
   a = {};
   catalogueList: [];
   inputConfiguration = {};
@@ -83,6 +87,7 @@ export class ManageConfigurationComponent implements OnInit {
   answerForm: FormGroup;
 
   selectedItems = [];
+  selectedItemsUpdate = []
   dropdownSettings = {
     singleSelection: false,
     text: 'Select Catalogue',
@@ -115,17 +120,22 @@ export class ManageConfigurationComponent implements OnInit {
 
 
   ngOnInit() {
-
-
     this.getAllRank(true);
     this.getAllCatalogue();
     this.getConfigurationIsActive(true);
   }
 
   onItemSelect(item: any) {
+    this.selectedItemsUpdate = []
     this.inputConfiguration['totalQuestion'] += 5;
-    console.log(this.inputConfiguration['totalQuestion']);
-    console.log(this.selectedItems);
+    
+    var cir = {
+      "configId" : this.updateConfig['ConfigId'],
+      "catalogueId" : item.CatalogueId,
+      "weightPoint" : this.updateConfig[item]['catalogueInConfigurations']
+    } 
+    this.selectedItemsUpdate.push(cir);
+    console.log(this.selectedItemsUpdate);
   }
 
   onSelectAll(item: any) { }
@@ -133,11 +143,9 @@ export class ManageConfigurationComponent implements OnInit {
   onDeSelectAll(item: any) { }
 
   OnItemDeSelect(item: any) {
-    console.log(this.selectedItems);
   }
 
   onDateSelect(item: any) {
-    console.log(item);
   }
 
   removeItem(item) {
@@ -174,7 +182,6 @@ export class ManageConfigurationComponent implements OnInit {
   openDetail(content, id: number) {
     this.indexDetail = 1;
     this.GetConfigurationCatalogueByConfigId(id);
-    console.log(id);
     this.modalService.open(content, { size: 'lg', windowClass: 'myCustomModalClass' });
     const a = document.querySelector('#update');
     this.stepper = new Stepper(a, {
@@ -191,8 +198,21 @@ export class ManageConfigurationComponent implements OnInit {
     this.index = this.index + 1;
     this.inputConfiguration['startDate'] = this.startDate;
     this.inputConfiguration['endDate'] = this.endDate;
-    console.log(this.inputConfiguration['startDate']);
-    console.log(this.inputConfiguration['endDate']);
+    if(this.index == 3){
+      for(var i =0; i< this.ListRank.length; i++) {
+        this.ListRank[i].catalogueInRank = [];
+        for (var j = 0; j < this.selectedItems.length; j++) {
+          var key = this.selectedItems[j].CatalogueId +"_"+this.ListRank[i].rankId;
+          var cir = {
+            "catalogueId" : this.selectedItems[j].CatalogueId,
+            "weightPoint":$('#'+key).val() * this.selectedItems[j]['weightPoint'] ,
+            "isActive": true
+          } 
+          this.ListRank[i].catalogueInRank.push(cir);
+        }
+      }
+    }
+    console.log(this.ListRank);
   }
 
   nextDetail() {
@@ -230,12 +250,14 @@ export class ManageConfigurationComponent implements OnInit {
       (data) => {
         tmp = data;
         for (let i = 0; i < tmp.length; i++) {
-          if (tmp[i]['quescount'] === 0) {
+          if (tmp[i].quescount == 0) {
             tmp.splice(i, 1);
           }
         }
         this.catalogueList = tmp;
+        console.log(data)
       }
+      
     );
   }
 
@@ -263,7 +285,7 @@ export class ManageConfigurationComponent implements OnInit {
     this.loading = true;
     this.configAPi.GetConfigurationCatalogueByConfigId(id).subscribe(
       (data) => {
-        this.updateConfig['ConfigId'] = data['data']['data']['ConfigId'];
+        this.updateConfig['ConfigId'] = data['data']['data']['configId'];
         this.updateConfig['testOwnerId'] = data['data']['data']['testOwnerId'];
         this.updateConfig['title'] = data['data']['data']['title'];
         this.updateConfig['totalQuestion'] = data['data']['data']['totalQuestion'];
@@ -276,8 +298,6 @@ export class ManageConfigurationComponent implements OnInit {
         this.updateConfig['configurationRank'] = data['data']['data']['configurationRank'];
         this.selectedItems = data['data']['data']['catalogueInConfigurations'];
         this.loading = false;
-        console.log(this.updateConfig);
-        console.log(this.selectedItems);
       }
     );
   }
@@ -302,15 +322,19 @@ export class ManageConfigurationComponent implements OnInit {
     }
   }
 
+  
   Create() {
+    
+    
+    console.log(this.ListRank);
     this.loading = false;
     if (this.inputConfiguration['duration'] === '' || this.inputConfiguration['totalQuestion'] === '') {
       Swal.fire('Error', 'Something went wrong', 'error');
       return;
     }
     this.inputConfiguration['catalogueInConfigurations'] = this.selectedItems;
+    
     this.inputConfiguration['configurationRank'] = this.ListRank;
-
     Swal.fire({
       title: 'Are you sure?',
       text: 'The configuration will be create!',
@@ -320,10 +344,11 @@ export class ManageConfigurationComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
-        this.loading = true;
+        // this.loading = true;
         this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
         this.inputConfiguration['endDate'] = new Date(this.inputConfiguration['endDate']);
-        console.log(this.inputConfiguration);
+
+        console.log(this.inputConfiguration)
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
           this.getConfigurationIsActive(true);
           this.closeModal();
@@ -347,10 +372,11 @@ export class ManageConfigurationComponent implements OnInit {
       if (result.value) {
         this.loading = true;
         console.log(this.updateConfig);
+        
         this.configAPi.updateConfiguration(this.updateConfig).subscribe(data => {
-          this.getConfigurationIsActive(true);
-          this.closeModal();
-          this.indexDetail = 1;
+        this.getConfigurationIsActive(true);
+        this.closeModal();
+        this.indexDetail = 1;
         Swal.fire('Success', 'The configuration has been updated', 'success');
         });
       }
@@ -430,14 +456,37 @@ export class ManageConfigurationComponent implements OnInit {
       total = this.selectedItems[i]['weightPoint'] + total;
     }
     if (total !== 1) {
-      console.log(total);
       this.toast.error('Message', 'Total mark of catalogue must be 1');
       return false;
     } else if (this.index === 2) {
-      if ($('#rate').val() === '') {
-        this.toast.error('Message', 'Please input rate of rank');
-        return false;
+      //gắn biến this của class vào biến that để có thể gọi ở trong function dưới
+      var that = this;
+      that.rateCataOfRank=[];
+      $(".rateCataByRank").each(function () {
+        //gọi this ở trong này nó hiểu là this của function
+        var val = $(this).val();
+        if (val === '') {
+          // toast error
+          return false;
+        } else {
+          that.rateCataOfRank.push(val);
+        }
+      });
+      // lấy value theo index selectedItems * index selectRank
+      console.log(this.rateCataOfRank);
+
+      //Lấy value của rank dev 2 của cata thứ 2
+      for (var i = 0; i < this.selectedItems.length; i++) {
+        for (var j = 0; j < this.selectRank.length; j++) {
+          var size = this.selectRank.length;
+          console.log(this.selectedItems[i].name + " " + this.selectRank[j].name + " : " + this.rateCataOfRank[(i * size + (j + 1)) - 1])
+        }
       }
+
+      // if (.val() === '') {
+      //   this.toast.error('Message', 'Please input rate of rank');
+      //   return false;
+      // }
       // else {
       //   var total = 0;
       //   for (var i = 0; i < this.ListRank.length; i++) {
@@ -453,21 +502,34 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   sendMail() {
-      Swal.fire({
-        title: 'Are you sure?',
-        text: 'The mail will be send to employee!',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, send it!',
-        cancelButtonText: 'No, keep it'
-      }).then((result) => {
-        if (result.value) {
-          this.closeModal();
-          Swal.fire('Success', 'The mail has been send', 'success');
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'The mail will be send to employee!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, send it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
+      if (result.value) {
+        this.closeModal();
+        Swal.fire('Success', 'The mail has been send', 'success');
 
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          this.closeModal();
-        }
-      });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.closeModal();
+      }
+    });
+  }
+
+  checkIfRankSelected() {
+    this.selectRank = [];
+    this.selectedAllRank = this.ListRank.every(function (item: any) {
+
+      return item.selected == true;
+    })
+    for (var i = 0; i < this.ListRank.length; i++) {
+      if (this.ListRank[i].selected == true) {
+        this.selectRank.push(this.ListRank[i])
+      }
     }
+  }
 }

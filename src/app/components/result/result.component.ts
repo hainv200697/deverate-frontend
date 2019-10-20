@@ -1,6 +1,8 @@
 
 declare var d3: any;
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { RankApiService } from 'src/app/services/rank-api.services';
+import { StatisticApiService } from 'src/app/services/statistic-api.service';
 
 @Component({
   selector: 'app-result',
@@ -8,22 +10,86 @@ import { Component, Output, EventEmitter, OnInit } from '@angular/core';
   styleUrls: ['./result.component.scss']
 })
 export class ResultComponent implements OnInit {
+  gaugeType = "semi";
+  gaugeValue = 28.3;
+  gaugeLabel = "Speed";
+  gaugeAppendText = "km/hr";
+  showRank: number;
+
+  public loading = false;
   gaugemap = {};
   public powerGauge: any;
+  ListRank: [];
+  statistic = [];
+  catalogueInStatistic = [];
+  selectedDevice = "";
+  test = "";
     
+  constructor(private rankApi: RankApiService,
+    private statisticApi: StatisticApiService,
+    ) {}
+  
+  ngOnInit() {
+  
+      this.radarChartType = 'radar';
+      this.getAllRank(true);
+      this.getStatistic(42);
+      
+      this.onChangeRank(3);
+  }
+  getAllRank(status: boolean) {
+    this.rankApi.getAllRank(status).subscribe(
+      (data) => {
+        this.ListRank = data['data']['data'];
+      }
+    );
+
+  }
+
+  getStatistic(id: number){
+    this.showRank = 0;
+    this.loading = true;
+    this.statisticApi.getStatistic(id).subscribe(
+      (data) => {
+        this.statistic = data['data']['data'];
+        // if(data['data']['data']['rank'] == "dev1"){
+        //   this.showRank = 1.5;
+        // }
+        // else if(data['data']['data']['rank'] == "dev2"){
+        //   this.showRank = 4.5;
+        // }
+        // else if(this.statistic['rank'] == "dev3"){
+        //   this.showRank = 7;
+        // }
+        this.catalogueInStatistic = data['data']['data']['catalogues'];
+        for(var i = 0; i < this.catalogueInStatistic.length; i++){
+          this.radarChartLabels.push(this.catalogueInStatistic[i].name);
+          this.radarChartData[0].data.push(this.catalogueInStatistic[i]['overallPoint']);
+          this.radarChartData[1].data.push(this.catalogueInStatistic[i]['thresholdPoint']);
+        }
+        this.loading = false;
+        this.draw();
+      },
+      
+    )
+    
+    ;
+    
+  }
+
+  onChangeRank(newValue) {
+    this.selectedDevice = newValue;
+    console.log(this.statistic['rank']);
+  }
+
 // Radar
-public radarChartLabels: string[] = [
-    'Software Requirement Analysis',
-    'Software Development Methods',
-    'Software Design Methods',
-    'Software Quality Inspection',
-    'Software Programming Methods',
-    'Software Quality Inspection',
-    'Specialized Software Technology'
-];
+
+public radarChartLabels: string[] = [];
+
+
 public radarChartData: any = [
-    { data: [65, 59, 90, 81, 56, 55, 40], label: 'Assessment Result' },
-    { data: [28, 48, 40, 19, 96, 27, 100], label: 'DEV 2' }
+    { data: [], label: 'Assement Result' },
+    { data: [], label: 'Dev2' }
 ];
 public radarChartType: string;
 
@@ -73,15 +139,19 @@ public chartHovered(e: any): void {
 
 
 
-constructor() {}
 
-ngOnInit() {
-
-    this.radarChartType = 'radar';
-    this.draw();
-}
 draw() {
   var self = this;
+  if(this.statistic['rank'] == "dev1"){
+    this.showRank = 1.5;
+  }
+  else if(this.statistic['rank'] == "dev2"){
+    this.showRank = 4.5;
+  }
+  else if(this.statistic['rank'] == "dev3"){
+    this.showRank = 7;
+  }
+  console.log(this.showRank)
  var gauge = function (container, configuration) {
  
    var config = {
@@ -91,20 +161,21 @@ draw() {
      ringInset: 20,
      ringWidth: 20,
 
-     pointerWidth: 10,
-     pointerTailLength: 5,
+     pointerWidth: 4,
+     pointerTailLength: 2,
      pointerHeadLengthPercent: 0.9,
 
      minValue: 0,
-     maxValue: 10,
+     maxValue: 9,
 
      minAngle: -90,
      maxAngle: 90,
 
      transitionMs: 750,
 
-     majorTicks: 5,
-     labelFormat: d3.format('d'),
+     majorTicks: 3,
+     labelFormat: "",
+    //  labelFormat: d3.format('d'),
      labelInset: 10,
 
      arcColorFn: d3.interpolateHsl(d3.rgb('#e8e2ca'), d3.rgb('#3e6c0a'))
@@ -118,7 +189,7 @@ draw() {
    var arc = undefined;
    var scale = undefined;
    var ticks = undefined;
-   var tickData = undefined;
+   var tickData = "aaa";
    var pointer = undefined;
 
    var donut = d3.pie();
@@ -250,16 +321,15 @@ draw() {
 
  this.powerGauge = gauge('#power-gauge', {
    size: 300,
-   clipWidth: 300,
+   clipWidth: 400,
    clipHeight: 300,
    ringWidth: 60,
-   maxValue: 10,
-   transitionMs: 4000,
+   maxValue: 9,
+   transitionMs: 3000,
  });
 // powerGauge.render(6);
  this.powerGauge.render();
-  this.powerGauge.update(6);
-
+  this.powerGauge.update(self.showRank);
 }
   
 }
