@@ -14,9 +14,9 @@ export class AnswerApiService {
         private httpClient: HttpClient,
     ) { }
 
-    getAllAnswerByQuestioId(questionId) {
+    getAllAnswerByQuestioId(questionId,status) {
         const API = 'api/Answer/GetAnswerByQuestion';
-        const param = new HttpParams().set('id', questionId);
+        const param = new HttpParams().set('id', questionId).set('status', status);
         return this.httpClient.get(this.URL + this.routes + API, { params: param });
     }
 

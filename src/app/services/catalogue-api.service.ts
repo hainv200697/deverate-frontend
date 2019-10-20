@@ -19,9 +19,10 @@ export class CatalogueApiService {
           'Content-Type': 'application/json'
         })
       }
-    getAllCatalogue() {
+    getAllCatalogue(status) {
+        const param = new HttpParams().set('status', status)
         const API = 'api/Catalogue/GetAllCatalogue';
-        return this.httpClient.get<any[]>(this.URL + this.routes + API);
+        return this.httpClient.get<any[]>(this.URL + this.routes + API, { params: param });
     }
 
     insertCatalogue(catalogue) {
