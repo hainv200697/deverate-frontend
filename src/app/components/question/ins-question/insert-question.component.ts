@@ -70,7 +70,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     updAnswer = [];
     anwserDel = [];
     allQuestions = [];
-    catalog = {};
 
     // Import excel file
     changeIns(key) {
@@ -326,7 +325,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.question['question'] = '';
         this.question['cate_id'] = '';
         this.getQuestionById(true);
-        this.getCatalogById();
         this.insQuestion['CatalogueId'] = this.id;
         this.updQuestion['CatalogueId'] = this.id;
     }
@@ -580,13 +578,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         return true;
     }
 
-    getCatalogById() {
-        this.catelogueService.getCatalogueById(this.id).subscribe(
-            (data: any) => {
-                this.catalog = data;
-            }
-        );
-    }
 
     // reset
     reset() {
