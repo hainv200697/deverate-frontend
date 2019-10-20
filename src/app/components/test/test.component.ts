@@ -93,4 +93,11 @@ export class TestComponent implements OnInit {
         console.log(res);
       });
   }
+
+  scroll(id) {
+    console.log(id);
+    let el = document.getElementById(id);
+    el.scrollIntoView({behavior:"smooth"});
+  }
+
 }
