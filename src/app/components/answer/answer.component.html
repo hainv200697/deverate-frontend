@@ -6,164 +6,172 @@
 <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
 </ngx-loading>
 
-    <app-page-header [heading]="'Answer'"></app-page-header>
+<app-page-header [heading]="'Answer'"></app-page-header>
 
-    <div class="card mb-3">
-        <div class="card-header">
-            <h5>Answer</h5>
-        </div>
-        <div class="table-responsive col-md-12 datatable">
-            <div class="row mb-1">
-                <div class="col">
-                    <div class=" row justify-content-between" style="margin-top: 20px;">
-                        <div class="form-group input-group col-md-6">
-                            <input type="text" class="form-control" placeholder="Enter your key word" name="searchText"
-                                [(ngModel)]="searchText">
-                            <div class="input-group-append">
-                                <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
-                            </div>
+<div class="card mb-3">
+    <div class="card-header">
+        <h5>Answer</h5>
+    </div>
+    <div class="table-responsive col-md-12 datatable">
+        <div class="row mb-1">
+            <div class="col">
+                <div class=" row justify-content-between" style="margin-top: 20px;">
+                    <div class="form-group input-group col-md-6">
+                        <input type="text" class="form-control" placeholder="Enter your key word" name="searchText"
+                            [(ngModel)]="searchText">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
                         </div>
-                        <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
-                            <i class="fa fa-fw fa-plus"></i>
-                            Create Answer
-                        </button>
                     </div>
-                    <div class="row justify-content-end" style="margin-top: 20px;">
-                        <button style="margin-right: 10px;" (click)="clickButtonChangeStatus(false);"
-                            class="btn btn-lg btn-danger" data-toggle="button">
-                            <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
-                        </button>
-                        <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
-                            class="btn btn-lg btn-success " data-toggle="button">
-                            <i class="fa fa-file-excel-o"></i>
-                        </button>
-                        <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
-                            class="btn btn-lg btn-primary" data-toggle="button">
-                            <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
-                                aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
-                        </button>
-                    </div>
+                    <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
+                        <i class="fa fa-fw fa-plus"></i>
+                        Create Answer
+                    </button>
+                </div>
+                <div class="row justify-content-end" style="margin-top: 20px;">
+                    <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
+                        (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger" data-toggle="button">
+                        <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
+                    </button>
+                    <button [hidden]="iconIsActive==true" (click)="clickButtonChangeStatus(true);"
+                        class="btn btn-lg btn-success" style="padding-left: 24px;">
+                        <i class="fa fa-check" tooltip="{{'Active' | translate}}" placement="top"></i>
+                    </button>
+                    <button style="margin-right: 10px;" (click)="openModalExcel(excel);" class="btn btn-lg btn-success "
+                        data-toggle="button">
+                        <i class="fa fa-file-excel-o"></i>
+                    </button>
+                    <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
+                        class="btn btn-lg btn-primary" data-toggle="button">
+                        <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
+                            aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                    </button>
                 </div>
             </div>
+        </div>
 
-            <table class="table  table-hover customtable" [svData]="answerList" #sv="svDataTable" [svRowsOnPage]="5"
-                svSortBy="name" svSortOrder="asc">
-                <thead>
-                    <tr class="col-md-12 row no-padding-no-margin">
-                        <th class="text-center col-md-1" scope="col">
-                            <input class="btn" type="checkbox" value="" [(ngModel)]="selectedAll"
-                                (change)="selectAll();">
-                        </th>
-                        <th class="col-md-3 text-center" scope="col">
-                            <sv-default-sorter by='Name'>Answer</sv-default-sorter>
-                        </th>
-                        <th class="col-md-4 text-center" scope="col">
-                            <sv-default-sorter by='Point'>Point</sv-default-sorter>
-                        </th>
-                        <th class="col-md-1 text-center" scope="col">
-                            Status
-                        </th>
-                        <th class="col-md-2 text-center" scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data">
-                        <td class="text-center col-md-1">
-                            <label>
-                                <input type="checkbox" value="" [(ngModel)]="item.selected" class="btn"
-                                    (change)="checkIfAllSelected();">
-                            </label>
-                        </td>
-                        <td class="col-md-3 text-left">{{ item.Answer }}</td>
-                        <td class="col-md-4 text-left">{{ item.Point }}</td>
-                        <td class="col-md-1 text-center">{{ item.quescount }}</td>
-                        <td class="text-center col-md-1" [hidden]="item.isActive==true">
-                            <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
-                        </td>
-                        <td class="text-center col-md-1" [hidden]="item.isActive==false">
-                            <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
-                        </td>
-                        <td class="col-md-2 text-center nowrap text-center action-column" style="color: red;">
-                            <button class="btn-warning btn btn-circle shadow-item"
-                                (click)="openUpdateModal(item,update)" tooltip="{{'common_modify' | translate}}">
-                                <i class="fa fa-edit edit-icon"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="4">
-                            <sv-bootstrap-paginator [rowsOnPageSet]="[4, 25, 50]"></sv-bootstrap-paginator>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
+        <table class="table  table-hover customtable" [svData]="answerList" #sv="svDataTable" [svRowsOnPage]="5"
+            svSortBy="name" svSortOrder="asc">
+            <thead>
+                <tr class="col-md-12 row no-padding-no-margin">
+                    <th class="text-center col-md-1" scope="col">
+                        <input class="btn" type="checkbox" value="" [(ngModel)]="selectedAll" (change)="selectAll();">
+                    </th>
+                    <th class="col-md-4 text-center" scope="col">
+                        <sv-default-sorter by='Name'>Answer</sv-default-sorter>
+                    </th>
+                    <th class="col-md-4 text-center" scope="col">
+                        <sv-default-sorter by='Point'>Point</sv-default-sorter>
+                    </th>
+                    <th class="col-md-1 text-center" scope="col">Status
+                        <div ngbDropdown class="d-inline-block dropdown">
+                            <button class=" icon-btn" ngbDropdownToggle style="color: black"></button>
+                            <div ngbDropdownMenu>
+                                <button class="dropdown-item" (click)="getAnswerById(true)">Active</button>
+                                <button class="dropdown-item" (click)="getAnswerById(false)">Disable</button>
+                            </div>
+                        </div>
+                    </th>
+                    <th class="col-md-2 text-center" scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data">
+                    <td class="text-center col-md-1">
+                        <label>
+                            <input type="checkbox" value="" [(ngModel)]="item.selected" class="btn"
+                                (change)="checkIfAllSelected();">
+                        </label>
+                    </td>
+                    <td class="col-md-3 text-center">{{ item.answer }}</td>
+                    <td class="col-md-4 text-center">{{ item.point }}</td>
+                    <td class="text-center col-md-1" [hidden]="item.isActive==true">
+                        <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
+                    </td>
+                    <td class="text-center col-md-1" [hidden]="item.isActive==false">
+                        <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
+                    </td>
+                    <td class="col-md-2 text-center nowrap text-center action-column" style="color: red;">
+                        <button class="btn-warning btn btn-circle shadow-item" (click)="openUpdateModal(item,update)"
+                            tooltip="{{'common_modify' | translate}}">
+                            <i class="fa fa-edit edit-icon"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <sv-bootstrap-paginator [rowsOnPageSet]="[4, 25, 50]"></sv-bootstrap-paginator>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<!--  Modal create -->
+<ng-template #create let-modal>
+    <div class="text-left mt-1 ">
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Create Answer</h4>
+        </div>
+        <div class="modal-body">
+            <div class="card-body">
+                <form class="text-left mt-1 ">
+                    <div class="form-content row">
+                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                            <label>Answer:</label>
+                            <input type="text" [(ngModel)]="insAnswer['answer']" name="ins_Answer"
+                                class="form-control input-underline input-lg" id=""
+                                placeholder="{{ 'answer' | translate }}">
+                        </div>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                            <label>Point:</label>
+                            <input type="number" [(ngModel)]="insAnswer['point']" name="ins_point"
+                                class="form-control input-underline input-lg" id=""
+                                placeholder="{{ 'Point' | translate }}">
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+    <div class="modal-footer">
+        <button class="btn btn-success save" (click)="insertAnswerSubmit()">Create</button>
+        <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
+    </div>
+</ng-template>
 
-    <!-- Modal create
-    <ng-template #create let-modal>
-        <div class="text-left mt-1 ">
-            <div class="modal-header">
-                <h4 class="modal-title" id="modal-basic-title">Create Answer</h4>
-            </div>
-            <div class="modal-body">
-                <div class="card-body">
-                    <form class="text-left mt-1 ">
-                        <div class="form-content row">
-                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                <label>Answer:</label>
-                                <input type="text" [(ngModel)]="insAnswer['Name']" name="ins_Answer"
-                                    class="form-control input-underline input-lg" id=""
-                                    placeholder="{{ 'answer' | translate }}">
-                            </div>
-                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                <label>Question:</label>
-                                 
-                                <textarea class="form-control" rows="3" [(ngModel)]="insAnswer['Description']"
-                                    placeholder="{{ 'Answer' | translate }}" name="ins_Answer"></textarea>
-                            </div>
+<!-- Update Modal -->
+<ng-template #update let-modal>
+    <div class="text-left mt-1 ">
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Create Answer</h4>
+        </div>
+        <div class="modal-body">
+            <div class="card-body">
+                <form class="text-left mt-1 ">
+                    <div class="form-content row">
+                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                            <label>Answer:</label>
+                            <input type="text" [(ngModel)]="updAnswer['answer']" name="upd_Answer"
+                                class="form-control input-underline input-lg" id=""
+                                placeholder="{{ 'answer' | translate }}">
                         </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-success save" (click)="insertAnswerSubmit()">Create</button>
-            <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
-        </div>
-    </ng-template> -->
-
-    <!-- Update Modal -->
-    <!-- <ng-template #update let-modal>
-        <div class="text-left mt-1 ">
-            <div class="modal-header">
-                <h4 class="modal-title" id="modal-basic-title">Create Answer</h4>
-            </div>
-            <div class="modal-body">
-                <div class="card-body">
-                    <form class="text-left mt-1 ">
-                        <div class="form-content row">
-                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                <label>Answer:</label>
-                                <input type="text" [(ngModel)]="updAnswer['Name']" name="upd_Answer_name"
-                                    class="form-control input-underline input-lg" id=""
-                                    placeholder="{{ 'Answer' | translate }}">
-                            </div>
-                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                <label>Description:</label>
-                                <textarea class="form-control" rows="3" [(ngModel)]="updAnswer['Description']"
-                                    placeholder="{{ 'description' | translate }}"
-                                    name="upd_Answer_description"></textarea>
-                            </div>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                            <label>Point:</label>
+                            <input type="number" [(ngModel)]="updAnswer['point']" name="upd_point"
+                                class="form-control input-underline input-lg" id=""
+                                placeholder="{{ 'Point' | translate }}">
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="modal-footer">
-            <button class="btn btn-success save" (click)="updateAnswerSubmit()">Update</button>
-            <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
-        </div>
-    </ng-template> -->
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success save" (click)="updateAnswerSubmit()">Update</button>
+        <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
+    </div>
+</ng-template>

@@ -5,6 +5,7 @@ import { CatalogueApiService } from '../../services/catalogue-api.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { element } from 'protractor';
 import Swal from 'sweetalert2';
+import { ToastrService } from 'ngx-toastr';
 declare var $: any;
 @Component({
     selector: 'app-catalogue',
@@ -16,10 +17,12 @@ export class CatalogueComponent implements OnInit {
         private translate: TranslateService,
         public router: Router,
         private modalService: NgbModal,
-        private catelogueService: CatalogueApiService
+        private catelogueService: CatalogueApiService,
+        private toastr: ToastrService,
     ) {
     }
     public loading = false;
+    iconIsActive: boolean;
     selectedAll: any;
     check = 0;
     catalogueList = [];
@@ -28,7 +31,7 @@ export class CatalogueComponent implements OnInit {
     updCatalogue = {};
     updateStatus = [];
     ngOnInit() {
-        this.getAllCatalogue();
+        this.getAllCatalogue(true);
     }
 
     // Open modal
@@ -61,9 +64,11 @@ export class CatalogueComponent implements OnInit {
     }
 
     // Get all catalogue
-    getAllCatalogue() {
+    getAllCatalogue(status) {
+        this.iconIsActive = status;
         this.loading = true;
-        this.catelogueService.getAllCatalogue().subscribe(
+        console.log(this.iconIsActive);
+        this.catelogueService.getAllCatalogue(this.iconIsActive).subscribe(
             (data :any[]) => {
                 this.loading = false;
                 this.catalogueList = data;
@@ -79,7 +84,7 @@ export class CatalogueComponent implements OnInit {
             
             refesh.classList.remove('spin-animation');
         }, 500);
-        this.getAllCatalogue();
+        this.getAllCatalogue(this.iconIsActive);
     }
 
     // Insert catalogue
@@ -87,7 +92,7 @@ export class CatalogueComponent implements OnInit {
         console.log(this.insCatalogue);
         this.insCata();
         this.closeModal();
-        this.getAllCatalogue();
+        this.getAllCatalogue(this.iconIsActive);
     }
 
     insCata() {
@@ -96,7 +101,8 @@ export class CatalogueComponent implements OnInit {
         this.catelogueService.insertCatalogue(this.insCatalogue).subscribe(
             (results) => {
                 this.loading = false;
-                console.log(results);
+                this.getAllCatalogue(this.iconIsActive);
+                this.toastr.success(results['message']);
             }
         );
     }
@@ -126,7 +132,6 @@ export class CatalogueComponent implements OnInit {
     updateCatalogueSubmit() {
         this.updCata();
         this.closeModal();
-        // this.getAllCatalogue();
     }
 
     updCata() {
@@ -134,7 +139,8 @@ export class CatalogueComponent implements OnInit {
         this.catelogueService.updateCatalogue(this.updCatalogue).subscribe(
             (data:any) => {
                 this.loading = false;
-                console.log(data['message']);
+                this.getAllCatalogue(this.iconIsActive);
+                this.toastr.success(data['message']);
             }
         );
     }
@@ -151,8 +157,12 @@ export class CatalogueComponent implements OnInit {
             if (result.value) {
                 for (let i = 0; i < this.updateStatus.length; i++) {
                     this.updateStatus[i].IsActive = status;
-                
                 }
+                this.catelogueService.removeCatalogue(this.updateStatus).subscribe(data => {
+                    this.getAllCatalogue(this.iconIsActive);
+                    this.closeModal();
+                    Swal.fire('Success', 'The company has been deleted', 'success');
+                });;
             Swal.fire(
               'Deleted',
               '',

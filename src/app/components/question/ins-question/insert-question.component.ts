@@ -34,9 +34,11 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         private activeRoute: ActivatedRoute
     ) {
     }
+    iconIsActive: boolean;
     // catalogue
     id: number = this.activeRoute.snapshot.params.id;
     // excel param
+    checkFile=true;
     searchText = '';
     arrayBuffer: any;
     file: File;
@@ -75,7 +77,12 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.create = key;
     }
     incomingfile(event) {
+        this.checkFile=true;
         this.file = event.target.files[0];
+        if(this.file.size > 200000){
+            this.checkFile=false;
+            this.toastr.error('File must be smaller than 20MB');
+        }
     }
 
     readExcel() {
@@ -143,9 +150,13 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
             this.insAnswer = this.answerForm.controls['answers'].value;
             let check = true;
+            this.insAnswer.forEach(element => {
+                element['isActive'] = true;
+            });
             this.insQuestion['MaxPoint'] = Math.max.apply(Math, this.insAnswer.map(function(o) { return o.point; }));
             this.insQuestion['Answer'] = this.insAnswer;
             const catalog = this.id;
+            console.log(this.insQuestion);
             if (catalog === undefined || catalog === null) {
                 this.toastr.error('Message', 'Cataloguecan not be blank!');
                 $('#ins_question_cate_id').css('border-color', 'red');
@@ -314,7 +325,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         }
         this.question['question'] = '';
         this.question['cate_id'] = '';
-        this.getQuestionById();
+        this.getQuestionById(true);
         this.getCatalogById();
         this.insQuestion['CatalogueId'] = this.id;
         this.updQuestion['CatalogueId'] = this.id;
@@ -461,10 +472,9 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 console.log(this.updateStatus);
                 this.questionService.removeQuestion(this.updateStatus).subscribe(
                     (results) => {
-                        this.getQuestionById();
+                        this.getQuestionById(this.iconIsActive);
                     }
                 );
-                this.getQuestionById();
 
                 Swal.fire(
                     'Deleted',
@@ -499,7 +509,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         setTimeout(function () {
             refesh.classList.remove('spin-animation');
         }, 500);
-        this.getQuestionById();
+        this.getQuestionById(this.iconIsActive);
     }
 
     addQuestion() {
@@ -507,8 +517,8 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.insQuestion['createBy'] = 1;
         this.questionService.insertQuestion(this.insQuestion).subscribe(
             (results) => {
-                this.getQuestionById();
-                this.toastr.success('Create question success');
+                this.getQuestionById(this.iconIsActive);
+                this.toastr.success(results['message']);
             }
         );
     }
@@ -519,7 +529,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.insQuestion = JSON.parse(data);
         this.questionService.insertQuestionByExcel(this.insQuestion).subscribe(
             (results) => {
-                this.getQuestionById();
+                this.getQuestionById(this.iconIsActive);
             }
         );
     }
@@ -536,27 +546,17 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         console.log(this.updQuestion);
         this.questionService.updateQuestion(this.updQuestion).subscribe(
             (results) => {
-                this.getQuestionById();
+                this.getQuestionById(this.iconIsActive);
             }
         );
     }
 
 
-    disableAnswer() {
-        this.updQuestion['answer'].forEach(element => {
-            this.anwserDel.push(element['AnswerId']);
-        });
-        // this.answerService.disableAnswer(element['AnswerId']).subscribe(
-        //     (results) => {
-        //         console.log(results);
-        //     }
-        // );
-        return true;
-    }
 
     // Get all question
-    getQuestionById() {
-        this.questionService.getQuestion(this.id).subscribe(
+    getQuestionById(status) {
+        this.iconIsActive = status;
+        this.questionService.getQuestion(this.id,this.iconIsActive).subscribe(
             (data: any) => {
                 console.log(data);
                 this.allQuestions = data;

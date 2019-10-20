@@ -163,7 +163,8 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-success save" (click)="insertQuestionSubmit('excel')">Create</button>
+        <button [disabled]="checkFile==false" class="btn btn-success save"
+            (click)="insertQuestionSubmit('excel')">Create</button>
         <button type="button" class="btn btn-danger" (click)="closeExcel()">Close</button>
     </div>
 </ng-template>
@@ -188,13 +189,6 @@
                             <span class="bs-stepper-label">View Question and Answer</span>
                         </button>
                     </div>
-                    <div class="line"></div>
-                    <div class="step" data-target="#test-l-3">
-                        <button [disabled]="index != 3" class="step-trigger">
-                            <span class="bs-stepper-circle">3</span>
-                            <span class="bs-stepper-label">Save Change</span>
-                        </button>
-                    </div>
                 </div>
             </div>
             <div class="modal-body">
@@ -215,48 +209,6 @@
                                         name="upd_question_question" class="form-control input-underline input-lg"
                                         id="upd_question_question" placeholder="{{ 'Question' | translate }}">
                                 </div>
-                            </div>
-                            <!--Add answer  -->
-                            <div class="form-content answer-form">
-                                <h4>Update Answer</h4>
-
-                                <form [formGroup]="answerForm" (ngSubmit)="next()">
-                                    <div class="form-row" style="padding-top: 20px;">
-                                        <div class="col align-self-start form-group">
-                                            <button type="button" class="btn btn-primary" (click)="onAddAnswers()">Add
-                                                answers</button>
-                                        </div>
-                                        <div class="col align-self-end form-group">
-                                            <p class="text-right">Number of answers : {{count}}</p>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="list-group-item "
-                                        *ngFor="let answer of answerForm.controls.answers.controls; let i=index">
-                                        <h5 class="card-title">Answer {{i + 1}}</h5>
-                                        <div [formGroup]="answer" class="form-row">
-                                            <div class="form-group col-10">
-                                                <label>Answer</label>
-                                                <input type="text" formControlName="answer1"
-                                                    class="form-control ans-{{i}}" />
-                                            </div>
-                                            <div class="form-group col-1">
-                                                <label>Mark</label>
-                                                <input type="number" formControlName="point"
-                                                    class="form-control mark-{{i}}" />
-                                            </div>
-                                            <div class="form-group col-1" style="position: relative;">
-                                                <button style="position: absolute; bottom: 0;" type="button "
-                                                    class="btn btn-danger" mat-mini-fab color="warn" fxFlex="nogrow"
-                                                    *ngIf="answerForm.controls.answers.controls.length > 3"
-                                                    (click)="removeUnit(i)">
-                                                    <span class="fa fa-fw fa-trash-o "></span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
                             </div>
                         </div>
                         <div id="test-l-2" class="content">
@@ -283,30 +235,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                    <table class="table table-striped table-bordered table-hover customtable">
-                                        <thead>
-                                            <tr class="col-md-12 row no-padding-no-margin">
-                                                <td class="col-md-9" style="font-weight: bold">Answer</td>
-                                                <td class="col-md-3" style="font-weight: bold">Point</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr class="col-md-12 row no-padding-no-margin" *ngFor="let q of updAnswer">
-                                                <td class="col-md-9">
-                                                    {{q.answer1}}
-                                                </td>
-                                                <td class="col-md-3">
-                                                    {{q.point}}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
                             </div>
-                        </div>
-                        <div id="test-l-3" class="content text-center">
-                            <button type="submit" class="btn btn-primary mt-5">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -315,8 +244,8 @@
     </div>
     <div class="modal-footer">
         <button class="btn btn-secondary back" [hidden]="index==1" (click)="back()">Back</button>
-        <button (click)="next('upd')" class="btn btn-primary">Next</button>
-        <button class="btn btn-success save" *ngIf="index == 3" (click)="updateQuestionSubmit()">Update</button>
+        <button (click)="next('upd')" [hidden]="index==2" class="btn btn-primary">Next</button>
+        <button class="btn btn-success save" [hidden]="index != 2" (click)="updateQuestionSubmit()">Update</button>
         <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
     </div>
 </ng-template>
@@ -350,9 +279,14 @@
                         </button>
                     </div>
                     <div class="row justify-content-end" style="margin-top: 20px;">
-                        <button style="margin-right: 10px;" (click)="clickButtonChangeStatus(false);"
-                            class="btn btn-lg btn-danger" data-toggle="button">
+                        <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
+                            (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger"
+                            data-toggle="button">
                             <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
+                        </button>
+                        <button [hidden]="iconIsActive==true" (click)="clickButtonChangeStatus(true);"
+                            class="btn btn-lg btn-success" style="padding-left: 24px;">
+                            <i class="fa fa-check" tooltip="{{'Active' | translate}}" placement="top"></i>
                         </button>
                         <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
                             class="btn btn-lg btn-success " data-toggle="button">
@@ -384,14 +318,14 @@
                             <sv-default-sorter by='createBy'>Create By</sv-default-sorter>
                         </th>
                         <th class="col-md-1 text-center" scope="col">
-                                <sv-default-sorter by='maxPoint'>Max Point</sv-default-sorter>
-                            </th>
+                            <sv-default-sorter by='maxPoint'>Max Point</sv-default-sorter>
+                        </th>
                         <th class="text-center col-md-1" scope="col">Status
                             <div ngbDropdown class="d-inline-block dropdown">
                                 <button class=" icon-btn" ngbDropdownToggle></button>
                                 <div ngbDropdownMenu>
-                                    <button class="dropdown-item" (click)="getQuestionStatus(true)">Active</button>
-                                    <button class="dropdown-item" (click)="getQuestionStatus(false)">Disable</button>
+                                    <button class="dropdown-item" (click)="getQuestionById(true)">Active</button>
+                                    <button class="dropdown-item" (click)="getQuestionById(false)">Disable</button>
                                 </div>
                             </div>
                         </th>
@@ -417,7 +351,7 @@
                             <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
                         </td>
                         <td class="col-md-2 nowrap text-center action-column">
-                            <button class="btn-primary btn btn-circle shadow-item" (click)="viewAnswer(item);"
+                            <button class="btn-primary btn btn-circle shadow-item" (click)="viewAnswer(q);"
                                 tooltip="view">
                                 <i class="fa fa fa-eye"></i>
                             </button>

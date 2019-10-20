@@ -18,8 +18,8 @@ export class QuestionApiService {
     };
     constructor(private httpClient: HttpClient) { }
     
-    getQuestion(id:any) {
-        let param= new HttpParams().set('id',id);
+    getQuestion(id:any,status) {
+        let param= new HttpParams().set('id',id).set('status',status);
         const API = 'api/Question/GetQuestionByCatalogue';
         return this.httpClient.get(this.URL + this.routes + API,{params :param} );
     }
@@ -44,8 +44,7 @@ export class QuestionApiService {
     }
 
     getQuestionByStatus(status, id) {
-        const param = new HttpParams().set('status', status);
-        param.set('id', id);
+        const param = new HttpParams().set('status', status).set('id', id);
         const API = 'api/Question/GetQuestionByStatus';
         return this.httpClient.get(this.URL + this.routes + API, { params: param });
     }

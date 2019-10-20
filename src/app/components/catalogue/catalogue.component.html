@@ -30,9 +30,14 @@
                         </button>
                     </div>
                     <div class="row justify-content-end" style="margin-top: 20px;">
-                        <button style="margin-right: 10px;" (click)="clickButtonChangeStatus(false);"
-                            class="btn btn-lg btn-danger" data-toggle="button">
+                        <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
+                            (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger"
+                            data-toggle="button">
                             <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
+                        </button>
+                        <button [hidden]="iconIsActive==true" (click)="clickButtonChangeStatus(true);"
+                            class="btn btn-lg btn-success" style="padding-left: 24px;">
+                            <i class="fa fa-check" tooltip="{{'Active' | translate}}" placement="top"></i>
                         </button>
                         <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
                             class="btn btn-lg btn-success " data-toggle="button">
@@ -64,8 +69,14 @@
                         <th class="col-md-1 text-center" scope="col">
                             <sv-default-sorter by='quescount'>Question</sv-default-sorter>
                         </th>
-                        <th class="col-md-1 text-center" scope="col">
-                            Status
+                        <th class="col-md-1 text-center" scope="col">Status
+                            <div ngbDropdown class="d-inline-block dropdown">
+                                <button class=" icon-btn" ngbDropdownToggle style="color: black"></button>
+                                <div ngbDropdownMenu>
+                                    <button class="dropdown-item" (click)="getAllCatalogue(true)">Active</button>
+                                    <button class="dropdown-item" (click)="getAllCatalogue(false)">Disable</button>
+                                </div>
+                            </div>
                         </th>
                         <th class="col-md-2 text-center" scope="col">Action</th>
                     </tr>
