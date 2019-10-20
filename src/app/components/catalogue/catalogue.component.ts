@@ -181,7 +181,7 @@ export class CatalogueComponent implements OnInit {
     }
 
     viewCatalog(item){
-        this.router.navigate(['/manage-question/', item['CatalogueId']]);
+        this.router.navigate(['/manage-question/', item['catalogueId']]);
     }
 
 }

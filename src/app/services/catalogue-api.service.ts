@@ -40,12 +40,6 @@ export class CatalogueApiService {
         return this.httpClient.put(this.URL + this.routes + API, Catalogue);
     }
 
-    getCatalogueById(id) {
-        console.log(id);
-        const param = new HttpParams().set('id', id);
-        const API = 'api/Catalogue/GetCatalogueById';
-        return this.httpClient.get(this.URL + this.routes + API, { params: param });
-    }
 
 
 }
