@@ -7,7 +7,7 @@ import { AppSettings } from '../appsetting';
 })
 export class TestService {
 
-  URL = 'http://localhost:8080/';
+  URL = 'https://localhost:5001/';
   routes = '';
   // URL = AppSettings.BASEURL;
   // routes = 'testmanagement/';

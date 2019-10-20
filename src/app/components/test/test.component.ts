@@ -58,7 +58,7 @@ export class TestComponent implements OnInit {
   }
 
   submit() {
-    console.log(this.question);
+    console.log(JSON.stringify(this.question));
     this.testService.postSubmitTest(this.question)
     .subscribe((res) => {
       console.log(res);

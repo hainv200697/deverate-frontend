@@ -226,7 +226,7 @@ export class ManageConfigurationComponent implements OnInit {
 
   getAllCatalogue() {
     let tmp: any;
-    this.catalogueApi.getAllCatalogue().subscribe(
+    this.catalogueApi.getAllCatalogue(true).subscribe(
       (data) => {
         tmp = data;
         for (let i = 0; i < tmp.length; i++) {
