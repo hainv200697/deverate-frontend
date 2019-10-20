@@ -28,8 +28,13 @@ export class TestService {
     return this.httpClient.post<any>(this.URL + this.routes + API, info);
   }
 
-  postSubmitTest(questionInTest) {
+  postSubmitTest(userTest) {
     const API = 'api/Test/SubmitTest';
-    return this.httpClient.post<any>(this.URL + this.routes + API, questionInTest);
+    return this.httpClient.post<any>(this.URL + this.routes + API, userTest);
+  }
+
+  postAutoSaveTest(userTest) {
+    const API = 'api/Test/AutoSave';
+    return this.httpClient.post<any>(this.URL + this.routes + API, userTest);
   }
 }
