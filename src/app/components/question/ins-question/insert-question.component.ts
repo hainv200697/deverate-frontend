@@ -261,46 +261,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 $('#upd_question_question').focus();
                 return;
             }
-
-
-            let i = -1;
-            this.updAnswer.forEach(element => {
-                i++;
-                if (check === true) {
-                    const ans = element['answer1'];
-                    if (ans === '' || ans.length < 5) {
-                        this.toastr.error('Message', 'Answer must be more than 5 characters!');
-                        check = false;
-                        $('.ans-' + i).css('border-color', 'red');
-                        $('.ans-' + i).focus();
-                        return;
-                    }
-                    const mark: number = element['point'];
-                    if (mark === null || mark === undefined) {
-                        this.toastr.error('Message', 'Mark can not be blank!');
-                        check = false;
-                        $('.mark-' + i).css('border-color', 'red');
-                        $('.mark-' + i).focus();
-                        return;
-                    }
-                    if (6 < mark || mark < 1) {
-                        this.toastr.error('Message', 'Mark can not be bigger than 6!');
-                        check = false;
-                        $('.mark-' + i).css('border-color', 'red');
-                        $('.mark-' + i).focus();
-                        return;
-                    }
-                    if (mark < 1) {
-                        this.toastr.error('Message', 'Mark can not be smaller than 1!');
-                        check = false;
-                        $('.mark-' + i).css('border-color', 'red');
-                        $('.mark-' + i).focus();
-                        return;
-                    }
-                } else {
-                    return;
-                }
-            });
             if (check === true) {
                 this.stepper.next();
                 this.index++;
@@ -406,6 +366,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         });
 
         this.index = 1;
+        this.updQuestion['catalogueName'] = item['catalogueName'];
         this.updQuestion['answer'] = item['answer'];
         this.getAnswerByQuestionId();
         this.updQuestion['QuestionId'] = item['QuestionId'];
