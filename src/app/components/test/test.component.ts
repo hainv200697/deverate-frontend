@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TestService } from 'src/app/services/test.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
-import { ViewEncapsulation } from '@angular/compiler/src/core';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-test',
@@ -17,17 +17,24 @@ export class TestComponent implements OnInit {
   key;
   error = false;
   test = false;
-  question;
+  questionInTest;
   alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  testId;
+  sub:Subscription;
   ngOnInit() {
-    const testId = this.route.snapshot.paramMap.get('testId');
-    this.config = this.testService.getConfig(testId)
+    this.testId = this.route.snapshot.paramMap.get('testId');
+    this.config = this.testService.getConfig(this.testId)
       .subscribe(res => {
         this.config = res;
         this.config.startDate = moment(this.config.startDate).format('LLLL');
         this.config.endDate = moment(this.config.endDate).format('LLLL');
         $('#openModalButton').click();
       });
+  }
+
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   open(content) {
@@ -48,9 +55,13 @@ export class TestComponent implements OnInit {
     this.testService.getAllQuestion(testInfo)
       .subscribe((res) => {
         this.test = true;
-        this.question = res;
-        console.log(this.question);
+        this.questionInTest = res;
         this.closeModal();
+
+        this.sub = interval(60000)
+        .subscribe((val) => { 
+          console.log("Auto Save")
+          this.autoSave()});
       },
         (error) => {
           this.error = true;
@@ -58,10 +69,28 @@ export class TestComponent implements OnInit {
   }
 
   submit() {
-    console.log(JSON.stringify(this.question));
-    this.testService.postSubmitTest(this.question)
-    .subscribe((res) => {
-      console.log(res);
-    });
+    const userTest = {
+      accountId: Number(sessionStorage.getItem('AccountId')),
+      testId: this.testId,
+      code: this.key,
+      questionInTest: this.questionInTest
+    }
+    this.testService.postSubmitTest(userTest)
+      .subscribe((res) => {
+        console.log(res);
+      });
+  }
+
+  autoSave() {
+    const userTest = {
+      accountId: Number(sessionStorage.getItem('AccountId')),
+      testId: this.testId,
+      code: this.key,
+      questionInTest: this.questionInTest
+    }
+    this.testService.postAutoSaveTest(userTest)
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 }

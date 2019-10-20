@@ -37,10 +37,10 @@
 </div>
 
 <div class="card mb-3 shadow-card col-md-10" [hidden]="!test">
-    <div class="col-md-12" *ngFor="let item of question, let iq = index">
+    <div class="col-md-12" *ngFor="let item of questionInTest, let iq = index">
         <div class="col-md-12">
             <div class="question">
-                <h5>{{iq+1}}. {{item['question']}}</h5>
+                <h5>{{iq+1}}. {{item.question}}</h5>
             </div>
             <div class="radio answer" *ngFor="let ans of item.answers; let ia = index">
                 <label style="padding-top: 5px;">
