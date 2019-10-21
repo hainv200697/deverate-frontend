@@ -30,11 +30,13 @@
 <div class="text-center" [hidden]="!test">
     <h2 style="color: red;">Doing Test</h2>
 </div>
-<div class="row col-md-12">
-    <div class="col-md-2 row">
+<div class="row col-md-12" style="margin-top: 50px;">
+    <div class="col-md-2 row" style="margin-top: 50px;">
         <div class="text-left timer col-md-2" [hidden]="!test">
-                <button (click)="scroll('question'+iq)" *ngFor="let item of question, let iq = index" class="btn btn-outline-primary " style="margin: 2px; width: 20%;" >{{iq+1}}
+            <div class="text-left">
+                <button id="btn{{iq}}" (click)="scroll('question'+iq)" *ngFor="let item of questionInTest, let iq = index" class="btn btn-outline-primary btn-item " >{{iq+1}}
                 </button>
+            </div>
             <br/>
             <br/>
             <div class="text-center">
@@ -43,14 +45,14 @@
         </div>
     </div>
     <div class=" shadow-card col-md-10" [hidden]="!test">
-        <div class="col-md-12" *ngFor="let item of question, let iq = index">
+        <div class="col-md-12" *ngFor="let item of questionInTest, let iq = index">
             <div class="col-md-12">
-                <div class="question" id="question{{i}}">
+                <div class="question" id="question{{iq}}">
                     <h5>{{iq+1}}. {{item['question']}}</h5>
                 </div>
-                <div class="radio answer" *ngFor="let ans of item.answers; let ia = index">
+                <div class="radio answer" *ngFor="let ans of item.answers; let ia = index"> 
                     <label style="padding-top: 5px;">
-                        <input type="radio" id="question{{iq+1}}" name="question{{iq+1}}" [value]="ans.answerId" [(ngModel)]="item.answerId">
+                        <input type="radio" id="question{{iq+1}}" (change)="changeAnswer('btn'+iq)" name="question{{iq+1}}" [value]="ans.answerId" [(ngModel)]="item.answerId">
                         {{alpha[ia]}}. {{ans.answer}}
                     </label>
                 </div>

@@ -44,7 +44,6 @@ export class LoginComponent implements OnInit {
                     alert(res.status.message);
                 }
             });
-
     }
 
     getDecodedAccessToken(token: string): any {
