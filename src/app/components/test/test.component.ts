@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TestService } from 'src/app/services/test.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -33,7 +33,7 @@ export class TestComponent implements OnInit {
       });
   }
 
-
+  // tslint:disable-next-line:use-lifecycle-interface
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
@@ -100,7 +100,6 @@ export class TestComponent implements OnInit {
         this.closeModal();
       }
     })
-
   }
 
   autoSave() {
@@ -109,7 +108,7 @@ export class TestComponent implements OnInit {
       testId: this.testId,
       code: this.key,
       questionInTest: this.questionInTest
-    }
+    };
     this.testService.postAutoSaveTest(userTest)
       .subscribe((res) => {
         console.log(res);
