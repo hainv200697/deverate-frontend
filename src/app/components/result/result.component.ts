@@ -15,6 +15,7 @@ export class ResultComponent implements OnInit {
   gaugeLabel = "Speed";
   gaugeAppendText = "km/hr";
   showRank: number;
+  test = "";
 
   public loading = false;
   gaugemap = {};
@@ -23,7 +24,6 @@ export class ResultComponent implements OnInit {
   statistic = [];
   catalogueInStatistic = [];
   selectedDevice = "";
-  test = "";
     
   constructor(private rankApi: RankApiService,
     private statisticApi: StatisticApiService,
@@ -33,9 +33,8 @@ export class ResultComponent implements OnInit {
   
       this.radarChartType = 'radar';
       this.getAllRank(true);
-      this.getStatistic(42);
+      this.getStatistic(6);
       
-      this.onChangeRank(3);
   }
   getAllRank(status: boolean) {
     this.rankApi.getAllRank(status).subscribe(
@@ -52,21 +51,13 @@ export class ResultComponent implements OnInit {
     this.statisticApi.getStatistic(id).subscribe(
       (data) => {
         this.statistic = data['data']['data'];
-        // if(data['data']['data']['rank'] == "dev1"){
-        //   this.showRank = 1.5;
-        // }
-        // else if(data['data']['data']['rank'] == "dev2"){
-        //   this.showRank = 4.5;
-        // }
-        // else if(this.statistic['rank'] == "dev3"){
-        //   this.showRank = 7;
-        // }
         this.catalogueInStatistic = data['data']['data']['catalogues'];
         for(var i = 0; i < this.catalogueInStatistic.length; i++){
           this.radarChartLabels.push(this.catalogueInStatistic[i].name);
-          this.radarChartData[0].data.push(this.catalogueInStatistic[i]['overallPoint']);
-          this.radarChartData[1].data.push(this.catalogueInStatistic[i]['thresholdPoint']);
+          this.radarChartData[0].data.push(this.catalogueInStatistic[i]['overallPoint'] * 100);
+          this.radarChartData[1].data.push(this.catalogueInStatistic[i]['thresholdPoint'] * 100);
         }
+        
         this.loading = false;
         this.draw();
       },
@@ -78,10 +69,24 @@ export class ResultComponent implements OnInit {
   }
 
   onChangeRank(newValue) {
-    this.selectedDevice = newValue;
-    console.log(this.statistic['rank']);
+    
+    console.log(newValue)
   }
 
+  onChangeRadarData(value){
+    this.test = value
+    this.radarChartLabels= [];
+    this.radarChartData = [
+      { data: [], label: 'Assement Result' },
+      { data: [], label: 'Threshold Point' }
+  ];
+    for(var i = 0; i < this.catalogueInStatistic.length; i++){
+      this.radarChartLabels.push(this.catalogueInStatistic[i].name);
+      this.radarChartData[0].data.push(this.catalogueInStatistic[i]['overallPoint'] * value);
+      this.radarChartData[1].data.push(this.catalogueInStatistic[i]['thresholdPoint'] * value);
+
+    }
+  }
 // Radar
 
 public radarChartLabels: string[] = [];
@@ -89,7 +94,7 @@ public radarChartLabels: string[] = [];
 
 public radarChartData: any = [
     { data: [], label: 'Assement Result' },
-    { data: [], label: 'Dev2' }
+    { data: [], label: 'Threshold Point' }
 ];
 public radarChartType: string;
 
@@ -151,7 +156,6 @@ draw() {
   else if(this.statistic['rank'] == "dev3"){
     this.showRank = 7;
   }
-  console.log(this.showRank)
  var gauge = function (container, configuration) {
  
    var config = {
@@ -330,6 +334,7 @@ draw() {
 // powerGauge.render(6);
  this.powerGauge.render();
   this.powerGauge.update(self.showRank);
+  console.log(self.showRank)
 }
   
 }
