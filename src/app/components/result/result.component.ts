@@ -54,8 +54,8 @@ export class ResultComponent implements OnInit {
         this.catalogueInStatistic = data['data']['data']['catalogues'];
         for(var i = 0; i < this.catalogueInStatistic.length; i++){
           this.radarChartLabels.push(this.catalogueInStatistic[i].name);
-          this.radarChartData[0].data.push(this.catalogueInStatistic[i]['overallPoint'] * 100);
-          this.radarChartData[1].data.push(this.catalogueInStatistic[i]['thresholdPoint'] * 100);
+          this.radarChartData[0].data.push(this.catalogueInStatistic[i]['overallPoint'] * 5);
+          this.radarChartData[1].data.push(this.catalogueInStatistic[i]['thresholdPoint'] * 5);
         }
         
         this.loading = false;

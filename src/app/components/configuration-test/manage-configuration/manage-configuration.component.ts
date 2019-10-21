@@ -113,6 +113,7 @@ export class ManageConfigurationComponent implements OnInit {
     showCheckbox: true,
   };
 
+  test = []
 
   PageSize(test: number) {
     this.pageSize = test;
@@ -191,6 +192,7 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   next() {
+
     if (this.validateConfiguration() === false) {
       return;
     }
@@ -199,8 +201,10 @@ export class ManageConfigurationComponent implements OnInit {
     this.inputConfiguration['startDate'] = this.startDate;
     this.inputConfiguration['endDate'] = this.endDate;
     if(this.index == 3){
+      this.catalogueInRank = [];
       for(var i =0; i< this.ListRank.length; i++) {
         this.ListRank[i].catalogueInRank = [];
+        
         for (var j = 0; j < this.selectedItems.length; j++) {
           var key = this.selectedItems[j].catalogueId +"_"+this.ListRank[i].rankId;
           var cir = {
@@ -208,11 +212,19 @@ export class ManageConfigurationComponent implements OnInit {
             "weightPoint":$('#'+key).val() * this.selectedItems[j]['weightPoint'] ,
             "isActive": true
           } 
+          var cirShow = {
+            "name" : this.selectedItems[j].name,
+            "rank" : this.ListRank[i].name,
+            "weightPoint":$('#'+key).val(),
+          } 
           this.ListRank[i].catalogueInRank.push(cir);
+          this.catalogueInRank.push(cirShow)
+          console.log(this.catalogueInRank);
         }
       }
     }
-    console.log(this.ListRank);
+    
+    
   }
 
   nextDetail() {
@@ -255,7 +267,6 @@ export class ManageConfigurationComponent implements OnInit {
           }
         }
         this.catalogueList = tmp;
-        console.log(data)
       }
       
     );
@@ -324,9 +335,7 @@ export class ManageConfigurationComponent implements OnInit {
 
   
   Create() {
-    
-    
-    console.log(this.ListRank);
+  
     this.loading = false;
     if (this.inputConfiguration['duration'] === '' || this.inputConfiguration['totalQuestion'] === '') {
       Swal.fire('Error', 'Something went wrong', 'error');
@@ -344,10 +353,9 @@ export class ManageConfigurationComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
-        // this.loading = true;
+        this.loading = true;
         this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
         this.inputConfiguration['endDate'] = new Date(this.inputConfiguration['endDate']);
-
         console.log(this.inputConfiguration)
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
           this.getConfigurationIsActive(true);
@@ -459,28 +467,13 @@ export class ManageConfigurationComponent implements OnInit {
       this.toast.error('Message', 'Total mark of catalogue must be 1');
       return false;
     } else if (this.index === 2) {
-      //gắn biến this của class vào biến that để có thể gọi ở trong function dưới
-      var that = this;
-      that.rateCataOfRank=[];
-      $(".rateCataByRank").each(function () {
-        //gọi this ở trong này nó hiểu là this của function
-        var val = $(this).val();
-        if (val === '') {
-          // toast error
-          return false;
-        } else {
-          that.rateCataOfRank.push(val);
-        }
-      });
-      // lấy value theo index selectedItems * index selectRank
-      console.log(this.rateCataOfRank);
-
-      //Lấy value của rank dev 2 của cata thứ 2
-      for (var i = 0; i < this.selectedItems.length; i++) {
-        for (var j = 0; j < this.selectRank.length; j++) {
-          var size = this.selectRank.length;
-          console.log(this.selectedItems[i].name + " " + this.selectRank[j].name + " : " + this.rateCataOfRank[(i * size + (j + 1)) - 1])
-        }
+      if($('#rate').val() === ''){
+        this.toast.error('Message', 'Please input rate of rank');
+        return false;
+      }
+      else if($('#rate').val() < 0 ){
+        this.toast.error('Message', 'Rate of rank must be less 1');
+        return false;
       }
 
       // if (.val() === '') {
@@ -493,7 +486,6 @@ export class ManageConfigurationComponent implements OnInit {
       //     total = this.ListRank[i]['rate'] + total;
       //   }
       //   if (total != 1) {
-      //     console.log(total)
       //     this.toast.error('Message', 'Total mark of Rank must be 1');
       //     return false;
       //   }
