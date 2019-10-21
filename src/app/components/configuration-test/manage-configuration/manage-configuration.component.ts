@@ -164,7 +164,7 @@ export class ManageConfigurationComponent implements OnInit {
 
     this.endDate = new Date();
     this.inputConfiguration['title'] = "";
-    this.inputConfiguration['testOwnerId'] = 1;
+    this.inputConfiguration['testOwnerId'] = sessionStorage.getItem("AccountId");
     this.inputConfiguration['totalQuestion'] = 0;
     this.inputConfiguration['title'] = '';
     this.inputConfiguration['duration'] = 15;

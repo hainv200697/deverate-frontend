@@ -5,14 +5,14 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class StatisticApiService {
-    URL = 'http://localhost:8080/';
-    routes = '';
+    // URL = 'https://localhost:5001/';
+    URL = AppSettings.BASEURL;
 
     constructor(private httpClient: HttpClient) { }
 
     getStatistic(id: number) {
         const API = 'api/System/Statistic/';
-        return this.httpClient.get(this.URL + this.routes + API + id);
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id);
     }
 
 }

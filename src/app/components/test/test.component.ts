@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TestService } from 'src/app/services/test.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 })
 export class TestComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private testService: TestService, private modalService: NgbModal) { }
+  constructor(private route: ActivatedRoute, private testService: TestService, private modalService: NgbModal, private router: Router) { }
   config;
   key;
   error = false;
@@ -39,7 +39,7 @@ export class TestComponent implements OnInit {
   }
 
   open(content) {
-    this.modalService.open(content, { size: 'lg',backdrop : 'static', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+    this.modalService.open(content, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
     });
   }
 
@@ -88,14 +88,13 @@ export class TestComponent implements OnInit {
       cancelButtonText: 'No, submited it'
     }).then((result) => {
       if (result.value) {
+        console.log(JSON.stringify(userTest))
         this.testService.postSubmitTest(userTest)
           .subscribe((res) => {
-            
+            this.closeModal();
+            Swal.fire('Success', 'The test has been submited', 'success');
+            this.router.navigate(['/result', this.testId]);
           });
-          
-        this.closeModal();
-        Swal.fire('Success', 'The test has been submited', 'success');
-        window.location.reload();
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         this.closeModal();
       }

@@ -6,33 +6,31 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class AnswerApiService {
-    URL = 'http://localhost:54318/';
-    // URL = AppSettings.BASEURL;
-    // routes = 'resource/';
-    routes = '';
+    // URL = 'http://localhost:54318/';
+    URL = AppSettings.BASEURL;
     constructor(
         private httpClient: HttpClient,
     ) { }
 
-    getAllAnswerByQuestioId(questionId,status) {
+    getAllAnswerByQuestioId(questionId, status) {
         const API = 'api/Answer/GetAnswerByQuestion';
         const param = new HttpParams().set('id', questionId).set('status', status);
-        return this.httpClient.get(this.URL + this.routes + API, { params: param });
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
 
     insertAnswer(answer: any) {
         const API = 'api/Answer/CreateAnswer';
-        return this.httpClient.post(this.URL + API, answer);
+        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API, answer);
     }
 
     updateAnswer(answer: any) {
         const API = 'api/Answer/UpdateAnswer';
-        return this.httpClient.put(this.URL + API, answer);
+        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, answer);
     }
 
     disableAnswer(AnswerId: any) {
         const API = 'api/Answer/RemoveAnswer';
-        return this.httpClient.put(this.URL + API, AnswerId);
+        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, AnswerId);
     }
 
 

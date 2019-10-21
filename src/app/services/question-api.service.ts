@@ -7,10 +7,8 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class QuestionApiService {
-    // URL = AppSettings.BASEURL;
-    URL ='http://localhost:54318/';
-    // routes = 'resource/';
-    routes = '';
+    URL = AppSettings.BASEURL;
+    // URL ='http://localhost:54318/';
     httpOptions = {
         headers: new HttpHeaders({
             'Content-Type': 'application/json'
@@ -21,31 +19,31 @@ export class QuestionApiService {
     getQuestion(id:any,status) {
         let param= new HttpParams().set('id',id).set('status',status);
         const API = 'api/Question/GetQuestionByCatalogue';
-        return this.httpClient.get(this.URL + this.routes + API,{params :param} );
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API,{params :param} );
     }
 
     insertQuestion(question: any) {
         const API = 'api/Question/CreateQuestion';
-        return this.httpClient.post(this.URL + this.routes + API, question);
+        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE+ API, question);
     }
 
     updateQuestion(question: any) {
         const API = 'api/Question/UpdateQuestion';
-        return this.httpClient.put(this.URL + this.routes + API, question);
+        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE+ API, question);
     }
     removeQuestion(question: any) {
         const API = 'api/Question/RemoveQuestion';
-        return this.httpClient.put(this.URL + this.routes + API, question);
+        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, question);
     }
 
     insertQuestionByExcel(question: any) {
         const API = 'api/Question/CreateQuestionExcel';
-        return this.httpClient.post(this.URL + this.routes + API, question);
+        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API, question);
     }
 
     getQuestionByStatus(status, id) {
         const param = new HttpParams().set('status', status).set('id', id);
         const API = 'api/Question/GetQuestionByStatus';
-        return this.httpClient.get(this.URL + this.routes + API, { params: param });
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
 }

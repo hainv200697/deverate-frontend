@@ -3,6 +3,7 @@ declare var d3: any;
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { RankApiService } from 'src/app/services/rank-api.services';
 import { StatisticApiService } from 'src/app/services/statistic-api.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-result',
@@ -27,13 +28,14 @@ export class ResultComponent implements OnInit {
     
   constructor(private rankApi: RankApiService,
     private statisticApi: StatisticApiService,
+    private route: ActivatedRoute
     ) {}
   
   ngOnInit() {
-  
       this.radarChartType = 'radar';
       this.getAllRank(true);
-      this.getStatistic(6);
+      var testId = this.route.snapshot.paramMap.get('testId');
+      this.getStatistic(Number(testId));
       
   }
   getAllRank(status: boolean) {
