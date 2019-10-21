@@ -4,6 +4,7 @@ import { TestService } from 'src/app/services/test.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { interval, Subscription } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-test',
@@ -20,7 +21,7 @@ export class TestComponent implements OnInit {
   questionInTest;
   alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   testId;
-  sub:Subscription;
+  sub: Subscription;
   ngOnInit() {
     this.testId = this.route.snapshot.paramMap.get('testId');
     this.config = this.testService.getConfig(this.testId)
@@ -38,7 +39,7 @@ export class TestComponent implements OnInit {
   }
 
   open(content) {
-    this.modalService.open(content, { size: 'lg', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+    this.modalService.open(content, { size: 'lg',backdrop : 'static', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
     });
   }
 
@@ -54,14 +55,16 @@ export class TestComponent implements OnInit {
     };
     this.testService.getAllQuestion(testInfo)
       .subscribe((res) => {
+        console.log(res);
         this.test = true;
         this.questionInTest = res;
         this.closeModal();
 
         this.sub = interval(60000)
-        .subscribe((val) => { 
-          console.log("Auto Save")
-          this.autoSave()});
+          .subscribe((val) => {
+            console.log("Auto Save")
+            this.autoSave()
+          });
       },
         (error) => {
           this.error = true;
@@ -69,16 +72,35 @@ export class TestComponent implements OnInit {
   }
 
   submit() {
+
     const userTest = {
       accountId: Number(sessionStorage.getItem('AccountId')),
       testId: this.testId,
       code: this.key,
       questionInTest: this.questionInTest
     }
-    this.testService.postSubmitTest(userTest)
-      .subscribe((res) => {
-        console.log(res);
-      });
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'The test will be submited!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, submited it!',
+      cancelButtonText: 'No, submited it'
+    }).then((result) => {
+      if (result.value) {
+        this.testService.postSubmitTest(userTest)
+          .subscribe((res) => {
+            
+          });
+          
+        this.closeModal();
+        Swal.fire('Success', 'The test has been submited', 'success');
+        window.location.reload();
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.closeModal();
+      }
+    })
+
   }
 
   autoSave() {
@@ -97,7 +119,13 @@ export class TestComponent implements OnInit {
   scroll(id) {
     console.log(id);
     let el = document.getElementById(id);
-    el.scrollIntoView({behavior:"smooth"});
+    el.scrollIntoView({ behavior: "smooth" });
+  }
+
+  changeAnswer(id) {
+    let el = document.getElementById(id);
+    el.style.backgroundColor = "blue";
+    el.style.color = "white";
   }
 
 }
