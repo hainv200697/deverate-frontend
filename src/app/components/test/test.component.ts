@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TestService } from 'src/app/services/test.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -20,7 +20,7 @@ export class TestComponent implements OnInit {
   questionInTest;
   alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   testId;
-  sub:Subscription;
+  sub: Subscription;
   ngOnInit() {
     this.testId = this.route.snapshot.paramMap.get('testId');
     this.config = this.testService.getConfig(this.testId)
@@ -32,7 +32,7 @@ export class TestComponent implements OnInit {
       });
   }
 
-
+  // tslint:disable-next-line:use-lifecycle-interface
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
@@ -59,9 +59,10 @@ export class TestComponent implements OnInit {
         this.closeModal();
 
         this.sub = interval(60000)
-        .subscribe((val) => { 
-          console.log("Auto Save")
-          this.autoSave()});
+          .subscribe((val) => {
+            console.log('Auto Save');
+            this.autoSave();
+          });
       },
         (error) => {
           this.error = true;
@@ -74,7 +75,7 @@ export class TestComponent implements OnInit {
       testId: this.testId,
       code: this.key,
       questionInTest: this.questionInTest
-    }
+    };
     this.testService.postSubmitTest(userTest)
       .subscribe((res) => {
         console.log(res);
@@ -87,7 +88,7 @@ export class TestComponent implements OnInit {
       testId: this.testId,
       code: this.key,
       questionInTest: this.questionInTest
-    }
+    };
     this.testService.postAutoSaveTest(userTest)
       .subscribe((res) => {
         console.log(res);
@@ -96,8 +97,8 @@ export class TestComponent implements OnInit {
 
   scroll(id) {
     console.log(id);
-    let el = document.getElementById(id);
-    el.scrollIntoView({behavior:"smooth"});
+    const el = document.getElementById(id);
+    el.scrollIntoView({ behavior: 'smooth' });
   }
 
 }
