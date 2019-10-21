@@ -96,7 +96,7 @@ export class ManageConfigurationComponent implements OnInit {
     enableSearchFilter: true,
     classes: 'form-control form-group',
     labelKey: 'name',
-    primaryKey: 'CatalogueId',
+    primaryKey: 'catalogueId',
     maxHeight: 240,
     showCheckbox: true,
   };
@@ -129,13 +129,13 @@ export class ManageConfigurationComponent implements OnInit {
     this.selectedItemsUpdate = []
     this.inputConfiguration['totalQuestion'] += 5;
     
-    var cir = {
-      "configId" : this.updateConfig['ConfigId'],
-      "catalogueId" : item.CatalogueId,
-      "weightPoint" : this.updateConfig[item]['catalogueInConfigurations']
-    } 
-    this.selectedItemsUpdate.push(cir);
-    console.log(this.selectedItemsUpdate);
+    // var cir = {
+    //   "configId" : this.updateConfig['ConfigId'],
+    //   "catalogueId" : item.CatalogueId,
+    //   "weightPoint" : this.updateConfig[item]['catalogueInConfigurations']
+    // } 
+    // this.selectedItemsUpdate.push(cir);
+    // console.log(this.selectedItemsUpdate);
   }
 
   onSelectAll(item: any) { }
@@ -202,9 +202,9 @@ export class ManageConfigurationComponent implements OnInit {
       for(var i =0; i< this.ListRank.length; i++) {
         this.ListRank[i].catalogueInRank = [];
         for (var j = 0; j < this.selectedItems.length; j++) {
-          var key = this.selectedItems[j].CatalogueId +"_"+this.ListRank[i].rankId;
+          var key = this.selectedItems[j].catalogueId +"_"+this.ListRank[i].rankId;
           var cir = {
-            "catalogueId" : this.selectedItems[j].CatalogueId,
+            "catalogueId" : this.selectedItems[j].catalogueId,
             "weightPoint":$('#'+key).val() * this.selectedItems[j]['weightPoint'] ,
             "isActive": true
           } 
