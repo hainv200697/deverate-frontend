@@ -2,7 +2,8 @@
     .modal-lg {
         width: 1000px !important;
     }
-    
+    @import "../../layout/components/header/header.component.scss";
+    @import '../../../styles/custom.scss';
 
 @mixin animation-name($name){
     animation-name: $name;
