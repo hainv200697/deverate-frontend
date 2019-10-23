@@ -4,6 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TestComponent } from './test.component';
+import { NgxLoadingModule } from 'ngx-loading';
 @NgModule({
   imports: [
     CommonModule,
@@ -11,6 +12,7 @@ import { TestComponent } from './test.component';
     FormsModule,
     TranslateModule,
     ReactiveFormsModule,
+    NgxLoadingModule
   ],
   declarations: [TestComponent]
 })

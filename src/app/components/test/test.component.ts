@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./test.component.scss']
 })
 export class TestComponent implements OnInit {
-
+  public loading = false;
   constructor(private route: ActivatedRoute, private testService: TestService, private modalService: NgbModal, private router: Router) { }
   config;
   key;
@@ -55,24 +55,40 @@ export class TestComponent implements OnInit {
     };
     this.testService.getAllQuestion(testInfo)
       .subscribe((res) => {
-        console.log(res);
+        
+        let i = 0;
         this.test = true;
         this.questionInTest = res;
         this.closeModal();
-
+        
+        this.questionInTest.forEach(element => {
+          console.log(element['answerId']);
+          if (element['answerId'] != null) {
+            let id = 'btn' + i;
+            console.log(id);
+            let el = document.getElementById(id);
+            console.log(el);
+            el.style.backgroundColor = "blue";
+            el.style.color = "white";
+          }
+          i++;
+        });
         this.sub = interval(60000)
           .subscribe((val) => {
             console.log("Auto Save")
             this.autoSave()
           });
+        
+        
       },
         (error) => {
           this.error = true;
         });
+
   }
 
   submit() {
-
+    this.loading = true;
     const userTest = {
       accountId: Number(sessionStorage.getItem('AccountId')),
       testId: this.testId,
@@ -91,6 +107,7 @@ export class TestComponent implements OnInit {
         console.log(JSON.stringify(userTest))
         this.testService.postSubmitTest(userTest)
           .subscribe((res) => {
+            this.loading = false;
             this.closeModal();
             Swal.fire('Success', 'The test has been submited', 'success');
             this.router.navigate(['/result', this.testId]);
