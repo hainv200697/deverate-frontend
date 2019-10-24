@@ -134,61 +134,66 @@
 <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
 </ngx-loading>
 
-<div class="col-md-12 col-lg-12 d-flex justify-content-end">
-    <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
-        <i class="fa fa-fw fa-plus"></i>
-        Create Company
-    </button>
-</div>
-<hr>
-
 <!-- Search -->
 
 <!-- Table question -->
 <div class="insert-form col-md-12">
+    <app-page-header [heading]="'Company'"></app-page-header>
+
     <div class="card mb-3 shadow-card">
-        <div class="card-header" style="color: white">
+        <div class="card-header">
             COMPANY
         </div>
         <div class="table-responsive col-md-12 datatable">
 
-            <div class="form-group col-md-12 row">
-                <div class="input-group input-group-icon col-md-6 no-padding-no-margin">
-                    <input type="search" placeholder="{{'Enter Company Name' | translate}}" [(ngModel)]="searchText">
-                    <div class="input-icon"><i class="fa fa-search"></i></div>
-                </div>
-
-            </div>
-            <div class="input-group-append col-md-6 mb-3" (clickOutside)="onClickOutside($event)">
-                <button (click)="clickButtonRefresh(refesh)" class="icon-btn">
-                    <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
-                        aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
-                </button>
-                <button [hidden]="iconIsActive==false" (click)="clickButtonChangeStatus(false);" class="icon-btn"
-                    style="padding-left: 24px;">
-                    <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
-                </button>
-                <button [hidden]="iconIsActive==true" (click)="clickButtonChangeStatus(true);" class="icon-btn"
-                    style="padding-left: 24px;">
-                    <i class="fa fa-check" tooltip="{{'active' | translate}}" placement="top"></i>
-                </button>
-                <div class="col-md-12"></div>
-                <div ngbDropdown class="col-md-11 d-flex justify-content-end d-inline-block dropdown">
-                    <button class="btn icon-btn border" ngbDropdownToggle>Item</button>
-                    <div ngbDropdownMenu>
-                        <button class="dropdown-item" (click)="PageSize(5)">5</button>
-                        <button class="dropdown-item" (click)="PageSize(25)">25</button>
-                        <button class="dropdown-item" (click)="PageSize(50)">50</button>
+            <div class="row mb-1">
+                <div class="col">
+                    <div class="row" style="margin-top: 20px;">
+                        <div class="form-group input-group col-md-6 row" style="margin-left: 21px;">
+                            <input class="col-md-10 no-padding-no-margin" type="search"
+                                placeholder="{{'Enter Company Name' | translate}}" [(ngModel)]="searchText"
+                                style="height: 38px;">
+                            <div class="input-group-append col-md-2 no-padding-no-margin d-flex align-items-start">
+                                <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <div class="form-group input-group col-md-6 row d-flex justify-content-end">
+                            <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
+                                <i class="fa fa-fw fa-plus"></i>
+                                Create Company
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row justify-content-end" style="margin-top: 20px;">
+                        <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
+                            (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger"
+                            data-toggle="button">
+                            <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
+                        </button>
+                        <button [hidden]="iconIsActive==true" style="margin-right: 10px;" (click)="clickButtonChangeStatus(true);"
+                            class="btn btn-lg btn-success">
+                            <i class="fa fa-check" tooltip="{{'Active' | translate}}" placement="top"></i>
+                        </button>
+                        <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
+                            class="btn btn-lg btn-primary" data-toggle="button">
+                            <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
+                                aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                        </button>
                     </div>
                 </div>
-
             </div>
-
-
-
-            <table [svData]="Companies" #sv="svDataTable" *ngIf="Companies.length != 0; else searchNull">
+            <div class="col-md-12"></div>
+            <div ngbDropdown class="col-md-11 d-flex justify-content-start d-inline-block dropdown">
+                <button class="btn icon-btn border" ngbDropdownToggle>Item</button>
+                <div ngbDropdownMenu>
+                    <button class="dropdown-item" (click)="PageSize(5)">5</button>
+                    <button class="dropdown-item" (click)="PageSize(25)">25</button>
+                    <button class="dropdown-item" (click)="PageSize(50)">50</button>
+                </div>
+            </div>
+            <table class="table  table-hover customtable" [svData]="Companies" #sv="svDataTable">
                 <thead>
-                    <tr class="col-md-12 row no-padding-no-margin pt-3" style="color: white">
+                    <tr class="col-md-12 row no-padding-no-margin pt-3">
                         <th class="text-center col-md-1" scope="col"><input class="btn" type="checkbox" value=""
                                 [(ngModel)]="selectedAll" (change)="selectAll();"></th>
                         <th class="text-center col-md-1" scope="col">
@@ -202,14 +207,14 @@
                             <sv-default-sorter by="ManagerName">Manager
                             </sv-default-sorter>
                         </th>
-                        <th class="text-center col-md-1" scope="col">Phone</th>
-                        <th class="text-center col-md-2" scope="col">
+                        <th class="text-center col-md-2" scope="col">Phone</th>
+                        <th class="text-center col-md-1" scope="col">
                             <sv-default-sorter by="Create_At">Creat At
                             </sv-default-sorter>
                         </th>
                         <th class="text-center col-md-1" scope="col">Status
                             <div ngbDropdown class="d-inline-block dropdown">
-                                <button class=" icon-btn" ngbDropdownToggle style="color: white"></button>
+                                <button class=" icon-btn" ngbDropdownToggle></button>
                                 <div ngbDropdownMenu>
                                     <button class="dropdown-item" (click)="getCompanyIsActive(true)">Active</button>
                                     <button class="dropdown-item" (click)="getCompanyIsActive(false)">Disable</button>
@@ -220,7 +225,7 @@
                     </tr>
                 </thead>
                 <tbody *ngIf="sv.data.length != 0;  else searchNull">
-                    <tr class="col-md-12 row no-padding-no-margin pt-2" style="font-size: 18px"
+                    <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px"
                         *ngFor="let c of sv.data | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index">
                         <td class="text-center col-md-1">
                             <input type="checkbox" value="" [(ngModel)]="c.selected" class="btn"
@@ -229,17 +234,17 @@
                         <td class="text-center col-md-1">{{i+1}}</td>
                         <td class="text-center col-md-2">{{c.name}}</td>
                         <td class="text-center col-md-3">{{c.managerName}}</td>
-                        <td class="text-center col-md-1">{{c.phone}}</td>
-                        <td class="text-center col-md-2">{{c.create_At}}</td>
-                        <td class="text-center col-md-1" [hidden]="c.isActive==true" style="color: red">
-                            Disable
+                        <td class="text-center col-md-2">{{c.phone}}</td>
+                        <td class="text-center col-md-1">{{c.create_At}}</td>
+                        <td class="text-center col-md-1" [hidden]="c.isActive==true">
+                            <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
                         </td>
-                        <td class="text-center col-md-1" [hidden]="c.isActive==false" style="color: green;">
-                            Active
+                        <td class="text-center col-md-1" [hidden]="c.isActive==false">
+                            <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
                         </td>
                         <td class="nowrap text-center action-column col-md-1">
-                            <button class="icon-btn" (click)="openDetail(update, c)"
-                                tooltip="{{'common_modify' | translate}}">
+                            <button class="btn-warning btn btn-circle shadow-item"
+                            (click)="openDetail(update, c)" tooltip="{{'common_modify' | translate}}">
                                 <i class="fa fa-edit edit-icon"></i>
                             </button>
                         </td>

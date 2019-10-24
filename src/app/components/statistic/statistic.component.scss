@@ -71,8 +71,3 @@ input[type="search"]::-webkit-search-cancel-button {
   #sticky-footer {
     flex-shrink: none;
   }
-
-  g[class^='raphael-group-'][class$='-creditgroup'] {
-    display:none !important;
-}
-

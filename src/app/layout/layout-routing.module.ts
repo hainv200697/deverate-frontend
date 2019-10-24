@@ -1,3 +1,5 @@
+import { StatisticModule } from './../components/statistic/statistic.module';
+import { StatisticComponent } from './../components/statistic/statistic.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LayoutComponent } from './layout.component';
@@ -30,6 +32,7 @@ const routes: Routes = [
             { path: 'manage-test/:id', loadChildren: () => import('../components/view-test/view-test.module').then(m => m.TestModule) },
             { path: 'manage-detail-test/:id', loadChildren: () => import('../components/default-test/defaut-test.module').then(m => m.DefautTestModule) },
             { path: 'reranking', component: RerankingComponent}
+            { path: 'statistic', loadChildren: () => import('../components/statistic/statistic.module').then(m => m.StatisticModule)},
         ]
     }
 ];
