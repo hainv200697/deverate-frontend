@@ -2,18 +2,18 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DefautTestRoutingModule } from './defaut-test-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TestComponent } from './test.component';
-import { NgxLoadingModule } from 'ngx-loading';
+import { DefautTestComponent } from './defaut-test.component';
 @NgModule({
   imports: [
     CommonModule,
     NgbModule,
+    DefautTestRoutingModule,
     FormsModule,
     TranslateModule,
     ReactiveFormsModule,
-    NgxLoadingModule
   ],
-  declarations: [TestComponent]
+  declarations: [DefautTestComponent]
 })
-export class TestModule { }
+export class DefautTestModule { }

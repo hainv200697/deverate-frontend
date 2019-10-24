@@ -26,7 +26,14 @@
         <button type="button" class="btn btn-success save shadow-card" (click)="quiz()">Quiz Now</button>
     </div>
 </ng-template>
+<ng-template #customLoadingTemplate>
+    <div class="custom-class">
 
+    </div>
+</ng-template>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
+</ngx-loading>
 <div class="text-center" [hidden]="!test">
     <h2 style="color: red;">Doing Test</h2>
 </div>

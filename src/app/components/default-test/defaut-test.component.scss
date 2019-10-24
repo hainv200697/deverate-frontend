@@ -1,0 +1,25 @@
+.card {
+    float: right;
+}
+.timer {
+    float: left;
+    position: fixed;
+    top: 60px;
+    left: 5px;
+    z-index: 100;
+    background-color: #E0E0E0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 10pt;
+    opacity: 0.9;
+    text-align: center;
+}
+
+.close-counter {
+    font-size: 9pt;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+.btn-item{
+    width: 20%;
+    margin : 3px;
+}
