@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { interval, Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+import { GobalService } from 'src/app/shared/services/gobal-service';
 
 @Component({
   selector: 'app-test',
@@ -13,7 +14,14 @@ import Swal from 'sweetalert2';
 })
 export class TestComponent implements OnInit {
   public loading = false;
-  constructor(private route: ActivatedRoute, private testService: TestService, private modalService: NgbModal, private router: Router) { }
+
+  constructor(
+    private route: ActivatedRoute, 
+    private testService: TestService, 
+    private modalService: NgbModal, 
+    private router: Router,
+    private gblserv : GobalService
+    ) { }
   config;
   key;
   error = false;
@@ -53,16 +61,17 @@ export class TestComponent implements OnInit {
       configId: this.config.configId,
       code: this.key
     };
+    let newAnswer = [];
     this.testService.getAllQuestion(testInfo)
       .subscribe((res) => {
-        
         let i = 0;
         this.test = true;
         this.questionInTest = res;
         this.closeModal();
-        
         this.questionInTest.forEach(element => {
-          console.log(element['answerId']);
+          newAnswer = this.gblserv.shuffleAnswer(element['answers']);
+          console.log(newAnswer);
+          element['answers'] =newAnswer;
           if (element['answerId'] != null) {
             let id = 'btn' + i;
             console.log(id);

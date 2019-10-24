@@ -3,7 +3,8 @@
         width: 1000px !important;
     }
 @import '~bs-stepper/dist/css/bs-stepper.min.css';
-@import "../../../../styles/style.scss";
+@import "../../../../styles/custom.scss";
+
 @mixin animation-name($name){
     animation-name: $name;
     -webkit-animation-name: $name;
