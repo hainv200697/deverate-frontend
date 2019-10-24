@@ -628,13 +628,16 @@
                         <td class="text-center col-md-1" [hidden]="c.isActive==false">
                             <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
                         </td>
-                        <td class="nowrap text-center action-column col-md-1 row no-padding-no-margin d-flex justify-content-center">
-                            <button class="btn-warning btn btn-circle shadow-item"
-                            (click)="openDetail(update, c.configId)" tooltip="{{'common_modify' | translate}}">
-                                <i class="fa fa-edit edit-icon"></i>
-                            </button>
-                            <button class="btn-success btn btn-circle shadow-item"
-                            (click)="sendMail()" tooltip="{{'mail' | translate}}">
+                        <td class="nowrap text-center action-column col-md-1 row no-padding-no-margin">
+                            <button class="btn btn-success" (click)="openDetail(update, c.configId)"
+                                tooltip="{{'common_modify' | translate}}">
+                                <i class="fa fa-edit"></i>
+                            </button>|
+                            <button class="btn btn-success" (click)="viewTest(c.configId)"
+                                tooltip="{{'view' | translate}}">
+                                <i class="fa fa-eyes"></i>
+                            </button>|
+                            <button class="btn btn-success" (click)="sendMail()" tooltip="{{'mail' | translate}}">
                                 <i class="fa fa-envelope"></i>
                             </button>
                             <!-- <button class="btn btn-success" (click)="sendMail()" tooltip="{{'mail' | translate}}">

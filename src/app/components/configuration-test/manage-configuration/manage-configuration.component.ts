@@ -530,4 +530,8 @@ export class ManageConfigurationComponent implements OnInit {
       }
     }
   }
+
+  viewTest(id){
+    this.router.navigate(['/manage-test/', id]);
+}
 }
