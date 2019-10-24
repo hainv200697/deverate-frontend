@@ -12,7 +12,7 @@ export class StatisticComponent implements OnInit {
   ngOnInit() {
     this.lineChartLegend = true;
     this.lineChartType = 'line';
-    this.getHistory(5);
+    this.getHistory(sessionStorage.getItem("AccountId"));
   }
 
   constructor(
@@ -22,7 +22,7 @@ export class StatisticComponent implements OnInit {
   historyData: any;
   catalogues: [];
 
-  getHistory(id: number) {
+  getHistory(id: string) {
     this.loading = true
     this.historyApi.getHistory(id).subscribe(
       (data) => {

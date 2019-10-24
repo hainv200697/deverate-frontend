@@ -71,7 +71,11 @@ export class ResultComponent implements OnInit {
               this.radarChartLabels.push(this.catalogue[j].name);
               this.radarChartData[0].data.push(this.catalogueOverpoint[j].overallPoint * 5);
               this.radarChartData[1].data.push(this.catalogue[j].thresholdPoint * 5);
-              this.catalogue[j].overallPoint = this.catalogueOverpoint[j].overallPoint;
+              for(var z = 0; z < this.catalogueOverpoint.length; z++){
+                if(this.catalogue[j].CatalogueId == this.catalogueOverpoint[z].CatalogueId){
+                  this.catalogue[j].overallPoint = this.catalogueOverpoint[z].overallPoint;
+                }
+              }
             }
 
           }
