@@ -4,7 +4,7 @@
     </div>
 </ng-template>
 <nav class="navbar navbar-expand-lg fixed-top">
-    <a class="navbar-brand btn" [routerLink]="['/']" [routerLinkActive]="['router-link-active']">
+    <a class="navbar-brand btn" [routerLink]="['/statistic']" [routerLinkActive]="['router-link-active']">
         <i class="fa fa-arrow-left"></i>
     </a>
     <a class="navbar-brand" href="#">STATISTIC</a>
@@ -28,7 +28,7 @@
 
 
     <div class="row col-md-12 border pt-4">
-        <div class="col col-sm-6 col-md-6">
+        <div class="col col-sm-6 col-md-6" style="height: 350px; overflow: auto;">
             <table class="table table-hover table-bordered customtable">
                 <thead style="background-color: rgba(0, 0, 0, 0.03);">
                     <tr class="col-md-12 row no-padding-no-margin">
@@ -40,13 +40,13 @@
                             Criteria
 
                         </th>
-                        <th class="text-center col-md-3">
+                        <th class="text-center col-md-2">
                             <!-- <select class="col-md-12" (change)="onChangeRank($event.target.value)">
                                 <option *ngFor="let l of ListRank" [value]="l.rankId">{{l.name}}</option>
                             </select> -->
                             {{statistic['rank']}}
                         </th>
-                        <th class="text-center col-md-3">
+                        <th class="text-center col-md-4">
                             Assessment Result
                         </th>
 
@@ -59,8 +59,8 @@
 
                         <td class="text-center col-md-1" style="font-size: 16px;">{{i+1}}</td>
                         <td class="text-center col-md-5" style="font-size: 16px;">{{c.name}}</td>
-                        <td class="text-center col-md-3" style="font-size: 16px;">{{c.thresholdPoint * 5}}</td>
-                        <td class="text-center col-md-3" style="font-size: 16px;">{{c.overallPoint * 5}}</td>
+                        <td class="text-center col-md-2" style="font-size: 16px;">{{c.thresholdPoint * 5}}</td>
+                        <td class="text-center col-md-4" style="font-size: 16px;">{{c.overallPoint * 5}}</td>
 
                     </tr>
                 </tbody>
@@ -69,7 +69,7 @@
 
         <div class="col col-sm-6 col-md-6">
 
-            <div class="card" style="height: 96%;">
+            <div class="card" style="height: 100%;">
                 <div class="card-header">
                     <b>Your Rank</b>
                 </div>
@@ -81,7 +81,7 @@
             </div>
         </div>
 
-        <div class="col col-sm-12 col-md-12">
+        <div class="col col-sm-12 col-md-12 mt-4">
             <div class="card mb-5">
                 <div class="card-header">
                     <b>Your Detail Point</b>

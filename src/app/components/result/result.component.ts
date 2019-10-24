@@ -101,7 +101,6 @@ export class ResultComponent implements OnInit {
               "minValue": "0",
               "maxValue": this.pointRank[2].point *5,
               "code": "#F2726F",
-              "displayValue": "dev1"
             }, {
               "minValue": this.pointRank[2].point *5,
               "maxValue": this.pointRank[1].point *5,
@@ -121,8 +120,8 @@ export class ResultComponent implements OnInit {
               {
                 "startValue": this.pointRank[2].point *5,
                 "color": "#0075c2",
-                "dashed": "1",
-                "displayValue": "dev1"
+                "dashed": "3",
+                "displayValue": "dev1",
               },
               {
                 "startValue": this.pointRank[1].point *5,
@@ -178,10 +177,7 @@ export class ResultComponent implements OnInit {
             }]
           }
         }
-
-
-        // this.dataSource.dials.dial['value'] = this.statistic['point'] * 5;
-        this.loading = false;
+        this.loading = false
       },
     );
 
