@@ -14,6 +14,7 @@ import { GobalService } from 'src/app/shared/services/gobal-service';
 })
 export class TestComponent implements OnInit {
   public loading = false;
+
   constructor(
     private route: ActivatedRoute, 
     private testService: TestService, 
