@@ -9,7 +9,7 @@
 
 <div class="card mb-3">
     <div class="card-header">
-        <h5>Answer</h5>
+        <h5>Test</h5>
     </div>
     <div class="table-responsive col-md-12 datatable">
         <div class="row mb-1">
@@ -22,10 +22,6 @@
                             <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
                         </div>
                     </div>
-                    <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
-                        <i class="fa fa-fw fa-plus"></i>
-                        Manage Test
-                    </button>
                 </div>
             </div>
         </div>
@@ -53,7 +49,7 @@
                     <td class="col-md-4 text-center">{{ item.title }}</td>
                     <td class="col-md-4 text-center">{{ item.accountName }}</td>
                     <td class="text-center col-md-1" [hidden]="item.isActive==true">
-                        <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
+                        <span class="shadow-item text-center badge badge-pill badge-primary">Processing</span>
                     </td>
                     <td class="text-center col-md-1" [hidden]="item.isActive==false">
                         <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
