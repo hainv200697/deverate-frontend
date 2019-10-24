@@ -209,7 +209,7 @@ export class ManageConfigurationComponent implements OnInit {
           var key = this.selectedItems[j].catalogueId +"_"+this.ListRank[i].rankId;
           var cir = {
             "catalogueId" : this.selectedItems[j].catalogueId,
-            "weightPoint":$('#'+key).val() * this.selectedItems[j]['weightPoint'] ,
+            "weightPoint":($('#'+key).val() * this.selectedItems[j]['weightPoint']) / 10000 ,
             "isActive": true
           } 
           var cirShow = {
@@ -341,9 +341,7 @@ export class ManageConfigurationComponent implements OnInit {
       Swal.fire('Error', 'Something went wrong', 'error');
       return;
     }
-    this.inputConfiguration['catalogueInConfigurations'] = this.selectedItems;
     
-    this.inputConfiguration['configurationRank'] = this.ListRank;
     Swal.fire({
       title: 'Are you sure?',
       text: 'The configuration will be create!',
@@ -354,6 +352,14 @@ export class ManageConfigurationComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.loading = true;
+        for(var i = 0; i < this.selectedItems.length; i++){
+          this.selectedItems[i].weightPoint /= 100
+        }
+        for(var i = 0; i < this.ListRank.length; i++){
+          this.ListRank[i].weightPoint /= 100
+        }
+        this.inputConfiguration['catalogueInConfigurations'] = this.selectedItems;
+        this.inputConfiguration['configurationRank'] = this.ListRank;
         this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
         this.inputConfiguration['endDate'] = new Date(this.inputConfiguration['endDate']);
         console.log(this.inputConfiguration)
@@ -463,8 +469,8 @@ export class ManageConfigurationComponent implements OnInit {
     for (let i = 0; i < this.selectedItems.length; i++) {
       total = this.selectedItems[i]['weightPoint'] + total;
     }
-    if (total !== 1) {
-      this.toast.error('Message', 'Total mark of catalogue must be 1');
+    if (total !== 100) {
+      this.toast.error('Message', 'Total mark of catalogue must be 100');
       return false;
     } else if (this.index === 2) {
       if($('#rate').val() === ''){
