@@ -10,13 +10,13 @@ export class StatisticApiService {
 
     constructor(private httpClient: HttpClient) { }
 
-    getHistory(accId: number){
+    getHistory(accId){
         const API = 'api/System/History/';
         return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + accId);
         // return this.httpClient.get(this.URL + API + accId);
     }
 
-    getStatistic(id: number) {
+    getStatistic(id) {
         const API = 'api/System/Statistic/';
         return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id);
         // return this.httpClient.get(this.URL + API + id);

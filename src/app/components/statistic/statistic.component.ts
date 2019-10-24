@@ -22,7 +22,7 @@ export class StatisticComponent implements OnInit {
   historyData: any;
   catalogues: [];
 
-  getHistory(id: string) {
+  getHistory(id) {
     this.loading = true
     this.historyApi.getHistory(id).subscribe(
       (data) => {
