@@ -59,8 +59,8 @@
 
                         <td class="text-center col-md-1" style="font-size: 16px;">{{i+1}}</td>
                         <td class="text-center col-md-5" style="font-size: 16px;">{{c.name}}</td>
-                        <td class="text-center col-md-2" style="font-size: 16px;">{{c.thresholdPoint}}</td>
-                        <td class="text-center col-md-4" style="font-size: 16px;">{{c.overallPoint}}</td>
+                        <td class="text-center col-md-2" style="font-size: 16px;">{{c.thresholdPoint *100}}</td>
+                        <td class="text-center col-md-4" style="font-size: 16px;">{{c.overallPoint *100}}</td>
 
                     </tr>
                 </tbody>
@@ -93,11 +93,11 @@
                         <option value="20">20</option>
                         <option value="100">100</option>
                     </select> -->
-                    <select class="col-md-1" (change)="onChangeRankData($event.target.value)" >
+                    <!-- <select class="col-md-1" (change)="onChangeRankData($event.target.value)" >
                         <option *ngFor="let r of ListRank" value="{{r.rankId}}">{{r.name}}</option>
-                    </select>
+                    </select> -->
                     <canvas baseChart height="100px" [datasets]="radarChartData" [labels]="radarChartLabels"
-                        [chartType]="radarChartType" (chartHover)="chartHovered($event)"
+                        [chartType]="radarChartType" (chartHover)="chartHovered($event)" [colors]="radarChartColor"
                         (chartClick)="chartClicked($event)">
                     </canvas>
                 </div>

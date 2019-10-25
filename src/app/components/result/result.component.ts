@@ -24,7 +24,7 @@ export class ResultComponent implements OnInit {
   ListRank: [];
   statistic = [];
   catalogueInStatistic = [];
-  pointRank : any;
+  pointRank: any;
   selectedDevice = "";
   catalogueInRanks: any;
   catalogue: any;
@@ -38,7 +38,6 @@ export class ResultComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.radarChartType = 'radar';
     this.getAllRank(true);
     var testId = this.route.snapshot.paramMap.get('testId');
     this.getStatistic(Number(testId), 1);
@@ -61,28 +60,28 @@ export class ResultComponent implements OnInit {
     this.statisticApi.getStatistic(id).subscribe(
       (data) => {
         this.statistic = data['data']['data'];
-        this.catalogueInRanks = data['data']['data']['catalogueInRanks'];
-        this.catalogueOverpoint = data['data']['data']['catalogues'];
-        this.pointRank = data['data']['data']['configurationRanks'];
+        this.catalogueInRanks = data['data']['data'].catalogueInRanks;
+        this.catalogueOverpoint = data['data']['data'].catalogues;
+        this.pointRank = data['data']['data'].configurationRanks;
+        
         for (var i = 0; i < this.catalogueInRanks.length; i++) {
-          if (rankId == this.catalogueInRanks[i].rankId) {
-            this.catalogue = data['data']['data']['catalogueInRanks'][i].catalogues
-            for (var j = 0; j < this.catalogue.length; j++) {
-              for(var z = 0; z < this.catalogueOverpoint.length; z++){
-                if(this.catalogue[j].CatalogueId == this.catalogueOverpoint[z].CatalogueId){
-                  this.catalogue[j].overallPoint = this.catalogueOverpoint[z].overallPoint;
-                }
+          this.catalogue = data['data']['data'].catalogueInRanks[i].catalogues
+          this.radarChartData[i+1].label = this.catalogueInRanks[i].rank
+          for (var j = 0; j < this.catalogue.length; j++) {
+              this.radarChartData[i+1].data.push(this.catalogue[j].thresholdPoint * 100);
+            for (var z = 0; z < this.catalogueOverpoint.length; z++) {
+              if (this.catalogue[j].CatalogueId == this.catalogueOverpoint[z].CatalogueId) {
+                this.catalogue[j].overallPoint = this.catalogueOverpoint[z].overallPoint;
               }
-              this.radarChartLabels.push(this.catalogue[j].name);
-              this.radarChartData[0].data.push(this.catalogue[j].overallPoint * 5);
-              this.radarChartData[1].data.push(this.catalogue[j].thresholdPoint * 5);
             }
-
           }
-
+        }
+        for(var a = 0; a < this.catalogue.length; a++){
+          this.radarChartLabels.push(this.catalogue[a].name);
+          this.radarChartData[0].data.push(this.catalogue[a].overallPoint *100)
         }
         this.catalogueTable = this.catalogue;
-        console.log(this.catalogueOverpoint)
+        console.log(this.catalogueInRanks)
         this.datasource = {
           "chart": {
             "caption": "",
@@ -103,18 +102,18 @@ export class ResultComponent implements OnInit {
           "colorRange": {
             "color": [{
               "minValue": "0",
-              "maxValue": this.pointRank[2].point *5,
+              "maxValue": this.pointRank[2].point * 5,
               "code": "#F2726F",
             }, {
-              "minValue": this.pointRank[2].point *5,
-              "maxValue": this.pointRank[1].point *5,
+              "minValue": this.pointRank[2].point * 5,
+              "maxValue": this.pointRank[1].point * 5,
               "code": "#FFC533",
             }, {
-              "minValue": this.pointRank[1].point *5,
-              "maxValue": this.pointRank[0].point *5,
+              "minValue": this.pointRank[1].point * 5,
+              "maxValue": this.pointRank[0].point * 5,
               "code": "#62B58F",
             }, {
-              "minValue": this.pointRank[0].point *5,
+              "minValue": this.pointRank[0].point * 5,
               "maxValue": "5",
               "code": "#00FF00",
             }]
@@ -122,19 +121,19 @@ export class ResultComponent implements OnInit {
           "trendPoints": {
             "point": [
               {
-                "startValue": this.pointRank[2].point *5,
+                "startValue": this.pointRank[2].point * 5,
                 "color": "#0075c2",
                 "dashed": "3",
                 "displayValue": "dev1",
               },
               {
-                "startValue": this.pointRank[1].point *5,
+                "startValue": this.pointRank[1].point * 5,
                 "color": "#0075c2",
                 "dashed": "1",
                 "displayValue": "dev2",
               },
               {
-                "startValue": this.pointRank[0].point *5,
+                "startValue": this.pointRank[0].point * 5,
                 "color": "#0075c2",
                 "dashed": "2",
                 "displayValue": "dev3"
@@ -202,14 +201,14 @@ export class ResultComponent implements OnInit {
       if (rankId == this.catalogueInRanks[i].rankId) {
         this.catalogue = this.catalogueInRanks[i].catalogues
         for (var j = 0; j < this.catalogue.length; j++) {
-          for(var z = 0; z < this.catalogueOverpoint.length; z++){
-            if(this.catalogue[j].CatalogueId == this.catalogueOverpoint[z].CatalogueId){
+          for (var z = 0; z < this.catalogueOverpoint.length; z++) {
+            if (this.catalogue[j].CatalogueId == this.catalogueOverpoint[z].CatalogueId) {
               this.catalogue[j].overallPoint = this.catalogueOverpoint[z].overallPoint;
             }
           }
           this.radarChartLabels.push(this.catalogue[j].name);
-          this.radarChartData[0].data.push(this.catalogue[j].overallPoint * 5);
-          this.radarChartData[1].data.push(this.catalogue[j].thresholdPoint * 5);
+          this.radarChartData[0].data.push(this.catalogue[j].overallPoint * 100);
+          this.radarChartData[1].data.push(this.catalogue[j].thresholdPoint * 100);
         }
       }
     }
@@ -223,9 +222,43 @@ export class ResultComponent implements OnInit {
 
   public radarChartData: any = [
     { data: [], label: 'Assement Result' },
-    { data: [], label: 'Threshold Point' }
+    { data: [], label: '' },
+    { data: [], label: '' },
+    { data: [], label: '' },
   ];
-  public radarChartType: string;
+
+  public radarChartColor = [
+    {
+      fill: true,
+      hoverBackgroundColor: "#FF0",
+      borderColor: "#0F0",
+      hoverBorderColor: "#00F",
+      strokeColor: "#0F0",
+      pointBorderColor: "rgba(133, 0, 97, 1)",
+    },
+    {
+      borderColor: "#ff0505",
+      fill: false,
+      strokeColor: "rgba(220,220,220,1)",
+      pointBorderColor: "rgba(133, 0, 97, 1)",
+    },
+    {
+      borderColor: "#0516ff",
+      fill: false,
+      strokeColor: "rgba(220,220,220,1)",
+      pointBorderColor: "rgba(133, 0, 97, 1)",
+
+    },
+    {
+      borderColor: "#ffdd1f",
+      fill: false,
+      strokeColor: "rgba(220,220,220,1)",
+      pointBorderColor: "rgba(133, 0, 97, 1)",
+    },
+
+  ]
+
+  public radarChartType: string = 'radar';
 
   public lineChartOptions: any = {
     responsive: true
