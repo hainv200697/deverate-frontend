@@ -121,6 +121,12 @@ export class ResultComponent implements OnInit {
           "trendPoints": {
             "point": [
               {
+                "startValue": 0,
+                "color": "#0075c2",
+                "dashed": "3",
+                "displayValue": "dev0",
+              },
+              {
                 "startValue": this.pointRank[2].point * 5,
                 "color": "#0075c2",
                 "dashed": "3",
@@ -137,6 +143,12 @@ export class ResultComponent implements OnInit {
                 "color": "#0075c2",
                 "dashed": "2",
                 "displayValue": "dev3"
+              },
+              {
+                "startValue": 5,
+                "color": "#0075c2",
+                "dashed": "2",
+                "displayValue": "dev4"
               }
             ]
           },

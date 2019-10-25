@@ -570,11 +570,11 @@
                         <!-- <th class="text-center col-md-1" scope="col">
                             No.
                         </th> -->
-                        <th class="text-center col-md-1" scope="col">
+                        <th class="text-center col-md-3" scope="col">
                             <sv-default-sorter>TestOwner
                             </sv-default-sorter>
                         </th>
-                        <th class="text-center col-md-1" scope="col">
+                        <th class="text-center col-md-2" scope="col">
                             <sv-default-sorter by="totalQuestion">Title
                             </sv-default-sorter>
                         </th>
@@ -582,14 +582,14 @@
                             <sv-default-sorter by="createDate">Create At
                             </sv-default-sorter>
                         </th>
-                        <th class="text-center col-md-2" scope="col">
+                        <!-- <th class="text-center col-md-2" scope="col">
                             <sv-default-sorter by="startDate">Start Date
                             </sv-default-sorter>
                         </th>
                         <th class="text-center col-md-2" scope="col">
                             <sv-default-sorter by="endDate">End Date
                             </sv-default-sorter>
-                        </th>
+                        </th> -->
                         <th class="text-center col-md-1" scope="col">
                             <sv-default-sorter by="duration">Time Test
                             </sv-default-sorter>
@@ -605,7 +605,7 @@
                                 </div>
                             </div>
                         </th>
-                        <th class="text-center col-md-1" scope="col">Action</th>
+                        <th class="text-center col-md-2" scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody *ngIf="sv.data.length != 0;  else searchNull">
@@ -616,11 +616,11 @@
                                 (change)="checkIfAllSelected();">
                         </td>
                         <!-- <td class="text-center col-md-1">{{i+1}}</td> -->
-                        <td class="text-center col-md-1">{{c.testOwnerName}}</td>
-                        <td class="text-center col-md-1">{{c.title}}</td>
+                        <td class="text-center col-md-3">{{c.testOwnerName}}</td>
+                        <td class="text-center col-md-2">{{c.title}}</td>
                         <td class="text-center col-md-2">{{c.createDate.split('T')[0]}}</td>
-                        <td class="text-center col-md-2">{{c.startDate}}</td>
-                        <td class="text-center col-md-2">{{c.endDate}}</td>
+                        <!-- <td class="text-center col-md-2">{{c.startDate}}</td>
+                        <td class="text-center col-md-2">{{c.endDate}}</td> -->
                         <td class="text-center col-md-1">{{c.duration}}</td>
                         <td class="text-center col-md-1" [hidden]="c.isActive==true">
                             <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
@@ -628,16 +628,16 @@
                         <td class="text-center col-md-1" [hidden]="c.isActive==false">
                             <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
                         </td>
-                        <td class="nowrap text-center action-column col-md-1 row no-padding-no-margin">
-                            <button class="btn btn-success" (click)="openDetail(update, c.configId)"
+                        <td class="nowrap text-center action-column col-md-2 row no-padding-no-margin d-flex justify-content-center">
+                            <button class="btn-warning btn btn-circle shadow-item" (click)="openDetail(update, c.configId)"
                                 tooltip="{{'common_modify' | translate}}">
                                 <i class="fa fa-edit"></i>
-                            </button>|
-                            <button class="btn btn-success" (click)="viewTest(c.configId)"
+                            </button>
+                            <button class="btn-primary btn btn-circle shadow-item" (click)="viewTest(c.configId)"
                                 tooltip="{{'view' | translate}}">
-                                <i class="fa fa-eyes"></i>
-                            </button>|
-                            <button class="btn btn-success" (click)="sendMail()" tooltip="{{'mail' | translate}}">
+                                <i class="fa fa fa-eye"></i>
+                            </button>
+                            <button class=" btn btn-circle shadow-item" (click)="sendMail()" tooltip="{{'mail' | translate}}">
                                 <i class="fa fa-envelope"></i>
                             </button>
                             <!-- <button class="btn btn-success" (click)="sendMail()" tooltip="{{'mail' | translate}}">
