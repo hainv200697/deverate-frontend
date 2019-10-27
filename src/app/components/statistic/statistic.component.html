@@ -18,36 +18,30 @@
         </b>
     </div>
 
-    <div class=" col col-md-8">
+    <div class=" col col-md-12">
         <div class="card mb-5">
             <div class="card-header">
                 <b>Your Detail Point</b>
             </div>
             <div class="card-body">
-                <canvas baseChart height="200" [datasets]="lineChartData" [labels]="lineChartLabels"
+                <combo-chart-component [view]="view" [scheme]="comboBarScheme" [colorSchemeLine]="lineChartScheme"
+                    [results]="barChart" [animations]="animations" [lineChart]="lineChartSeries"
+                    [yAxisTickFormatting]="yLeftTickFormat" [yLeftAxisScaleFactor]="yLeftAxisScale"
+                    [yRightAxisScaleFactor]="yRightAxisScale" [yRightAxisTickFormatting]="yRightTickFormat"
+                    [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+                    [legendTitle]="legendTitle" [legendPosition]="legendPosition" [showGridLines]="showGridLines"
+                    [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+                    [showRightYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
+                    [yAxisLabelRight]="yAxisLabelRight">
+                </combo-chart-component>
+                <!-- <canvas baseChart height="200" [datasets]="lineChartData" [labels]="lineChartLabels"
                     [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend"
                     [chartType]="lineChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
-                </canvas>
+                </canvas> -->
             </div>
         </div>
     </div>
 
-    <div class=" mb-3 col-md-4 row" style="height: 600px; overflow: auto;">
-        <table class="table  table-hover table-bordered customtable">
-            <thead style="background-color: rgba(0, 0, 0, 0.03);">
-                <tr class="col-md-12 row no-padding-no-margin">
-                    <th class="text-center col-md-6">Date</th>
-                    <th class="text-center col-md-6">point</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px" *ngFor="let c of historyData">
-                    <td class="text-center col-md-6"><a href="/result/{{c.testId}}">{{c['createDate'].split('T')[0]}}</a></td>
-                    <td class="text-center col-md-6">{{c['point']*5}}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 
 
 

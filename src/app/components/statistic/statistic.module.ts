@@ -4,6 +4,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StatisticComponent } from './statistic.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 import { StatisticRoutingModule } from './statistic-routing.module';
@@ -12,6 +14,8 @@ import { GaugeModule } from 'angular-gauge';
 import { NgxGaugeModule } from 'ngx-gauge';
 import { NgxLoadingModule } from 'ngx-loading';
 import { FusionChartsModule } from 'angular-fusioncharts';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ComboChartComponent, ComboSeriesVerticalComponent } from '../combo-chart';
 
 
 @NgModule({
@@ -24,9 +28,10 @@ import { FusionChartsModule } from 'angular-fusioncharts';
     StatisticRoutingModule,
     Ng2Charts,
     NgxGaugeModule,
-    NgxLoadingModule.forRoot({})
+    NgxChartsModule,
+    NgxLoadingModule.forRoot({}),
   ],
   
-  declarations: [StatisticComponent]
+  declarations: [StatisticComponent,ComboChartComponent, ComboSeriesVerticalComponent]
 })
 export class StatisticModule { }
