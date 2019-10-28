@@ -29,6 +29,7 @@ export class TestComponent implements OnInit {
   questionInTest;
   alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   testId;
+  time =0;
   sub: Subscription;
   ngOnInit() {
     this.testId = this.route.snapshot.paramMap.get('testId');
@@ -39,16 +40,14 @@ export class TestComponent implements OnInit {
         this.config.endDate = moment(this.config.endDate).format('LLLL');
         $('#openModalButton').click();
       });
+      
   }
 
-  // tslint:disable-next-line:use-lifecycle-interface
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
 
   open(content) {
     this.modalService.open(content, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-    });
+    }).catch(e => {
+  });
   }
 
   closeModal() {
@@ -64,23 +63,16 @@ export class TestComponent implements OnInit {
     let newAnswer = [];
     this.testService.getAllQuestion(testInfo)
       .subscribe((res) => {
-        let i = 0;
         this.test = true;
-        this.questionInTest = res;
+        this.questionInTest = res.questionInTest;
+        const now= moment();
+        const startDay = moment(res.startTime);
+        const timer = now.diff(startDay)/1000;
+        this.time = this.config.duration *60  - timer;
         this.closeModal();
         this.questionInTest.forEach(element => {
           newAnswer = this.gblserv.shuffleAnswer(element['answers']);
-          console.log(newAnswer);
           element['answers'] =newAnswer;
-          if (element['answerId'] != null) {
-            let id = 'btn' + i;
-            console.log(id);
-            let el = document.getElementById(id);
-            console.log(el);
-            el.style.backgroundColor = "blue";
-            el.style.color = "white";
-          }
-          i++;
         });
         this.sub = interval(60000)
           .subscribe((val) => {
@@ -97,7 +89,6 @@ export class TestComponent implements OnInit {
   }
 
   submit() {
-    this.loading = true;
     const userTest = {
       accountId: Number(sessionStorage.getItem('AccountId')),
       testId: this.testId,
@@ -113,18 +104,21 @@ export class TestComponent implements OnInit {
       cancelButtonText: 'No, submited it'
     }).then((result) => {
       if (result.value) {
+        this.loading = true;
         console.log(JSON.stringify(userTest))
         this.testService.postSubmitTest(userTest)
           .subscribe((res) => {
             this.loading = false;
             this.closeModal();
             Swal.fire('Success', 'The test has been submited', 'success');
+            this.sub.unsubscribe();
             this.router.navigate(['/result', this.testId]);
           });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         this.closeModal();
       }
-    })
+    }).catch(e => {
+  });
   }
 
   autoSave() {
@@ -145,11 +139,4 @@ export class TestComponent implements OnInit {
     let el = document.getElementById(id);
     el.scrollIntoView({ behavior: "smooth" });
   }
-
-  changeAnswer(id) {
-    let el = document.getElementById(id);
-    el.style.backgroundColor = "blue";
-    el.style.color = "white";
-  }
-
 }

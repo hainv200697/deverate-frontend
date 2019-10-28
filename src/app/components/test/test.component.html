@@ -41,10 +41,11 @@
     <div class="col-md-2 row" style="margin-top: 50px;">
         <div class="text-left timer col-md-2" [hidden]="!test">
             <div class="text-left">
-                <button id="btn{{iq}}" (click)="scroll('question'+iq)" *ngFor="let item of questionInTest, let iq = index" class="btn btn-outline-primary btn-item " >{{iq+1}}
+                <button [ngClass]="{'hasAnswer': (item.answerId != null)}" (click)="scroll('question'+iq)" *ngFor="let item of questionInTest, let iq = index" class="btn btn-outline-primary btn-item " >{{iq+1}}
                 </button>
             </div>
             <br/>
+            <countdown [config]="{leftTime: time}"></countdown>
             <br/>
             <div class="text-center">
                 <button class="btn btn-outline-secondary btn-sm"  (click)="submit()"><strong>Finish</strong></button>
