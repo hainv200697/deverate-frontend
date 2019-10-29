@@ -38,29 +38,31 @@
     <h2 style="color: red;">Doing Test</h2>
 </div>
 <div class="row col-md-12" style="margin-top: 50px;">
-    <div class="col-md-2 row" style="margin-top: 50px;">
-        <div class="text-left timer col-md-2" [hidden]="!test">
+    <div class="col-md-3 row" style="margin-top: 50px;">
+        <div class="text-left timer " [hidden]="!test">
             <div class="text-left">
                 <button [ngClass]="{'hasAnswer': (item.answerId != null)}" (click)="scroll('question'+iq)" *ngFor="let item of questionInTest, let iq = index" class="btn btn-outline-primary btn-item " >{{iq+1}}
                 </button>
             </div>
             <br/>
-            <countdown [config]="{leftTime: time}"></countdown>
-            <br/>
+            <div class="text-center">
+                <countdown (event)="handleEvent($event)" [config]="{leftTime: time}" [ngClass]="{'warningCountdown': (time &#60; 10 )}"></countdown>
+            </div>
+                <br/>
             <div class="text-center">
                 <button class="btn btn-outline-secondary btn-sm"  (click)="submit()"><strong>Finish</strong></button>
             </div>
         </div>
     </div>
-    <div class=" shadow-card col-md-10" [hidden]="!test">
-        <div class="col-md-12" *ngFor="let item of questionInTest, let iq = index">
+    <div class=" test-card col-md-9" [hidden]="!test">
+        <div class="col-md-12 question-test" *ngFor="let item of questionInTest, let iq = index">
             <div class="col-md-12">
                 <div class="question" id="question{{iq}}">
                     <h5>{{iq+1}}. {{item['question']}}</h5>
                 </div>
                 <div class="radio answer" *ngFor="let ans of item.answers; let ia = index"> 
                     <label style="padding-top: 5px;">
-                        <input type="radio" id="question{{iq+1}}" (change)="changeAnswer('btn'+iq)" name="question{{iq+1}}" [value]="ans.answerId" [(ngModel)]="item.answerId">
+                        <input type="radio" id="question{{iq+1}}"  name="question{{iq+1}}" [value]="ans.answerId" [(ngModel)]="item.answerId">
                         {{alpha[ia]}}. {{ans.answer}}
                     </label>
                 </div>

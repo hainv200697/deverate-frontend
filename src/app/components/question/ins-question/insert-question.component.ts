@@ -519,8 +519,9 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             (data: any) => {
                 console.log(data);
                 this.allQuestions = data;
-                this.insQuestion['catalogueName'] = this.allQuestions[0]['catalogueName'];
-                
+                if(this.allQuestions.length != 0){
+                    this.insQuestion['catalogueName'] = this.allQuestions[0]['catalogueName'];
+                }
             }
         );
     }

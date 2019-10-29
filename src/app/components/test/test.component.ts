@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TestService } from 'src/app/services/test.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -12,26 +12,32 @@ import { GobalService } from 'src/app/shared/services/gobal-service';
   templateUrl: './test.component.html',
   styleUrls: ['./test.component.scss']
 })
-export class TestComponent implements OnInit {
+export class TestComponent implements OnInit, AfterViewChecked {
   public loading = false;
 
   constructor(
-    private route: ActivatedRoute, 
-    private testService: TestService, 
-    private modalService: NgbModal, 
+    private route: ActivatedRoute,
+    private testService: TestService,
+    private modalService: NgbModal,
     private router: Router,
-    private gblserv : GobalService
-    ) { }
+    private gblserv: GobalService
+  ) { }
   config;
   key;
+  check = '';
   error = false;
   test = false;
-  questionInTest;
+  questionInTest = [];
   alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   testId;
-  time =0;
+  time = 0;
   sub: Subscription;
   ngOnInit() {
+    $(document).ready(function () {
+      if (this.time > 5) {
+        console.log(this.time);
+      }
+    });
     this.testId = this.route.snapshot.paramMap.get('testId');
     this.config = this.testService.getConfig(this.testId)
       .subscribe(res => {
@@ -40,14 +46,14 @@ export class TestComponent implements OnInit {
         this.config.endDate = moment(this.config.endDate).format('LLLL');
         $('#openModalButton').click();
       });
-      
+
   }
 
 
   open(content) {
     this.modalService.open(content, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
     }).catch(e => {
-  });
+    });
   }
 
   closeModal() {
@@ -65,22 +71,24 @@ export class TestComponent implements OnInit {
       .subscribe((res) => {
         this.test = true;
         this.questionInTest = res.questionInTest;
-        const now= moment();
+        const now = moment();
         const startDay = moment(res.startTime);
-        const timer = now.diff(startDay)/1000;
+        const timer = now.diff(startDay) / 1000;
         this.time = this.config.duration *60  - timer;
-        this.closeModal();
-        this.questionInTest.forEach(element => {
-          newAnswer = this.gblserv.shuffleAnswer(element['answers']);
-          element['answers'] =newAnswer;
-        });
-        this.sub = interval(60000)
-          .subscribe((val) => {
-            console.log("Auto Save")
-            this.autoSave()
+        if (this.time > 0) {
+          this.closeModal();
+          this.questionInTest.forEach(element => {
+
+            newAnswer = this.gblserv.shuffleAnswer(element['answers']);
+            element['answers'] = newAnswer;
           });
-        
-        
+          this.sub = interval(60000)
+            .subscribe((val) => {
+              console.log("Auto Save")
+              this.autoSave()
+            });
+        }
+
       },
         (error) => {
           this.error = true;
@@ -118,7 +126,11 @@ export class TestComponent implements OnInit {
         this.closeModal();
       }
     }).catch(e => {
-  });
+    });
+  }
+
+  handleEvent(status) {
+    this.check = status.action;
   }
 
   autoSave() {
@@ -139,4 +151,26 @@ export class TestComponent implements OnInit {
     let el = document.getElementById(id);
     el.scrollIntoView({ behavior: "smooth" });
   }
+
+  ngAfterViewChecked() {
+    console.log(this.check);
+    if (this.check == "done") {
+      console.log("aaaaaaaaa");
+      const userTest = {
+        accountId: Number(sessionStorage.getItem('AccountId')),
+        testId: this.testId,
+        code: this.key,
+        questionInTest: this.questionInTest
+      }
+      this.loading = true;
+      console.log(JSON.stringify(userTest))
+      this.testService.postSubmitTest(userTest)
+        .subscribe((res) => {
+          this.loading = false;
+          this.sub.unsubscribe();
+          this.router.navigate(['/result', this.testId]);
+        });
+    }
+  }
+
 }
