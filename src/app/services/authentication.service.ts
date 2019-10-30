@@ -6,14 +6,9 @@ import { AppSettings } from '../appsetting';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  };
   constructor(private httpClient: HttpClient) { }
 
   login(account: any) {
-    return this.httpClient.post<any>(`${AppSettings.BASEURL}${AppSettings.ROUTE_AUTH}api/Login/Authen`, account, this.httpOptions);
+    return this.httpClient.post<any>(`${AppSettings.BASEURL}${AppSettings.ROUTE_AUTH}Account/Login`, account);
   }
 }
