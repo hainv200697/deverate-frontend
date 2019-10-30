@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit {
                     if (userInfo != null) {
                         sessionStorage.setItem('isLoggedin', 'true');
                         sessionStorage.setItem('Authorization', res.data.data);
+                        sessionStorage.setItem('Username', userInfo.Username);
                         sessionStorage.setItem('AccountId', userInfo.AccountId);
                         sessionStorage.setItem('Fullname', userInfo.Fullname);
                         this.router.navigate(['/catalogue']);
