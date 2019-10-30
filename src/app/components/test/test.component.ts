@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewChecked } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TestService } from 'src/app/services/test.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -32,11 +32,6 @@ export class TestComponent implements OnInit {
   time = 0;
   sub: Subscription;
   ngOnInit() {
-    $(document).ready(function () {
-      if (this.time > 5) {
-        console.log(this.time);
-      }
-    });
     this.testId = this.route.snapshot.paramMap.get('testId');
     this.config = this.testService.getConfig(this.testId)
       .subscribe(res => {
