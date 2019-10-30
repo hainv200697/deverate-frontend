@@ -22,4 +22,10 @@ export class StatisticApiService {
         // return this.httpClient.get(this.URL + API + id);
     }
 
+    GetGeneralStatistic(id){
+        const API = 'api/Test/GetGeneralStatistic?accountId=';
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id);
+        // return this.httpClient.get(this.URL + API + id);
+    }
+
 }

@@ -6,43 +6,43 @@ import { AppSettings } from '../appsetting';
   providedIn: 'root'
 })
 export class TestService {
-  // URL = 'http://localhost:8080/';
-  URL = AppSettings.BASEURL;
+  URL = 'http://localhost:8080/';
+  // URL = AppSettings.BASEURL;
   constructor(private httpClient: HttpClient) { }
 
   getAllTestInfo(accountId) {
     const API = 'api/Test/AllMyTestToday/';
-    return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_TEST + API + accountId);
+    return this.httpClient.get<any>(this.URL  + API + accountId);
   }
 
   getConfig(testId) {
     const API = 'api/Test/GetConfig/';
-    return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_TEST + API + testId);
+    return this.httpClient.get<any>(this.URL  + API + testId);
   }
 
   getAllQuestion(info) {
     const API = 'api/Test/MyTest';
-    return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST + API, info);
+    return this.httpClient.post<any>(this.URL  + API, info);
   }
 
   postSubmitTest(userTest) {
     const API = 'api/Test/SubmitTest';
-    return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST+ API, userTest);
+    return this.httpClient.post<any>(this.URL + API, userTest);
   }
 
   postAutoSaveTest(userTest) {
     const API = 'api/Test/AutoSave';
-    return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST + API, userTest);
+    return this.httpClient.post<any>(this.URL  + API, userTest);
   }
   getTestByConfigId(id){
     const param = new HttpParams().set('id', id);
     const API = 'api/Test/GetAllTest/';
-    return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_TEST + API, { params: param });
+    return this.httpClient.get<any>(this.URL  + API, { params: param });
   }
 
   getAllQuestionManager(info) {
     const API = 'api/Test/ManagerInTest';
-    return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST  + API, info);
+    return this.httpClient.post<any>(this.URL  + API, info);
   }
 
 }
