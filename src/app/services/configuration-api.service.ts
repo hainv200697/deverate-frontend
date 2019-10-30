@@ -34,4 +34,9 @@ export class ConfigurationApiService {
         const API = 'ConfigurationApi/ChangeStatusConfiguration';
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE+ API, ConfigurationModel);
     }
+
+    sendCode(id){
+        const API = 'api/System/SendTestMail/';
+        return this.httpClient.get('http://localhost:8080/' + API + id);
+    }
 }

@@ -501,7 +501,7 @@ export class ManageConfigurationComponent implements OnInit {
     }
   }
 
-  sendMail() {
+  sendMail(id) {
     Swal.fire({
       title: 'Are you sure?',
       text: 'The mail will be send to employee!',
@@ -511,11 +511,11 @@ export class ManageConfigurationComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
-        this.closeModal();
-        Swal.fire('Success', 'The mail has been send', 'success');
-
+        this.configAPi.sendCode(id).subscribe(data => {
+          Swal.fire('Success', 'The mail has been send', 'success');
+        });
+        
       } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.closeModal();
       }
     });
   }
