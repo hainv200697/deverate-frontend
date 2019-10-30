@@ -167,6 +167,7 @@ export class ManageConfigurationComponent implements OnInit {
     this.inputConfiguration['testOwnerId'] = sessionStorage.getItem("AccountId");
     this.inputConfiguration['totalQuestion'] = 0;
     this.inputConfiguration['title'] = '';
+    this.inputConfiguration['type'] = true;
     this.inputConfiguration['duration'] = 15;
     this.inputConfiguration['startDate'] = this.startDate;
     this.inputConfiguration['endDate'] = this.endDate.setDate(this.startDate.getDate() + 1);
@@ -196,6 +197,7 @@ export class ManageConfigurationComponent implements OnInit {
     if (this.validateConfiguration() === false) {
       return;
     }
+    console.log(this.inputConfiguration['type']);
     this.stepper.next();
     this.index = this.index + 1;
     this.inputConfiguration['startDate'] = this.startDate;
@@ -219,7 +221,6 @@ export class ManageConfigurationComponent implements OnInit {
           } 
           this.ListRank[i].catalogueInRank.push(cir);
           this.catalogueInRank.push(cirShow)
-          console.log(this.catalogueInRank);
         }
       }
     }
@@ -298,6 +299,7 @@ export class ManageConfigurationComponent implements OnInit {
       (data) => {
         this.updateConfig['ConfigId'] = data['data']['data']['configId'];
         this.updateConfig['testOwnerId'] = data['data']['data']['testOwnerId'];
+        this.updateConfig['type'] = data['data']['data']['type'];
         this.updateConfig['title'] = data['data']['data']['title'];
         this.updateConfig['totalQuestion'] = data['data']['data']['totalQuestion'];
         this.updateConfig['createDate'] = data['data']['data']['createDate'];
