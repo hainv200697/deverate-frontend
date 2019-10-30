@@ -12,7 +12,7 @@ import { GobalService } from 'src/app/shared/services/gobal-service';
   templateUrl: './test.component.html',
   styleUrls: ['./test.component.scss']
 })
-export class TestComponent implements OnInit, AfterViewChecked {
+export class TestComponent implements OnInit {
   public loading = false;
 
   constructor(
@@ -24,7 +24,6 @@ export class TestComponent implements OnInit, AfterViewChecked {
   ) { }
   config;
   key;
-  check = '';
   error = false;
   test = false;
   questionInTest = [];
@@ -42,6 +41,7 @@ export class TestComponent implements OnInit, AfterViewChecked {
     this.config = this.testService.getConfig(this.testId)
       .subscribe(res => {
         this.config = res;
+        this.config.title = this.config.title.toUpperCase();
         this.config.startDate = moment(this.config.startDate).format('LLLL');
         this.config.endDate = moment(this.config.endDate).format('LLLL');
         $('#openModalButton').click();
@@ -97,12 +97,6 @@ export class TestComponent implements OnInit, AfterViewChecked {
   }
 
   submit() {
-    const userTest = {
-      accountId: Number(sessionStorage.getItem('AccountId')),
-      testId: this.testId,
-      code: this.key,
-      questionInTest: this.questionInTest
-    }
     Swal.fire({
       title: 'Are you sure?',
       text: 'The test will be submited!',
@@ -112,16 +106,7 @@ export class TestComponent implements OnInit, AfterViewChecked {
       cancelButtonText: 'No, submited it'
     }).then((result) => {
       if (result.value) {
-        this.loading = true;
-        console.log(JSON.stringify(userTest))
-        this.testService.postSubmitTest(userTest)
-          .subscribe((res) => {
-            this.loading = false;
-            this.closeModal();
-            Swal.fire('Success', 'The test has been submited', 'success');
-            this.sub.unsubscribe();
-            this.router.navigate(['/result', this.testId]);
-          });
+        this.submitTest();
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         this.closeModal();
       }
@@ -129,8 +114,24 @@ export class TestComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  handleEvent(status) {
-    this.check = status.action;
+  handleEvent($event) {
+    
+    if(!this.test){
+      return;
+    }
+    switch ($event.action) {
+      case 'notify':
+        if($event.left == 30000){
+        $('.count-down span').css("color","red");
+        }else{
+          $('.count-down span').html("Time Up!");
+        }
+        break;
+      case 'done':
+        this.submitTest();
+        break;
+    }
+    
   }
 
   autoSave() {
@@ -152,25 +153,23 @@ export class TestComponent implements OnInit, AfterViewChecked {
     el.scrollIntoView({ behavior: "smooth" });
   }
 
-  ngAfterViewChecked() {
-    console.log(this.check);
-    if (this.check == "done") {
-      console.log("aaaaaaaaa");
-      const userTest = {
-        accountId: Number(sessionStorage.getItem('AccountId')),
-        testId: this.testId,
-        code: this.key,
-        questionInTest: this.questionInTest
-      }
-      this.loading = true;
-      console.log(JSON.stringify(userTest))
-      this.testService.postSubmitTest(userTest)
-        .subscribe((res) => {
-          this.loading = false;
-          this.sub.unsubscribe();
-          this.router.navigate(['/result', this.testId]);
-        });
+  submitTest() {
+    const userTest = {
+      accountId: Number(sessionStorage.getItem('AccountId')),
+      testId: this.testId,
+      code: this.key,
+      questionInTest: this.questionInTest
     }
+    this.loading = true;
+    console.log(JSON.stringify(userTest))
+    this.testService.postSubmitTest(userTest)
+      .subscribe((res) => {
+        this.loading = false;
+        this.closeModal();
+        Swal.fire('Success', 'The test has been submited', 'success');
+        this.sub.unsubscribe();
+        this.router.navigate(['/result', this.testId]);
+      });
   }
 
 }

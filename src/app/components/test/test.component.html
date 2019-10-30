@@ -35,7 +35,7 @@
 <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
 </ngx-loading>
 <div class="text-center" [hidden]="!test">
-    <h2 style="color: red;">Doing Test</h2>
+    <h2>{{config.title}}</h2>
 </div>
 <div class="row col-md-12" style="margin-top: 50px;">
     <div class="col-md-3 row" style="margin-top: 50px;">
@@ -45,8 +45,8 @@
                 </button>
             </div>
             <br/>
-            <div class="text-center">
-                <countdown (event)="handleEvent($event)" [config]="{leftTime: time}" [ngClass]="{'warningCountdown': (time &#60; 10 )}"></countdown>
+            <div class="text-center" >
+                <countdown  (event)="handleEvent($event)" [config]="{leftTime: time,notify: [ 1, 30 ]}" [ngClass]="{'warningCountdown': (time &#60; 10 )}"></countdown>
             </div>
                 <br/>
             <div class="text-center">
