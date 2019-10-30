@@ -1,0 +1,87 @@
+<ng-template #customLoadingTemplate>
+    <div class="custom-class">
+
+    </div>
+</ng-template>
+<div class=" row col-md-12 d-flex justify-content-center no-padding-no-margin">
+
+
+    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
+    </ngx-loading>
+
+
+    <div class="row col-md-12 d-flex justify-content-center">
+        <b>
+            <h2 class="page-header ">
+                RESULT
+            </h2>
+        </b>
+    </div>
+
+    <!-- <div class=" col col-md-6">
+        <div class="card mb-5">
+            <div class="card-header">
+                <b>Your Detail Point</b>
+            </div>
+            <div class="card-body">
+                <combo-chart-component [view]="view" [scheme]="comboBarScheme" [colorSchemeLine]="lineChartScheme"
+                    [results]="barChart" [animations]="animations" [lineChart]="lineChartSeries"
+                    [yAxisTickFormatting]="yLeftTickFormat" [yLeftAxisScaleFactor]="yLeftAxisScale"
+                    [yRightAxisScaleFactor]="yRightAxisScale" [yRightAxisTickFormatting]="yRightTickFormat"
+                    [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+                    [legendTitle]="legendTitle" [legendPosition]="legendPosition" [showGridLines]="showGridLines"
+                    [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+                    [showRightYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
+                    [yAxisLabelRight]="yAxisLabelRight" *ngIf="isLoaded">
+                </combo-chart-component>
+            </div>
+        </div>
+    </div>
+    <div class="col col-md-6">
+        <div class="card mb-5">
+            <div class="card-header">
+                Pie Chart
+            </div>
+            <div class="card-body">
+                <ngx-charts-pie-chart [view]="[550, 450]" [labels]="true" [results]="single" [legend]="true"
+                    [explodeSlices]="false" [labels]="true" [doughnut]="false">
+                </ngx-charts-pie-chart>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="col col-md-6">
+        <div class="card mb-5">
+            <div class="card-header">
+                Vertical chart
+            </div>
+            <div class="card-body">
+                <ngx-charts-line-chart [view]="[600, 450]" [scheme]="colorScheme" [results]="multi" [gradient]="gradient"
+                    [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+                    [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel">
+                </ngx-charts-line-chart>
+                <!-- <ngx-charts-bar-vertical-stacked [view]="[600, 450]" [scheme]="colorScheme" [results]="historyData"
+                    [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+                    [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+                    [yAxisLabel]="yAxisLabel" (select)="onSelect(modal,$event)" *ngIf="isLoaded">
+                </ngx-charts-bar-vertical-stacked> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-6">
+        <div class="card mb-5">
+            <div class="card-header">
+                Vertical chart
+            </div>
+            <div class="card-body">
+
+            </div>
+        </div>
+    </div>
+    <ng-template #modal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title modal-header" id="modal-basic-title">Chart</h4>
+        </div>
+    </ng-template>
+</div>

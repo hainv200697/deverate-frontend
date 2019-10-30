@@ -1,7 +1,12 @@
-<div class="insert-form col-md-12">
-  <div class="card mb-3 shadow-card">
-      <div class="card-header" style="color: white">
-          RERANKING TODAY
-      </div>
-  </div>
+<div>
+    <div class="insert-form col-md-12">
+        <div class="card mb-3 shadow-card">
+            <div class="card-header" style="color: white">
+                RERANKING TODAY
+            </div>
+        </div>
+        </div>
+        <div *ngFor="let config of configs, let i=index">
+            <a [routerLink]="['/test/',config.testId]"><h3>{{config.title}}</h3></a>
+        </div>
 </div>

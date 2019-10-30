@@ -15,6 +15,7 @@ import { ToastrModule } from 'ngx-toastr';
 import {AngularDateTimePickerModule} from 'angular2-datetimepicker';
 import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
 import { from } from 'rxjs';
+import { NgxLoadingModule } from 'ngx-loading';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { from } from 'rxjs';
     DataTableModule,
     ToastrModule.forRoot(),
     AngularDateTimePickerModule,
-    AngularMultiSelectModule
+    AngularMultiSelectModule,
+    NgxLoadingModule.forRoot({})
   ],
   
   declarations: [ManageConfigurationComponent,CompanyFilterPipe]

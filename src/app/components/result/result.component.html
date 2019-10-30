@@ -1,0 +1,114 @@
+<ng-template #customLoadingTemplate>
+    <div class="custom-class">
+
+    </div>
+</ng-template>
+<nav class="navbar navbar-expand-lg fixed-top">
+    <a class="navbar-brand btn" [routerLink]="['/statistic']" [routerLinkActive]="['router-link-active']">
+        <i class="fa fa-arrow-left"></i>
+    </a>
+    <a class="navbar-brand" href="#">STATISTIC</a>
+</nav>
+<div class="container row col-md-12 d-flex justify-content-center"
+    style="padding-top: 80px; margin-right: 0px; margin-left: 0px;">
+
+
+    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
+    </ngx-loading>
+
+
+    <div class="row col-md-12 d-flex justify-content-center">
+        <b>
+            <h2 class="page-header ">
+                RESULT
+            </h2>
+        </b>
+    </div>
+
+
+
+    <div class="row col-md-12 border pt-4">
+        <div class="col col-sm-6 col-md-6" style="height: 350px; overflow: auto;">
+            <table class="table table-hover table-bordered customtable">
+                <thead style="background-color: rgba(0, 0, 0, 0.03);">
+                    <tr class="col-md-12 row no-padding-no-margin">
+
+                        <th class="text-center col-md-1 no-padding-no-margin">
+                            No.
+                        </th>
+                        <th class="text-center col-md-5">
+                            Criteria
+
+                        </th>
+                        <th class="text-center col-md-2">
+                            <!-- <select class="col-md-12" (change)="onChangeRank($event.target.value)">
+                                <option *ngFor="let l of ListRank" [value]="l.rankId">{{l.name}}</option>
+                            </select> -->
+                            {{statistic['rank']}}
+                        </th>
+                        <th class="text-center col-md-4">
+                            Assessment Result
+                        </th>
+
+
+                    </tr>
+                </thead>
+                <tbody style="background-color: white;">
+                    <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px"
+                        *ngFor="let c of catalogueTable; let i = index ">
+
+                        <td class="text-center col-md-1" style="font-size: 16px;">{{i+1}}</td>
+                        <td class="text-center col-md-5" style="font-size: 16px;">{{c.name}}</td>
+                        <td class="text-center col-md-2" style="font-size: 16px;">{{c.thresholdPoint *100}}</td>
+                        <td class="text-center col-md-4" style="font-size: 16px;">{{c.overallPoint *100}}</td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col col-sm-6 col-md-6">
+
+            <div class="card" style="height: 100%;">
+                <div class="card-header">
+                    <b>Your Rank</b>
+                </div>
+                <div class="card-body d-flex justify-content-center col-md-12 row no-padding-no-margin">
+
+                    <fusioncharts type="angulargauge" width="100%" height="100%" [dataFormat]="json"
+                        [dataSource]="datasource"></fusioncharts>
+                </div>
+            </div>
+        </div>
+
+        <div class="col col-sm-12 col-md-12 mt-4">
+            <div class="card mb-5">
+                <div class="card-header">
+                    <b>Your Detail Point</b>
+                </div>
+                <div class="card-body">
+                    <!-- <select class="col-md-1" (change)="onChangeRadarData($event.target.value)">
+                        <option value="1">1</option>
+                        <option value="5" selected="selected">5</option>
+                        <option value="20">20</option>
+                        <option value="100">100</option>
+                    </select> -->
+                    <!-- <select class="col-md-1" (change)="onChangeRankData($event.target.value)" >
+                        <option *ngFor="let r of ListRank" value="{{r.rankId}}">{{r.name}}</option>
+                    </select> -->
+                    <canvas baseChart height="100px" [datasets]="radarChartData" [labels]="radarChartLabels"
+                        [chartType]="radarChartType" (chartHover)="chartHovered($event)" [colors]="radarChartColor"
+                        (chartClick)="chartClicked($event)">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<footer id="sticky-footer" class="py-2 bg-dark text-white-50">
+    <div class="container text-center">
+        <small style="color: white;">Copyright &copy; Deverate</small>
+    </div>
+</footer>

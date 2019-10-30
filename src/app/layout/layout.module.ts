@@ -10,8 +10,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ChangepassComponent } from '../components/changepass/changepass.component';
 import {BreadcrumbModule} from 'angular-crumbs';
-import { RerankingComponent } from '../components/ranking/reranking/reranking.component';
-// import { InsertQuestionComponent } from '../components/question/ins-question/insert-question.component';
+import { RerankingModule } from '../components/ranking/reranking/reranking.module';
 @NgModule({
     imports: [
         CommonModule,
@@ -21,14 +20,14 @@ import { RerankingComponent } from '../components/ranking/reranking/reranking.co
         FormsModule,
         ReactiveFormsModule,
         BreadcrumbModule,
+        RerankingModule
     ],
     declarations: [
-        LayoutComponent, 
-        SidebarComponent, 
-        HeaderComponent, 
+        LayoutComponent,
+        SidebarComponent,
+        HeaderComponent,
         ProfileComponent,
-        ChangepassComponent,
-        RerankingComponent
+        ChangepassComponent
     ]
 })
 export class LayoutModule {}

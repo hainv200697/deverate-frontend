@@ -5,6 +5,7 @@ import { CatalogueApiService } from '../../services/catalogue-api.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { element } from 'protractor';
 import Swal from 'sweetalert2';
+import { ToastrService } from 'ngx-toastr';
 declare var $: any;
 @Component({
     selector: 'app-catalogue',
@@ -17,26 +18,28 @@ export class CatalogueComponent implements OnInit {
         public router: Router,
         private modalService: NgbModal,
         private catelogueService: CatalogueApiService,
+        private toastr: ToastrService,
     ) {
     }
+    public loading = false;
+    iconIsActive: boolean;
     selectedAll: any;
     check = 0;
     catalogueList = [];
-    searchText :string;
+    searchText: string;
     insCatalogue = {};
     updCatalogue = {};
     updateStatus = [];
     ngOnInit() {
-        this.getAllCatalogue();
+        this.getAllCatalogue(true);
     }
 
-    //Open modal 
+    // Open modal
     open(create) {
         this.modalService.open(create, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
     }
 
     openUpdateModal(item, update) {
-        console.log(item);
         this.updateModal(item);
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
 
@@ -45,9 +48,9 @@ export class CatalogueComponent implements OnInit {
     updateModal(item) {
         if (item != null) {
             this.updCatalogue['CatalogueId'] = item['CatalogueId'];
-            this.updCatalogue['Name'] = item['Name'];
-            this.updCatalogue['Description'] = item['Description'];
-            this.updCatalogue['IsActive'] = item['IsActive'];
+            this.updCatalogue['Name'] = item['name'];
+            this.updCatalogue['Description'] = item['description'];
+            this.updCatalogue['IsActive'] = item['isActive'];
         }
 
     }
@@ -61,23 +64,27 @@ export class CatalogueComponent implements OnInit {
     }
 
     // Get all catalogue
-    getAllCatalogue() {
-        this.catelogueService.getAllCatalogue().subscribe(
-            (data) => {
-
-                this.catalogueList = data['data']['data'];
+    getAllCatalogue(status) {
+        this.iconIsActive = status;
+        this.loading = true;
+        console.log(this.iconIsActive);
+        this.catelogueService.getAllCatalogue(this.iconIsActive).subscribe(
+            (data :any[]) => {
+                this.loading = false;
+                this.catalogueList = data;
                 console.log(this.catalogueList);
             }
         );
     }
-    
+
 
     clickButtonRefresh(refesh) {
         refesh.classList.add('spin-animation');
         setTimeout(function () {
+            
             refesh.classList.remove('spin-animation');
-        }, 500)
-        this.getAllCatalogue();
+        }, 500);
+        this.getAllCatalogue(this.iconIsActive);
     }
 
     // Insert catalogue
@@ -85,75 +92,77 @@ export class CatalogueComponent implements OnInit {
         console.log(this.insCatalogue);
         this.insCata();
         this.closeModal();
-        this.getAllCatalogue();
+        this.getAllCatalogue(this.iconIsActive);
     }
 
     insCata() {
         this.insCatalogue['IsActive'] = true;
-        console.log(this.insCatalogue);
+        this.loading = true;
         this.catelogueService.insertCatalogue(this.insCatalogue).subscribe(
             (results) => {
-                console.log(results);
+                this.loading = false;
+                this.getAllCatalogue(this.iconIsActive);
+                this.toastr.success(results['message']);
             }
         );
     }
 
     selectAll() {
         this.updateStatus = [];
-        for (var i = 0; i < this.catalogueList.length; i++) {
+        for (let i = 0; i < this.catalogueList.length; i++) {
             this.catalogueList[i].selected = this.selectedAll;
-            this.updateStatus.push(this.catalogueList[i])
+            this.updateStatus.push(this.catalogueList[i]);
         }
     }
 
     checkIfAllSelected() {
         this.updateStatus = [];
         this.selectedAll = this.catalogueList.every(function (item: any) {
-            return item.selected == true;
+            return item.selected === true;
 
-        })
-        for (var i = 0; i < this.catalogueList.length; i++) {
-            if (this.catalogueList[i].selected == true) {
-                this.updateStatus.push(this.catalogueList[i])
+        });
+        for (let i = 0; i < this.catalogueList.length; i++) {
+            if (this.catalogueList[i].selected === true) {
+                this.updateStatus.push(this.catalogueList[i]);
             }
         }
 
     }
-    // Update catalogue 
+    // Update catalogue
     updateCatalogueSubmit() {
         this.updCata();
         this.closeModal();
-        this.getAllCatalogue();
     }
 
     updCata() {
-        console.log(this.updCatalogue);
+        this.loading = true;
         this.catelogueService.updateCatalogue(this.updCatalogue).subscribe(
-            (results) => {
-                console.log(results);
+            (data:any) => {
+                this.loading = false;
+                this.getAllCatalogue(this.iconIsActive);
+                this.toastr.success(data['message']);
             }
         );
     }
 
-    clickButtonChangeStatus(status: boolean){
+    clickButtonChangeStatus(status: boolean) {
         Swal.fire({
-          title: 'Are you sure?',
-          text: 'This catalogue will be delete!',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Yes, delete it!',
-          cancelButtonText: 'No, keep it'
+            title: 'Are you sure?',
+            text: 'This catalogue will be delete!',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, keep it'
         }).then((result) => {
-          if (result.value) {
-            for(var i =0; i< this.updateStatus.length; i++){
-              this.updateStatus[i].IsActive = status;
-            }
-            this.catelogueService.removeCatalogue(this.updateStatus).subscribe(
-                (results) => {
-                    console.log(results);
+            if (result.value) {
+                for (let i = 0; i < this.updateStatus.length; i++) {
+                    this.updateStatus[i].IsActive = status;
                 }
-            );
-            
+                this.catelogueService.removeCatalogue(this.updateStatus).subscribe(data => {
+                    this.getAllCatalogue(this.iconIsActive);
+                    this.closeModal();
+                    Swal.fire('Success', 'The company has been deleted', 'success');
+                });;
             Swal.fire(
               'Deleted',
               '',
@@ -171,8 +180,8 @@ export class CatalogueComponent implements OnInit {
         })
     }
 
-    // viewCatalog(item){
-    //     this.check = 1;
-    // }
+    viewCatalog(item){
+        this.router.navigate(['/manage-question/', item['catalogueId']]);
+    }
 
 }

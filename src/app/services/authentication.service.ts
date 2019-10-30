@@ -6,14 +6,13 @@ import { AppSettings } from '../appsetting';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  }
   constructor(private httpClient: HttpClient) { }
 
-  login(account:any) {
-    return this.httpClient.post<any>(`${AppSettings.BASEURL}authenticate/api/Login/Authen`, account, this.httpOptions);
+  login(account) {
+    return this.httpClient.post<any>(`${AppSettings.BASEURL}${AppSettings.ROUTE_AUTH}Account/Login`, account);
+  }
+
+  changePassword(user) {
+    return this.httpClient.put<any>(`${AppSettings.BASEURL}${AppSettings.ROUTE_AUTH}Account/ChangePassword`, user);
   }
 }

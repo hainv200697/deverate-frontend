@@ -10,6 +10,7 @@ import { CatalogueRoutingModule } from './catalogue-routing.module';
 import { DataTableModule } from 'ng-angular8-datatable';
 import { InsertQuestionModule } from '../question/ins-question/insert-question.module';
 import { CatalogueFilterPipe } from './catalog-filter.pipe';
+import { NgxLoadingModule } from 'ngx-loading';
 @NgModule({
   imports: [
     CommonModule,
@@ -21,7 +22,8 @@ import { CatalogueFilterPipe } from './catalog-filter.pipe';
     DataTableModule,
     ReactiveFormsModule,
     PageHeaderModule,
-    TooltipModule
+    TooltipModule,
+    NgxLoadingModule.forRoot({})
   ],
   declarations: [
     CatalogueFilterPipe,
