@@ -511,7 +511,7 @@ export class ManageConfigurationComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
-        this.configAPi.sendCode(id).subscribe(data => {
+        this.configAPi.sendMail(id).subscribe(data => {
           Swal.fire('Success', 'The mail has been send', 'success');
         });
         

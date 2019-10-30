@@ -35,8 +35,8 @@ export class ConfigurationApiService {
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE+ API, ConfigurationModel);
     }
 
-    sendCode(id){
+    sendMail(id){
         const API = 'api/System/SendTestMail/';
-        return this.httpClient.get('http://localhost:8080/' + API + id);
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE+ API + id);
     }
 }
