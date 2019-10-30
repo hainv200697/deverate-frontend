@@ -197,7 +197,6 @@ export class ManageConfigurationComponent implements OnInit {
     if (this.validateConfiguration() === false) {
       return;
     }
-    console.log(this.inputConfiguration['type']);
     this.stepper.next();
     this.index = this.index + 1;
     this.inputConfiguration['startDate'] = this.startDate;
@@ -364,7 +363,6 @@ export class ManageConfigurationComponent implements OnInit {
         this.inputConfiguration['configurationRank'] = this.ListRank;
         this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
         this.inputConfiguration['endDate'] = new Date(this.inputConfiguration['endDate']);
-        console.log(this.inputConfiguration)
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
           this.getConfigurationIsActive(true);
           this.closeModal();
@@ -387,8 +385,6 @@ export class ManageConfigurationComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.loading = true;
-        console.log(this.updateConfig);
-        
         this.configAPi.updateConfiguration(this.updateConfig).subscribe(data => {
         this.getConfigurationIsActive(true);
         this.closeModal();

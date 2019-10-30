@@ -37,6 +37,6 @@ export class ConfigurationApiService {
 
     sendMail(id){
         const API = 'api/System/SendTestMail/';
-        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE+ API + id);
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id);
     }
 }
