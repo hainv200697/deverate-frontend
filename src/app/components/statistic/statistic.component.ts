@@ -32,73 +32,73 @@ export class StatisticComponent implements OnInit {
   colorScheme = {
     domain: ['#9370DB', '#87CEFA', '#FA8072', '#FF7F50', '#90EE90', '#9370DB']
   };
-  // multi: any[] = [];
-  multi = [
-    {
-      "name": "Karthikeyan",
-      "series": [
-        {
-          "name": "2016",
-          "value": "15000"
-        },
-        {
-          "name": "2017",
-          "value": "20000"
-        },
-        {
-          "name": "2018",
-          "value": "25000"
-        },
-        {
-          "name": "2019",
-          "value": "30000"
-        }
-      ],
-    },
-    {
-      "name": "Gnana Prakasam",
-      "series": [
-        {
-          "name": "2016",
-          "value": "4000"
-        },
-        {
-          "name": "2017",
-          "value": "4500"
-        },
-        {
-          "name": "2018",
-          "value": "10000"
-        },
-        {
-          "name": "2019",
-          "value": "15000"
-        }
-      ],
-    },
-    {
-      "name": "Kumaresan",
-      "series": [
-        {
-          "name": "2016",
-          "value": "5000"
-        },
-        {
-          "name": "2017",
-          "value": "8000"
-        },
-        {
-          "name": "2018",
-          "value": "15000"
-        },
-        {
-          "name": "2019",
-          "value": "35000"
-        }
-      ],
-    }
+  multi: any[] = [];
+  // multi = [
+  //   {
+  //     "name": "Karthikeyan",
+  //     "series": [
+  //       {
+  //         "name": "2016",
+  //         "value": "15000"
+  //       },
+  //       {
+  //         "name": "2017",
+  //         "value": "20000"
+  //       },
+  //       {
+  //         "name": "2018",
+  //         "value": "25000"
+  //       },
+  //       {
+  //         "name": "2019",
+  //         "value": "30000"
+  //       }
+  //     ],
+  //   },
+  //   {
+  //     "name": "Gnana Prakasam",
+  //     "series": [
+  //       {
+  //         "name": "2016",
+  //         "value": "4000"
+  //       },
+  //       {
+  //         "name": "2017",
+  //         "value": "4500"
+  //       },
+  //       {
+  //         "name": "2018",
+  //         "value": "10000"
+  //       },
+  //       {
+  //         "name": "2019",
+  //         "value": "15000"
+  //       }
+  //     ],
+  //   },
+  //   {
+  //     "name": "Kumaresan",
+  //     "series": [
+  //       {
+  //         "name": "2016",
+  //         "value": "5000"
+  //       },
+  //       {
+  //         "name": "2017",
+  //         "value": "8000"
+  //       },
+  //       {
+  //         "name": "2018",
+  //         "value": "15000"
+  //       },
+  //       {
+  //         "name": "2019",
+  //         "value": "35000"
+  //       }
+  //     ],
+  //   }
   
-  ];
+  // ];
   // data pie
   single = [
     {
@@ -136,7 +136,7 @@ export class StatisticComponent implements OnInit {
 
   ngOnInit() {
     this.isLoaded = false;
-    // this.GetGeneralStatistic(sessionStorage.getItem("AccountId"));
+    this.GetGeneralStatistic(sessionStorage.getItem("AccountId"));
     // this.getHistory(5);
   }
 
@@ -157,24 +157,7 @@ export class StatisticComponent implements OnInit {
     this.historyApi.GetGeneralStatistic(id).subscribe(
       (data) => {
         this.historyData = data['items'];
-        for (var i = 0; i < this.historyData.length; i++) {
-          
-
-          this.series[i] = data['items'][i].catalogues
-          // test = this.historyData[i].catalogues;
-          // for (var y = 0; y < this.historyData[i].catalogues.length; y++) {
-          //   this.series.push({
-          //     id : this.historyData[i].catalogues[y].id,
-          //     name : this.historyData[i].catalogues[y].name,
-          //     value : this.historyData[i].catalogues[y].catalogueGPA,
-          //   });
-          //   
-          // }
-
-        }
-        // this.multi.push({
-        //   series: this.series,
-        // });
+        
         console.log(this.historyData);
         this.isLoaded = true;
         this.loading = false;
