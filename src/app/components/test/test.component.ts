@@ -22,6 +22,7 @@ export class TestComponent implements OnInit {
     private router: Router,
     private gblserv: GobalService
   ) { }
+  accountId = Number(sessionStorage.getItem('AccountId'));
   config;
   key;
   error = false;
@@ -33,6 +34,28 @@ export class TestComponent implements OnInit {
   sub: Subscription;
   ngOnInit() {
     this.testId = this.route.snapshot.paramMap.get('testId');
+    console.log(this.accountId);
+    this.config = this.testService.getTestAccount(this.testId)
+      .subscribe(res => {
+        if (this.accountId) {
+          if (res['data']['data'] == this.accountId) {
+            this.getconfig();
+          }
+          else {
+            this.router.navigate(['**']);
+          }
+        }
+        else if (res['data']['data'] == null) {
+          this.getconfig();
+        }
+        else {
+          this.router.navigate(['login']);
+        }
+      });
+
+  }
+
+  getconfig() {
     this.config = this.testService.getConfig(this.testId)
       .subscribe(res => {
         this.config = res;
@@ -41,9 +64,7 @@ export class TestComponent implements OnInit {
         this.config.endDate = moment(this.config.endDate).format('LLLL');
         $('#openModalButton').click();
       });
-
   }
-
 
   open(content) {
     this.modalService.open(content, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -69,7 +90,7 @@ export class TestComponent implements OnInit {
         const now = moment();
         const startDay = moment(res.startTime);
         const timer = now.diff(startDay) / 1000;
-        this.time = this.config.duration *60  - timer;
+        this.time = this.config.duration * 60 - timer;
         if (this.time > 0) {
           this.closeModal();
           this.questionInTest.forEach(element => {
@@ -110,15 +131,15 @@ export class TestComponent implements OnInit {
   }
 
   handleEvent($event) {
-    
-    if(!this.test){
+
+    if (!this.test) {
       return;
     }
     switch ($event.action) {
       case 'notify':
-        if($event.left == 30000){
-        $('.count-down span').css("color","red");
-        }else{
+        if ($event.left == 30000) {
+          $('.count-down span').css("color", "red");
+        } else {
           $('.count-down span').html("Time Up!");
         }
         break;
@@ -126,7 +147,7 @@ export class TestComponent implements OnInit {
         this.submitTest();
         break;
     }
-    
+
   }
 
   autoSave() {

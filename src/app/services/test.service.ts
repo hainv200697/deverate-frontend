@@ -45,4 +45,9 @@ export class TestService {
     return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST  + API, info);
   }
 
+  getTestAccount(testId) {
+    const API = 'api/Test/GetTestAccount';
+    const param = new HttpParams().set('testId', testId);
+    return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_TEST + API,{ params: param });
+  }
 }
