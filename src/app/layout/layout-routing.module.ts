@@ -33,6 +33,7 @@ const routes: Routes = [
             { path: 'manage-detail-test/:id', loadChildren: () => import('../components/default-test/defaut-test.module').then(m => m.DefautTestModule) },
             { path: 'reranking', component: RerankingComponent},
             { path: 'statistic', loadChildren: () => import('../components/statistic/statistic.module').then(m => m.StatisticModule)},
+            { path: 'manage-employee', loadChildren: () => import('../components/employee/employee.module').then(m => m.EmployeeModule)},
         ]
     }
 ];
