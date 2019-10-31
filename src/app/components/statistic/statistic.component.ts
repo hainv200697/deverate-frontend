@@ -107,11 +107,11 @@ export class StatisticComponent implements OnInit {
             name : element.name,
             series : [
               {
-                name :"làm test",
+                name :"employees did the test ",
                 value: element.numberOfFinishedTest
               },
               {
-                name: "ko làm test",
+                name: "employees didn't the test.",
                 value: element.totalTest - element.numberOfFinishedTest
               }
             ]
