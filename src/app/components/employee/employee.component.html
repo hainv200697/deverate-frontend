@@ -1,0 +1,168 @@
+<ng-template #customLoadingTemplate>
+    <div class="custom-class">
+
+    </div>
+</ng-template>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
+</ngx-loading>
+
+<ng-template #excel let-modal>
+    <div class="container">
+        <div id="stepper1" class="bs-stepper">
+            <div class="modal-header header-custom">
+                <h3>Insert by Excel</h3>
+            </div>
+            <div class="modal-body">
+                <div class="create-file">
+                    <button class="btn btn-primary" (click)="changeIns(0)">Insert default</button>
+                    <input type="file" style="display: inline-block;" (change)="incomingfile($event)"
+                        placeholder="Upload file" accept=".xlsx">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button [disabled]="checkFile==false" class="btn btn-success save"
+            (click)="insertEmployeeSubmit('excel')">Create</button>
+        <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
+    </div>
+</ng-template>
+
+<ng-template #create let-modal>
+    <div class="text-left mt-1 ">
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Create Employee</h4>
+        </div>
+        <div class="modal-body modal-basic-title col-md-12 row no-padding-no-margin">
+            <form class="col-md-12 no-padding-no-margin row">
+                <div class="form-group col-md-12">
+                    <label>Employee Information: </label>
+                    <div class="form-group input-group">
+                        <input type="text" placeholder="FullName" minlength="3" [(ngModel)]="insEmployee['fullname']"
+                            name="ins_manager_fullname" class="form-control">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="button"><i class="fa fa-user"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group input-group">
+                        <input class="form-control" type="email" placeholder="Email" [(ngModel)]="insEmployee['email']"
+                            name="ins_manager_email">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="button"><i class="fa fa-envelope"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success save shadow-card" (click)="insertEmployeeSubmit('default')">Create</button>
+        <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
+    </div>
+</ng-template>
+
+<app-page-header [heading]="'Manage Employee'"></app-page-header>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h5>Manage Employee</h5>
+    </div>
+    <div class="table-responsive col-md-12 datatable">
+        <div class="row mb-1">
+            <div class="col">
+                <div class=" row justify-content-between" style="margin-top: 20px;">
+                    <div class="form-group input-group col-md-6">
+                        <input type="text" class="form-control" placeholder="Enter your key word" name="searchText"
+                            [(ngModel)]="searchText">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                    <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
+                        <i class="fa fa-fw fa-plus"></i>
+                        Create Employee
+                    </button>
+                </div>
+                <div class="row justify-content-end" style="margin-top: 20px;">
+                    <button style="margin-right: 10px;" (click)="openModalExcel(excel);" class="btn btn-lg btn-success "
+                        data-toggle="button">
+                        <i class="fa fa-file-excel-o"></i>
+                    </button>
+                    <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
+                        class="btn btn-lg btn-primary" data-toggle="button">
+                        <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
+                            aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <table class="table  table-hover customtable" [svData]="employeeList" #sv="svDataTable" [svRowsOnPage]="5"
+            svSortBy="name" svSortOrder="asc">
+            <thead>
+                <tr class="col-md-12 row no-padding-no-margin">
+                    <th class="text-center col-md-1" scope="col">
+                        <input class="btn" type="checkbox" value="" [(ngModel)]="selectedAll" (change)="selectAll();">
+                    </th>
+                    <th class="col-md-2 text-center" scope="col">
+                        <sv-default-sorter by='username'>Username</sv-default-sorter>
+                    </th>
+                    <th class="col-md-2 text-center" scope="col">
+                        <sv-default-sorter by='fullname'>Fullname</sv-default-sorter>
+                    </th>
+                    <th class="col-md-3 text-center" scope="col">
+                        <sv-default-sorter by='email'>Email</sv-default-sorter>
+                    </th>
+                    <th class="col-md-1 text-center" scope="col">
+                        <sv-default-sorter by='gender'>Gender</sv-default-sorter>
+                    </th>
+                    <th class="col-md-2 text-center" scope="col">
+                        <sv-default-sorter by='joinDate'>JoinDate</sv-default-sorter>
+                    </th>
+                    <th class="col-md-1 text-center" scope="col">Status
+                        <!-- <div ngbDropdown class="d-inline-block dropdown">
+                            <button class=" icon-btn" ngbDropdownToggle style="color: black"></button>
+                            <div ngbDropdownMenu>
+                                <button class="dropdown-item" (click)="getAnswerById(true)">Active</button>
+                                <button class="dropdown-item" (click)="getAnswerById(false)">Disable</button>
+                            </div>
+                        </div> -->
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data">
+                    <td class="text-center col-md-1">
+                        <label>
+                            <input type="checkbox" value="" [(ngModel)]="item.selected" class="btn"
+                                (change)="checkIfAllSelected();">
+                        </label>
+                    </td>
+                    <td class="col-md-2 text-center">{{ item.username }}</td>
+                    <td class="col-md-2 text-center">{{ item.fullname }}</td>
+                    <td class="col-md-3 text-center">{{ item.email }}</td>
+                    <td class="text-center col-md-1" [hidden]="item.gender==false">
+                        Male
+                    </td>
+                    <td class="text-center col-md-1" [hidden]="item.gender==true">
+                        FeMale
+                    </td>
+                    <td class="col-md-2 text-center">{{ item.joinDate.split('T')[0] }}</td>
+                    <td class="text-center col-md-1" [hidden]="item.isActive==true">
+                        <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
+                    </td>
+                    <td class="text-center col-md-1" [hidden]="item.isActive==false">
+                        <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <sv-bootstrap-paginator [rowsOnPageSet]="[4, 25, 50]"></sv-bootstrap-paginator>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
