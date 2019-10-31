@@ -30,16 +30,26 @@ export class TestComponent implements OnInit {
   alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   testId;
   time = 0;
+  accountId= Number(sessionStorage.getItem('AccountId'));
   sub: Subscription;
   ngOnInit() {
     this.testId = this.route.snapshot.paramMap.get('testId');
     this.config = this.testService.getConfig(this.testId)
       .subscribe(res => {
         this.config = res;
-        this.config.title = this.config.title.toUpperCase();
-        this.config.startDate = moment(this.config.startDate).format('LLLL');
-        this.config.endDate = moment(this.config.endDate).format('LLLL');
-        $('#openModalButton').click();
+        console.log(res);
+        console.log(this.accountId);
+        if(this.config.accountId != null && this.accountId == 0){
+          this.router.navigate(['login']);
+        } else if(this.config.accountId != null && this.accountId != this.config.accountId){
+          this.router.navigate(['**']);
+        }else{
+
+          this.config.title = this.config.title.toUpperCase();
+          this.config.startDate = moment(this.config.startDate).format('LLLL');
+          this.config.endDate = moment(this.config.endDate).format('LLLL');
+          $('#openModalButton').click();
+        }
       });
 
   }
@@ -57,6 +67,7 @@ export class TestComponent implements OnInit {
 
   quiz() {
     const testInfo = {
+      testId : this.testId ,
       accountId: Number(sessionStorage.getItem('AccountId')),
       configId: this.config.configId,
       code: this.key
