@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
     selector: 'app-changepass',
@@ -8,11 +9,29 @@ import { routerTransition } from '../../router.animations';
     animations: [routerTransition()]
 })
 export class ChangepassComponent implements OnInit {
-    constructor() {}
+    constructor(private authenticationService: AuthenticationService) {}
+    oldPassword = '';
+    newPassword = '';
+    rePassword = ''
 
     ngOnInit() {}
 
     changePassword(){
-        
+        if (this.newPassword != this.rePassword) {
+            return;
+        }
+        const user = {
+            username: sessionStorage.getItem('Username'),
+            oldPassword: this.oldPassword,
+            newPassword: this.newPassword
+        }
+        this.authenticationService.changePassword(user)
+        .subscribe((res) => {
+            alert("success")
+        }, (error) => {
+            if (error.status == 400) {
+                alert("Current password is invalid")
+            }
+        })
     }
 }

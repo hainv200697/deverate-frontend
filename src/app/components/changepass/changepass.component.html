@@ -4,30 +4,30 @@
             <div class="card-header">
                 Change Password
             </div>
-            <form role="form">
+            <div role="form">
                 <div class="card-body">
                     <div class="form-content">
                         <div class="form-group col-sm-12 col-md-5 col-lg-5 align-conten-style">
-                            <label>Password:</label>
-                            <input type="text" class="form-control input-underline input-lg col-md-12 col-lg-12" id=""
-                                placeholder="{{ 'Password' | translate }}">
+                            <label>Current Password:</label>
+                            <input type="password" class="form-control input-underline input-lg col-md-12 col-lg-12" id=""
+                                placeholder="Password" [(ngModel)]="oldPassword">
                         </div>
                         <div class="form-group col-sm-12 col-md-5 col-lg-5 align-conten-style">
                             <label>New Password:</label>
-                            <input type="text" class="form-control input-underline input-lg col-md-12 col-lg-12" id=""
-                                placeholder="{{ 'Password' | translate }}">
+                            <input type="password" class="form-control input-underline input-lg col-md-12 col-lg-12" id=""
+                                placeholder="Password" [(ngModel)]="newPassword">
                         </div>
                         <div class="form-group col-sm-12 col-md-5 col-lg-5 align-conten-style">
                             <label>New Password Confirm:</label>
-                            <input type="text" class="form-control input-underline input-lg col-md-12 col-lg-12" id=""
-                                placeholder="{{ 'Password' | translate }}">
+                            <input type="password" class="form-control input-underline input-lg col-md-12 col-lg-12" id=""
+                                placeholder="Password" [(ngModel)]="rePassword">
                         </div>
                     </div>
                 </div>
                 <div class="card-footer text-right">
                     <button class="btn btn-info btn-sm" (click)="changePassword()">Change Password</button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>

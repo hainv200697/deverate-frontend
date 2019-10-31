@@ -8,7 +8,11 @@ import { AppSettings } from '../appsetting';
 export class AuthenticationService {
   constructor(private httpClient: HttpClient) { }
 
-  login(account: any) {
+  login(account) {
     return this.httpClient.post<any>(`${AppSettings.BASEURL}${AppSettings.ROUTE_AUTH}Account/Login`, account);
+  }
+
+  changePassword(user) {
+    return this.httpClient.put<any>(`${AppSettings.BASEURL}${AppSettings.ROUTE_AUTH}Account/ChangePassword`, user);
   }
 }

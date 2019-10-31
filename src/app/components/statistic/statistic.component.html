@@ -11,14 +11,26 @@
 
 
     <div class="row col-md-12 d-flex justify-content-center">
-        <b>
-            <h2 class="page-header ">
-                RESULT
-            </h2>
-        </b>
+        <div class="col-md-6">
+            <b>
+                <h2 class="page-header ">
+                    RESULT
+                </h2>
+            </b>
+        </div>
+        <div class="d-flex justify-content-end col-md-6">
+            <!-- <select (change)="getDataStatistic($event.target.value)">
+                <option [ngValue]="5">5</option>
+                <option [ngValue]="10">10</option>
+            </select> -->
+            <ng-multiselect-dropdown [placeholder]="'Select Period'" [data]="dropdownList" (onSelect)="getDataStatistic($event)" (onSelectAll)="onSelectAll($event)"
+                [(ngModel)]="selectedItems" [settings]="dropdownSettings" *ngIf="isLoaded" >
+            </ng-multiselect-dropdown>
+        </div>
     </div>
 
-    <div class=" col col-md-12">
+
+    <!-- <div class=" col col-md-6">
         <div class="card mb-5">
             <div class="card-header">
                 <b>Your Detail Point</b>
@@ -32,17 +44,61 @@
                     [legendTitle]="legendTitle" [legendPosition]="legendPosition" [showGridLines]="showGridLines"
                     [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
                     [showRightYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
-                    [yAxisLabelRight]="yAxisLabelRight">
+                    [yAxisLabelRight]="yAxisLabelRight" *ngIf="isLoaded">
                 </combo-chart-component>
-                <!-- <canvas baseChart height="200" [datasets]="lineChartData" [labels]="lineChartLabels"
-                    [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend"
-                    [chartType]="lineChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
-                </canvas> -->
+            </div>
+        </div>
+    </div>
+    <div class="col col-md-6">
+        <div class="card mb-5">
+            <div class="card-header">
+                Pie Chart
+            </div>
+            <div class="card-body">
+                <ngx-charts-pie-chart [view]="[550, 450]" [labels]="true" [results]="single" [legend]="true"
+                    [explodeSlices]="false" [labels]="true" [doughnut]="false">
+                </ngx-charts-pie-chart>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="col col-md-6 mt-3">
+        <div class="card mb-5">
+            <div class="card-header">
+                Vertical chart
+            </div>
+            <div class="card-body">
+                <ngx-charts-line-chart [view]="[650, 450]" [scheme]="colorScheme" [results]="historyData"
+                    [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+                    [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+                    [yAxisLabel]="yAxisLabel">
+                </ngx-charts-line-chart>
+                <!-- <ngx-charts-bar-vertical-stacked [view]="[600, 450]" [scheme]="colorScheme" [results]="historyData"
+                    [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+                    [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+                    [yAxisLabel]="yAxisLabel" (select)="onSelect(modal,$event)" *ngIf="isLoaded">
+                </ngx-charts-bar-vertical-stacked> -->
             </div>
         </div>
     </div>
 
-
-
-
+    <div class="col col-md-6 mt-3">
+        <div class="card mb-5">
+            <div class="card-header">
+                Vertical chart
+            </div>
+            <div class="card-body">
+                <ngx-charts-bar-vertical-stacked [view]="[650, 450]" [scheme]="colorScheme" [results]="multi"
+                    [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+                    [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+                    yAxisLabel='Employee' (select)="onSelect(modal,$event)">
+                </ngx-charts-bar-vertical-stacked>
+            </div>
+        </div>
+    </div>
+    <ng-template #modal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title modal-header" id="modal-basic-title">Chart</h4>
+        </div>
+    </ng-template>
 </div>

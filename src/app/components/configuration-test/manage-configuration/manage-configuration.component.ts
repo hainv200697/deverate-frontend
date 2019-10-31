@@ -167,6 +167,7 @@ export class ManageConfigurationComponent implements OnInit {
     this.inputConfiguration['testOwnerId'] = sessionStorage.getItem("AccountId");
     this.inputConfiguration['totalQuestion'] = 0;
     this.inputConfiguration['title'] = '';
+    this.inputConfiguration['type'] = true;
     this.inputConfiguration['duration'] = 15;
     this.inputConfiguration['startDate'] = this.startDate;
     this.inputConfiguration['endDate'] = this.endDate.setDate(this.startDate.getDate() + 1);
@@ -219,7 +220,6 @@ export class ManageConfigurationComponent implements OnInit {
           } 
           this.ListRank[i].catalogueInRank.push(cir);
           this.catalogueInRank.push(cirShow)
-          console.log(this.catalogueInRank);
         }
       }
     }
@@ -298,6 +298,7 @@ export class ManageConfigurationComponent implements OnInit {
       (data) => {
         this.updateConfig['ConfigId'] = data['data']['data']['configId'];
         this.updateConfig['testOwnerId'] = data['data']['data']['testOwnerId'];
+        this.updateConfig['type'] = data['data']['data']['type'];
         this.updateConfig['title'] = data['data']['data']['title'];
         this.updateConfig['totalQuestion'] = data['data']['data']['totalQuestion'];
         this.updateConfig['createDate'] = data['data']['data']['createDate'];
@@ -362,7 +363,6 @@ export class ManageConfigurationComponent implements OnInit {
         this.inputConfiguration['configurationRank'] = this.ListRank;
         this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
         this.inputConfiguration['endDate'] = new Date(this.inputConfiguration['endDate']);
-        console.log(this.inputConfiguration)
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
           this.getConfigurationIsActive(true);
           this.closeModal();
@@ -385,8 +385,6 @@ export class ManageConfigurationComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.loading = true;
-        console.log(this.updateConfig);
-        
         this.configAPi.updateConfiguration(this.updateConfig).subscribe(data => {
         this.getConfigurationIsActive(true);
         this.closeModal();
@@ -499,7 +497,7 @@ export class ManageConfigurationComponent implements OnInit {
     }
   }
 
-  sendMail() {
+  sendMail(id) {
     Swal.fire({
       title: 'Are you sure?',
       text: 'The mail will be send to employee!',
@@ -509,11 +507,11 @@ export class ManageConfigurationComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
-        this.closeModal();
-        Swal.fire('Success', 'The mail has been send', 'success');
-
+        this.configAPi.sendMail(id).subscribe(data => {
+          Swal.fire('Success', 'The mail has been send', 'success');
+        });
+        
       } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.closeModal();
       }
     });
   }

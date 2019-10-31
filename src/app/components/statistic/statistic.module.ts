@@ -15,6 +15,7 @@ import { NgxGaugeModule } from 'ngx-gauge';
 import { NgxLoadingModule } from 'ngx-loading';
 import { FusionChartsModule } from 'angular-fusioncharts';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ComboChartComponent, ComboSeriesVerticalComponent } from '../combo-chart';
 
 
@@ -30,6 +31,7 @@ import { ComboChartComponent, ComboSeriesVerticalComponent } from '../combo-char
     NgxGaugeModule,
     NgxChartsModule,
     NgxLoadingModule.forRoot({}),
+    NgMultiSelectDropDownModule.forRoot()
   ],
   
   declarations: [StatisticComponent,ComboChartComponent, ComboSeriesVerticalComponent]
