@@ -32,73 +32,9 @@ export class StatisticComponent implements OnInit {
   colorScheme = {
     domain: ['#9370DB', '#87CEFA', '#FA8072', '#FF7F50', '#90EE90', '#9370DB']
   };
-  multi: any[] = [];
-  // multi = [
-  //   {
-  //     "name": "Karthikeyan",
-  //     "series": [
-  //       {
-  //         "name": "2016",
-  //         "value": "15000"
-  //       },
-  //       {
-  //         "name": "2017",
-  //         "value": "20000"
-  //       },
-  //       {
-  //         "name": "2018",
-  //         "value": "25000"
-  //       },
-  //       {
-  //         "name": "2019",
-  //         "value": "30000"
-  //       }
-  //     ],
-  //   },
-  //   {
-  //     "name": "Gnana Prakasam",
-  //     "series": [
-  //       {
-  //         "name": "2016",
-  //         "value": "4000"
-  //       },
-  //       {
-  //         "name": "2017",
-  //         "value": "4500"
-  //       },
-  //       {
-  //         "name": "2018",
-  //         "value": "10000"
-  //       },
-  //       {
-  //         "name": "2019",
-  //         "value": "15000"
-  //       }
-  //     ],
-  //   },
-  //   {
-  //     "name": "Kumaresan",
-  //     "series": [
-  //       {
-  //         "name": "2016",
-  //         "value": "5000"
-  //       },
-  //       {
-  //         "name": "2017",
-  //         "value": "8000"
-  //       },
-  //       {
-  //         "name": "2018",
-  //         "value": "15000"
-  //       },
-  //       {
-  //         "name": "2019",
-  //         "value": "35000"
-  //       }
-  //     ],
-  //   }
-  
-  // ];
+
+  multi = [];
+
   // data pie
   single = [
     {
@@ -137,7 +73,16 @@ export class StatisticComponent implements OnInit {
   ngOnInit() {
     this.isLoaded = false;
     this.GetGeneralStatistic(sessionStorage.getItem("AccountId"));
-    // this.getHistory(5);
+    this.selectedItems = [];
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true,
+    };
   }
 
   constructor(
@@ -151,14 +96,34 @@ export class StatisticComponent implements OnInit {
 
   GetGeneralStatistic(id) {
     this.loading = true
-    this.multi = [];
     this.series = [];
     let test: any;
     this.historyApi.GetGeneralStatistic(id).subscribe(
       (data) => {
         this.historyData = data['items'];
-        
-        console.log(this.historyData);
+        this.multi= [];
+        this.historyData.forEach(element => {
+          let itemMulti = {
+            name : element.name,
+            series : [
+              {
+                name :"employees did the test ",
+                value: element.numberOfFinishedTest
+              },
+              {
+                name: "employees didn't the test.",
+                value: element.totalTest - element.numberOfFinishedTest
+              }
+            ]
+          };
+          this.multi.push(itemMulti);
+          let itemDropdown = {
+            id : element.configId,
+            text : element.name,
+          };
+          this.dropdownList.push(itemDropdown);
+        });
+        console.log(this.dropdownList);
         this.isLoaded = true;
         this.loading = false;
       }
@@ -171,4 +136,16 @@ export class StatisticComponent implements OnInit {
     }).catch((error) => {
     });
   }
+
+  getDataStatistic(value){
+    console.log(value);
+  }
+
+  onSelectAll(value){
+    console.log(value);
+  }
+
+  dropdownList = [];
+  selectedItems = [];
+  dropdownSettings = {};
 }

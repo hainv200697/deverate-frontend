@@ -30,7 +30,8 @@ export class ResultComponent implements OnInit {
   catalogue: any;
   catalogueTable: any;
   catalogueOverpoint: any;
-  datasource: {}
+  datasource: {};
+  isLogin;
 
   constructor(private rankApi: RankApiService,
     private statisticApi: StatisticApiService,
@@ -41,6 +42,7 @@ export class ResultComponent implements OnInit {
     this.getAllRank(true);
     var testId = this.route.snapshot.paramMap.get('testId');
     this.getStatistic(Number(testId), 1);
+    this.isLogin = sessionStorage.getItem('isLoggedin');
   }
   getAllRank(status: boolean) {
     this.loading = true;

@@ -11,12 +11,24 @@
 
 
     <div class="row col-md-12 d-flex justify-content-center">
-        <b>
-            <h2 class="page-header ">
-                RESULT
-            </h2>
-        </b>
+        <div class="col-md-6">
+            <b>
+                <h2 class="page-header ">
+                    RESULT
+                </h2>
+            </b>
+        </div>
+        <div class="d-flex justify-content-end col-md-6">
+            <!-- <select (change)="getDataStatistic($event.target.value)">
+                <option [ngValue]="5">5</option>
+                <option [ngValue]="10">10</option>
+            </select> -->
+            <ng-multiselect-dropdown [placeholder]="'Select Period'" [data]="dropdownList" (onSelect)="getDataStatistic($event)" (onSelectAll)="onSelectAll($event)"
+                [(ngModel)]="selectedItems" [settings]="dropdownSettings" *ngIf="isLoaded" >
+            </ng-multiselect-dropdown>
+        </div>
     </div>
+
 
     <!-- <div class=" col col-md-6">
         <div class="card mb-5">
@@ -50,15 +62,16 @@
         </div>
     </div> -->
 
-    <div class="col col-md-6">
+    <div class="col col-md-6 mt-3">
         <div class="card mb-5">
             <div class="card-header">
                 Vertical chart
             </div>
             <div class="card-body">
-                <ngx-charts-line-chart [view]="[600, 450]" [scheme]="colorScheme" [results]="historyData" [gradient]="gradient"
-                    [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
-                    [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel">
+                <ngx-charts-line-chart [view]="[650, 450]" [scheme]="colorScheme" [results]="historyData"
+                    [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+                    [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+                    [yAxisLabel]="yAxisLabel">
                 </ngx-charts-line-chart>
                 <!-- <ngx-charts-bar-vertical-stacked [view]="[600, 450]" [scheme]="colorScheme" [results]="historyData"
                     [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
@@ -69,13 +82,17 @@
         </div>
     </div>
 
-    <div class="col col-md-6">
+    <div class="col col-md-6 mt-3">
         <div class="card mb-5">
             <div class="card-header">
                 Vertical chart
             </div>
             <div class="card-body">
-
+                <ngx-charts-bar-vertical-stacked [view]="[650, 450]" [scheme]="colorScheme" [results]="multi"
+                    [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+                    [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+                    yAxisLabel='Employee' (select)="onSelect(modal,$event)">
+                </ngx-charts-bar-vertical-stacked>
             </div>
         </div>
     </div>

@@ -4,7 +4,7 @@
     </div>
 </ng-template>
 <nav class="navbar navbar-expand-lg fixed-top">
-    <a class="navbar-brand btn" [routerLink]="['/statistic']" [routerLinkActive]="['router-link-active']">
+    <a [hidden]="isLogin==null" class="navbar-brand btn" [routerLink]="['/catalogue']" [routerLinkActive]="['router-link-active']">
         <i class="fa fa-arrow-left"></i>
     </a>
     <a class="navbar-brand" href="#">STATISTIC</a>
