@@ -45,7 +45,7 @@ export class DefautTestComponent implements OnInit {
       .subscribe((res) => {
         let i = 0;
         this.test = true;
-        this.questionInTest = res;
+        this.questionInTest = res.questionInTest;
         this.questionInTest.forEach(element => {
           newAnswer = this.gblserv.shuffleAnswer(element['answers']);
           console.log(newAnswer);
