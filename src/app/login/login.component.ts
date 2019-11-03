@@ -31,26 +31,25 @@ export class LoginComponent implements OnInit {
         };
         this.authenticationService.login(account)
             .subscribe((res) => {
-                if (res.status.code === 200) {
-                    const userInfo = this.getDecodedAccessToken(res.data.data);
+                    const userInfo = this.getDecodedAccessToken(res.token);
                     if (userInfo != null) {
                         sessionStorage.setItem('isLoggedin', 'true');
-                        sessionStorage.setItem('Authorization', res.data.data);
-                        sessionStorage.setItem('Username', userInfo.Username);
-                        sessionStorage.setItem('AccountId', userInfo.AccountId);
-                        sessionStorage.setItem('Fullname', userInfo.Fullname);
+                        sessionStorage.setItem('Authorization', res.token);
+                        sessionStorage.setItem('Username', userInfo.username);
+                        sessionStorage.setItem('AccountId', userInfo.accountId);
+                        sessionStorage.setItem('Fullname', userInfo.fullName);
+                        sessionStorage.setItem('CompanyId', userInfo.companyId);
+                        sessionStorage.setItem('Role', userInfo.role);
                         this.router.navigate(['/catalogue']);
                     }
-                } else {
-                    alert(res.status.message);
-                }
+            }, (error) => {
+                alert(error);
             });
     }
 
     getDecodedAccessToken(token: string): any {
         try {
             const userInfo = jwt_decode(token);
-            console.log(userInfo);
             return userInfo;
         } catch (Error) {
             return null;
