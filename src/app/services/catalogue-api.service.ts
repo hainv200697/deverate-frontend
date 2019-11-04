@@ -18,7 +18,7 @@ export class CatalogueApiService {
         })
       }
     getAllCatalogue(status,id) {
-        const param = new HttpParams().set('status', status).set('id',id);
+        const param = new HttpParams().set('status', status).set('companyId',id);
         const API = 'api/Catalogue/GetAllCatalogue';
         return this.httpClient.get<any[]>(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
