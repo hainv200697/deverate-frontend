@@ -37,8 +37,6 @@ export class TestComponent implements OnInit {
     this.config = this.testService.getConfig(this.testId)
       .subscribe(res => {
         this.config = res;
-        console.log(res);
-        console.log(this.accountId);
         if(this.config.accountId != null && this.accountId == 0){
           this.router.navigate(['login']);
         } else if(this.config.accountId != null && this.accountId != this.config.accountId){
@@ -49,6 +47,10 @@ export class TestComponent implements OnInit {
           this.config.startDate = moment(this.config.startDate).format('LLLL');
           this.config.endDate = moment(this.config.endDate).format('LLLL');
           $('#openModalButton').click();
+        }
+        if(this.config.status == true){
+          this.closeModal();
+          this.router.navigate(['/result', this.testId]);
         }
       });
 
