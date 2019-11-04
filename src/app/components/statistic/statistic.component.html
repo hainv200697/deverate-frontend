@@ -19,65 +19,24 @@
             </b>
         </div>
         <div class="d-flex justify-content-end col-md-6">
-            <!-- <select (change)="getDataStatistic($event.target.value)">
-                <option [ngValue]="5">5</option>
-                <option [ngValue]="10">10</option>
-            </select> -->
-            <ng-multiselect-dropdown [placeholder]="'Select Period'" [data]="dropdownList" (onSelect)="getDataStatistic($event)" (onSelectAll)="onSelectAll($event)"
-                [(ngModel)]="selectedItems" [settings]="dropdownSettings" *ngIf="isLoaded" >
+            <ng-multiselect-dropdown [placeholder]="'Select Period'" [data]="dropdownList"
+                (onSelect)="getDataStatistic($event)" (onSelectAll)="onSelectAll($event)" [(ngModel)]="selectedItems"
+                [settings]="dropdownSettings" *ngIf="isLoaded">
             </ng-multiselect-dropdown>
         </div>
     </div>
 
-
-    <!-- <div class=" col col-md-6">
-        <div class="card mb-5">
-            <div class="card-header">
-                <b>Your Detail Point</b>
-            </div>
-            <div class="card-body">
-                <combo-chart-component [view]="view" [scheme]="comboBarScheme" [colorSchemeLine]="lineChartScheme"
-                    [results]="barChart" [animations]="animations" [lineChart]="lineChartSeries"
-                    [yAxisTickFormatting]="yLeftTickFormat" [yLeftAxisScaleFactor]="yLeftAxisScale"
-                    [yRightAxisScaleFactor]="yRightAxisScale" [yRightAxisTickFormatting]="yRightTickFormat"
-                    [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
-                    [legendTitle]="legendTitle" [legendPosition]="legendPosition" [showGridLines]="showGridLines"
-                    [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
-                    [showRightYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
-                    [yAxisLabelRight]="yAxisLabelRight" *ngIf="isLoaded">
-                </combo-chart-component>
-            </div>
-        </div>
-    </div>
-    <div class="col col-md-6">
-        <div class="card mb-5">
-            <div class="card-header">
-                Pie Chart
-            </div>
-            <div class="card-body">
-                <ngx-charts-pie-chart [view]="[550, 450]" [labels]="true" [results]="single" [legend]="true"
-                    [explodeSlices]="false" [labels]="true" [doughnut]="false">
-                </ngx-charts-pie-chart>
-            </div>
-        </div>
-    </div> -->
-
     <div class="col col-md-6 mt-3">
         <div class="card mb-5">
             <div class="card-header">
-                Vertical chart
+                Average Point Catalogue
             </div>
-            <div class="card-body">
-                <ngx-charts-line-chart [view]="[650, 450]" [scheme]="colorScheme" [results]="historyData"
+            <div class="card-body" *ngIf="isLoaded">
+                <ngx-charts-line-chart [view]="[650, 450]" [scheme]="colorScheme" [results]="averageCatalogue"
                     [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
                     [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
-                    [yAxisLabel]="yAxisLabel">
+                    [yAxisLabel]="yAxisLabel" [legendTitle]="legendTitle" *ngIf="isLoaded">
                 </ngx-charts-line-chart>
-                <!-- <ngx-charts-bar-vertical-stacked [view]="[600, 450]" [scheme]="colorScheme" [results]="historyData"
-                    [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
-                    [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
-                    [yAxisLabel]="yAxisLabel" (select)="onSelect(modal,$event)" *ngIf="isLoaded">
-                </ngx-charts-bar-vertical-stacked> -->
             </div>
         </div>
     </div>
@@ -85,17 +44,75 @@
     <div class="col col-md-6 mt-3">
         <div class="card mb-5">
             <div class="card-header">
-                Vertical chart
+                Statistic Employee do the test
             </div>
-            <div class="card-body">
-                <ngx-charts-bar-vertical-stacked [view]="[650, 450]" [scheme]="colorScheme" [results]="multi"
+            <div class="card-body" *ngIf="isLoaded">
+                <ngx-charts-bar-horizontal-normalized [view]="[650, 450]" [scheme]="colorScheme" [results]="multi"
                     [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
                     [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
-                    yAxisLabel='Employee' (select)="onSelect(modal,$event)">
-                </ngx-charts-bar-vertical-stacked>
+                    [yAxisLabel]="yAxisLabel" [legendTitle]="legendTitle" *ngIf="isLoaded">
+                </ngx-charts-bar-horizontal-normalized>
             </div>
         </div>
     </div>
+
+    <div class="col col-md-6 mt-3">
+        <div class="card mb-5">
+            <div class="card-header">
+                Statistic Rank
+            </div>
+            <div class="card-body" *ngIf="load">
+                <ngx-charts-bar-vertical-2d [view]="[650, 450]" [scheme]="colorScheme" [results]="dataGroupChart" [gradient]="gradient"
+                    [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+                    [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
+                    [legendTitle]="legendTitle" *ngIf="load">
+                </ngx-charts-bar-vertical-2d>
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-6 mt-3">
+        <div class="card mb-5">
+            <div class="card-header">
+                Statistic Rank
+            </div>
+            <div class="card-body">
+                <table class="table table-hover table-bordered customtable">
+                    <thead style="background-color: rgba(0, 0, 0, 0.03);">
+                        <tr class="col-md-12 row no-padding-no-margin">
+    
+                            <th class="text-center col-md-1 no-padding-no-margin">
+                                No.
+                            </th>
+                            <th class="text-center col-md-5">
+                                Employee
+    
+                            </th>
+                            <th class="text-center col-md-2">
+                                Point
+                            </th>
+                            <th class="text-center col-md-4">
+                                Rank
+                            </th>
+    
+    
+                        </tr>
+                    </thead>
+                    <tbody style="background-color: white;">
+                        <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px">
+    
+                            <td class="text-center col-md-1" style="font-size: 16px;">a</td>
+                            <td class="text-center col-md-5" style="font-size: 16px;">a</td>
+                            <td class="text-center col-md-2" style="font-size: 16px;">a</td>
+                            <td class="text-center col-md-4" style="font-size: 16px;">a</td>
+    
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <ng-template #modal let-modal>
         <div class="modal-header">
             <h4 class="modal-title modal-header" id="modal-basic-title">Chart</h4>

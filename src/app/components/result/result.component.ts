@@ -67,7 +67,7 @@ export class ResultComponent implements OnInit {
         this.pointRank = data['data']['data'].configurationRanks;
         
         for (var i = 0; i < this.catalogueInRanks.length; i++) {
-          this.catalogue = data['data']['data'].catalogueInRanks[i].catalogues
+          this.catalogue = this.catalogueInRanks[i].catalogues
           this.radarChartData[i+1].label = this.catalogueInRanks[i].rank
           for (var j = 0; j < this.catalogue.length; j++) {
               this.radarChartData[i+1].data.push(this.catalogue[j].thresholdPoint * 100);
