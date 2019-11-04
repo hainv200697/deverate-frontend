@@ -28,4 +28,8 @@ export class StatisticApiService {
         // return this.httpClient.get(this.URL + API + id);
     }
 
+    GetRankStatistic(id){
+        const API = 'api/Test/GetRankStatistic?accountId=';
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id);
+    }
 }

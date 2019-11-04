@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
@@ -10,24 +11,26 @@ import { StatisticApiService } from 'src/app/services/statistic-api.service';
   styleUrls: ['./statistic.component.scss']
 })
 export class StatisticComponent implements OnInit {
-
+  catalogConfig = [];
   view = [550, 450];
   showXAxis = true;
   showYAxis = true;
   gradient = false;
   xAxes: [{ stacked: true }];
   showLegend = true;
-  legendTitle = 'Legend';
+  legendTitle = 'Title';
   legendPosition = 'right';
-  showXAxisLabel = true;
+  showXAxisLabel = false;
   xAxisLabel = 'Test';
-  showYAxisLabel = true;
+  showYAxisLabel = false;
   yAxisLabel = 'Catalogue Point';
   showGridLines = true;
   innerPadding = '5%';
   animations: boolean = true;
   barChart: any[] = [];
   series: any[] = [];
+  isLoaded = false;
+  load = false;
   //vertical bar chart
   colorScheme = {
     domain: ['#9370DB', '#87CEFA', '#FA8072', '#FF7F50', '#90EE90', '#9370DB']
@@ -35,21 +38,9 @@ export class StatisticComponent implements OnInit {
 
   multi = [];
 
-  // data pie
-  single = [
-    {
-      "name": "Germany",
-      "value": 8940000
-    },
-    {
-      "name": "USA",
-      "value": 5000000
-    },
-    {
-      "name": "France",
-      "value": 7200000
-    }
-  ];
+  dataGroupChart: any;
+  data = [];
+
   lineChartSeries: any[] = [];
   lineChartScheme = {
     name: 'coolthree',
@@ -67,12 +58,14 @@ export class StatisticComponent implements OnInit {
 
   showRightYAxisLabel: boolean = true;
   yAxisLabelRight: string = 'Average Point';
-  isLoaded;
 
+  rankStattistic = [];
 
   ngOnInit() {
     this.isLoaded = false;
+    this.load = false;
     this.GetGeneralStatistic(sessionStorage.getItem("AccountId"));
+    this.GetRankStatistic(sessionStorage.getItem("AccountId"));
     this.selectedItems = [];
     this.dropdownSettings = {
       singleSelection: false,
@@ -92,23 +85,40 @@ export class StatisticComponent implements OnInit {
 
   public loading = false;
   historyData: any;
+  averageCatalogue = [];
   catalogues: [];
 
   GetGeneralStatistic(id) {
     this.loading = true
     this.series = [];
-    let test: any;
     this.historyApi.GetGeneralStatistic(id).subscribe(
       (data) => {
         this.historyData = data['items'];
-        this.multi= [];
+        this.multi = [];
+        var size = this.historyData[0].series.length;
+        for (let i = 0; i < size; i++) {
+          var series = [];
+          this.historyData.forEach(element => {
+            if (series.length < 5) {
+              series.push({ name: element.name, value: element.series[i].value * 100 });
+            }
+
+          });
+          var element = {
+            name: this.historyData[0].series[i].name,
+            series
+          }
+          this.averageCatalogue.push(element);
+        }
+        this.isLoaded = true;
+
         this.historyData.forEach(element => {
           let itemMulti = {
-            name : element.name,
-            series : [
+            name: element.name,
+            series: [
               {
-                name :"employees did the test ",
-                value: element.numberOfFinishedTest
+                name: "employees did the test ",
+                value: element.numberOfFinishedTest,
               },
               {
                 name: "employees didn't the test.",
@@ -116,15 +126,29 @@ export class StatisticComponent implements OnInit {
               }
             ]
           };
-          this.multi.push(itemMulti);
+          if (this.multi.length < 5) {
+            this.multi.push(itemMulti);
+          }
           let itemDropdown = {
-            id : element.configId,
-            text : element.name,
+            id: element.configId,
+            text: element.name,
           };
           this.dropdownList.push(itemDropdown);
         });
-        console.log(this.dropdownList);
         this.isLoaded = true;
+        this.loading = false;
+      }
+    );
+  }
+
+  GetRankStatistic(id) {
+    this.loading = true
+    this.historyApi.GetRankStatistic(id).subscribe(
+      (data) => {
+        this.dataGroupChart = data;
+
+        console.log(this.dataGroupChart)
+        this.load = true;
         this.loading = false;
       }
     );
@@ -137,11 +161,11 @@ export class StatisticComponent implements OnInit {
     });
   }
 
-  getDataStatistic(value){
+  getDataStatistic(value) {
     console.log(value);
   }
 
-  onSelectAll(value){
+  onSelectAll(value) {
     console.log(value);
   }
 

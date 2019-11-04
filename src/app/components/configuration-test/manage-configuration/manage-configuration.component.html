@@ -288,6 +288,12 @@
         </div>
     </div>
     <div class="modal-footer">
+        <label>Sample Config</label>
+        <select (change)="onChangeSampleConfig($event.target.value)">
+            <option>none</option>
+            <option [ngValue]="1">1</option>
+            <option [ngValue]="2">2</option>
+        </select>
         <button class="btn btn-secondary back" (click)="back()" [hidden]="index == 1 ">Back</button>
         <button (click)="next()" class="btn btn-primary" [hidden]="index == 3">Next</button>
         <button class="btn btn-success save" (click)="Create()" [hidden]="index ==1 || index == 2">Create</button>
@@ -600,8 +606,7 @@
                 </div>
             </div>
 
-
-            <table [svData]="Configurations" #sv="svDataTable" svSortBy="Name" svSortOrder="asc"
+            <table [svData]="Configurations|CompanyFilterPipe:searchText" #sv="svDataTable" svSortBy="Name" svSortOrder="asc"
                 class="table  table-hover customtable">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin">

@@ -370,6 +370,7 @@ export class ManageConfigurationComponent implements OnInit {
         Swal.fire('Success', 'The configuration has been created', 'success');
         });
       }
+    }).catch((error) => {
     });
   }
 
@@ -392,6 +393,7 @@ export class ManageConfigurationComponent implements OnInit {
         Swal.fire('Success', 'The configuration has been updated', 'success');
         });
       }
+    }).catch((error) => {
     });
 
   }
@@ -421,6 +423,7 @@ export class ManageConfigurationComponent implements OnInit {
           this.updateStatus = [];
           this.closeModal();
         }
+      }).catch((error) => {
       });
     } else {
       Swal.fire({
@@ -445,6 +448,7 @@ export class ManageConfigurationComponent implements OnInit {
           this.updateStatus = [];
           this.closeModal();
         }
+      }).catch((error) => {
       });
     }
   }
@@ -513,6 +517,7 @@ export class ManageConfigurationComponent implements OnInit {
         
       } else if (result.dismiss === Swal.DismissReason.cancel) {
       }
+    }).catch((error) => {
     });
   }
 
@@ -526,6 +531,57 @@ export class ManageConfigurationComponent implements OnInit {
       if (this.ListRank[i].selected == true) {
         this.selectRank.push(this.ListRank[i])
       }
+    }
+  }
+
+  onChangeSampleConfig(value){
+    if(value == "none"){
+      this.inputConfiguration['type'] = true;
+      this.inputConfiguration['title'] = "";
+      this.inputConfiguration['totalQuestion'] = 0;
+      this.inputConfiguration['duration'] = 15;
+      this.selectedItems = [];
+      this.ListRank[0].weightPoint = 0;
+      this.ListRank[1].weightPoint = 0;
+      this.ListRank[2].weightPoint = 0;
+      $('#1_3').val(Number(16));
+    $('#1_2').val(16);
+    $('#1_1').val(16);
+    }
+    else if(value == 1){
+      this.inputConfiguration['type'] = true;
+      this.inputConfiguration['title'] = "test developer";
+      this.inputConfiguration['totalQuestion'] = 30;
+      this.inputConfiguration['duration'] = 20;
+      this.selectedItems = [
+        {"catalogueId":1,"name":"Software Development Methods", "weightPoint" : 40},
+        {"catalogueId":2,"name":"Software Requirement Analysis", "weightPoint" : 60},
+    ];
+    this.ListRank[0].weightPoint = 70;
+    this.ListRank[1].weightPoint = 60;
+    this.ListRank[2].weightPoint = 50;
+    $('#1_3').val(Number(16));
+    $('#1_2').val(16);
+    $('#1_1').val(16);
+    console.log($('#1_3').val())
+    }
+    else if(value == 2){
+      this.inputConfiguration['type'] = true;
+      this.inputConfiguration['title'] = "test manager";
+      this.inputConfiguration['totalQuestion'] = 40;
+      this.inputConfiguration['duration'] = 25;
+      this.selectedItems = [
+        {"catalogueId":1,"name":"Software Development Methods", "weightPoint" : 30},
+        {"catalogueId":2,"name":"Software Requirement Analysis", "weightPoint" : 30},
+        {"catalogueId":3,"name":"Software Design Methods", "weightPoint" : 20},
+        {"catalogueId":4,"name":"Software Programming Methods", "weightPoint" : 20},
+    ];
+    this.ListRank[0].weightPoint = 80;
+    this.ListRank[1].weightPoint = 60;
+    this.ListRank[2].weightPoint = 50;
+    $("#1_3").val(16);
+    $('#1_2').val(16);
+    $('#1_1').val(16);
     }
   }
 
