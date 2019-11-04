@@ -8,7 +8,8 @@ import { InsertQuestionRoutingModule } from './insert-question-routing.module';
 import {TooltipModule} from "ngx-tooltip";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableModule } from 'ng-angular8-datatable';
-import {InsertQuestionFilterPipe} from './insert-question-filter.pipe'
+import {InsertQuestionFilterPipe} from './insert-question-filter.pipe';
+import { NgxLoadingModule } from 'ngx-loading';
 @NgModule({
   imports: [
     CommonModule,
@@ -19,6 +20,7 @@ import {InsertQuestionFilterPipe} from './insert-question-filter.pipe'
     ReactiveFormsModule,
     InsertQuestionRoutingModule,
     PageHeaderModule,
+    NgxLoadingModule,
     TooltipModule
   ],
   declarations: [InsertQuestionComponent,InsertQuestionFilterPipe]

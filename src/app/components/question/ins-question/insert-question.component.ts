@@ -72,7 +72,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     updAnswer = [];
     anwserDel = [];
     allQuestions = [];
-    
+    public loading = false;
     // Import excel file
     changeIns(key) {
         this.create = key;
@@ -423,10 +423,10 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     clickButtonChangeStatus(status: boolean) {
         Swal.fire({
             title: 'Are you sure?',
-            text: 'This catalogue will be delete!',
+            text: 'This catalogue will be change!',
             type: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
+            confirmButtonText: 'Yes, Change it!',
             cancelButtonText: 'No, keep it'
         }).then((result) => {
             if (result.value) {
@@ -437,11 +437,12 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 this.questionService.removeQuestion(this.updateStatus).subscribe(
                     (results) => {
                         this.getQuestionById(this.iconIsActive);
+                        this.toastr.success("Changed success");
                     }
                 );
 
                 Swal.fire(
-                    'Deleted',
+                    'Changed',
                     '',
                     'success'
                 );
@@ -511,6 +512,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.questionService.updateQuestion(this.updQuestion).subscribe(
             (results) => {
                 this.getQuestionById(this.iconIsActive);
+                this.toastr.success(results['message']);
             }
         );
     }
@@ -519,10 +521,11 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
     // Get all question
     getQuestionById(status) {
+        this.loading = true;
         this.iconIsActive = status;
         this.questionService.getQuestion(this.id,this.companyId,this.iconIsActive).subscribe(
             (data: any) => {
-                console.log(data);
+                this.loading = false;
                 this.allQuestions = data;
                 if(this.allQuestions.length != 0){
                     this.insQuestion['catalogueName'] = this.allQuestions[0]['catalogueName'];

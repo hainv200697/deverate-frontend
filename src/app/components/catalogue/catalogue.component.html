@@ -35,8 +35,9 @@
                             data-toggle="button">
                             <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
                         </button>
-                        <button [hidden]="iconIsActive==true" (click)="clickButtonChangeStatus(true);"
-                            class="btn btn-lg btn-success" style="padding-left: 24px;">
+                        <button [hidden]="iconIsActive==true" style="margin-right: 10px;"
+                            (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success"
+                            data-toggle="button">
                             <i class="fa fa-check" tooltip="{{'Active' | translate}}" placement="top"></i>
                         </button>
                         <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
