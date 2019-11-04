@@ -84,14 +84,16 @@
                             <th class="text-center col-md-1 no-padding-no-margin">
                                 No.
                             </th>
-                            <th class="text-center col-md-7">
+                            <th class="text-center col-md-6">
                                 Employee
     
                             </th>
-                            <th class="text-center col-md-4">
+                            <th class="text-center col-md-2">
                                 Point
                             </th>
-    
+                            <th class="text-center col-md-3">
+                                Date
+                            </th>
     
                         </tr>
                     </thead>
@@ -99,8 +101,9 @@
                         <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px" *ngFor="let data of dataEmployeeOverPoint; let i = index">
     
                             <td class="text-center col-md-1" style="font-size: 16px;">{{i+1}}</td>
-                            <td class="text-center col-md-7" style="font-size: 16px;">{{data.username}}</td>
-                            <td class="text-center col-md-4" style="font-size: 16px;">{{data.overallPoint}}</td>
+                            <td class="text-center col-md-6" style="font-size: 16px;">{{data.username}}</td>
+                            <td class="text-center col-md-2" style="font-size: 16px;">{{data.overallPoint *100}}</td>
+                            <td class="text-center col-md-3" style="font-size: 16px;">{{data.configCreateDate.split('T')[0]}}</td>
                         </tr>
                     </tbody>
                 </table>
