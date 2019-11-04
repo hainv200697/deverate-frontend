@@ -6,7 +6,7 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class EmployeeApiService {
-    // URL = 'https://localhost:5001/';
+    // URL = 'http://localhost:9000/';
     URL = AppSettings.BASEURL;
     constructor(
         private httpClient: HttpClient,
@@ -20,7 +20,7 @@ export class EmployeeApiService {
 
     postCreateEmployee(employee) {
         const API = 'api/Employee/CreateEmployee';
-        return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST+ API, employee);
+        return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employee);
     }
 
     postCreateEmployeeByExcel(employees) {
