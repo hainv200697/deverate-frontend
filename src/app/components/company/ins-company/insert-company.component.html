@@ -203,12 +203,12 @@
                             <sv-default-sorter by="Name">Company
                             </sv-default-sorter>
                         </th>
-                        <th class="text-center col-md-3" scope="col">
+                        <th class="text-center col-md-2" scope="col">
                             <sv-default-sorter by="ManagerName">Manager
                             </sv-default-sorter>
                         </th>
                         <th class="text-center col-md-2" scope="col">Phone</th>
-                        <th class="text-center col-md-1" scope="col">
+                        <th class="text-center col-md-2" scope="col">
                             <sv-default-sorter by="Create_At">Creat At
                             </sv-default-sorter>
                         </th>
@@ -233,9 +233,9 @@
                         </td>
                         <td class="text-center col-md-1">{{i+1}}</td>
                         <td class="text-center col-md-2">{{c.name}}</td>
-                        <td class="text-center col-md-3">{{c.managerName}}</td>
+                        <td class="text-center col-md-2">{{c.managerName}}</td>
                         <td class="text-center col-md-2">{{c.phone}}</td>
-                        <td class="text-center col-md-1">{{c.create_At}}</td>
+                        <td class="text-center col-md-2">{{c.create_At.split('T')[0]}}</td>
                         <td class="text-center col-md-1" [hidden]="c.isActive==true">
                             <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
                         </td>

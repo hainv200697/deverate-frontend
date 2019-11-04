@@ -32,4 +32,9 @@ export class StatisticApiService {
         const API = 'api/Test/GetRankStatistic?accountId=';
         return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id);
     }
+
+    GetOverallPointStatistic(id){
+        const API = 'api/Test/GetOverallPointStatistic?companyId=';
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id);
+    }
 }

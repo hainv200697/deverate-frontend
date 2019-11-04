@@ -76,7 +76,7 @@
             <div class="card-header">
                 Statistic Rank
             </div>
-            <div class="card-body">
+            <div class="card-body" style="height: 490px; overflow: auto;">
                 <table class="table table-hover table-bordered customtable">
                     <thead style="background-color: rgba(0, 0, 0, 0.03);">
                         <tr class="col-md-12 row no-padding-no-margin">
@@ -84,28 +84,23 @@
                             <th class="text-center col-md-1 no-padding-no-margin">
                                 No.
                             </th>
-                            <th class="text-center col-md-5">
+                            <th class="text-center col-md-7">
                                 Employee
     
                             </th>
-                            <th class="text-center col-md-2">
-                                Point
-                            </th>
                             <th class="text-center col-md-4">
-                                Rank
+                                Point
                             </th>
     
     
                         </tr>
                     </thead>
                     <tbody style="background-color: white;">
-                        <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px">
+                        <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px" *ngFor="let data of dataEmployeeOverPoint; let i = index">
     
-                            <td class="text-center col-md-1" style="font-size: 16px;">a</td>
-                            <td class="text-center col-md-5" style="font-size: 16px;">a</td>
-                            <td class="text-center col-md-2" style="font-size: 16px;">a</td>
-                            <td class="text-center col-md-4" style="font-size: 16px;">a</td>
-    
+                            <td class="text-center col-md-1" style="font-size: 16px;">{{i+1}}</td>
+                            <td class="text-center col-md-7" style="font-size: 16px;">{{data.username}}</td>
+                            <td class="text-center col-md-4" style="font-size: 16px;">{{data.overallPoint}}</td>
                         </tr>
                     </tbody>
                 </table>
