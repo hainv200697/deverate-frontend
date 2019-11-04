@@ -30,6 +30,7 @@ export class CatalogueComponent implements OnInit {
     insCatalogue = {};
     updCatalogue = {};
     updateStatus = [];
+    companyId = Number(sessionStorage.getItem('CompanyId'));
     ngOnInit() {
         this.getAllCatalogue(true);
     }
@@ -67,12 +68,10 @@ export class CatalogueComponent implements OnInit {
     getAllCatalogue(status) {
         this.iconIsActive = status;
         this.loading = true;
-        console.log(this.iconIsActive);
-        this.catelogueService.getAllCatalogue(this.iconIsActive).subscribe(
+        this.catelogueService.getAllCatalogue(this.iconIsActive,this.companyId).subscribe(
             (data :any[]) => {
                 this.loading = false;
                 this.catalogueList = data;
-                console.log(this.catalogueList);
             }
         );
     }
@@ -89,14 +88,13 @@ export class CatalogueComponent implements OnInit {
 
     // Insert catalogue
     insertCatalogueSubmit() {
-        console.log(this.insCatalogue);
         this.insCata();
         this.closeModal();
         this.getAllCatalogue(this.iconIsActive);
     }
 
     insCata() {
-        this.insCatalogue['IsActive'] = true;
+        this.insCatalogue['companyId'] = this.companyId;
         this.loading = true;
         this.catelogueService.insertCatalogue(this.insCatalogue).subscribe(
             (results) => {
@@ -110,7 +108,9 @@ export class CatalogueComponent implements OnInit {
     selectAll() {
         this.updateStatus = [];
         for (let i = 0; i < this.catalogueList.length; i++) {
-            this.catalogueList[i].selected = this.selectedAll;
+            if(this.catalogueList[i].type){
+                this.catalogueList[i].selected = this.selectedAll;
+            }
             this.updateStatus.push(this.catalogueList[i]);
         }
     }
@@ -148,23 +148,24 @@ export class CatalogueComponent implements OnInit {
     clickButtonChangeStatus(status: boolean) {
         Swal.fire({
             title: 'Are you sure?',
-            text: 'This catalogue will be delete!',
+            text: 'This status will be change!',
             type: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
+            confirmButtonText: 'Yes, change it!',
             cancelButtonText: 'No, keep it'
         }).then((result) => {
             if (result.value) {
                 for (let i = 0; i < this.updateStatus.length; i++) {
                     this.updateStatus[i].IsActive = status;
+                    this.updateStatus[i].companyId = this.companyId;
                 }
                 this.catelogueService.removeCatalogue(this.updateStatus).subscribe(data => {
                     this.getAllCatalogue(this.iconIsActive);
                     this.closeModal();
-                    Swal.fire('Success', 'The company has been deleted', 'success');
+                    Swal.fire('Success', 'The company has been change', 'success');
                 });;
             Swal.fire(
-              'Deleted',
+              'change',
               '',
               'success'
             )

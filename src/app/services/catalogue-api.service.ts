@@ -6,7 +6,7 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class CatalogueApiService {
-    // URL = 'https://localhost:5001/';
+    // URL = 'http://localhost:9000/';
     URL = AppSettings.BASEURL;
     constructor(
         private httpClient: HttpClient,
@@ -17,8 +17,8 @@ export class CatalogueApiService {
           'Content-Type': 'application/json'
         })
       }
-    getAllCatalogue(status) {
-        const param = new HttpParams().set('status', status)
+    getAllCatalogue(status,id) {
+        const param = new HttpParams().set('status', status).set('companyId',id);
         const API = 'api/Catalogue/GetAllCatalogue';
         return this.httpClient.get<any[]>(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }

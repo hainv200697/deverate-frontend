@@ -63,11 +63,14 @@
                         <th class="col-md-3 text-center" scope="col">
                             <sv-default-sorter by='Name'>Catalog</sv-default-sorter>
                         </th>
-                        <th class="col-md-4 text-center" scope="col">
+                        <th class="col-md-3 text-center" scope="col">
                             <sv-default-sorter by='Description'>Description</sv-default-sorter>
                         </th>
                         <th class="col-md-1 text-center" scope="col">
                             <sv-default-sorter by='quescount'>Question</sv-default-sorter>
+                        </th>
+                        <th class="col-md-1 text-center" scope="col">
+                            <sv-default-sorter by='quescount'>Type</sv-default-sorter>
                         </th>
                         <th class="col-md-1 text-center" scope="col">Status
                             <div ngbDropdown class="d-inline-block dropdown">
@@ -85,13 +88,15 @@
                     <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data">
                         <td class="text-center col-md-1">
                             <label>
-                                <input type="checkbox" value="" [(ngModel)]="item.selected" class="btn"
+                                <input [disabled]="!item.type" type="checkbox" value="" [(ngModel)]="item.selected" class="btn"
                                     (change)="checkIfAllSelected();">
                             </label>
                         </td>
                         <td class="col-md-3 text-left">{{ item.name }}</td>
-                        <td class="col-md-4 text-left">{{ item.description }}</td>
+                        <td class="col-md-3 text-left">{{ item.description }}</td>
                         <td class="col-md-1 text-center">{{ item.quescount }}</td>
+                        <td [hidden]="!item.type" class="col-md-1 text-center">Company</td>
+                        <td [hidden]="item.type" class="col-md-1 text-center">Default</td>
                         <td class="text-center col-md-1" [hidden]="item.isActive==true">
                             <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
                         </td>
