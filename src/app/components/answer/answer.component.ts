@@ -17,6 +17,7 @@ export class AnswerComponent implements OnInit {
         private toastr: ToastrService,
     ) { }
     public loading = false;
+    searchText ='';
     iconIsActive=true;
     selectedAll: any;
     answerList =[];

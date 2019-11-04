@@ -50,7 +50,7 @@
             </div>
         </div>
 
-        <table class="table  table-hover customtable" [svData]="answerList" #sv="svDataTable" [svRowsOnPage]="5"
+        <table class="table  table-hover customtable" [svData]="answerList | AnswerFilterPipe:searchText" #sv="svDataTable" [svRowsOnPage]="5"
             svSortBy="name" svSortOrder="asc">
             <thead>
                 <tr class="col-md-12 row no-padding-no-margin">
@@ -83,7 +83,7 @@
                                 (change)="checkIfAllSelected();">
                         </label>
                     </td>
-                    <td class="col-md-3 text-center">{{ item.answer }}</td>
+                    <td class="col-md-4 text-center">{{ item.answer }}</td>
                     <td class="col-md-4 text-center">{{ item.point }}</td>
                     <td class="text-center col-md-1" [hidden]="item.isActive==true">
                         <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
