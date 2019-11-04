@@ -60,12 +60,15 @@ export class StatisticComponent implements OnInit {
   yAxisLabelRight: string = 'Average Point';
 
   rankStattistic = [];
+  dataEmployeeOverPoint: any;
 
+  companyId = Number(sessionStorage.getItem('CompanyId'));
   ngOnInit() {
     this.isLoaded = false;
     this.load = false;
     this.GetGeneralStatistic(sessionStorage.getItem("AccountId"));
     this.GetRankStatistic(sessionStorage.getItem("AccountId"));
+    this.GetOverallPointStatistic(this.companyId);
     this.selectedItems = [];
     this.dropdownSettings = {
       singleSelection: false,
@@ -146,9 +149,18 @@ export class StatisticComponent implements OnInit {
     this.historyApi.GetRankStatistic(id).subscribe(
       (data) => {
         this.dataGroupChart = data;
-
-        console.log(this.dataGroupChart)
         this.load = true;
+        this.loading = false;
+      }
+    );
+  }
+
+  GetOverallPointStatistic(id){
+    this.loading = true
+    this.historyApi.GetOverallPointStatistic(id).subscribe(
+      (data) => {
+        this.dataEmployeeOverPoint = data;
+        console.log(this.dataEmployeeOverPoint)
         this.loading = false;
       }
     );

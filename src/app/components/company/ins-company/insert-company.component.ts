@@ -68,7 +68,7 @@ export class InsertCompanyComponent implements OnInit {
 
   open(content) {
     this.modalService.open(content, { size: 'lg', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-
+    }).catch((error) => {
     });
   }
 
@@ -86,7 +86,8 @@ export class InsertCompanyComponent implements OnInit {
 
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
 
-    });
+    }).catch((error) => {
+    });;
   }
 
   selectAll() {
@@ -123,13 +124,14 @@ export class InsertCompanyComponent implements OnInit {
             this.getCompanyIsActive(status);
             this.closeModal();
             Swal.fire('Success', 'The company has been deleted', 'success');
-          });;
+          });
         }
         else if (result.dismiss === Swal.DismissReason.cancel) {
           this.updateStatus = [];
           this.closeModal();
         }
-      })
+      }).catch((error) => {
+      });
     }
     else {
       Swal.fire({
@@ -153,7 +155,8 @@ export class InsertCompanyComponent implements OnInit {
           this.updateStatus = [];
           this.closeModal();
         }
-      })
+      }).catch((error) => {
+      });
     }
   }
 
@@ -184,7 +187,6 @@ export class InsertCompanyComponent implements OnInit {
       (data) => {
         this.loading = false;
         this.Companies = data['data']['data'];
-
       }
     );
   }
@@ -213,8 +215,6 @@ export class InsertCompanyComponent implements OnInit {
 
   Save() {
     if (this.validdate() == false) {
-      console.log(this.validdate())
-      console.log(this.inputCompany);
       return;
     }
     else {
@@ -233,7 +233,6 @@ export class InsertCompanyComponent implements OnInit {
       }).then((result) => {
         if (result.value) {
           this.loading = true;
-          console.log(inputCompanyData)
           this.companyApi.insertCompany(inputCompanyData).subscribe(data => {
             this.getCompanyIsActive(true);
             this.closeModal();
@@ -244,7 +243,8 @@ export class InsertCompanyComponent implements OnInit {
           this.updateStatus = [];
           this.closeModal();
         }
-      })
+      }).catch((error) => {
+      });
     }
   }
 
@@ -275,10 +275,21 @@ export class InsertCompanyComponent implements OnInit {
         this.updateStatus = [];
         this.closeModal();
       }
-    })
+    }).catch((error) => {
+    });
   }
 
   validdate() {
+    for (var i = 0; i < this.Companies.length; i++) {
+      if (this.Companies[i].name == this.inputCompany['name']) {
+        this.toast.error('Message', 'Company\'s name is exist');
+        return false;
+      }
+      else if(this.Companies[i].phone == this.inputCompany['phone']){
+        this.toast.error('Message', 'Company\'s phone is exist');
+        return false;
+      }
+    }
     if (this.inputCompany['name'] == "") {
       this.toast.error('Message', 'Please input company name');
       return false;

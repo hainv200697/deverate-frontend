@@ -119,6 +119,7 @@ export class ManageConfigurationComponent implements OnInit {
     this.pageSize = test;
   }
 
+    companyId = Number(sessionStorage.getItem('CompanyId'));
 
   ngOnInit() {
     this.getAllRank(true);
@@ -258,7 +259,7 @@ export class ManageConfigurationComponent implements OnInit {
 
   getAllCatalogue() {
     let tmp: any;
-    this.catalogueApi.getAllCatalogue(true).subscribe(
+    this.catalogueApi.getAllCatalogue(true,this.companyId).subscribe(
       (data) => {
         tmp = data;
         for (let i = 0; i < tmp.length; i++) {
