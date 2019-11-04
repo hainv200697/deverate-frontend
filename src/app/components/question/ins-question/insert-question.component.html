@@ -300,7 +300,7 @@
                     </div>
                 </div>
             </div>
-            <table style="margin-top: 20px;" class="table  table-hover customtable" [svData]="allQuestions"
+            <table style="margin-top: 20px;" class="table  table-hover customtable" [svData]="allQuestions | InsertQuestionFilterPipe:searchText"
                 #sv="svDataTable" [svRowsOnPage]="5" svSortBy="name" svSortOrder="asc">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin">

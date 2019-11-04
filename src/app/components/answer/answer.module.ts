@@ -10,6 +10,7 @@ import { PageHeaderModule } from 'src/app/shared';
 import { AnswerRoutingModule } from './answer-routing.module';
 import { TooltipModule } from 'ngx-tooltip';
 import { NgxLoadingModule } from 'ngx-loading';
+import { AnswerFilterPipe } from './answer-filter.pipe';
 
 @NgModule({
     imports: [
@@ -25,7 +26,7 @@ import { NgxLoadingModule } from 'ngx-loading';
     NgxLoadingModule
     ],
     declarations: [
-        AnswerComponent
+        AnswerComponent,AnswerFilterPipe
       ]
 })
 export class AnswerModule {}
