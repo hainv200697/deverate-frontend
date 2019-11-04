@@ -16,8 +16,8 @@ export class QuestionApiService {
     };
     constructor(private httpClient: HttpClient) { }
     
-    getQuestion(id:any,status) {
-        let param= new HttpParams().set('id',id).set('status',status);
+    getQuestion(id:any,companyId,status) {
+        let param= new HttpParams().set('id',id).set('companyId',companyId).set('status',status);
         const API = 'api/Question/GetQuestionByCatalogue';
         return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API,{params :param} );
     }

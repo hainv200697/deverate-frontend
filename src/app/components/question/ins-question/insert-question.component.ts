@@ -37,6 +37,8 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     iconIsActive: boolean;
     // catalogue
     id: number = this.activeRoute.snapshot.params.id;
+    accountId = Number(sessionStorage.getItem('AccountId'))
+    companyId = Number(sessionStorage.getItem('CompanyId'));
     // excel param
     checkFile=true;
     searchText = '';
@@ -70,7 +72,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     updAnswer = [];
     anwserDel = [];
     allQuestions = [];
-
+    
     // Import excel file
     changeIns(key) {
         this.create = key;
@@ -117,7 +119,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 this.listAnswer = [];
                 questionObj.question1 = element['Question'];
                 questionObj.isActive = true;
-                questionObj.createBy = 1;
+                questionObj.createBy = this.accountId;
                 questionObj.catalogueId = this.id;
                 for (let i = 0; i <= 5; i++) {
                     const answerObj = new AnswerModel();
@@ -276,6 +278,9 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         return false;
     }
     ngOnInit() {
+        if(this.accountId == null){
+            this.router.navigate(['login']);
+        }
         this.insQuestion['Answer'] = [];
         this.mainForm();
         for (let i = 0; i <= 1; i++) {
@@ -372,7 +377,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.updQuestion['QuestionId'] = item['QuestionId'];
         this.updQuestion['question1'] = item['question1'];
         this.updQuestion['isActive'] = true;
-        this.updQuestion['createBy'] = 1;
+        this.updQuestion['createBy'] = this.accountId;
         console.log(this.updQuestion);
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
         const a = document.querySelector('#stepper1');
@@ -473,7 +478,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
     addQuestion() {
         this.insQuestion['isActive'] = true;
-        this.insQuestion['createBy'] = 1;
+        this.insQuestion['createBy'] = this.accountId;
         this.questionService.insertQuestion(this.insQuestion).subscribe(
             (results) => {
                 this.getQuestionById(this.iconIsActive);
@@ -515,13 +520,16 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     // Get all question
     getQuestionById(status) {
         this.iconIsActive = status;
-        this.questionService.getQuestion(this.id,this.iconIsActive).subscribe(
+        this.questionService.getQuestion(this.id,this.companyId,this.iconIsActive).subscribe(
             (data: any) => {
                 console.log(data);
                 this.allQuestions = data;
                 if(this.allQuestions.length != 0){
                     this.insQuestion['catalogueName'] = this.allQuestions[0]['catalogueName'];
                 }
+            },
+            (error : any)=>{
+                this.router.navigate(['**']);
             }
         );
     }
