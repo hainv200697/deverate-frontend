@@ -136,8 +136,6 @@ export class EmployeeComponent implements OnInit {
     async insertEmployeeSubmit(key) {
         if (key === 'excel') {
             await this.insertEmployeeExcel();
-            this.getEmployee(this.iconIsActive);
-            this.toastr.success("Create success");
         } else {
             if (!this.validdate) {
                 return;
