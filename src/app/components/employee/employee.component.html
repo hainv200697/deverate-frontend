@@ -14,7 +14,6 @@
             </div>
             <div class="modal-body">
                 <div class="create-file">
-                    <button class="btn btn-primary" (click)="changeIns(0)">Insert default</button>
                     <input type="file" style="display: inline-block;" (change)="incomingfile($event)"
                         placeholder="Upload file" accept=".xlsx">
                 </div>
@@ -84,6 +83,15 @@
                     </button>
                 </div>
                 <div class="row justify-content-end" style="margin-top: 20px;">
+                    <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
+                        (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger" data-toggle="button">
+                        <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
+                    </button>
+                    <button [hidden]="iconIsActive==true" style="margin-right: 10px;"
+                            (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success"
+                            data-toggle="button">
+                            <i class="fa fa-check" tooltip="{{'Active' | translate}}" placement="top"></i>
+                        </button>
                     <button style="margin-right: 10px;" (click)="openModalExcel(excel);" class="btn btn-lg btn-success "
                         data-toggle="button">
                         <i class="fa fa-file-excel-o"></i>
@@ -120,13 +128,13 @@
                         <sv-default-sorter by='joinDate'>JoinDate</sv-default-sorter>
                     </th>
                     <th class="col-md-1 text-center" scope="col">Status
-                        <!-- <div ngbDropdown class="d-inline-block dropdown">
+                        <div ngbDropdown class="d-inline-block dropdown">
                             <button class=" icon-btn" ngbDropdownToggle style="color: black"></button>
                             <div ngbDropdownMenu>
-                                <button class="dropdown-item" (click)="getAnswerById(true)">Active</button>
-                                <button class="dropdown-item" (click)="getAnswerById(false)">Disable</button>
+                                <button class="dropdown-item" (click)="getEmployee(true)">Active</button>
+                                <button class="dropdown-item" (click)="getEmployee(false)">Disable</button>
                             </div>
-                        </div> -->
+                        </div>
                     </th>
                 </tr>
             </thead>

@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
                         sessionStorage.setItem('Authorization', res.token);
                         sessionStorage.setItem('Username', userInfo.username);
                         sessionStorage.setItem('AccountId', userInfo.accountId);
-                        sessionStorage.setItem('Fullname', userInfo.fullName);
+                        sessionStorage.setItem('Fullname', userInfo.fullname);
                         sessionStorage.setItem('CompanyId', userInfo.companyId);
                         sessionStorage.setItem('Role', userInfo.role);
                         this.router.navigate(['/catalogue']);
