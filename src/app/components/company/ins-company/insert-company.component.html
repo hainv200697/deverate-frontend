@@ -151,7 +151,7 @@
                     <div class="row" style="margin-top: 20px;">
                         <div class="form-group input-group col-md-6 row" style="margin-left: 21px;">
                             <input class="col-md-10 no-padding-no-margin" type="search"
-                                placeholder="{{'Enter Company Name' | translate}}" [(ngModel)]="searchText"
+                                placeholder="{{'Enter data' | translate}}" [(ngModel)]="searchText"
                                 style="height: 38px;">
                             <div class="input-group-append col-md-2 no-padding-no-margin d-flex align-items-start">
                                 <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
@@ -191,7 +191,7 @@
                     <button class="dropdown-item" (click)="PageSize(50)">50</button>
                 </div>
             </div>
-            <table class="table  table-hover customtable" [svData]="Companies" #sv="svDataTable">
+            <table class="table  table-hover customtable" [svData]="Companies|CompanyFilterPipe:searchText" #sv="svDataTable">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin pt-3">
                         <th class="text-center col-md-1" scope="col"><input class="btn" type="checkbox" value=""

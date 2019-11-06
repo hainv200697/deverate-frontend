@@ -293,7 +293,8 @@ export class ManageConfigurationComponent implements OnInit {
     this.configAPi.getAllConfiguration(status, id).subscribe(
       (data) => {
         this.loading = false;
-        this.Configurations = data['data']['data'];
+        this.Configurations = data['data']['data']['configurations'];
+        console.log(this.Configurations)
       }
     );
   }
@@ -421,7 +422,7 @@ export class ManageConfigurationComponent implements OnInit {
             this.selectConfiguration[i].isActive = status;
           }
           this.configAPi.changeStatusConfiguration(this.selectConfiguration).subscribe(data => {
-            this.getConfigurationIsActive(status, this.companyId);
+            this.getConfigurationIsActive(true, this.companyId);
             this.closeModal();
             Swal.fire('Success', 'The configuration has been deleted', 'success');
           });
@@ -446,7 +447,7 @@ export class ManageConfigurationComponent implements OnInit {
             this.selectConfiguration[i].isActive = status;
           }
           this.configAPi.changeStatusConfiguration(this.selectConfiguration).subscribe(data => {
-            this.getConfigurationIsActive(status, this.companyId);
+            this.getConfigurationIsActive(true, this.companyId);
             this.closeModal();
             Swal.fire('Success', 'The configuration has been enabled', 'success');
           });
