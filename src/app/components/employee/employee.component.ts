@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import * as XLSX from 'ts-xlsx';
+import Stepper from 'bs-stepper';
 import { GloblaService } from 'src/assets/service/global.service';
 @Component({
     selector: 'app-employee',
@@ -31,7 +32,7 @@ export class EmployeeComponent implements OnInit {
     employeeList = [];
     insEmployee = {};
     employees = [];
-    updateStatus = [];
+    updateEmployee = [];
     ngOnInit() {
         this.getEmployee(this.iconIsActive);
     }
@@ -165,10 +166,10 @@ export class EmployeeComponent implements OnInit {
             results => {
                 console.log(results);
                 this.loading = false;
-                // if (results.status.code == 200) {
-                //     this.toastr.success(results.status.message);
+                if (results.status.code == 200) {
+                    this.toastr.success(results.status.message);
                     
-                // }
+                }
                 this.employees = [];
                 this.insEmployee = {};
                 this.getEmployee(this.iconIsActive);
@@ -195,16 +196,16 @@ clickButtonChangeStatus(status: boolean) {
         cancelButtonText: 'No, keep it'
     }).then((result) => {
         if (result.value) {
-            for (let i = 0; i < this.updateStatus.length; i++) {
-                this.updateStatus[i].IsActive = status;
+            for (let i = 0; i < this.updateEmployee.length; i++) {
+                this.updateEmployee[i].IsActive = status;
             }
-            this.employeeService.disableEmployee(this.updateStatus).subscribe(data => {
+            this.employeeService.disableEmployee(this.updateEmployee).subscribe(data => {
                 this.getEmployee(this.iconIsActive);
                 this.closeModal();
                 Swal.fire('Success', 'The company has been deleted', 'success');
             });;
       } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.updateStatus = [];
+        this.updateEmployee = [];
         Swal.fire(
           'Cancelled',
           '',
@@ -214,24 +215,52 @@ clickButtonChangeStatus(status: boolean) {
     })
 }
 
+// send pass
+resendmail() {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'Password will be send!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, send it!',
+        cancelButtonText: 'No, Do not send it'
+    }).then((result) => {
+        if (result.value) {
+            this.employeeService.resendpassword(this.updateEmployee).subscribe(data => {
+                this.getEmployee(this.iconIsActive);
+                this.closeModal();
+                console.log(data);
+                Swal.fire( {title:'Success',text: data.status.message,type:'success'});
+            },error=>{
+                console.log(error);
+                Swal.fire({title:'Cancelled',text: error.error,type:'error'});
+            }
+            
+            );;
+      } 
+    })
+}
+
     // select employee
     selectAll() {
-        this.updateStatus = [];
+        this.updateEmployee = [];
         for (let i = 0; i < this.employeeList.length; i++) {
             this.employeeList[i].selected = this.selectedAll;
-            this.updateStatus.push(this.employeeList[i]);
+            this.employeeList[i].companyId = this.companyId;
+            this.updateEmployee.push(this.employeeList[i]);
         }
     }
 
     checkIfAllSelected() {
-        this.updateStatus = [];
+        this.updateEmployee = [];
         this.selectedAll = this.employeeList.every(function (item: any) {
             return item.selected === true;
 
         });
         for (let i = 0; i < this.employeeList.length; i++) {
             if (this.employeeList[i].selected === true) {
-                this.updateStatus.push(this.employeeList[i]);
+                this.employeeList[i].companyId = this.companyId;
+                this.updateEmployee.push(this.employeeList[i]);
             }
         }
 

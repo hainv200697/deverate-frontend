@@ -27,4 +27,9 @@ export class EmployeeApiService {
         const API = 'api/Employee/RemoveEmployee';
         return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employees);
     }
+
+    resendpassword(employees){
+        const API = 'api/Employee/ResendPassword';
+        return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employees);
+    }
 }   
