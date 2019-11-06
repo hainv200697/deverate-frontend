@@ -22,8 +22,10 @@ export class EmployeeComponent implements OnInit {
     ) { }
     public loading = false;
     iconIsActive=true;
+    private stepper: Stepper;
     companyId = Number(sessionStorage.getItem('CompanyId'));
     // Excel
+    index = 1;
     checkFile = false;
     arrayBuffer: any;
     file: File;
@@ -35,6 +37,16 @@ export class EmployeeComponent implements OnInit {
     updateEmployee = [];
     ngOnInit() {
         this.getEmployee(this.iconIsActive);
+    }
+    async next(){
+        this.index = 2;
+        await this.formatExcel();
+        this.stepper.next();
+    }
+    back(){
+        this.index=1;
+        this.employees = [];
+        this.stepper.previous();
     }
     // Excel
     incomingfile(event) {
@@ -122,6 +134,11 @@ export class EmployeeComponent implements OnInit {
 
     openModalExcel(excel) {
         this.modalService.open(excel, { size: 'lg', windowClass: 'myCustomModalClass' });
+        const a = document.querySelector('#stepper1');
+        this.stepper = new Stepper(a, {
+            linear: false,
+            animation: true
+        });
     }
 
     // close modal
@@ -134,9 +151,9 @@ export class EmployeeComponent implements OnInit {
 
     // submit
     // insert submit
-    async insertEmployeeSubmit(key) {
+    insertEmployeeSubmit(key) {
         if (key === 'excel') {
-            await this.insertEmployeeExcel();
+            this.insertEmployeeExcel();
         } else {
             if (!this.validdate) {
                 return;
@@ -147,8 +164,7 @@ export class EmployeeComponent implements OnInit {
     }
 
 
-    async insertEmployeeExcel() {
-        await this.formatExcel();
+    insertEmployeeExcel() {
         this.insertEmployee();
         
     }
