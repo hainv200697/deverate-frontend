@@ -23,13 +23,15 @@ export class EmployeeApiService {
         return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employees);
     }
 
-    disableEmployee(employees){
+    disableEmployee(employees,status){
         const API = 'api/Employee/RemoveEmployee';
-        return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employees);
+        const param = new HttpParams().set('status', status);
+        return this.httpClient.put<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employees,{ params: param });
     }
 
-    resendpassword(employees){
+    resendpassword(employees, companyId){
         const API = 'api/Employee/ResendPassword';
-        return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employees);
+        const param = new HttpParams().set('companyId',companyId);
+        return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employees,{ params: param });
     }
 }   

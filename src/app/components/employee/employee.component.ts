@@ -35,6 +35,8 @@ export class EmployeeComponent implements OnInit {
     insEmployee = {};
     employees = [];
     updateEmployee = [];
+    listUser:String[] = [];
+    listId:number[] = [];
     ngOnInit() {
         this.getEmployee(this.iconIsActive);
     }
@@ -194,7 +196,17 @@ export class EmployeeComponent implements OnInit {
             (error)=>{
                 this.loading = false;
                 console.log(error); 
-                this.toastr.error(error.error);
+                let email = [];
+                let i = 0;
+                console.log(error.error);
+                error.error.forEach(element => {
+                    if(i < 4){
+                        email.push(element);
+                    }
+                    i++;
+                });
+                console.log(email);
+                this.toastr.error("Email "+email + " existed");
             }
         );
     }
@@ -212,10 +224,11 @@ clickButtonChangeStatus(status: boolean) {
         cancelButtonText: 'No, keep it'
     }).then((result) => {
         if (result.value) {
+            console.log(this.updateEmployee);
             for (let i = 0; i < this.updateEmployee.length; i++) {
-                this.updateEmployee[i].IsActive = status;
+                this.listId.push(this.updateEmployee[i].accountId)
             }
-            this.employeeService.disableEmployee(this.updateEmployee).subscribe(data => {
+            this.employeeService.disableEmployee(this.listId,status).subscribe(data => {
                 this.getEmployee(this.iconIsActive);
                 this.closeModal();
                 Swal.fire('Success', 'The company has been deleted', 'success');
@@ -242,14 +255,29 @@ resendmail() {
         cancelButtonText: 'No, Do not send it'
     }).then((result) => {
         if (result.value) {
-            this.employeeService.resendpassword(this.updateEmployee).subscribe(data => {
+            this.updateEmployee.forEach(element => {
+                this.listUser.push(element.username);
+            }); 
+            this.employeeService.resendpassword(this.listUser,this.companyId).subscribe(data => {
                 this.getEmployee(this.iconIsActive);
                 this.closeModal();
                 console.log(data);
                 Swal.fire( {title:'Success',text: data.status.message,type:'success'});
+                this.listUser = [];
             },error=>{
                 console.log(error);
-                Swal.fire({title:'Cancelled',text: error.error,type:'error'});
+                let account = [];
+                let i = 0;
+                console.log(error.error);
+                error.error.forEach(element => {
+                    if(i < 4){
+                        account.push(element);
+                    }
+                    i++;
+                });
+                Swal.fire({title:'Cancelled',
+                text: "Account "+ account +" not found",
+                type:'error'});
             }
             
             );;
