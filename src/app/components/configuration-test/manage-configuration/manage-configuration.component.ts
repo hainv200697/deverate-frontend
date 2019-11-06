@@ -1,3 +1,4 @@
+import { option1, option2, option0 } from './data';
 import { RankApiService } from './../../../services/rank-api.services';
 import { CatalogueApiService } from './../../../services/catalogue-api.service';
 import { ConfigurationApiService } from './../../../services/configuration-api.service';
@@ -70,7 +71,7 @@ export class ManageConfigurationComponent implements OnInit {
   Account = {};
   ListRank = [];
   a = {};
-  catalogueList: [];
+  catalogueList = [];
   inputConfiguration = {};
   inputManager = {};
 
@@ -99,6 +100,7 @@ export class ManageConfigurationComponent implements OnInit {
     primaryKey: 'catalogueId',
     maxHeight: 240,
     showCheckbox: true,
+    badgeShowLimit: 0,
   };
   dropdownSettingsDetail = {
     singleSelection: false,
@@ -119,18 +121,18 @@ export class ManageConfigurationComponent implements OnInit {
     this.pageSize = test;
   }
 
-    companyId = Number(sessionStorage.getItem('CompanyId'));
+  companyId = Number(sessionStorage.getItem('CompanyId'));
 
   ngOnInit() {
     this.getAllRank(true);
     this.getAllCatalogue();
-    this.getConfigurationIsActive(true);
+    this.getConfigurationIsActive(true, this.companyId);
   }
 
   onItemSelect(item: any) {
     this.selectedItemsUpdate = []
     this.inputConfiguration['totalQuestion'] += 5;
-    
+
     // var cir = {
     //   "configId" : this.updateConfig['ConfigId'],
     //   "catalogueId" : item.CatalogueId,
@@ -153,7 +155,7 @@ export class ManageConfigurationComponent implements OnInit {
   removeItem(item) {
 
     for (let i = 0; i < this.selectedItems.length; i++) {
-      if (this.selectedItems[i]['id'] === item['id']) {
+      if (this.selectedItems[i]['catalogueId'] == item['catalogueId']) {
         this.selectedItems.splice(i, 1);
       }
     }
@@ -202,30 +204,30 @@ export class ManageConfigurationComponent implements OnInit {
     this.index = this.index + 1;
     this.inputConfiguration['startDate'] = this.startDate;
     this.inputConfiguration['endDate'] = this.endDate;
-    if(this.index == 3){
+    if (this.index == 3) {
       this.catalogueInRank = [];
-      for(var i =0; i< this.ListRank.length; i++) {
+      for (var i = 0; i < this.ListRank.length; i++) {
         this.ListRank[i].catalogueInRank = [];
-        
+
         for (var j = 0; j < this.selectedItems.length; j++) {
-          var key = this.selectedItems[j].catalogueId +"_"+this.ListRank[i].rankId;
+          var key = this.selectedItems[j].catalogueId + "_" + this.ListRank[i].rankId;
           var cir = {
-            "catalogueId" : this.selectedItems[j].catalogueId,
-            "weightPoint":($('#'+key).val() * this.selectedItems[j]['weightPoint']) / 10000 ,
+            "catalogueId": this.selectedItems[j].catalogueId,
+            "weightPoint": ($('#' + key).val() * this.selectedItems[j]['weightPoint']) / 10000,
             "isActive": true
-          } 
+          }
           var cirShow = {
-            "name" : this.selectedItems[j].name,
-            "rank" : this.ListRank[i].name,
-            "weightPoint":$('#'+key).val(),
-          } 
+            "name": this.selectedItems[j].name,
+            "rank": this.ListRank[i].name,
+            "weightPoint": $('#' + key).val(),
+          }
           this.ListRank[i].catalogueInRank.push(cir);
           this.catalogueInRank.push(cirShow)
         }
       }
     }
-    
-    
+
+
   }
 
   nextDetail() {
@@ -259,17 +261,20 @@ export class ManageConfigurationComponent implements OnInit {
 
   getAllCatalogue() {
     let tmp: any;
-    this.catalogueApi.getAllCatalogue(true,this.companyId).subscribe(
+    this.catalogueApi.getAllCatalogue(true, this.companyId).subscribe(
       (data) => {
         tmp = data;
-        for (let i = 0; i < tmp.length; i++) {
+        for (let i = 0; i < data.length; i++) {
           if (tmp[i].quescount == 0) {
             tmp.splice(i, 1);
+            i--
           }
         }
+
+        console.log(tmp)
         this.catalogueList = tmp;
       }
-      
+
     );
   }
 
@@ -278,14 +283,14 @@ export class ManageConfigurationComponent implements OnInit {
     setTimeout(function () {
       refesh.classList.remove('spin-animation');
     }, 500);
-    this.getConfigurationIsActive(true);
+    this.getConfigurationIsActive(true, this.companyId);
   }
 
 
-  getConfigurationIsActive(status: boolean) {
+  getConfigurationIsActive(status: boolean, id) {
     this.loading = true;
     this.iconIsActive = status;
-    this.configAPi.getAllConfiguration(status).subscribe(
+    this.configAPi.getAllConfiguration(status, id).subscribe(
       (data) => {
         this.loading = false;
         this.Configurations = data['data']['data'];
@@ -335,15 +340,15 @@ export class ManageConfigurationComponent implements OnInit {
     }
   }
 
-  
+
   Create() {
-  
+
     this.loading = false;
     if (this.inputConfiguration['duration'] === '' || this.inputConfiguration['totalQuestion'] === '') {
       Swal.fire('Error', 'Something went wrong', 'error');
       return;
     }
-    
+
     Swal.fire({
       title: 'Are you sure?',
       text: 'The configuration will be create!',
@@ -354,10 +359,10 @@ export class ManageConfigurationComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.loading = true;
-        for(var i = 0; i < this.selectedItems.length; i++){
+        for (var i = 0; i < this.selectedItems.length; i++) {
           this.selectedItems[i].weightPoint /= 100
         }
-        for(var i = 0; i < this.ListRank.length; i++){
+        for (var i = 0; i < this.ListRank.length; i++) {
           this.ListRank[i].weightPoint /= 100
         }
         this.inputConfiguration['catalogueInConfigurations'] = this.selectedItems;
@@ -365,10 +370,10 @@ export class ManageConfigurationComponent implements OnInit {
         this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
         this.inputConfiguration['endDate'] = new Date(this.inputConfiguration['endDate']);
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
-          this.getConfigurationIsActive(true);
+          this.getConfigurationIsActive(true, this.companyId);
           this.closeModal();
           this.index = 1;
-        Swal.fire('Success', 'The configuration has been created', 'success');
+          Swal.fire('Success', 'The configuration has been created', 'success');
         });
       }
     }).catch((error) => {
@@ -388,10 +393,10 @@ export class ManageConfigurationComponent implements OnInit {
       if (result.value) {
         this.loading = true;
         this.configAPi.updateConfiguration(this.updateConfig).subscribe(data => {
-        this.getConfigurationIsActive(true);
-        this.closeModal();
-        this.indexDetail = 1;
-        Swal.fire('Success', 'The configuration has been updated', 'success');
+          this.getConfigurationIsActive(true, this.companyId);
+          this.closeModal();
+          this.indexDetail = 1;
+          Swal.fire('Success', 'The configuration has been updated', 'success');
         });
       }
     }).catch((error) => {
@@ -416,7 +421,7 @@ export class ManageConfigurationComponent implements OnInit {
             this.selectConfiguration[i].isActive = status;
           }
           this.configAPi.changeStatusConfiguration(this.selectConfiguration).subscribe(data => {
-            this.getConfigurationIsActive(status);
+            this.getConfigurationIsActive(status, this.companyId);
             this.closeModal();
             Swal.fire('Success', 'The configuration has been deleted', 'success');
           });
@@ -441,7 +446,7 @@ export class ManageConfigurationComponent implements OnInit {
             this.selectConfiguration[i].isActive = status;
           }
           this.configAPi.changeStatusConfiguration(this.selectConfiguration).subscribe(data => {
-            this.getConfigurationIsActive(status);
+            this.getConfigurationIsActive(status, this.companyId);
             this.closeModal();
             Swal.fire('Success', 'The configuration has been enabled', 'success');
           });
@@ -476,11 +481,11 @@ export class ManageConfigurationComponent implements OnInit {
       this.toast.error('Message', 'Total mark of catalogue must be 100');
       return false;
     } else if (this.index === 2) {
-      if($('#rate').val() === ''){
+      if ($('#rate').val() === '') {
         this.toast.error('Message', 'Please input rate of rank');
         return false;
       }
-      else if($('#rate').val() < 0 ){
+      else if ($('#rate').val() < 0) {
         this.toast.error('Message', 'Rate of rank must be less 1');
         return false;
       }
@@ -515,7 +520,7 @@ export class ManageConfigurationComponent implements OnInit {
         this.configAPi.sendMail(id).subscribe(data => {
           Swal.fire('Success', 'The mail has been send', 'success');
         });
-        
+
       } else if (result.dismiss === Swal.DismissReason.cancel) {
       }
     }).catch((error) => {
@@ -535,58 +540,31 @@ export class ManageConfigurationComponent implements OnInit {
     }
   }
 
-  onChangeSampleConfig(value){
-    if(value == "none"){
-      this.inputConfiguration['type'] = true;
-      this.inputConfiguration['title'] = "";
-      this.inputConfiguration['totalQuestion'] = 0;
-      this.inputConfiguration['duration'] = 15;
-      this.selectedItems = [];
-      this.ListRank[0].weightPoint = 0;
-      this.ListRank[1].weightPoint = 0;
-      this.ListRank[2].weightPoint = 0;
-      $('#1_3').val(Number(16));
-    $('#1_2').val(16);
-    $('#1_1').val(16);
+  onChangeSampleConfig(value) {
+    if (value == "none") {
+      this.inputConfiguration = option0;
+      this.selectedItems = option0.selectedItems;
+      this.ListRank[0].weightPoint = option0.dev3;
+      this.ListRank[1].weightPoint = option0.dev2;
+      this.ListRank[2].weightPoint = option0.dev1;
     }
-    else if(value == 1){
-      this.inputConfiguration['type'] = true;
-      this.inputConfiguration['title'] = "test developer";
-      this.inputConfiguration['totalQuestion'] = 30;
-      this.inputConfiguration['duration'] = 20;
-      this.selectedItems = [
-        {"catalogueId":1,"name":"Software Development Methods", "weightPoint" : 40},
-        {"catalogueId":2,"name":"Software Requirement Analysis", "weightPoint" : 60},
-    ];
-    this.ListRank[0].weightPoint = 70;
-    this.ListRank[1].weightPoint = 60;
-    this.ListRank[2].weightPoint = 50;
-    $('#1_3').val(Number(16));
-    $('#1_2').val(16);
-    $('#1_1').val(16);
-    console.log($('#1_3').val())
+    else if (value == 1) {
+      this.inputConfiguration = option1;
+      this.selectedItems = option1.selectedItems;
+      this.ListRank[0].weightPoint = option1.dev3;
+      this.ListRank[1].weightPoint = option1.dev2;
+      this.ListRank[2].weightPoint = option1.dev1;
     }
-    else if(value == 2){
-      this.inputConfiguration['type'] = true;
-      this.inputConfiguration['title'] = "test manager";
-      this.inputConfiguration['totalQuestion'] = 40;
-      this.inputConfiguration['duration'] = 25;
-      this.selectedItems = [
-        {"catalogueId":1,"name":"Software Development Methods", "weightPoint" : 30},
-        {"catalogueId":2,"name":"Software Requirement Analysis", "weightPoint" : 30},
-        {"catalogueId":3,"name":"Software Design Methods", "weightPoint" : 20},
-        {"catalogueId":4,"name":"Software Programming Methods", "weightPoint" : 20},
-    ];
-    this.ListRank[0].weightPoint = 80;
-    this.ListRank[1].weightPoint = 60;
-    this.ListRank[2].weightPoint = 50;
-    $("#1_3").val(16);
-    $('#1_2').val(16);
-    $('#1_1').val(16);
+    else if (value == 2) {
+      this.inputConfiguration = option2;
+      this.selectedItems = option2.selectedItems;
+      this.ListRank[0].weightPoint = option2.dev3;
+      this.ListRank[1].weightPoint = option2.dev2;
+      this.ListRank[2].weightPoint = option2.dev1;
     }
   }
 
-  viewTest(id){
+  viewTest(id) {
     this.router.navigate(['/manage-test/', id]);
-}
+  }
 }

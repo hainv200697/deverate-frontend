@@ -21,7 +21,6 @@ export class ResultComponent implements OnInit {
   public loading = false;
   gaugemap = {};
   public powerGauge: any;
-  ListRank: [];
   statistic = [];
   catalogueInStatistic = [];
   pointRank: any;
@@ -32,6 +31,7 @@ export class ResultComponent implements OnInit {
   catalogueOverpoint: any;
   datasource: {};
   isLogin;
+  isLoaded = false;
 
   constructor(private rankApi: RankApiService,
     private statisticApi: StatisticApiService,
@@ -39,20 +39,10 @@ export class ResultComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getAllRank(true);
+    this.isLoaded = false;
     var testId = this.route.snapshot.paramMap.get('testId');
     this.getStatistic(Number(testId), 1);
     this.isLogin = sessionStorage.getItem('isLoggedin');
-  }
-  getAllRank(status: boolean) {
-    this.loading = true;
-    this.rankApi.getAllRank(status).subscribe(
-      (data) => {
-        this.ListRank = data['data']['data'];
-        this.loading = false;
-      }
-    );
-
   }
 
   getStatistic(id: number, rankId: number) {
@@ -194,7 +184,8 @@ export class ResultComponent implements OnInit {
             }]
           }
         }
-        this.loading = false
+        this.loading = false;
+        this.isLoaded = true;
       },
     );
 
