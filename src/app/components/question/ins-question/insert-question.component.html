@@ -155,7 +155,6 @@
             </div>
             <div class="modal-body">
                 <div class="create-file">
-                    <button class="btn btn-primary" (click)="changeIns(0)">Insert default</button>
                     <input type="file" style="display: inline-block;" (change)="incomingfile($event)"
                         placeholder="Upload file" accept=".xlsx">
                 </div>
@@ -341,7 +340,7 @@
                                     (change)="checkIfAllSelected();">
                             </label>
                         </td>
-                        <td class="text-center col-md-3">{{q.catalogueName}}</td>
+                        <td class="text-center col-md-3">{{catalogueName}}</td>
                         <td class="text-center col-md-3">{{q.question1}}</td>
                         <td class="text-center col-md-1">{{q.createBy}}</td>
                         <td class="text-center col-md-1">{{q.maxPoint}}</td>

@@ -2,7 +2,7 @@ import { AnswerModel } from './answer-model';
 
 export class QuestionModel{
     QuestionId : number
-    catalogueId : number
+    cicid : number
     question1 : string
     maxPoint: number
     isActive : boolean

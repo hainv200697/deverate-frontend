@@ -40,6 +40,10 @@
                             data-toggle="button">
                             <i class="fa fa-check" tooltip="{{'Active' | translate}}" placement="top"></i>
                         </button>
+                        <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
+                            class="btn btn-lg btn-success " data-toggle="button">
+                            <i class="fa fa-file-excel-o"></i>
+                        </button>
                         <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
                             class="btn btn-lg btn-primary" data-toggle="button">
                             <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
@@ -49,7 +53,7 @@
                 </div>
             </div>
 
-            <table class="table  table-hover customtable" [svData]="catalogueList | CatalogueFilterPipe:searchText" #sv="svDataTable" [svRowsOnPage]="5"
+            <table class="table  table-hover customtable" [svData]="catalogueList | CatalogueDefaultFilterPipe:searchText" #sv="svDataTable" [svRowsOnPage]="5"
                 svSortBy="name" svSortOrder="asc">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin">
@@ -85,7 +89,7 @@
                     <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data">
                         <td class="text-center col-md-1">
                             <label>
-                                <input [disabled]="!item.type" type="checkbox" value="" [(ngModel)]="item.selected" class="btn"
+                                <input type="checkbox" value="" [(ngModel)]="item.selected" class="btn"
                                     (change)="checkIfAllSelected();">
                             </label>
                         </td>

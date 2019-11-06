@@ -38,6 +38,25 @@ export class CatalogueApiService {
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, Catalogue);
     }
 
+    getAllCatalogueDefault(status){
+        const param = new HttpParams().set('status', status);
+        const API = 'api/Catalogue/GetAllCatalogueDefault';
+        return this.httpClient.get<any[]>(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
+    }
 
+    insertCatalogueDefault(catalogue) {
+        const API = 'api/Catalogue/CreateCatalogueDefault';
+        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API, catalogue);
+    }
+
+    updateCatalogueDefault(Catalogue) {
+        const API = 'api/Catalogue/UpdateCatalogueDefault';
+        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, Catalogue);
+    }
+
+    removeCatalogueDefault(Catalogue) {
+        const API = 'api/Catalogue/RemoveCatalogueDefault';
+        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, Catalogue);
+    }
 
 }

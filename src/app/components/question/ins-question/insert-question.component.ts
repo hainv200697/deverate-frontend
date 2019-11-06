@@ -37,6 +37,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     iconIsActive: boolean;
     // catalogue
     id: number = this.activeRoute.snapshot.params.id;
+    catalogueName='';
     accountId = Number(sessionStorage.getItem('AccountId'))
     companyId = Number(sessionStorage.getItem('CompanyId'));
     // excel param
@@ -72,7 +73,9 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     updAnswer = [];
     anwserDel = [];
     allQuestions = [];
+    insertQuestion = [];
     public loading = false;
+    cicid;
     // Import excel file
     changeIns(key) {
         this.create = key;
@@ -80,6 +83,12 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     incomingfile(event) {
         this.checkFile=true;
         this.file = event.target.files[0];
+        let name = this.file.name.split('.');
+        let type = name[name.length-1]+"";
+        if(type != 'xlsx'){
+            this.checkFile=false;
+            this.toastr.error('File must be a excel file');
+        }
         if(this.file.size > 200000){
             this.checkFile=false;
             this.toastr.error('File must be smaller than 20MB');
@@ -120,7 +129,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 questionObj.question1 = element['Question'];
                 questionObj.isActive = true;
                 questionObj.createBy = this.accountId;
-                questionObj.catalogueId = this.id;
+                questionObj.cicid = this.cicid;
                 for (let i = 0; i <= 5; i++) {
                     const answerObj = new AnswerModel();
                     if (i === 0) {
@@ -480,7 +489,10 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     addQuestion() {
         this.insQuestion['isActive'] = true;
         this.insQuestion['createBy'] = this.accountId;
-        this.questionService.insertQuestion(this.insQuestion).subscribe(
+        this.insQuestion['cicid'] = this.cicid;
+        this.insQuestion['catalogueName'] = this.catalogueName;
+        this.insertQuestion.push(this.insQuestion);
+        this.questionService.insertQuestion(this.insertQuestion).subscribe(
             (results) => {
                 this.getQuestionById(this.iconIsActive);
                 this.toastr.success(results['message']);
@@ -491,8 +503,9 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     async addQuestionByExcel() {
         await this.formatExcel();
         const data = JSON.stringify(this.listInsert);
-        this.insQuestion = JSON.parse(data);
-        this.questionService.insertQuestionByExcel(this.insQuestion).subscribe(
+        this.insertQuestion = JSON.parse(data);
+        console.log(this.insertQuestion);
+        this.questionService.insertQuestion(this.insertQuestion).subscribe(
             (results) => {
                 this.getQuestionById(this.iconIsActive);
             }
@@ -526,10 +539,12 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.questionService.getQuestion(this.id,this.companyId,this.iconIsActive).subscribe(
             (data: any) => {
                 this.loading = false;
-                this.allQuestions = data;
-                if(this.allQuestions.length != 0){
-                    this.insQuestion['catalogueName'] = this.allQuestions[0]['catalogueName'];
-                }
+                console.log(data);
+                this.catalogueName = data.catalogueName;
+                this.cicid = data.cicid;
+                this.allQuestions = data.questions;
+                console.log(this.allQuestions);
+                    
             },
             (error : any)=>{
                 this.router.navigate(['**']);
