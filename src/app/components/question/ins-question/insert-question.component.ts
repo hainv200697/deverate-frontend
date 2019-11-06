@@ -338,17 +338,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         control.removeAt(i);
     }
 
-    updateAnswerForm(): FormGroup {
-        return this.formBuilder.group({
-            answer1: ['', Validators.required],
-            point: ['', Validators.required],
-            answerId: ['', Validators.required],
-        });
-    }
 
-    onAddUpdateAnswers() {
-        (<FormArray>this.answerForm.controls['answers']).push(this.updateAnswerForm());
-    }
 
     // Endynamic form
 
@@ -380,13 +370,11 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         });
 
         this.index = 1;
-        this.updQuestion['catalogueName'] = item['catalogueName'];
-        this.updQuestion['answer'] = item['answer'];
-        this.getAnswerByQuestionId();
-        this.updQuestion['QuestionId'] = item['QuestionId'];
+        this.updQuestion['QuestionId'] = item['questionId'];
         this.updQuestion['question1'] = item['question1'];
         this.updQuestion['isActive'] = true;
         this.updQuestion['createBy'] = this.accountId;
+        this.updQuestion['cicid'] = this.cicid;
         console.log(this.updQuestion);
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
         const a = document.querySelector('#stepper1');
@@ -553,20 +541,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
 
-    getAnswerByQuestionId() {
-        this.updQuestion['answer'].forEach(item => {
-            this.ansForm = this.updateAnswerForm();
-            this.ansForm.setValue({
-                'answer1': item['answer1'],
-                'point': item['point'],
-                'answerId': item['answerId']
-            });
-            (<FormArray>this.answerForm.controls['answers']).push(this.ansForm);
-            this.count++;
-        });
-
-        return true;
-    }
+    
 
 
     // reset
