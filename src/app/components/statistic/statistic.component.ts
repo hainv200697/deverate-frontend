@@ -61,6 +61,7 @@ export class StatisticComponent implements OnInit {
 
   rankStattistic = [];
   dataEmployeeOverPoint: any;
+  chooseConfig = [];
 
   companyId = Number(sessionStorage.getItem('CompanyId'));
   ngOnInit() {
@@ -174,7 +175,17 @@ export class StatisticComponent implements OnInit {
   }
 
   getDataStatistic(value) {
-    console.log(value);
+    this.chooseConfig.push(value);
+    console.log(this.chooseConfig)
+  }
+
+  onItemDeSelect(value){
+    for (let i = 0; i < this.chooseConfig.length; i++) {
+      if (this.chooseConfig[i].id == value.id) {
+        this.chooseConfig.splice(i, 1);
+        break;
+      }
+    }
   }
 
   onSelectAll(value) {

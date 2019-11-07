@@ -613,7 +613,7 @@
                         <th class="text-center col-md-1" scope="col"><input class="btn" type="checkbox" value=""
                                 [(ngModel)]="selectedAll" (change)="selectAll();"></th>
                         <th class="text-center col-md-3" scope="col">
-                            <sv-default-sorter>TestOwner
+                            <sv-default-sorter>Progress
                             </sv-default-sorter>
                         </th>
                         <th class="text-center col-md-2" scope="col">
@@ -649,10 +649,10 @@
                             <input type="checkbox" value="" [(ngModel)]="c.selected" class="btn"
                                 (change)="checkIfAllSelected();">
                         </td>
-                        <td class="text-center col-md-3">{{c.testOwnerName}}</td>
+                        <td class="text-center col-md-3">9/10</td>
                         <td class="text-center col-md-2">{{c.title}}</td>
                         <td class="text-center col-md-2">{{c.createDate.split('T')[0]}}</td>
-                        <td class="text-center col-md-1">{{c.duration}}</td>
+                        <td class="text-center col-md-1">{{c.duration}}'</td>
                         <td class="text-center col-md-1" [hidden]="c.isActive==true">
                             <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
                         </td>
