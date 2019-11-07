@@ -8,7 +8,7 @@ import { AppSettings } from '../appsetting';
 })
 export class QuestionApiService {
     URL = AppSettings.BASEURL;
-    // URL ='http://localhost:54318/';
+    // URL ='http://localhost:9000/';
     httpOptions = {
         headers: new HttpHeaders({
             'Content-Type': 'application/json'
@@ -36,14 +36,5 @@ export class QuestionApiService {
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, question);
     }
 
-    insertQuestionByExcel(question: any) {
-        const API = 'api/Question/CreateQuestionExcel';
-        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API, question);
-    }
 
-    getQuestionByStatus(status, id) {
-        const param = new HttpParams().set('status', status).set('id', id);
-        const API = 'api/Question/GetQuestionByStatus';
-        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
-    }
 }

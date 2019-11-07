@@ -3,16 +3,15 @@ import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CatalogueApiService } from '../../services/catalogue-api.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { element } from 'protractor';
 import Swal from 'sweetalert2';
 import { ToastrService } from 'ngx-toastr';
 declare var $: any;
 @Component({
-    selector: 'app-catalogue',
-    templateUrl: './catalogue.component.html',
-    styleUrls: ['./catalogue.component.scss']
+    selector: 'app-catalogue-default',
+    templateUrl: './catalogue-default.component.html',
+    styleUrls: ['./catalogue-default.component.scss']
 })
-export class CatalogueComponent implements OnInit {
+export class CatalogueDefaultComponent implements OnInit {
     constructor(
         private translate: TranslateService,
         public router: Router,
@@ -30,7 +29,6 @@ export class CatalogueComponent implements OnInit {
     insCatalogue = {};
     updCatalogue = {};
     updateStatus = [];
-    companyId = Number(sessionStorage.getItem('CompanyId'));
     ngOnInit() {
         this.getAllCatalogue(true);
     }
@@ -68,10 +66,11 @@ export class CatalogueComponent implements OnInit {
     getAllCatalogue(status) {
         this.iconIsActive = status;
         this.loading = true;
-        this.catelogueService.getAllCatalogue(this.iconIsActive,this.companyId).subscribe(
+        this.catelogueService.getAllCatalogueDefault(this.iconIsActive).subscribe(
             (data :any[]) => {
                 this.loading = false;
                 this.catalogueList = data;
+                console.log(this.catalogueList);
             }
         );
     }
@@ -94,9 +93,8 @@ export class CatalogueComponent implements OnInit {
     }
 
     insCata() {
-        this.insCatalogue['companyId'] = this.companyId;
         this.loading = true;
-        this.catelogueService.insertCatalogue(this.insCatalogue).subscribe(
+        this.catelogueService.insertCatalogueDefault(this.insCatalogue).subscribe(
             (results) => {
                 this.loading = false;
                 this.getAllCatalogue(this.iconIsActive);
@@ -136,7 +134,7 @@ export class CatalogueComponent implements OnInit {
 
     updCata() {
         this.loading = true;
-        this.catelogueService.updateCatalogue(this.updCatalogue).subscribe(
+        this.catelogueService.updateCatalogueDefault(this.updCatalogue).subscribe(
             (data:any) => {
                 this.loading = false;
                 this.getAllCatalogue(this.iconIsActive);
@@ -157,9 +155,8 @@ export class CatalogueComponent implements OnInit {
             if (result.value) {
                 for (let i = 0; i < this.updateStatus.length; i++) {
                     this.updateStatus[i].IsActive = status;
-                    this.updateStatus[i].companyId = this.companyId;
                 }
-                this.catelogueService.removeCatalogue(this.updateStatus).subscribe(data => {
+                this.catelogueService.removeCatalogueDefault(this.updateStatus).subscribe(data => {
                     this.getAllCatalogue(this.iconIsActive);
                     this.closeModal();
                     Swal.fire('Success', 'The company has been change', 'success');

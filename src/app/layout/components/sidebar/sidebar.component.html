@@ -36,6 +36,10 @@
             <i class="fa fa-th-list"></i>&nbsp;
             <span>{{ 'Catalogue' | translate }}</span>
         </a>
+        <a [routerLink]="['/default-catalogue']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-th-list"></i>&nbsp;
+            <span>{{ 'Catalogue Default' | translate }}</span>
+        </a>
         <a [routerLink]="['/manage-company']" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-th-list"></i>&nbsp;
             <span>{{ 'Manage Company' | translate }}</span>

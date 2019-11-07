@@ -155,7 +155,6 @@
             </div>
             <div class="modal-body">
                 <div class="create-file">
-                    <button class="btn btn-primary" (click)="changeIns(0)">Insert default</button>
                     <input type="file" style="display: inline-block;" (change)="incomingfile($event)"
                         placeholder="Upload file" accept=".xlsx">
                 </div>
@@ -282,7 +281,7 @@
                         <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
                             (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger"
                             data-toggle="button">
-                            <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
+                            <i class="fa fa-ban" tooltip="{{'delete' | translate}}" placement="top"></i>
                         </button>
                         <button [hidden]="iconIsActive==true" style="margin-right: 10px;"
                             (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success"
@@ -341,7 +340,7 @@
                                     (change)="checkIfAllSelected();">
                             </label>
                         </td>
-                        <td class="text-center col-md-3">{{q.catalogueName}}</td>
+                        <td class="text-center col-md-3">{{catalogueName}}</td>
                         <td class="text-center col-md-3">{{q.question1}}</td>
                         <td class="text-center col-md-1">{{q.createBy}}</td>
                         <td class="text-center col-md-1">{{q.maxPoint}}</td>

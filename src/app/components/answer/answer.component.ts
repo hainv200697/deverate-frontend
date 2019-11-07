@@ -114,10 +114,10 @@ export class AnswerComponent implements OnInit {
     clickButtonChangeStatus(status: boolean) {
         Swal.fire({
             title: 'Are you sure?',
-            text: 'This catalogue will be delete!',
+            text: 'Status will be changed!',
             type: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
+            confirmButtonText: 'Yes, Change it!',
             cancelButtonText: 'No, keep it'
         }).then((result) => {
             if (result.value) {
@@ -127,7 +127,7 @@ export class AnswerComponent implements OnInit {
                 this.answerService.disableAnswer(this.updateStatus).subscribe(data => {
                     this.getAnswerById(this.iconIsActive);
                     this.closeModal();
-                    Swal.fire('Success', 'The company has been deleted', 'success');
+                    Swal.fire('Success', 'The status has been changed', 'success');
                 });;
           } else if (result.dismiss === Swal.DismissReason.cancel) {
             this.updateStatus = [];
