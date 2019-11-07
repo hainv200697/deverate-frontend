@@ -194,15 +194,10 @@ export class EmployeeComponent implements OnInit {
             },  
             (error)=>{
                 this.loading = false;
-                let email = [];
-                let i = 0;
-                error.error.forEach(element => {
-                    if(i < 4){
-                        email.push(element);
-                    }
-                    i++;
-                });
-                this.toastr.error("Email "+email + " existed");
+                const email = error.error.slice(0, 3);
+                const message = `Email ${email.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
+                this.toastr.error(message);
+                this.closeModal();
             }
         );
     }
@@ -263,16 +258,10 @@ resendmail() {
                 this.listUser = [];
             },error=>{
                 if(error.status == 400){
-                    let account = [];
-                    let i = 0;
-                    error.error.forEach(element => {
-                        if(i < 4){
-                            account.push(element);
-                        }
-                        i++;
-                    });
+                    const account = error.error.slice(0, 3);
+                    const message = `Account ${account.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
                     Swal.fire({title:'Cancelled',
-                    text: "Account "+ account +" not found",
+                    text: message,
                     type:'error'});
                 }
                 if(error.status == 500){
