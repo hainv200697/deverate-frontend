@@ -420,7 +420,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     clickButtonChangeStatus(status: boolean) {
         Swal.fire({
             title: 'Are you sure?',
-            text: 'This catalogue will be change!',
+            text: 'This catalogue will be changed!',
             type: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, Change it!',
@@ -559,16 +559,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
     }
 
-    getQuestionStatus(status) {
-        console.log(status);
-        this.questionService.getQuestionByStatus(status, this.id).subscribe(
-            (data: any) => {
-                console.log(data);
-                this.allQuestions = data;
-            }
-        );
-    }
     viewAnswer(item){
-        this.router.navigate(['/manage-answer/', item['QuestionId']]);
+        this.router.navigate(['/manage-answer/', item['questionId']]);
     }
 }

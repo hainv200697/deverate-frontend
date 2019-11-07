@@ -37,9 +37,4 @@ export class QuestionApiService {
     }
 
 
-    getQuestionByStatus(status, id) {
-        const param = new HttpParams().set('status', status).set('id', id);
-        const API = 'api/Question/GetQuestionByStatus';
-        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
-    }
 }
