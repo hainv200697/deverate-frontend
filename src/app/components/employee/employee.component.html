@@ -136,7 +136,7 @@
                     </button>
                     <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
                         (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger" data-toggle="button">
-                        <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
+                        <i class="fa fa-ban" tooltip="{{'delete' | translate}}" placement="top"></i>
                     </button>
                     <button [hidden]="iconIsActive==true" style="margin-right: 10px;"
                         (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success" data-toggle="button">
@@ -155,7 +155,7 @@
             </div>
         </div>
 
-        <table class="table  table-hover customtable" [svData]="employeeList" #sv="svDataTable" [svRowsOnPage]="5"
+        <table class="table  table-hover customtable" [svData]="employeeList | EmployeeFilterPipe:searchText" #sv="svDataTable" [svRowsOnPage]="5"
             svSortBy="name" svSortOrder="asc">
             <thead>
                 <tr class="col-md-12 row no-padding-no-margin">
@@ -203,7 +203,7 @@
                         Male
                     </td>
                     <td class="text-center col-md-1" [hidden]="item.gender==true">
-                        FeMale
+                        Female
                     </td>
                     <td class="col-md-2 text-center">{{ item.joinDate.split('T')[0] }}</td>
                     <td class="text-center col-md-1" [hidden]="item.isActive==true">

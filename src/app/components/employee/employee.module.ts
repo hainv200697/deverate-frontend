@@ -10,6 +10,7 @@ import { PageHeaderModule } from 'src/app/shared';
 import { EmployeeRoutingModule } from './employee-routing.module';
 import { TooltipModule } from 'ngx-tooltip';
 import { NgxLoadingModule } from 'ngx-loading';
+import { EmployeeFilterPipe } from './employee-filter.pipe';
 
 @NgModule({
     imports: [
@@ -25,7 +26,8 @@ import { NgxLoadingModule } from 'ngx-loading';
     NgxLoadingModule
     ],
     declarations: [
-      EmployeeComponent
+      EmployeeComponent,
+      EmployeeFilterPipe
       ]
 })
 export class EmployeeModule {}

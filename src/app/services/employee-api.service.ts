@@ -15,7 +15,7 @@ export class EmployeeApiService {
     getAllEmployee(companyId,status) {
         const API = 'api/Employee/GetEmployee';
         const param = new HttpParams().set('companyId', companyId).set('status', status);
-        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
+        return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
 
     postCreateEmployee(employees) {
@@ -24,7 +24,7 @@ export class EmployeeApiService {
     }
 
     disableEmployee(employees,status){
-        const API = 'api/Employee/RemoveEmployee';
+        const API = 'api/Employee/UpdateEmployeeStatus';
         const param = new HttpParams().set('status', status);
         return this.httpClient.put<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employees,{ params: param });
     }

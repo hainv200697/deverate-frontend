@@ -26,6 +26,7 @@ export class EmployeeComponent implements OnInit {
     companyId = Number(sessionStorage.getItem('CompanyId'));
     // Excel
     index = 1;
+    searchText = '';
     checkFile = false;
     arrayBuffer: any;
     file: File;
@@ -98,6 +99,7 @@ export class EmployeeComponent implements OnInit {
         try {
             let list: any;
             list = await this.readExcel();
+            console.log(list);
             list.forEach(element => {
                 this.insEmployee = {};
                 this.insEmployee['companyId'] = this.companyId;
@@ -120,7 +122,8 @@ export class EmployeeComponent implements OnInit {
         this.iconIsActive =status;
         this.employeeService.getAllEmployee(this.companyId,this.iconIsActive).subscribe(
             (data) => {
-                this.employeeList = data['data']['data'];
+                console.log(data);
+                this.employeeList = data;
             }
         );
     }
@@ -132,6 +135,7 @@ export class EmployeeComponent implements OnInit {
     }
 
     openModalExcel(excel) {
+        this.index = 1;
         this.modalService.open(excel, { size: 'lg', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
@@ -157,6 +161,10 @@ export class EmployeeComponent implements OnInit {
             if (!this.validdate) {
                 return;
             }
+            this.employees=[];
+            this.insEmployee['companyId'] = this.companyId;
+            this.insEmployee['role'] = 3;
+            this.employees.push(this.insEmployee);
             this.insertEmployee();
             this.getEmployee(this.iconIsActive);
         }
@@ -173,19 +181,17 @@ export class EmployeeComponent implements OnInit {
     // function 
     // insert Employee function
     insertEmployee() {
-        this.insEmployee['companyId'] = this.companyId;
         this.loading = true; 
-        this.insEmployee['role'] = 3;
-        this.employees.push(this.insEmployee);
+        console.log(this.employees);
         this.employeeService.postCreateEmployee(this.employees).subscribe(
             results => {
                 this.loading = false;
-                this.toastr.success(results);
+                this.toastr.success("Create success");
                 this.employees = [];
                 this.insEmployee = {};
                 this.getEmployee(this.iconIsActive);
                 this.closeModal();
-            },
+            },  
             (error)=>{
                 this.loading = false;
                 let email = [];
@@ -205,19 +211,22 @@ export class EmployeeComponent implements OnInit {
     // change status
 // change status
 clickButtonChangeStatus(status: boolean) {
+    
     Swal.fire({
         title: 'Are you sure?',
-        text: 'This catalogue will be delete!',
+        text: 'Status will be change!',
         type: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
+        confirmButtonText: 'Yes, change it!',
         cancelButtonText: 'No, keep it'
     }).then((result) => {
         if (result.value) {
             for (let i = 0; i < this.updateEmployee.length; i++) {
                 this.listId.push(this.updateEmployee[i].accountId)
             }
+            this.loading = true;
             this.employeeService.disableEmployee(this.listId,status).subscribe(data => {
+                this.loading = false;
                 this.getEmployee(this.iconIsActive);
                 this.closeModal();
                 Swal.fire('Success', 'The status has been change', 'success');
