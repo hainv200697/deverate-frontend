@@ -53,6 +53,7 @@ export class ResultComponent implements OnInit {
       (data) => {
         this.statistic = data['data']['data'];
         this.catalogueInRanks = data['data']['data'].catalogueInRanks;
+        let tes = 
         this.catalogueOverpoint = data['data']['data'].catalogues;
         this.pointRank = data['data']['data'].configurationRanks;
         let dialValue =  data['data']['data'].rank;
@@ -74,7 +75,7 @@ export class ResultComponent implements OnInit {
           this.catalogue = this.catalogueInRanks[i].catalogues
           this.radarChartData[i + 1].label = this.catalogueInRanks[i].rank
           for (var j = 0; j < this.catalogue.length; j++) {
-            this.radarChartData[i + 1].data.push(this.catalogue[j].thresholdPoint * 100);
+            this.radarChartData[i + 1].data.push(this.catalogue[j].thresholdPoint);
             for (var z = 0; z < this.catalogueOverpoint.length; z++) {
               if (this.catalogue[j].CatalogueId == this.catalogueOverpoint[z].CatalogueId) {
                 this.catalogue[j].overallPoint = this.catalogueOverpoint[z].overallPoint;
@@ -84,10 +85,9 @@ export class ResultComponent implements OnInit {
         }
         for (var a = 0; a < this.catalogue.length; a++) {
           this.radarChartLabels.push(this.catalogue[a].name);
-          this.radarChartData[0].data.push(this.catalogue[a].overallPoint * 100)
+          this.radarChartData[0].data.push(this.catalogue[a].overallPoint)
         }
         this.catalogueTable = this.catalogue;
-        console.log(this.catalogueInRanks)
         this.datasource = {
           "chart": {
             "caption": "",
@@ -189,7 +189,7 @@ export class ResultComponent implements OnInit {
                   "id": "state-cs-text",
                   "type": "Text",
                   "color": "black",
-                  "label": "Overall point:" + (data['data']['data']['point'] * 100),
+                  "label": "Overall point:" + (data['data']['data']['point']),
                   "fontSize": "18",
                   "background-color": "#ffffff",
                   "align": "center",
@@ -228,12 +228,11 @@ export class ResultComponent implements OnInit {
             }
           }
           this.radarChartLabels.push(this.catalogue[j].name);
-          this.radarChartData[0].data.push(this.catalogue[j].overallPoint * 100);
-          this.radarChartData[1].data.push(this.catalogue[j].thresholdPoint * 100);
+          this.radarChartData[0].data.push(this.catalogue[j].overallPoint);
+          this.radarChartData[1].data.push(this.catalogue[j].thresholdPoint);
         }
       }
     }
-    console.log(this.catalogue)
   }
 
   // Radar

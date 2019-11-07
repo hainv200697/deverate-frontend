@@ -274,8 +274,6 @@ export class ManageConfigurationComponent implements OnInit {
             i--
           }
         }
-
-        console.log(tmp)
         this.catalogueList = tmp;
       }
 
@@ -298,7 +296,6 @@ export class ManageConfigurationComponent implements OnInit {
       (data) => {
         this.loading = false;
         this.Configurations = data;
-        console.log(this.Configurations)
       }
     );
   }
@@ -386,7 +383,6 @@ export class ManageConfigurationComponent implements OnInit {
         this.inputConfiguration['configurationRank'] = this.ListRank;
         this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
         this.inputConfiguration['endDate'] = new Date(this.inputConfiguration['endDate']);
-        console.log(this.inputConfiguration)
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
           this.getConfigurationIsActive(true);
           this.closeModal();
