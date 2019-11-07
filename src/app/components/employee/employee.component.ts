@@ -180,10 +180,7 @@ export class EmployeeComponent implements OnInit {
         this.employeeService.postCreateEmployee(this.employees).subscribe(
             results => {
                 this.loading = false;
-                if (results.status.code == 200) {
-                    this.toastr.success(results.status.message);
-                    
-                }
+                this.toastr.success(results);
                 this.employees = [];
                 this.insEmployee = {};
                 this.getEmployee(this.iconIsActive);
@@ -253,20 +250,27 @@ resendmail() {
             this.employeeService.resendpassword(this.listUser,this.companyId).subscribe(data => {
                 this.getEmployee(this.iconIsActive);
                 this.closeModal();
-                Swal.fire( {title:'Success',text: data.status.message,type:'success'});
+                Swal.fire( {title:'Success',text: "Password was send to your email!",type:'success'});
                 this.listUser = [];
             },error=>{
-                let account = [];
-                let i = 0;
-                error.error.forEach(element => {
-                    if(i < 4){
-                        account.push(element);
-                    }
-                    i++;
-                });
-                Swal.fire({title:'Cancelled',
-                text: "Account "+ account +" not found",
-                type:'error'});
+                if(error.status == 400){
+                    let account = [];
+                    let i = 0;
+                    error.error.forEach(element => {
+                        if(i < 4){
+                            account.push(element);
+                        }
+                        i++;
+                    });
+                    Swal.fire({title:'Cancelled',
+                    text: "Account "+ account +" not found",
+                    type:'error'});
+                }
+                if(error.status == 500){
+                    Swal.fire({title:'Cancelled',
+                    text: "System error",
+                    type:'error'});
+                }
             }
             
             );;
