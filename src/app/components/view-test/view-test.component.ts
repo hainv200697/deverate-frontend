@@ -15,15 +15,17 @@ import { GobalService } from 'src/app/shared/services/gobal-service';
 export class ViewTestComponent implements OnInit {
   public loading = false;
   constructor(
-    private route: ActivatedRoute, 
-    private testService: TestService, 
-    private modalService: NgbModal, 
+    private route: ActivatedRoute,
+    private testService: TestService,
+    private modalService: NgbModal,
     private router: Router,
-    private gblserv : GobalService,
-    private activeRoute :ActivatedRoute
-    ) { }
+    private gblserv: GobalService,
+    private activeRoute: ActivatedRoute
+  ) { }
   config;
   key;
+  sendMail = [];
+  selectedAll: any;
   error = false;
   test = false;
   questionInTest;
@@ -31,7 +33,7 @@ export class ViewTestComponent implements OnInit {
   testId;
   sub: Subscription;
   id = this.activeRoute.snapshot.params.id;
-  listTest = [];  
+  listTest = [];
   ngOnInit() {
     console.log(this.id);
     this.getTestByConfig();
@@ -43,16 +45,69 @@ export class ViewTestComponent implements OnInit {
 
   }
 
-  getTestByConfig(){
-        this.testService.getTestByConfigId(this.id).subscribe(
-            (data: any) => {
-                console.log(data);
-                this.listTest = data;
-            }
-        );
+  getTestByConfig() {
+    this.testService.getTestByConfigId(this.id).subscribe(
+      (data: any) => {
+        console.log(data);
+        this.listTest = data;
+      }
+    );
   }
-  openViewTest(id){
+  openViewTest(id) {
     console.log(id);
     this.router.navigate(['/manage-detail-test/', id]);
-}
+  }
+
+  // select answer
+  selectAll() {
+    this.sendMail = [];
+    for (let i = 0; i < this.listTest.length; i++) {
+      this.listTest[i].selected = this.selectedAll;
+      this.sendMail.push(this.listTest[i]);
+    }
+  }
+
+  checkIfAllSelected() {
+    this.sendMail = [];
+    this.selectedAll = this.listTest.every(function (item: any) {
+      return item.selected === true;
+
+    });
+    for (let i = 0; i < this.listTest.length; i++) {
+      if (this.listTest[i].selected === true) {
+        this.sendMail.push(this.listTest[i]);
+      }
+    }
+  }
+
+  // change status
+  sendQuizCode() {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Code will be send!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, send it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
+      if (result.value) {
+        let listTestId:number[] = [];
+        this.sendMail.forEach(element => {
+          listTestId.push(element.testId);
+        });
+        this.testService.sendMail(listTestId).subscribe(data => {
+          this.getTestByConfig();
+          Swal.fire('Success', 'Code has been send', 'success');
+        });;
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.sendMail = [];
+        Swal.fire(
+          'Cancelled',
+          '',
+          'error'
+        )
+      }
+    })
+  }
+
 }
