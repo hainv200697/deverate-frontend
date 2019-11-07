@@ -53,7 +53,6 @@ export class ResultComponent implements OnInit {
       (data) => {
         this.statistic = data['data']['data'];
         this.catalogueInRanks = data['data']['data'].catalogueInRanks;
-        let tes = 
         this.catalogueOverpoint = data['data']['data'].catalogues;
         this.pointRank = data['data']['data'].configurationRanks;
         let dialValue =  data['data']['data'].rank;
