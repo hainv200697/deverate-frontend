@@ -104,9 +104,8 @@ export class StatisticComponent implements OnInit {
           var series = [];
           this.historyData.forEach(element => {
             if (series.length < 5) {
-              series.push({ name: element.name, value: element.series[i].value * 100 });
+              series.push({ name: element.name, value: element.series[i].value});
             }
-
           });
           var element = {
             name: this.historyData[0].series[i].name,
@@ -115,7 +114,6 @@ export class StatisticComponent implements OnInit {
           this.averageCatalogue.push(element);
         }
         this.isLoaded = true;
-
         this.historyData.forEach(element => {
           let itemMulti = {
             name: element.name,
@@ -161,14 +159,12 @@ export class StatisticComponent implements OnInit {
     this.historyApi.GetOverallPointStatistic(id).subscribe(
       (data) => {
         this.dataEmployeeOverPoint = data;
-        console.log(this.dataEmployeeOverPoint)
         this.loading = false;
       }
     );
   }
 
   onSelect(modal, evt) {
-    console.log(evt);
     this.modalService.open(modal, { size: 'lg', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
     }).catch((error) => {
     });
@@ -176,7 +172,6 @@ export class StatisticComponent implements OnInit {
 
   getDataStatistic(value) {
     this.chooseConfig.push(value);
-    console.log(this.chooseConfig)
   }
 
   onItemDeSelect(value){
@@ -189,7 +184,6 @@ export class StatisticComponent implements OnInit {
   }
 
   onSelectAll(value) {
-    console.log(value);
   }
 
   dropdownList = [];
