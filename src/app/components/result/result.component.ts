@@ -29,6 +29,7 @@ export class ResultComponent implements OnInit {
   catalogue: any;
   catalogueTable: any;
   catalogueOverpoint: any;
+  catalogueInConfigs: any;
   datasource: {};
   isLogin;
   isLoaded = false;
@@ -55,6 +56,7 @@ export class ResultComponent implements OnInit {
         this.catalogueInRanks = data['data']['data'].catalogueInRanks;
         this.catalogueOverpoint = data['data']['data'].catalogues;
         this.pointRank = data['data']['data'].configurationRanks;
+        this.catalogueTable = data['data']['data'].catalogueInConfigs;
         let dialValue =  data['data']['data'].rank;
         let tmp = 0;
         if(dialValue == "dev0"){
@@ -78,6 +80,7 @@ export class ResultComponent implements OnInit {
             for (var z = 0; z < this.catalogueOverpoint.length; z++) {
               if (this.catalogue[j].CatalogueId == this.catalogueOverpoint[z].CatalogueId) {
                 this.catalogue[j].overallPoint = this.catalogueOverpoint[z].overallPoint;
+                this.catalogueTable[j].overallPoint = this.catalogueOverpoint[z].overallPoint;
               }
             }
           }
@@ -86,7 +89,6 @@ export class ResultComponent implements OnInit {
           this.radarChartLabels.push(this.catalogue[a].name);
           this.radarChartData[0].data.push(this.catalogue[a].overallPoint)
         }
-        this.catalogueTable = this.catalogue;
         this.datasource = {
           "chart": {
             "caption": "",
