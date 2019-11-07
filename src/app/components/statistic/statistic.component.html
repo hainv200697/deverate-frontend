@@ -51,6 +51,15 @@
                     [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
                     [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
                     [yAxisLabel]="yAxisLabel" [legendTitle]="legendTitle" *ngIf="isLoaded">
+                    <ng-template #tooltipTemplate let-model="model">
+                        This is the single point tooltip template
+                        <h1>{{model.value}}</h1>
+                    </ng-template>
+
+                    <ng-template #seriesTooltipTemplate let-model="model">
+                        This is vertical line tooltip template
+                        <pre>{{model|json}}</pre>
+                    </ng-template>
                 </ngx-charts-bar-horizontal-normalized>
             </div>
         </div>
@@ -62,10 +71,10 @@
                 Statistic Rank
             </div>
             <div class="card-body" *ngIf="load">
-                <ngx-charts-bar-vertical-2d [view]="[650, 450]" [scheme]="colorScheme" [results]="dataGroupChart" [gradient]="gradient"
-                    [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
-                    [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
-                    [legendTitle]="legendTitle" *ngIf="load">
+                <ngx-charts-bar-vertical-2d [view]="[650, 450]" [scheme]="colorScheme" [results]="dataGroupChart"
+                    [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+                    [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+                    [yAxisLabel]="yAxisLabel" [legendTitle]="legendTitle" *ngIf="load">
                 </ngx-charts-bar-vertical-2d>
             </div>
         </div>
@@ -80,13 +89,13 @@
                 <table class="table table-hover table-bordered customtable">
                     <thead style="background-color: rgba(0, 0, 0, 0.03);">
                         <tr class="col-md-12 row no-padding-no-margin">
-    
+
                             <th class="text-center col-md-1 no-padding-no-margin">
                                 No.
                             </th>
                             <th class="text-center col-md-6">
                                 Employee
-    
+
                             </th>
                             <th class="text-center col-md-2">
                                 Point
@@ -94,16 +103,18 @@
                             <th class="text-center col-md-3">
                                 Date
                             </th>
-    
+
                         </tr>
                     </thead>
                     <tbody style="background-color: white;">
-                        <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px" *ngFor="let data of dataEmployeeOverPoint; let i = index">
-    
+                        <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px"
+                            *ngFor="let data of dataEmployeeOverPoint; let i = index">
+
                             <td class="text-center col-md-1" style="font-size: 16px;">{{i+1}}</td>
                             <td class="text-center col-md-6" style="font-size: 16px;">{{data.username}}</td>
                             <td class="text-center col-md-2" style="font-size: 16px;">{{data.overallPoint *100}}</td>
-                            <td class="text-center col-md-3" style="font-size: 16px;">{{data.configCreateDate.split('T')[0]}}</td>
+                            <td class="text-center col-md-3" style="font-size: 16px;">
+                                {{data.configCreateDate.split('T')[0]}}</td>
                         </tr>
                     </tbody>
                 </table>
