@@ -151,12 +151,10 @@ export class TestComponent implements OnInit {
     };
     this.testService.postAutoSaveTest(userTest)
       .subscribe((res) => {
-        console.log(res);
       });
   }
 
   scroll(id) {
-    console.log(id);
     let el = document.getElementById(id);
     el.scrollIntoView({ behavior: "smooth" });
   }
@@ -169,7 +167,6 @@ export class TestComponent implements OnInit {
       questionInTest: this.questionInTest
     }
     this.loading = true;
-    console.log(JSON.stringify(userTest))
     this.testService.postSubmitTest(userTest)
       .subscribe((res) => {
         this.loading = false;

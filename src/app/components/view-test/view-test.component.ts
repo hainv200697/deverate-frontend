@@ -35,7 +35,6 @@ export class ViewTestComponent implements OnInit {
   id = this.activeRoute.snapshot.params.id;
   listTest = [];
   ngOnInit() {
-    console.log(this.id);
     this.getTestByConfig();
 
   }
@@ -48,13 +47,11 @@ export class ViewTestComponent implements OnInit {
   getTestByConfig() {
     this.testService.getTestByConfigId(this.id).subscribe(
       (data: any) => {
-        console.log(data);
         this.listTest = data;
       }
     );
   }
   openViewTest(id) {
-    console.log(id);
     this.router.navigate(['/manage-detail-test/', id]);
   }
 
