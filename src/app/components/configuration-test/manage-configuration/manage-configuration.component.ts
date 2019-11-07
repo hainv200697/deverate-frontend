@@ -1,4 +1,4 @@
-import { option1, option2, option0 } from './data';
+import { option1, option2, option0, Point } from './data';
 import { RankApiService } from './../../../services/rank-api.services';
 import { CatalogueApiService } from './../../../services/catalogue-api.service';
 import { ConfigurationApiService } from './../../../services/configuration-api.service';
@@ -52,6 +52,7 @@ export class ManageConfigurationComponent implements OnInit {
     defaultOpen: false,
     closeOnSelect: true,
   };
+  point: number[][];
   private stepper: Stepper;
   index = 1;
   indexDetail = 1;
@@ -86,7 +87,6 @@ export class ManageConfigurationComponent implements OnInit {
   form: any;
   count = 1;
   answerForm: FormGroup;
-
   selectedItems = [];
   selectedItemsUpdate = []
   dropdownSettings = {
@@ -113,6 +113,7 @@ export class ManageConfigurationComponent implements OnInit {
     primaryKey: 'catalogueId',
     maxHeight: 240,
     showCheckbox: true,
+    badgeShowLimit: 0,
   };
 
   test = []
@@ -121,25 +122,16 @@ export class ManageConfigurationComponent implements OnInit {
     this.pageSize = test;
   }
 
-  companyId = Number(sessionStorage.getItem('CompanyId'));
+  companyId = sessionStorage.getItem('CompanyId');
 
   ngOnInit() {
     this.getAllRank(true);
     this.getAllCatalogue();
-    this.getConfigurationIsActive(true, this.companyId);
+    this.getConfigurationIsActive(true);
   }
 
   onItemSelect(item: any) {
-    this.selectedItemsUpdate = []
     this.inputConfiguration['totalQuestion'] += 5;
-
-    // var cir = {
-    //   "configId" : this.updateConfig['ConfigId'],
-    //   "catalogueId" : item.CatalogueId,
-    //   "weightPoint" : this.updateConfig[item]['catalogueInConfigurations']
-    // } 
-    // this.selectedItemsUpdate.push(cir);
-    // console.log(this.selectedItemsUpdate);
   }
 
   onSelectAll(item: any) { }
@@ -147,20 +139,24 @@ export class ManageConfigurationComponent implements OnInit {
   onDeSelectAll(item: any) { }
 
   OnItemDeSelect(item: any) {
+    this.inputConfiguration['totalQuestion'] -= 5;
   }
 
   onDateSelect(item: any) {
   }
 
-  removeItem(item) {
+  removeItem(item, select) {
 
-    for (let i = 0; i < this.selectedItems.length; i++) {
-      if (this.selectedItems[i]['catalogueId'] == item['catalogueId']) {
-        this.selectedItems.splice(i, 1);
+    for (let i = 0; i < select.length; i++) {
+      if (select[i]['catalogueId'] == item['catalogueId']) {
+        select.splice(i, 1);
       }
     }
   }
 
+  onItemUpdateSelect(item){
+
+  }
   open(content) {
     this.index = 1;
     this.startDate = new Date();
@@ -253,7 +249,15 @@ export class ManageConfigurationComponent implements OnInit {
   getAllRank(status: boolean) {
     this.rankApi.getAllRank(status).subscribe(
       (data) => {
-        this.ListRank = data['data']['data'];
+        let tmp = []
+        tmp = data['data']['data'];
+        for(var i =0; i < tmp.length ; i++){
+          if(tmp[i].name == "dev0"){
+            tmp.splice(i,1);
+            break;
+          }
+        }
+        this.ListRank = tmp;
       }
     );
 
@@ -283,17 +287,17 @@ export class ManageConfigurationComponent implements OnInit {
     setTimeout(function () {
       refesh.classList.remove('spin-animation');
     }, 500);
-    this.getConfigurationIsActive(true, this.companyId);
+    this.getConfigurationIsActive(true);
   }
 
 
-  getConfigurationIsActive(status: boolean, id) {
+  getConfigurationIsActive(status: boolean) {
     this.loading = true;
     this.iconIsActive = status;
-    this.configAPi.getAllConfiguration(status, id).subscribe(
+    this.configAPi.getAllConfiguration(status, this.companyId).subscribe(
       (data) => {
         this.loading = false;
-        this.Configurations = data['data']['data']['configurations'];
+        this.Configurations = data;
         console.log(this.Configurations)
       }
     );
@@ -313,9 +317,21 @@ export class ManageConfigurationComponent implements OnInit {
         this.updateConfig['endDate'] = data['data']['data']['endDate'];
         this.updateConfig['duration'] = data['data']['data']['duration'];
         this.updateConfig['isActive'] = data['data']['data']['isActive'];
-        this.updateConfig['catalogueInConfigurations'] = data['data']['data']['catalogueInConfigurations'];
-        this.updateConfig['configurationRank'] = data['data']['data']['configurationRank'];
-        this.selectedItems = data['data']['data']['catalogueInConfigurations'];
+        
+        let test = [];
+        test = data['data']['data']['catalogueInConfigurations'];
+        for(var i =0; i < test.length; i++){
+          test[i].weightPoint = test[i].weightPoint * 100; 
+        }
+        this.updateConfig['catalogueInConfigurations'] = test;
+
+        let test1 = [];
+        test1 = data['data']['data']['configurationRank'];
+        for(var i =0; i < test1.length; i++){
+          test1[i].weightPoint = test1[i].weightPoint * 100; 
+        }
+        this.updateConfig['configurationRank'] = test1;
+        this.selectedItemsUpdate = data['data']['data']['catalogueInConfigurations'];
         this.loading = false;
       }
     );
@@ -370,8 +386,9 @@ export class ManageConfigurationComponent implements OnInit {
         this.inputConfiguration['configurationRank'] = this.ListRank;
         this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
         this.inputConfiguration['endDate'] = new Date(this.inputConfiguration['endDate']);
+        console.log(this.inputConfiguration)
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
-          this.getConfigurationIsActive(true, this.companyId);
+          this.getConfigurationIsActive(true);
           this.closeModal();
           this.index = 1;
           Swal.fire('Success', 'The configuration has been created', 'success');
@@ -394,7 +411,7 @@ export class ManageConfigurationComponent implements OnInit {
       if (result.value) {
         this.loading = true;
         this.configAPi.updateConfiguration(this.updateConfig).subscribe(data => {
-          this.getConfigurationIsActive(true, this.companyId);
+          this.getConfigurationIsActive(true);
           this.closeModal();
           this.indexDetail = 1;
           Swal.fire('Success', 'The configuration has been updated', 'success');
@@ -422,7 +439,7 @@ export class ManageConfigurationComponent implements OnInit {
             this.selectConfiguration[i].isActive = status;
           }
           this.configAPi.changeStatusConfiguration(this.selectConfiguration).subscribe(data => {
-            this.getConfigurationIsActive(true, this.companyId);
+            this.getConfigurationIsActive(true);
             this.closeModal();
             Swal.fire('Success', 'The configuration has been deleted', 'success');
           });
@@ -447,7 +464,7 @@ export class ManageConfigurationComponent implements OnInit {
             this.selectConfiguration[i].isActive = status;
           }
           this.configAPi.changeStatusConfiguration(this.selectConfiguration).subscribe(data => {
-            this.getConfigurationIsActive(true, this.companyId);
+            this.getConfigurationIsActive(true);
             this.closeModal();
             Swal.fire('Success', 'The configuration has been enabled', 'success');
           });
@@ -458,6 +475,10 @@ export class ManageConfigurationComponent implements OnInit {
       }).catch((error) => {
       });
     }
+  }
+
+  validateUpdateConfiguration(){
+
   }
 
   validateConfiguration() {
@@ -548,13 +569,14 @@ export class ManageConfigurationComponent implements OnInit {
       this.ListRank[0].weightPoint = option0.dev3;
       this.ListRank[1].weightPoint = option0.dev2;
       this.ListRank[2].weightPoint = option0.dev1;
-    }
+      this.point = []  }
     else if (value == 1) {
       this.inputConfiguration = option1;
       this.selectedItems = option1.selectedItems;
       this.ListRank[0].weightPoint = option1.dev3;
       this.ListRank[1].weightPoint = option1.dev2;
       this.ListRank[2].weightPoint = option1.dev1;
+      this.point = Point  
     }
     else if (value == 2) {
       this.inputConfiguration = option2;
@@ -562,6 +584,7 @@ export class ManageConfigurationComponent implements OnInit {
       this.ListRank[0].weightPoint = option2.dev3;
       this.ListRank[1].weightPoint = option2.dev2;
       this.ListRank[2].weightPoint = option2.dev1;
+      this.point = Point  
     }
   }
 

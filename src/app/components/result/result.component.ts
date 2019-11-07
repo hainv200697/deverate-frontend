@@ -55,12 +55,26 @@ export class ResultComponent implements OnInit {
         this.catalogueInRanks = data['data']['data'].catalogueInRanks;
         this.catalogueOverpoint = data['data']['data'].catalogues;
         this.pointRank = data['data']['data'].configurationRanks;
-        
+        let dialValue =  data['data']['data'].rank;
+        let tmp = 0;
+        if(dialValue == "dev0"){
+          tmp = 12.5
+        }
+        else if(dialValue =="dev1"){
+          tmp = 12.5 +25
+        }
+        else if(dialValue =="dev2"){
+          tmp = 12.5 + 50
+        }
+        else if(dialValue =="dev3"){
+          tmp = 12.5 + 75
+        }
+
         for (var i = 0; i < this.catalogueInRanks.length; i++) {
           this.catalogue = this.catalogueInRanks[i].catalogues
-          this.radarChartData[i+1].label = this.catalogueInRanks[i].rank
+          this.radarChartData[i + 1].label = this.catalogueInRanks[i].rank
           for (var j = 0; j < this.catalogue.length; j++) {
-              this.radarChartData[i+1].data.push(this.catalogue[j].thresholdPoint * 100);
+            this.radarChartData[i + 1].data.push(this.catalogue[j].thresholdPoint * 100);
             for (var z = 0; z < this.catalogueOverpoint.length; z++) {
               if (this.catalogue[j].CatalogueId == this.catalogueOverpoint[z].CatalogueId) {
                 this.catalogue[j].overallPoint = this.catalogueOverpoint[z].overallPoint;
@@ -68,9 +82,9 @@ export class ResultComponent implements OnInit {
             }
           }
         }
-        for(var a = 0; a < this.catalogue.length; a++){
+        for (var a = 0; a < this.catalogue.length; a++) {
           this.radarChartLabels.push(this.catalogue[a].name);
-          this.radarChartData[0].data.push(this.catalogue[a].overallPoint *100)
+          this.radarChartData[0].data.push(this.catalogue[a].overallPoint * 100)
         }
         this.catalogueTable = this.catalogue;
         console.log(this.catalogueInRanks)
@@ -81,8 +95,8 @@ export class ResultComponent implements OnInit {
             "gaugeOuterRadius": "140",
             "gaugeInnerRadius": "90",
             "lowerLimit": "0",
-            "upperLimit": "5",
-            "showValue": "3",
+            "upperLimit": "100",
+            "showValue": "1",
             "numberSuffix": "",
             "theme": "fusion",
             "showToolTip": "1",
@@ -90,23 +104,25 @@ export class ResultComponent implements OnInit {
             "showGaugeBorder": "1",
             "pivotFillType": "linear",
             "chartBottomMargin": "50",
+            "showTickMarks": "0",
+            "showTickValues": "0"
           },
           "colorRange": {
             "color": [{
-              "minValue": "0",
-              "maxValue": this.pointRank[2].point * 5,
+              "minValue": 0,
+              "maxValue": 25,
               "code": "#F2726F",
             }, {
-              "minValue": this.pointRank[2].point * 5,
-              "maxValue": this.pointRank[1].point * 5,
+              "minValue": 25,
+              "maxValue": 50,
               "code": "#FFC533",
             }, {
-              "minValue": this.pointRank[1].point * 5,
-              "maxValue": this.pointRank[0].point * 5,
+              "minValue": 50,
+              "maxValue": 75,
               "code": "#62B58F",
             }, {
-              "minValue": this.pointRank[0].point * 5,
-              "maxValue": "5",
+              "minValue": 75,
+              "maxValue": 100,
               "code": "#00FF00",
             }]
           },
@@ -119,36 +135,36 @@ export class ResultComponent implements OnInit {
                 "displayValue": "dev0",
               },
               {
-                "startValue": this.pointRank[2].point * 5,
+                "startValue": 25,
                 "color": "#0075c2",
                 "dashed": "3",
                 "displayValue": "dev1",
               },
               {
-                "startValue": this.pointRank[1].point * 5,
+                "startValue": 50,
                 "color": "#0075c2",
                 "dashed": "1",
                 "displayValue": "dev2",
               },
               {
-                "startValue": this.pointRank[0].point * 5,
+                "startValue": 75,
                 "color": "#0075c2",
                 "dashed": "2",
                 "displayValue": "dev3"
               },
               {
-                "startValue": 5,
+                "startValue": 100,
                 "color": "#0075c2",
                 "dashed": "2",
                 "displayValue": "dev4"
-              }
+              },
             ]
           },
           "dials": {
             "dial": [{
-              "value": data['data']['data']['point'] * 5,
-              "showValue": "1",
-              "valueFontSize": "22"
+              "value": tmp,
+              "showValue": "0",
+              "valueFontSize": "25"
 
             }]
           },
@@ -173,7 +189,7 @@ export class ResultComponent implements OnInit {
                   "id": "state-cs-text",
                   "type": "Text",
                   "color": "black",
-                  "label": "Overall point:" + (data['data']['data']['point'] * 5),
+                  "label": "Overall point:" + (data['data']['data']['point'] * 100),
                   "fontSize": "18",
                   "background-color": "#ffffff",
                   "align": "center",
