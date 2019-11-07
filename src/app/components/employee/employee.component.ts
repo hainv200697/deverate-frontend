@@ -53,11 +53,9 @@ export class EmployeeComponent implements OnInit {
     // Excel
     incomingfile(event) {
         this.file = event.target.files[0];
-        console.log(this.file);
         if(this.file != null && this.file != undefined){
             var name = this.file.name.split('.');
             let type = name[name.length-1]+"";
-            console.log(type);
             if (type != 'xlsx') {
                 this.checkFile = false;
                 this.toastr.error('File must be excel file');
@@ -101,7 +99,6 @@ export class EmployeeComponent implements OnInit {
             let list: any;
             list = await this.readExcel();
             list.forEach(element => {
-                console.log(element);
                 this.insEmployee = {};
                 this.insEmployee['companyId'] = this.companyId;
                 this.insEmployee['fullname'] = element.fullname;
@@ -110,7 +107,7 @@ export class EmployeeComponent implements OnInit {
                 this.employees.push(this.insEmployee);
             });
         } catch (err) {
-            console.log(err);
+            this.toastr.error(err);
         }
 
     }
@@ -182,7 +179,6 @@ export class EmployeeComponent implements OnInit {
         this.employees.push(this.insEmployee);
         this.employeeService.postCreateEmployee(this.employees).subscribe(
             results => {
-                console.log(results);
                 this.loading = false;
                 if (results.status.code == 200) {
                     this.toastr.success(results.status.message);
@@ -195,17 +191,14 @@ export class EmployeeComponent implements OnInit {
             },
             (error)=>{
                 this.loading = false;
-                console.log(error); 
                 let email = [];
                 let i = 0;
-                console.log(error.error);
                 error.error.forEach(element => {
                     if(i < 4){
                         email.push(element);
                     }
                     i++;
                 });
-                console.log(email);
                 this.toastr.error("Email "+email + " existed");
             }
         );
@@ -224,14 +217,13 @@ clickButtonChangeStatus(status: boolean) {
         cancelButtonText: 'No, keep it'
     }).then((result) => {
         if (result.value) {
-            console.log(this.updateEmployee);
             for (let i = 0; i < this.updateEmployee.length; i++) {
                 this.listId.push(this.updateEmployee[i].accountId)
             }
             this.employeeService.disableEmployee(this.listId,status).subscribe(data => {
                 this.getEmployee(this.iconIsActive);
                 this.closeModal();
-                Swal.fire('Success', 'The company has been deleted', 'success');
+                Swal.fire('Success', 'The status has been change', 'success');
             });;
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         this.updateEmployee = [];
@@ -261,14 +253,11 @@ resendmail() {
             this.employeeService.resendpassword(this.listUser,this.companyId).subscribe(data => {
                 this.getEmployee(this.iconIsActive);
                 this.closeModal();
-                console.log(data);
                 Swal.fire( {title:'Success',text: data.status.message,type:'success'});
                 this.listUser = [];
             },error=>{
-                console.log(error);
                 let account = [];
                 let i = 0;
-                console.log(error.error);
                 error.error.forEach(element => {
                     if(i < 4){
                         account.push(element);
