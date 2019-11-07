@@ -11,6 +11,9 @@
     <div class="card-header">
         <h5>Test</h5>
     </div>
+
+    
+
     <div class="table-responsive col-md-12 datatable">
         <div class="row mb-1">
             <div class="col">
@@ -24,13 +27,20 @@
                     </div>
                 </div>
             </div>
+            <div class="row justify-content-end" style="margin-top: 20px;">
+                <button [hidden]="iconIsActive==false" style="margin-right: 20px;"
+                    (click)="sendQuizCode();" class="btn btn-lg btn-warning" data-toggle="button">
+                    <i class="fa fa-envelope" tooltip="{{'Send mail' | translate}}" placement="top"></i>
+                </button>
+            </div>
         </div>
 
         <table class="table  table-hover customtable" [svData]="listTest" #sv="svDataTable" [svRowsOnPage]="5"
             svSortBy="name" svSortOrder="asc">
             <thead>
                 <tr class="col-md-12 row no-padding-no-margin">
-                    <th class="col-md-1 text-center" scope="col">#
+                    <th class="text-center col-md-1" scope="col">
+                        <input class="btn" type="checkbox" value="" [(ngModel)]="selectedAll" (change)="selectAll();">
                     </th>
                     <th class="col-md-4 text-center" scope="col">
                         <sv-default-sorter by='title'>Title</sv-default-sorter>
@@ -45,7 +55,12 @@
             </thead>
             <tbody>
                 <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data, let i = index">
-                    <td class="col-md-1 text-center">{{ i+1 }}</td>
+                    <td class="text-center col-md-1">
+                        <label>
+                            <input type="checkbox" value="" [(ngModel)]="item.selected" class="btn"
+                                (change)="checkIfAllSelected();">
+                        </label>
+                    </td>
                     <td class="col-md-4 text-center">{{ item.title }}</td>
                     <td class="col-md-4 text-center">{{ item.accountName }}</td>
                     <td class="text-center col-md-1" [hidden]="item.isActive==true">

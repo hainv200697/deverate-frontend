@@ -42,7 +42,12 @@ export class TestService {
 
   getAllQuestionManager(info) {
     const API = 'api/Test/ManagerInTest';
-    return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE  + API, info);
+    return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST  + API, info);
+  }
+
+  sendMail(listId) {
+    const API = 'api/Test/SendTestCode';
+    return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST  + API, listId);
   }
 
 }
