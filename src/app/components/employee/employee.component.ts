@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import * as XLSX from 'ts-xlsx';
+import Stepper from 'bs-stepper';
 import { GloblaService } from 'src/assets/service/global.service';
 @Component({
     selector: 'app-employee',
@@ -20,9 +21,13 @@ export class EmployeeComponent implements OnInit {
         private globalservice: GloblaService
     ) { }
     public loading = false;
-    id = Number(sessionStorage.getItem('AccountId'));
+    iconIsActive=true;
+    private stepper: Stepper;
+    companyId = Number(sessionStorage.getItem('CompanyId'));
     // Excel
-    checkFile = true;
+    index = 1;
+    searchText = '';
+    checkFile = false;
     arrayBuffer: any;
     file: File;
     listDataExcel = [];
@@ -30,17 +35,41 @@ export class EmployeeComponent implements OnInit {
     employeeList = [];
     insEmployee = {};
     employees = [];
-    companyId = 0;
+    updateEmployee = [];
+    listUser:String[] = [];
+    listId:number[] = [];
     ngOnInit() {
-        this.getEmployee();
+        this.getEmployee(this.iconIsActive);
+    }
+    async next(){
+        this.index = 2;
+        await this.formatExcel();
+        this.stepper.next();
+    }
+    back(){
+        this.index=1;
+        this.employees = [];
+        this.stepper.previous();
     }
     // Excel
     incomingfile(event) {
-        this.checkFile = true;
         this.file = event.target.files[0];
-        if (this.file.size > 200000) {
-            this.checkFile = false;
-            this.toastr.error('File must be smaller than 20MB');
+        if(this.file != null && this.file != undefined){
+            var name = this.file.name.split('.');
+            let type = name[name.length-1]+"";
+            if (type != 'xlsx') {
+                this.checkFile = false;
+                this.toastr.error('File must be excel file');
+                this.file = null;
+                return;
+            }
+            if (this.file.size > 200000) {
+                this.checkFile = false;
+                this.toastr.error('File must be smaller than 20MB');
+                this.file = null;
+                return;
+            }
+            this.checkFile = true;
         }
     }
 
@@ -48,7 +77,6 @@ export class EmployeeComponent implements OnInit {
         return new Promise((resolve, reject) => {
             const fileReader = new FileReader();
             fileReader.onload = (e) => {
-
                 this.arrayBuffer = fileReader.result;
                 let data = new Uint8Array(this.arrayBuffer);
                 let arr = new Array();
@@ -71,29 +99,31 @@ export class EmployeeComponent implements OnInit {
         try {
             let list: any;
             list = await this.readExcel();
+            console.log(list);
             list.forEach(element => {
-                console.log(element);
                 this.insEmployee = {};
-                this.insEmployee['accountId'] = this.id;
+                this.insEmployee['companyId'] = this.companyId;
                 this.insEmployee['fullname'] = element.fullname;
                 this.insEmployee['email'] = element.email;
+                this.insEmployee['role'] = 3;
                 this.employees.push(this.insEmployee);
             });
         } catch (err) {
-            console.log(err);
+            this.toastr.error(err);
         }
 
     }
 
     clickButtonRefresh() {
-        this.getEmployee();
+        this.getEmployee(this.iconIsActive);
     }
 
-    getEmployee() {
-        this.employeeService.getAllEmployee(this.id).subscribe(
+    getEmployee(status) {
+        this.iconIsActive =status;
+        this.employeeService.getAllEmployee(this.companyId,this.iconIsActive).subscribe(
             (data) => {
-                console.log(data['data']['data']);
-                this.employeeList = data['data']['data'];
+                console.log(data);
+                this.employeeList = data;
             }
         );
     }
@@ -105,43 +135,45 @@ export class EmployeeComponent implements OnInit {
     }
 
     openModalExcel(excel) {
+        this.index = 1;
         this.modalService.open(excel, { size: 'lg', windowClass: 'myCustomModalClass' });
+        const a = document.querySelector('#stepper1');
+        this.stepper = new Stepper(a, {
+            linear: false,
+            animation: true
+        });
     }
 
     // close modal
     closeModal() {
+        this.employees = [];
         this.modalService.dismissAll();
+
     }
 
 
     // submit
     // insert submit
-    async insertEmployeeSubmit(key) {
+    insertEmployeeSubmit(key) {
         if (key === 'excel') {
-            await this.insertEmployeeExcel();
-            this.getEmployee();
-            this.toastr.success("Create success");
+            this.insertEmployeeExcel();
         } else {
             if (!this.validdate) {
                 return;
             }
+            this.employees=[];
+            this.insEmployee['companyId'] = this.companyId;
+            this.insEmployee['role'] = 3;
+            this.employees.push(this.insEmployee);
             this.insertEmployee();
-            this.getEmployee();
+            this.getEmployee(this.iconIsActive);
         }
     }
 
 
-    async insertEmployeeExcel() {
-        await this.formatExcel();
-        console.log(this.employees);
-        this.employeeService.postCreateEmployeeByExcel(this.employees).subscribe(
-            results => {
-                console.log(results);
-                    this.getEmployee();
-                    // this.toastr.success(results.status.message);
-                    this.closeModal();
-            }
-        );
+    insertEmployeeExcel() {
+        this.insertEmployee();
+        
     }
 
 
@@ -149,18 +181,22 @@ export class EmployeeComponent implements OnInit {
     // function 
     // insert Employee function
     insertEmployee() {
-        this.insEmployee['accountId'] = this.id;
-        this.loading = true;
-        this.insEmployee['questionId'] = parseInt(this.insEmployee['questionId']);
-        this.employeeService.postCreateEmployee(this.insEmployee).subscribe(
+        this.loading = true; 
+        console.log(this.employees);
+        this.employeeService.postCreateEmployee(this.employees).subscribe(
             results => {
-                console.log(results);
                 this.loading = false;
-                if (results.status.code == 200) {
-                    this.toastr.success(results.status.message);
-                    
-                }
-                this.getEmployee();
+                this.toastr.success("Create success");
+                this.employees = [];
+                this.insEmployee = {};
+                this.getEmployee(this.iconIsActive);
+                this.closeModal();
+            },  
+            (error)=>{
+                this.loading = false;
+                const email = error.error.slice(0, 3);
+                const message = `Email ${email.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
+                this.toastr.error(message);
                 this.closeModal();
             }
         );
@@ -168,30 +204,102 @@ export class EmployeeComponent implements OnInit {
 
 
     // change status
+// change status
+clickButtonChangeStatus(status: boolean) {
+    
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'Status will be change!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, change it!',
+        cancelButtonText: 'No, keep it'
+    }).then((result) => {
+        if (result.value) {
+            for (let i = 0; i < this.updateEmployee.length; i++) {
+                this.listId.push(this.updateEmployee[i].accountId)
+            }
+            this.loading = true;
+            this.employeeService.disableEmployee(this.listId,status).subscribe(data => {
+                this.loading = false;
+                this.getEmployee(this.iconIsActive);
+                this.closeModal();
+                Swal.fire('Success', 'The status has been change', 'success');
+            });;
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.updateEmployee = [];
+        Swal.fire(
+          'Cancelled',
+          '',
+          'error'
+        )
+      }
+    })
+}
 
+// send pass
+resendmail() {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'Password will be send!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, send it!',
+        cancelButtonText: 'No, Do not send it'
+    }).then((result) => {
+        if (result.value) {
+            this.updateEmployee.forEach(element => {
+                this.listUser.push(element.username);
+            }); 
+            this.employeeService.resendpassword(this.listUser,this.companyId).subscribe(data => {
+                this.getEmployee(this.iconIsActive);
+                this.closeModal();
+                Swal.fire( {title:'Success',text: "Password was send to your email!",type:'success'});
+                this.listUser = [];
+            },error=>{
+                if(error.status == 400){
+                    const account = error.error.slice(0, 3);
+                    const message = `Account ${account.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
+                    Swal.fire({title:'Cancelled',
+                    text: message,
+                    type:'error'});
+                }
+                if(error.status == 500){
+                    Swal.fire({title:'Cancelled',
+                    text: "System error",
+                    type:'error'});
+                }
+            }
+            
+            );;
+      } 
+    })
+}
 
-    // select answer
-    // selectAll() {
-    //     this.updateStatus = [];
-    //     for (let i = 0; i < this.answerList.length; i++) {
-    //         this.answerList[i].selected = this.selectedAll;
-    //         this.updateStatus.push(this.answerList[i]);
-    //     }
-    // }
+    // select employee
+    selectAll() {
+        this.updateEmployee = [];
+        for (let i = 0; i < this.employeeList.length; i++) {
+            this.employeeList[i].selected = this.selectedAll;
+            this.employeeList[i].companyId = this.companyId;
+            this.updateEmployee.push(this.employeeList[i]);
+        }
+    }
 
-    // checkIfAllSelected() {
-    //     this.updateStatus = [];
-    //     this.selectedAll = this.answerList.every(function (item: any) {
-    //         return item.selected === true;
+    checkIfAllSelected() {
+        this.updateEmployee = [];
+        this.selectedAll = this.employeeList.every(function (item: any) {
+            return item.selected === true;
 
-    //     });
-    //     for (let i = 0; i < this.answerList.length; i++) {
-    //         if (this.answerList[i].selected === true) {
-    //             this.updateStatus.push(this.answerList[i]);
-    //         }
-    //     }
+        });
+        for (let i = 0; i < this.employeeList.length; i++) {
+            if (this.employeeList[i].selected === true) {
+                this.employeeList[i].companyId = this.companyId;
+                this.updateEmployee.push(this.employeeList[i]);
+            }
+        }
 
-    // }
+    }
     validdate() {
         if (this.insEmployee['fullname'] == '') {
             this.toastr.error('Message', 'Please input employee name');

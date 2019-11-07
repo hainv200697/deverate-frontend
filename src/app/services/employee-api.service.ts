@@ -12,19 +12,26 @@ export class EmployeeApiService {
         private httpClient: HttpClient,
     ) { }
 
-    getAllEmployee(questionId) {
+    getAllEmployee(companyId,status) {
         const API = 'api/Employee/GetEmployee';
-        const param = new HttpParams().set('id', questionId);
-        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
+        const param = new HttpParams().set('companyId', companyId).set('status', status);
+        return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
 
-    postCreateEmployee(employee) {
+    postCreateEmployee(employees) {
         const API = 'api/Employee/CreateEmployee';
-        return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employee);
+        return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employees);
     }
 
-    postCreateEmployeeByExcel(employees) {
-        const API = 'api/Employee/CreateEmployeeExcel';
-        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API, employees);
+    disableEmployee(employees,status){
+        const API = 'api/Employee/UpdateEmployeeStatus';
+        const param = new HttpParams().set('status', status);
+        return this.httpClient.put<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employees,{ params: param });
+    }
+
+    resendpassword(employees, companyId){
+        const API = 'api/Employee/ResendPassword';
+        const param = new HttpParams().set('companyId',companyId);
+        return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employees,{ params: param });
     }
 }   
