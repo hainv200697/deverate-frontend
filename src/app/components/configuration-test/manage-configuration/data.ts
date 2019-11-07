@@ -13,6 +13,7 @@ export var option1 =
 {
     "type": true,
     "title": "test developer",
+    "testOwnerId" : Number(sessionStorage.getItem("AccountId")),
     "totalQuestion": 30,
     "duration": 20,
     selectedItems:
@@ -28,6 +29,7 @@ export var option2 =
 {
     "type": true,
     "title": "test manager",
+    "testOwnerId" : Number(sessionStorage.getItem("AccountId")),
     "totalQuestion": 40,
     "duration": 25,
     selectedItems:
@@ -41,3 +43,4 @@ export var option2 =
     "dev2": 60,
     "dev1": 50,
 }
+export var Point: number[][] =[ [110,80,70], [140,50,70], [120,80,100], [100,70,120]];

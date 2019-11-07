@@ -41,7 +41,7 @@
 
                         </th>
                         <th class="text-center col-md-2">
-                            {{statistic['rank']}}
+                            WeightPoint
                         </th>
                         <th class="text-center col-md-4">
                             Assessment Result
@@ -56,9 +56,13 @@
 
                         <td class="text-center col-md-1" style="font-size: 16px;">{{i+1}}</td>
                         <td class="text-center col-md-5" style="font-size: 16px;">{{c.name}}</td>
-                        <td class="text-center col-md-2" style="font-size: 16px;">{{c.thresholdPoint *100}}</td>
+                        <td class="text-center col-md-2" style="font-size: 16px;">{{c.thresholdPoint *100}}%</td>
                         <td class="text-center col-md-4" style="font-size: 16px;">{{c.overallPoint *100}}</td>
 
+                    </tr>
+                    <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px">
+                        <td class="text-center col-md-6" style="font-size: 16px;">Total</td>
+                        <td class="text-center col-md-6" style="font-size: 16px;">{{statistic.point*100}}</td>
                     </tr>
                 </tbody>
             </table>
