@@ -119,6 +119,7 @@ export class EmployeeComponent implements OnInit {
                     this.checkExcel = false;
                 }
                 if (element.role == null ||
+                    element.role == isNaN ||
                     element.role == undefined ||
                     element.role < 3 ||
                     element.role > 4) 
@@ -222,24 +223,26 @@ export class EmployeeComponent implements OnInit {
     // function 
     // insert Employee function
     insertEmployee() {
-        this.loading = true;
-        this.employeeService.postCreateEmployee(this.employees).subscribe(
-            results => {
-                this.loading = false;
-                this.toastr.success("Create success");
-                this.employees = [];
-                this.insEmployee = {};
-                this.getEmployee(this.iconIsActive);
-                this.closeModal();
-            },
-            (error) => {
-                this.loading = false;
-                const email = error.error.slice(0, 3);
-                const message = `Email ${email.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
-                this.toastr.error(message);
-                this.closeModal();
-            }
-        );
+        if(this.validdate()){
+            this.loading = true;
+            this.employeeService.postCreateEmployee(this.employees).subscribe(
+                results => {
+                    this.loading = false;
+                    this.toastr.success("Create success");
+                    this.employees = [];
+                    this.insEmployee = {};
+                    this.getEmployee(this.iconIsActive);
+                    this.closeModal();
+                },
+                (error) => {
+                    this.loading = false;
+                    const email = error.error.slice(0, 3);
+                    const message = `Email ${email.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
+                    this.toastr.error(message);
+                    this.closeModal();
+                }
+            );
+        }
     }
 
 
@@ -344,7 +347,7 @@ export class EmployeeComponent implements OnInit {
 
     }
     validdate() {
-        if (this.insEmployee['fullname'] == '') {
+        if (this.insEmployee['fullname'] == '' || this.insEmployee['fullname'] == null) {
             this.toastr.error('Message', 'Please input employee name');
             return false;
         } else if (this.insEmployee['fullname'].length < 3) {
@@ -352,27 +355,39 @@ export class EmployeeComponent implements OnInit {
             return false;
         } else if (!this.globalservice.checkMail.test(String(this.insEmployee['email']).toUpperCase())) {
             this.toastr.error('Message', 'Email wrong format');
+            return false; 
+        }else if (this.insEmployee['email'] == '') {
+            this.toastr.error('Message', 'Email can not blank');
+            return false;
+        }else if (this.insEmployee['role'] == '') {
+            this.toastr.error('Message', 'Role can not blank');
+            return false;
+        }else if (this.insEmployee['role'] == isNaN) {
+            this.toastr.error('Message', 'RoleId mus be a number');
+            return false;
+        }else if (this.insEmployee['role'] < 3 || this.insEmployee['role'] > 4) {
+            this.toastr.error('Message', 'Role must be in the range of 3 to 4');
             return false;
         }
         return true;
     }
 
-    updateStatus(item) {
-        this.loading = true;
-        this.updRole['accountId'] = item.accountId;
-        this.updRole['roleId'] = item.roleId;
-        this.employeeService.putUpdateAccount(this.updRole).subscribe(
-            results => {
-                this.loading = false;
-                this.toastr.success("Update success");
-                this.updRole = {};
-                this.getEmployee(this.iconIsActive);
-            },
-            (error) => {
-                this.loading = false;
-                this.toastr.error(error);
-            }
-        );
-    }
+    // updateStatus(item) {
+    //     this.loading = true;
+    //     this.updRole['accountId'] = item.accountId;
+    //     this.updRole['roleId'] = item.roleId;
+    //     this.employeeService.putUpdateAccount(this.updRole).subscribe(
+    //         results => {
+    //             this.loading = false;
+    //             this.toastr.success("Update success");
+    //             this.updRole = {};
+    //             this.getEmployee(this.iconIsActive);
+    //         },
+    //         (error) => {
+    //             this.loading = false;
+    //             this.toastr.error(error);
+    //         }
+    //     );
+    // }
 
 }

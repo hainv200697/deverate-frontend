@@ -21,7 +21,7 @@
                     <div class="step" data-target="#test-l-2">
                         <button [disabled]="index != 2 " class="step-trigger">
                             <span class="bs-stepper-circle">2</span>
-                            <span class="bs-stepper-label">Review Employee</span>
+                            <span class="bs-stepper-label">Review Account</span>
                         </button>
                     </div>
                 </div>
@@ -43,17 +43,21 @@
                                 <table class="table table-striped table-bordered table-hover customtable">
                                     <thead>
                                         <tr class="col-md-12 row no-padding-no-margin">
-                                            <td class="col-md-6" style="font-weight: bold">Fullname</td>
+                                            <td class="col-md-4" style="font-weight: bold">Fullname</td>
                                             <td class="col-md-6" style="font-weight: bold">Email</td>
+                                            <td class="col-md-2" style="font-weight: bold">RoleId</td>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr class="col-md-12 row no-padding-no-margin" *ngFor="let q of employees">
-                                            <td class="col-md-6">
+                                            <td class="col-md-4">
                                                 {{q.fullname}}
                                             </td>
                                             <td class="col-md-6">
                                                 {{q.email}}
+                                            </td>
+                                            <td class="col-md-2">
+                                                {{q.role}}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -78,22 +82,22 @@
 <ng-template #create let-modal>
     <div class="text-left mt-1 ">
         <div class="modal-header">
-            <h4 class="modal-title" id="modal-basic-title">Create Employee</h4>
+            <h4 class="modal-title" id="modal-basic-title">Create Account</h4>
         </div>
         <div class="modal-body modal-basic-title col-md-12 row no-padding-no-margin">
             <form class="col-md-12 no-padding-no-margin row">
                 <div class="form-group col-md-12">
-                    <label>Employee Information: </label>
+                    <label>Account Information: </label>
                     <div class="form-group input-group">
                         <input type="text" placeholder="FullName" minlength="3" [(ngModel)]="insEmployee['fullname']"
-                            name="ins_manager_fullname" class="form-control">
+                        (change)="validdate()" name="ins_manager_fullname" class="form-control">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="button"><i class="fa fa-user"></i></button>
                         </div>
                     </div>
                     <div class="form-group input-group">
                         <input class="form-control" type="email" placeholder="Email" [(ngModel)]="insEmployee['email']"
-                            name="ins_manager_email">
+                        (change)="validdate()" name="ins_manager_email">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="button"><i class="fa fa-envelope"></i></button>
                         </div>
@@ -119,11 +123,11 @@
 
 
 
-<app-page-header [heading]="'Manage Employee'"></app-page-header>
+<app-page-header [heading]="'Manage Account'"></app-page-header>
 
 <div class="card mb-3">
     <div class="card-header">
-        <h5>Manage Employee</h5>
+        <h5>Manage Account</h5>
     </div>
     <div class="table-responsive col-md-12 datatable">
         <div class="row mb-1">
@@ -214,11 +218,15 @@
                     <td class="col-md-1 text-center">{{ item.username }}</td>
                     <td class="col-md-3 text-center">{{ item.fullname }}</td>
                     <td class="col-md-2 text-center">{{ item.email }}</td>
-                    <td class="text-center col-md-2">
-                        <select class="custom-select" (change)="updateStatus(item)" [(ngModel)]="item.roleId">
+                    <td [hidden]="item.roleId==3" class="text-center col-md-2">
+                        <!-- <select class="custom-select" (change)="updateStatus(item)" [(ngModel)]="item.roleId">
                             <option [ngValue]="3">Employee</option>
                             <option [ngValue]="4">Test Owner</option>
-                        </select>
+                        </select> -->
+                        Test Owner
+                    </td>
+                    <td [hidden]="item.roleId==4"class="text-center col-md-2">
+                        Employee
                     </td>
                     <td class="text-center col-md-1" [hidden]="item.gender==false">
                         Male
