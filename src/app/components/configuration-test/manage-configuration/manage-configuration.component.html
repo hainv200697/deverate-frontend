@@ -46,7 +46,7 @@
                             <div class="col-md-7 row">
                                 <label class="col-md-3" style="text-align: center">Title:</label>
                                 <input class="col-md-6" type="text" [(ngModel)]="inputConfiguration['title']"
-                                    name="ins_config_title">
+                                    name="ins_config_title" (change)="validateConfiguration()">
                             </div>
 
 
@@ -56,7 +56,7 @@
                                 <label class="col-md-8" style="text-align: right">Total
                                     Question:</label>
                                 <input class="col-md-4" type="number" [(ngModel)]="inputConfiguration['totalQuestion']"
-                                    name="ins_config_totalquestion" [min]="5" style="height: 30px">
+                                    name="ins_config_totalquestion" (change)="validateConfiguration()" [min]="5" style="height: 30px">
                                 <label class="col-md-12"></label>
                                 <label class="col-md-8" style="text-align: right;">Duration:</label>
                                 <input class="col-md-4" type="number" [(ngModel)]="inputConfiguration['duration']"
@@ -116,41 +116,17 @@
                     <div class="form-content answer-form">
                         <h4>Configutation Rank Rate</h4>
 
-                        <div class="d-flex justify-content-center col-md-12">
-                            <div class="list-group-item col-md-8 ">
-                                <h5 class="card-title"> </h5>
-                                <div class="form-row" *ngFor="let rank of ListRank">
-
-                                    <div class="form-group col-8">
-                                        <label>Rank</label>
-                                        <input type="text" disabled="disabled" [value]="rank['name']"
-                                            class="form-control " />
-                                    </div>
-                                    <div class="form-group col-3">
-                                        <label>Mark</label>
-                                        <input type="number" [(ngModel)]="rank.weightPoint" class="form-control"
-                                            step="10" id="rate" min="10" max="100" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-md-12">
                             <table #table01 class="table table-striped table-bordered table-hover customtable mt-3">
-                                <thead>
-                                    <tr class="col-md-12 row no-padding-no-margin">
-                                        <th class="text-center col-md-3"></th>
-                                        <th class="text-center col-md-3" *ngFor="let s of ListRank" scope="col">
-                                            {{s.name}}
-                                        </th>
-                                    </tr>
-                                </thead>
                                 <tbody>
-                                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let s1 of selectedItems; let i = index">
+                                    <tr class="col-md-12 row no-padding-no-margin"
+                                        *ngFor="let s1 of selectedItems; let i = index">
                                         <td class="text-center col-md-3">{{s1.name}}</td>
                                         <td class="text-center col-md-3" *ngFor="let s2 of ListRank; let j = index">
                                             <!-- Validate  -->
-                                            <input type="number" value="0" min="10" step="10" style="height: 30px"
-                                                class="col-md-12" id="{{s1.catalogueId}}_{{s2.rankId}}" [ngModel]="point[i][j]">
+                                            <input (change)="calculateRank()" type="number" value="0" min="0" max="100" step="10" style="height: 30px"
+                                                class="col-md-12" id="{{s1.catalogueId}}_{{s2.rankId}}"
+                                                [ngModel]="point[i][j]">
                                         </td>
                                     </tr>
                                 </tbody>
@@ -399,7 +375,7 @@
                                     </div>
                                     <div class="form-group col-md-3">
                                         <input type="number" min="10" max="100" step="10" class="form-control"
-                                            style="font-size: 15px" [(ngModel)]="c.weightPoint"/>
+                                            style="font-size: 15px" [(ngModel)]="c.weightPoint" />
                                     </div>
                                     <div class="form-group col-1" style="position: relative;">
                                         <button type="button " class="btn btn-danger" mat-mini-fab color="warn"
@@ -606,8 +582,8 @@
                 </div>
             </div>
 
-            <table [svData]="Configurations|CompanyFilterPipe:searchText" #sv="svDataTable" svSortBy="Name" svSortOrder="asc"
-                class="table  table-hover customtable">
+            <table [svData]="Configurations|CompanyFilterPipe:searchText" #sv="svDataTable" svSortBy="Name"
+                svSortOrder="asc" class="table  table-hover customtable">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin">
                         <th class="text-center col-md-1" scope="col"><input class="btn" type="checkbox" value=""
