@@ -23,7 +23,7 @@
                             <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
                         </div>
                     </div>
-                    <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
+                    <button [disabled]="answerList.length > 5" class="btn btn-lg btn-outline-primary" (click)="open(create)">
                         <i class="fa fa-fw fa-plus"></i>
                         Create Answer
                     </button>
@@ -38,10 +38,6 @@
                             data-toggle="button">
                             <i class="fa fa-check" tooltip="{{'Active' | translate}}" placement="top"></i>
                         </button>
-                    <button style="margin-right: 10px;" (click)="openModalExcel(excel);" class="btn btn-lg btn-success "
-                        data-toggle="button">
-                        <i class="fa fa-file-excel-o"></i>
-                    </button>
                     <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
                         class="btn btn-lg btn-primary" data-toggle="button">
                         <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
@@ -125,12 +121,14 @@
                             <label>Answer:</label>
                             <input type="text" [(ngModel)]="insAnswer['answer']" name="ins_Answer"
                                 class="form-control input-underline input-lg" id=""
+                                (change)="validate()"
                                 placeholder="{{ 'answer' | translate }}">
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <label>Point:</label>
                             <input type="number" [(ngModel)]="insAnswer['point']" name="ins_point"
                                 class="form-control input-underline input-lg" id=""
+                                (change)="validate()"
                                 placeholder="{{ 'Point' | translate }}">
                         </div>
                     </div>
@@ -139,7 +137,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-success save" (click)="insertAnswerSubmit()">Create</button>
+        <button [disabled]="checkAdd == false" class="btn btn-success save" (click)="insertAnswerSubmit()">Create</button>
         <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
     </div>
 </ng-template>
@@ -158,12 +156,14 @@
                             <label>Answer:</label>
                             <input type="text" [(ngModel)]="updAnswer['answer']" name="upd_Answer"
                                 class="form-control input-underline input-lg" id=""
+                                (change)="validateUpdate()"
                                 placeholder="{{ 'answer' | translate }}">
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <label>Point:</label>
                             <input type="number" [(ngModel)]="updAnswer['point']" name="upd_point"
                                 class="form-control input-underline input-lg" id=""
+                                (change)="validateUpdate()"
                                 placeholder="{{ 'Point' | translate }}">
                         </div>
                     </div>
@@ -172,7 +172,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-success save" (click)="updateAnswerSubmit()">Update</button>
+        <button [disabled]="checkUpd == false" class="btn btn-success save" (click)="updateAnswerSubmit()">Update</button>
         <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
     </div>
 </ng-template>

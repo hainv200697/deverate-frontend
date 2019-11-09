@@ -94,15 +94,17 @@ export class CatalogueComponent implements OnInit {
     }
 
     insCata() {
-        this.insCatalogue['companyId'] = this.companyId;
-        this.loading = true;
-        this.catelogueService.insertCatalogue(this.insCatalogue).subscribe(
-            (results) => {
-                this.loading = false;
-                this.getAllCatalogue(this.iconIsActive);
-                this.toastr.success(results['message']);
-            }
-        );
+        if(this.validdate()){
+            this.insCatalogue['companyId'] = this.companyId;
+            this.loading = true;
+            this.catelogueService.insertCatalogue(this.insCatalogue).subscribe(
+                (results) => {
+                    this.loading = false;
+                    this.getAllCatalogue(this.iconIsActive);
+                    this.toastr.success(results['message']);
+                }
+            );
+        }
     }
 
     selectAll() {
@@ -183,6 +185,17 @@ export class CatalogueComponent implements OnInit {
 
     viewCatalog(item){
         this.router.navigate(['/manage-question/', item['catalogueId']]);
+    } 
+
+    validdate() {
+        if (this.insCatalogue['Name'] == '') {
+            this.toastr.error('Message', 'Please input catalogue name');
+            return false;
+        } else if (this.insCatalogue['Name'].length < 3) {
+            this.toastr.error('Message', 'Please input catalogue name min 3 letter');
+            return false;
+        }
+        return true;
     }
 
 }
