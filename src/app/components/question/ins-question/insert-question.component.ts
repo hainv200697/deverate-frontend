@@ -76,7 +76,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     insertQuestion = [];
     public loading = false;
     cicid;
-    check= true;
+    check = true;
     // Import excel file
     changeIns(key) {
         this.create = key;
@@ -122,7 +122,9 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     async formatExcel() {
         try {
             let list: any;
+            this.check = true;
             list = await this.readExcel();
+            console.log(list);
             list.forEach(element => {
                 const questionObj = new QuestionModel();
                 this.listAnswer = [];
@@ -134,37 +136,33 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                     this.toastr.error("Question " + element.Question + " is null");
                     this.check = false;
                 }
-                for (let i = 0; i <= 5; i++) {
-                    const answerObj = new AnswerModel();
-                    if (i === 0) {
-                        if (element['answer'] == null) {
-                            this.toastr.error("Answer of " + element.Question + " can not null");
-                            this.check = false;
-                        }
-                        answerObj.answer1 = element['answer'];
-                        answerObj.point = element['point'];
-                        answerObj.isActive = true;
-                        this.listAnswer.push(answerObj);
-                    } else if (element['answer_' + i] == null || element['answer_' + i] == undefined ||
-                        element['point_' + i] < 0 || element['point_' + i] > 6) {
-                        this.toastr.error("Answer of " + element.Question + " is invalid!");
+                for (let i = 1; i <= 6; i++) {
+                    if (element['answer_' + i] == null || element['answer_' + i] == undefined){
+                        element['answer_' + i] = null;
+                        this.toastr.error("Answer of " + element.Question + " is null!");
                         this.check = false;
-                    } else {
-                        answerObj.answer1 = element['answer_' + i];
-                        answerObj.point = element['point_' + i];
-                        answerObj.isActive = true;
-                        this.listAnswer.push(answerObj);
+                    }else if (element['answer_' + i].length < 3 || element['answer_' + i].length > 200){
+                        this.toastr.error("Answer of " + element.Question + " must be in range from 3 to 200 letters!");
+                        this.check = false;
                     }
+                    if (element['point_' + i] == null || element['point_' + i] == undefined){
+                        element['point_' + i]=null;
+                        this.toastr.error("Point of " + element.Question + " is null!");
+                        this.check = false;
+                    }else if (element['point_' + i] < 1 || element['point_' + i] > 6){
+                        this.toastr.error("Highest point of answer " + element.Question + " is 6!");
+                        this.check = false;
+                    }
+                    const answerObj = new AnswerModel();
+                    answerObj.answer1 = element['answer_' + i];
+                    answerObj.point = element['point_' + i];
+                    answerObj.isActive = true;
+                    this.listAnswer.push(answerObj);
                 }
 
                 questionObj.maxPoint = Math.max.apply(Math, this.listAnswer.map(function (o) { return o.point; }));
                 questionObj.answer = this.listAnswer;
                 console.log(questionObj);
-                if(questionObj.answer.length > 5 || questionObj.answer.length < 3)
-                {
-                    this.toastr.error("Answer of " + element.Question + " is less than 6!");
-                    this.check = false;
-                }   
                 this.listInsert.push(questionObj);
             });
         } catch (err) {
@@ -297,11 +295,12 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     back() {
+        this.listInsert = [];
         this.index = 1;
         this.stepper.previous();
     }
 
-    async nextExcel(){
+    async nextExcel() {
         await this.formatExcel();
         this.index = 2;
         const data = JSON.stringify(this.listInsert);
@@ -390,6 +389,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         });
     }
     closeModal() {
+        this.listInsert = [];
         this.modalService.dismissAll();
         this.reset();
     }
@@ -515,14 +515,16 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 this.getQuestionById(this.iconIsActive);
                 this.toastr.success(results['message']);
             },
-            (error)=>{
-                if(error.status == 400){
+            (error) => {
+                if (error.status == 400) {
                     this.toastr.error('Input is invalid');
                 }
-                if(error.status == 500){
-                    Swal.fire({title:'Cancelled',
-                    text: "System error",
-                    type:'error'});
+                if (error.status == 500) {
+                    Swal.fire({
+                        title: 'Cancelled',
+                        text: "System error",
+                        type: 'error'
+                    });
                 }
             }
         );
