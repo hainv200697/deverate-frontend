@@ -1,3 +1,4 @@
+import { EmployeeApiService } from 'src/app/services/employee-api.service';
 import { option1, option2, option0, Point } from './data';
 import { RankApiService } from './../../../services/rank-api.services';
 import { CatalogueApiService } from './../../../services/catalogue-api.service';
@@ -30,6 +31,7 @@ export class ManageConfigurationComponent implements OnInit {
     private catalogueApi: CatalogueApiService,
     private rankApi: RankApiService,
     private toast: ToastrService,
+    private employeeApi: EmployeeApiService,
   ) {
     this.page = 1;
     this.pageSize = 5;
@@ -116,18 +118,18 @@ export class ManageConfigurationComponent implements OnInit {
     badgeShowLimit: 0,
   };
 
-  test = []
-
   PageSize(test: number) {
     this.pageSize = test;
   }
 
   companyId = sessionStorage.getItem('CompanyId');
+  employeeInCompany = [];
 
   ngOnInit() {
     this.getAllRank(true);
     this.getAllCatalogue();
     this.getConfigurationIsActive(true);
+    this.getAllEmployee();
   }
 
   onItemSelect(item: any) {
@@ -191,17 +193,29 @@ export class ManageConfigurationComponent implements OnInit {
     });
   }
 
-  next() {
+  calculateRank(){
+    for(var i = 0 ; i < this.selectedItems.length; i++){
+      this.ListRank[0].weightPoint += Number($('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[0].rankId).val()) * (this.selectedItems[i].weightPoint/100);
+      this.ListRank[1].weightPoint += Number($('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[1].rankId).val()) * (this.selectedItems[i].weightPoint/100);
+      this.ListRank[2].weightPoint += Number($('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[2].rankId).val()) * (this.selectedItems[i].weightPoint/100);
+    }
+  }
 
+  next() {
+    for(var i = 0; i < this.ListRank.length; i++){
+      this.ListRank[i].weightPoint = 0;
+    }
     if (this.validateConfiguration() === false) {
       return;
     }
+    this.calculateRank();
     this.stepper.next();
     this.index = this.index + 1;
     this.inputConfiguration['startDate'] = this.startDate;
     this.inputConfiguration['endDate'] = this.endDate;
     if (this.index == 3) {
       this.catalogueInRank = [];
+      
       for (var i = 0; i < this.ListRank.length; i++) {
         this.ListRank[i].catalogueInRank = [];
 
@@ -209,7 +223,7 @@ export class ManageConfigurationComponent implements OnInit {
           var key = this.selectedItems[j].catalogueId + "_" + this.ListRank[i].rankId;
           var cir = {
             "catalogueId": this.selectedItems[j].catalogueId,
-            "weightPoint": ($('#' + key).val() * this.selectedItems[j]['weightPoint']) / 10000,
+            "weightPoint": ($('#' + key).val()) / 100,
             "isActive": true
           }
           var cirShow = {
@@ -217,13 +231,14 @@ export class ManageConfigurationComponent implements OnInit {
             "rank": this.ListRank[i].name,
             "weightPoint": $('#' + key).val(),
           }
-          this.ListRank[i].catalogueInRank.push(cir);
+         
+          console.log($('#' + this.selectedItems[0].catalogueId + "_" + this.ListRank[0].rankId).val())
+          console.log(cirShow)
+          this.ListRank[i].catalogueInRank.push(cirShow);
           this.catalogueInRank.push(cirShow)
         }
       }
     }
-
-
   }
 
   nextDetail() {
@@ -314,20 +329,8 @@ export class ManageConfigurationComponent implements OnInit {
         this.updateConfig['endDate'] = data['data']['data']['endDate'];
         this.updateConfig['duration'] = data['data']['data']['duration'];
         this.updateConfig['isActive'] = data['data']['data']['isActive'];
-        
-        let test = [];
-        test = data['data']['data']['catalogueInConfigurations'];
-        for(var i =0; i < test.length; i++){
-          test[i].weightPoint = test[i].weightPoint * 100; 
-        }
-        this.updateConfig['catalogueInConfigurations'] = test;
-
-        let test1 = [];
-        test1 = data['data']['data']['configurationRank'];
-        for(var i =0; i < test1.length; i++){
-          test1[i].weightPoint = test1[i].weightPoint * 100; 
-        }
-        this.updateConfig['configurationRank'] = test1;
+        this.updateConfig['catalogueInConfigurations'] = data['data']['data']['catalogueInConfigurations'];
+        this.updateConfig['configurationRank'] = data['data']['data']['configurationRank'];
         this.selectedItemsUpdate = data['data']['data']['catalogueInConfigurations'];
         this.loading = false;
       }
@@ -373,12 +376,6 @@ export class ManageConfigurationComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.loading = true;
-        for (var i = 0; i < this.selectedItems.length; i++) {
-          this.selectedItems[i].weightPoint /= 100
-        }
-        for (var i = 0; i < this.ListRank.length; i++) {
-          this.ListRank[i].weightPoint /= 100
-        }
         this.inputConfiguration['catalogueInConfigurations'] = this.selectedItems;
         this.inputConfiguration['configurationRank'] = this.ListRank;
         this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
@@ -477,8 +474,26 @@ export class ManageConfigurationComponent implements OnInit {
 
   }
 
+  getAllEmployee(){
+    this.employeeApi.getAllEmployee(this.companyId,true).subscribe(
+      (data) => {
+
+        this.employeeInCompany = data;
+        console.log(this.employeeInCompany)
+      }
+    );
+  }
+
   validateConfiguration() {
-    if (this.inputConfiguration['totalQuestion'] < 1 || this.inputConfiguration['totalQuestion'] > 100) {
+    if(this.inputConfiguration['type']==true && this.employeeInCompany.length ==0){
+      this.toast.error('Message', 'No employee in company');
+      return false;
+    }
+    else if(this.inputConfiguration['title']== ""){
+      this.toast.error('Message', 'Please input title config');
+      return false;
+    }
+    else if (this.inputConfiguration['totalQuestion'] < 1 || this.inputConfiguration['totalQuestion'] > 100) {
       this.toast.error('Message', 'Total question must be range 1 to 100');
       return false;
     } else if (this.inputConfiguration['duration'] < 15 || this.inputConfiguration['duration'] > 180) {

@@ -21,7 +21,7 @@ export class ResultComponent implements OnInit {
   public loading = false;
   gaugemap = {};
   public powerGauge: any;
-  statistic = [];
+  statistic: any;
   catalogueInStatistic = [];
   pointRank: any;
   selectedDevice = "";
@@ -32,7 +32,7 @@ export class ResultComponent implements OnInit {
   catalogueInConfigs: any;
   datasource: {};
   isLogin;
-  isLoaded = false;
+  isLoaded;
 
   constructor(private rankApi: RankApiService,
     private statisticApi: StatisticApiService,
@@ -53,22 +53,42 @@ export class ResultComponent implements OnInit {
     this.statisticApi.getStatistic(id).subscribe(
       (data) => {
         this.statistic = data['data']['data'];
-        this.catalogueInRanks = data['data']['data'].catalogueInRanks;
+        let tes = data['data']['data'].catalogueInRanks;
+
+        if (this.statistic.rank == "dev1") {
+          tes.splice(0,1);
+          this.radarChartColor.splice(1,1);
+        }
+        else if(this.statistic.rank == "dev0"){
+          tes.splice(0,2);
+          this.radarChartColor.splice(1,2);
+        }
+        else if(this.statistic.rank == "dev2"){
+          tes.splice(2,1); 
+          this.radarChartColor.splice(1,2);
+        }
+        else if(this.statistic.rank == "dev3"){
+          tes.splice(2,1); 
+          this.radarChartColor.splice(1,2);
+        }
+        
+        this.catalogueInRanks = tes;
+
         this.catalogueOverpoint = data['data']['data'].catalogues;
         this.pointRank = data['data']['data'].configurationRanks;
         this.catalogueTable = data['data']['data'].catalogueInConfigs;
-        let dialValue =  data['data']['data'].rank;
+        let dialValue = data['data']['data'].rank;
         let tmp = 0;
-        if(dialValue == "dev0"){
+        if (dialValue == "dev0") {
           tmp = 12.5
         }
-        else if(dialValue =="dev1"){
-          tmp = 12.5 +25
+        else if (dialValue == "dev1") {
+          tmp = 12.5 + 25
         }
-        else if(dialValue =="dev2"){
+        else if (dialValue == "dev2") {
           tmp = 12.5 + 50
         }
-        else if(dialValue =="dev3"){
+        else if (dialValue == "dev3") {
           tmp = 12.5 + 75
         }
 
@@ -92,7 +112,7 @@ export class ResultComponent implements OnInit {
         this.datasource = {
           "chart": {
             "caption": "",
-            "baseFontSize": "18",
+            "baseFontSize": "15",
             "gaugeOuterRadius": "140",
             "gaugeInnerRadius": "90",
             "lowerLimit": "0",
@@ -104,7 +124,7 @@ export class ResultComponent implements OnInit {
             // "theme": "fint",
             "showGaugeBorder": "1",
             "pivotFillType": "linear",
-            "chartBottomMargin": "50",
+            "chartBottomMargin": "30",
             "showTickMarks": "0",
             "showTickValues": "0"
           },
@@ -245,35 +265,34 @@ export class ResultComponent implements OnInit {
     { data: [], label: 'Assement Result' },
     { data: [], label: '' },
     { data: [], label: '' },
-    { data: [], label: '' },
   ];
 
   public radarChartColor = [
     {
       fill: true,
       hoverBackgroundColor: "#FF0",
-      borderColor: "#0F0",
+      borderColor: "rgb(29, 138, 198)",
       hoverBorderColor: "#00F",
-      strokeColor: "#0F0",
+      strokeColor: "rgb(29, 138, 198)",
       pointBorderColor: "rgba(133, 0, 97, 1)",
     },
     {
-      borderColor: "#ff0505",
+      borderColor: "rgb(0, 204, 0)",
       fill: false,
-      strokeColor: "rgba(220,220,220,1)",
+      strokeColor: "rgb(0, 204, 0)",
       pointBorderColor: "rgba(133, 0, 97, 1)",
     },
     {
-      borderColor: "#0516ff",
+      borderColor: "rgb(78, 144, 114)",
       fill: false,
-      strokeColor: "rgba(220,220,220,1)",
+      strokeColor: "rgb(78, 144, 114)",
       pointBorderColor: "rgba(133, 0, 97, 1)",
 
     },
     {
-      borderColor: "#ffdd1f",
+      borderColor: "rgb(204, 157, 40)",
       fill: false,
-      strokeColor: "rgba(220,220,220,1)",
+      strokeColor: "rgb(204, 157, 40)",
       pointBorderColor: "rgba(133, 0, 97, 1)",
     },
 
