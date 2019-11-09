@@ -135,7 +135,7 @@
                         <div class="form-content row">
                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                 <label>Catalog:</label>
-                                <input type="text" [(ngModel)]="insCatalogue['Name']" name="ins_Catalogue"
+                                <input (change)="validdate()" type="text" [(ngModel)]="insCatalogue['Name']" name="ins_Catalogue"
                                     class="form-control input-underline input-lg" id=""
                                     placeholder="{{ 'catalogue' | translate }}">
                             </div>

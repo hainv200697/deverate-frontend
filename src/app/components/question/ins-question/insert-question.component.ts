@@ -37,11 +37,11 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     iconIsActive: boolean;
     // catalogue
     id: number = this.activeRoute.snapshot.params.id;
-    catalogueName='';
+    catalogueName = '';
     accountId = Number(sessionStorage.getItem('AccountId'))
     companyId = Number(sessionStorage.getItem('CompanyId'));
     // excel param
-    checkFile=true;
+    checkFile = true;
     searchText = '';
     arrayBuffer: any;
     file: File;
@@ -76,21 +76,22 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     insertQuestion = [];
     public loading = false;
     cicid;
+    check= true;
     // Import excel file
     changeIns(key) {
         this.create = key;
     }
     incomingfile(event) {
-        this.checkFile=true;
+        this.checkFile = true;
         this.file = event.target.files[0];
         let name = this.file.name.split('.');
-        let type = name[name.length-1]+"";
-        if(type != 'xlsx'){
-            this.checkFile=false;
+        let type = name[name.length - 1] + "";
+        if (type != 'xlsx') {
+            this.checkFile = false;
             this.toastr.error('File must be a excel file');
         }
-        if(this.file.size > 200000){
-            this.checkFile=false;
+        if (this.file.size > 200000) {
+            this.checkFile = false;
             this.toastr.error('File must be smaller than 20MB');
         }
     }
@@ -124,29 +125,46 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             list = await this.readExcel();
             list.forEach(element => {
                 const questionObj = new QuestionModel();
-
                 this.listAnswer = [];
                 questionObj.question1 = element['Question'];
                 questionObj.isActive = true;
                 questionObj.createBy = this.accountId;
                 questionObj.cicid = this.cicid;
+                if (element['Question'] == null) {
+                    this.toastr.error("Question " + element.Question + " is null");
+                    this.check = false;
+                }
                 for (let i = 0; i <= 5; i++) {
                     const answerObj = new AnswerModel();
                     if (i === 0) {
-
+                        if (element['answer'] == null) {
+                            this.toastr.error("Answer of " + element.Question + " can not null");
+                            this.check = false;
+                        }
                         answerObj.answer1 = element['answer'];
                         answerObj.point = element['point'];
                         answerObj.isActive = true;
                         this.listAnswer.push(answerObj);
-                    } else if (element['answer_' + i] != null || element['answer_' + i] !== undefined) {
+                    } else if (element['answer_' + i] == null || element['answer_' + i] == undefined ||
+                        element['point_' + i] < 0 || element['point_' + i] > 6) {
+                        this.toastr.error("Answer of " + element.Question + " is invalid!");
+                        this.check = false;
+                    } else {
                         answerObj.answer1 = element['answer_' + i];
                         answerObj.point = element['point_' + i];
                         answerObj.isActive = true;
                         this.listAnswer.push(answerObj);
                     }
                 }
-                questionObj.maxPoint =  Math.max.apply(Math, this.listAnswer.map(function(o) { return o.point; }));
+
+                questionObj.maxPoint = Math.max.apply(Math, this.listAnswer.map(function (o) { return o.point; }));
                 questionObj.answer = this.listAnswer;
+                console.log(questionObj);
+                if(questionObj.answer.length > 5 || questionObj.answer.length < 3)
+                {
+                    this.toastr.error("Answer of " + element.Question + " is less than 6!");
+                    this.check = false;
+                }   
                 this.listInsert.push(questionObj);
             });
         } catch (err) {
@@ -163,10 +181,9 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             this.insAnswer.forEach(element => {
                 element['isActive'] = true;
             });
-            this.insQuestion['MaxPoint'] = Math.max.apply(Math, this.insAnswer.map(function(o) { return o.point; }));
+            this.insQuestion['MaxPoint'] = Math.max.apply(Math, this.insAnswer.map(function (o) { return o.point; }));
             this.insQuestion['Answer'] = this.insAnswer;
             const catalog = this.id;
-            console.log(this.insQuestion);
             if (catalog === undefined || catalog === null) {
                 this.toastr.error('Message', 'Cataloguecan not be blank!');
                 $('#ins_question_cate_id').css('border-color', 'red');
@@ -236,13 +253,13 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             });
             if (check === true) {
                 this.stepper.next();
-                this.index++;
+                this.index = 2;
             }
 
         } else {
             this.updAnswer = this.answerForm.controls['answers'].value;
             let check = true;
-            this.updQuestion['MaxPoint'] = Math.max.apply(Math, this.updAnswer.map(function(o) { return o.point; }));
+            this.updQuestion['MaxPoint'] = Math.max.apply(Math, this.updAnswer.map(function (o) { return o.point; }));
             this.updQuestion['answer'] = this.updAnswer;
             const catalog = this.id;
             if (catalog === undefined || catalog === null) {
@@ -274,20 +291,30 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             }
             if (check === true) {
                 this.stepper.next();
-                this.index++;
+                this.index = 2;
             }
         }
     }
 
     back() {
+        this.index = 1;
         this.stepper.previous();
+    }
+
+    async nextExcel(){
+        await this.formatExcel();
+        this.index = 2;
+        const data = JSON.stringify(this.listInsert);
+        this.insertQuestion = JSON.parse(data);
+        console.log(this.insertQuestion);
+        this.stepper.next();
     }
 
     onSubmit() {
         return false;
     }
     ngOnInit() {
-        if(this.accountId == null){
+        if (this.accountId == null) {
             this.router.navigate(['login']);
         }
         this.insQuestion['Answer'] = [];
@@ -356,6 +383,11 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     openModalExcel(excel) {
         this.index = 1;
         this.modalService.open(excel, { size: 'lg', windowClass: 'myCustomModalClass' });
+        const a = document.querySelector('#stepper1');
+        this.stepper = new Stepper(a, {
+            linear: false,
+            animation: true
+        });
     }
     closeModal() {
         this.modalService.dismissAll();
@@ -375,7 +407,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.updQuestion['isActive'] = true;
         this.updQuestion['createBy'] = this.accountId;
         this.updQuestion['cicid'] = this.cicid;
-        console.log(this.updQuestion);
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
@@ -385,7 +416,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     closeUpdateModal() {
-        this.index = 0;
+        this.index = 1;
         this.reset();
         this.modalService.dismissAll();
     }
@@ -430,7 +461,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 for (let i = 0; i < this.updateStatus.length; i++) {
                     this.updateStatus[i].IsActive = status;
                 }
-                console.log(this.updateStatus);
                 this.questionService.removeQuestion(this.updateStatus).subscribe(
                     (results) => {
                         this.getQuestionById(this.iconIsActive);
@@ -484,15 +514,21 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             (results) => {
                 this.getQuestionById(this.iconIsActive);
                 this.toastr.success(results['message']);
+            },
+            (error)=>{
+                if(error.status == 400){
+                    this.toastr.error('Input is invalid');
+                }
+                if(error.status == 500){
+                    Swal.fire({title:'Cancelled',
+                    text: "System error",
+                    type:'error'});
+                }
             }
         );
     }
 
     async addQuestionByExcel() {
-        await this.formatExcel();
-        const data = JSON.stringify(this.listInsert);
-        this.insertQuestion = JSON.parse(data);
-        console.log(this.insertQuestion);
         this.questionService.insertQuestion(this.insertQuestion).subscribe(
             (results) => {
                 this.getQuestionById(this.iconIsActive);
@@ -501,7 +537,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     updateQuestionSubmit() {
-        console.log(this.updQuestion);
         this.updateQuestion();
 
         this.closeUpdateModal();
@@ -509,7 +544,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     updateQuestion() {
-        console.log(this.updQuestion);
         this.questionService.updateQuestion(this.updQuestion).subscribe(
             (results) => {
                 this.getQuestionById(this.iconIsActive);
@@ -524,24 +558,22 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     getQuestionById(status) {
         this.loading = true;
         this.iconIsActive = status;
-        this.questionService.getQuestion(this.id,this.companyId,this.iconIsActive).subscribe(
+        this.questionService.getQuestion(this.id, this.companyId, this.iconIsActive).subscribe(
             (data: any) => {
                 this.loading = false;
-                console.log(data);
                 this.catalogueName = data.catalogueName;
                 this.cicid = data.cicid;
                 this.allQuestions = data.questions;
-                console.log(this.allQuestions);
-                    
+
             },
-            (error : any)=>{
+            (error: any) => {
                 this.router.navigate(['**']);
             }
         );
     }
 
 
-    
+
 
 
     // reset
@@ -559,7 +591,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
     }
 
-    viewAnswer(item){
+    viewAnswer(item) {
         this.router.navigate(['/manage-answer/', item['questionId']]);
     }
 }

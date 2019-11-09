@@ -17,95 +17,98 @@ export class AnswerComponent implements OnInit {
         private toastr: ToastrService,
     ) { }
     public loading = false;
-    searchText ='';
-    iconIsActive=true;
+    searchText = '';
+    iconIsActive = true;
     selectedAll: any;
-    answerList =[];
-    insAnswer ={};
-    updAnswer={};
+    answerList = [];
+    insAnswer = {};
+    updAnswer = {};
     updateStatus = [];
+    checkAdd=false;
+    checkUpd=true;
     id: number = this.activeRoute.snapshot.params.id;
     ngOnInit() {
-        
         this.getAnswerById(true);
     }
 
-    clickButtonRefresh(){
+    clickButtonRefresh() {
         this.getAnswerById(this.iconIsActive);
     }
 
     getAnswerById(status) {
         this.iconIsActive = status;
-        this.answerService.getAllAnswerByQuestioId(this.id,status).subscribe(
+        this.answerService.getAllAnswerByQuestioId(this.id, status).subscribe(
             (data: any) => {
                 console.log(data);
                 this.answerList = data;
             }
         );
     }
-// modal
+    // modal
     // insert
     open(create) {
         this.modalService.open(create, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
     }
 
-    
+
     // update
     openUpdateModal(item, update) {
         this.updAnswer['AnswerId'] = item['AnswerId'];
         this.updAnswer['answer'] = item['answer'];
         this.updAnswer['point'] = item['point'];
-        this.updAnswer['isActive'] =true;
+        this.updAnswer['isActive'] = true;
         this.updAnswer['questionId'] = item['questionId'];
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
 
     }
 
     // close modal
-    closeModal(){
+    closeModal() {
         this.modalService.dismissAll();
     }
 
-// submit
+    // submit
     // insert submit
-    insertAnswerSubmit(){
+    insertAnswerSubmit() {
         this.insertAnswer();
         this.closeModal();
     }
 
     // insert submit
-    updateAnswerSubmit(){
+    updateAnswerSubmit() {
         this.updateAnswer();
         this.closeModal();
     }
 
-// function 
+    // function 
     // insert answer function
-    insertAnswer(){
-        this.insAnswer['isActive'] = true;
-        this.insAnswer['questionId']= this.id;
-        this.loading = true;
-        this.insAnswer['questionId'] = parseInt(this.insAnswer['questionId']);
-        this.answerService.insertAnswer(this.insAnswer).subscribe(
-            (results) => {
-                console.log(results);
-                this.loading = false;
-                this.getAnswerById(true);
-                this.toastr.success( results['message']);
-            }
-        );
+    insertAnswer() {
+        if (this.validate()) {
+            this.insAnswer['isActive'] = true;
+            this.insAnswer['questionId'] = this.id;
+            this.loading = true;
+            this.insAnswer['questionId'] = parseInt(this.insAnswer['questionId']);
+            this.answerService.insertAnswer(this.insAnswer).subscribe(
+                (results) => {
+                    console.log(results);
+                    this.loading = false;
+                    this.getAnswerById(true);
+                    this.toastr.success(results['message']);
+                }
+            );
+        }
     }
 
     // update anser function
-    updateAnswer(){
+    updateAnswer() {
         this.loading = true;
         console.log(this.updAnswer);
         this.answerService.updateAnswer(this.updAnswer).subscribe(
-            (results)=>{
+            (results) => {
                 console.log(results);
                 this.loading = false;
                 this.getAnswerById(this.iconIsActive);
-                this.toastr.success( results['message']);
+                this.toastr.success(results['message']);
             }
         );
     }
@@ -129,14 +132,14 @@ export class AnswerComponent implements OnInit {
                     this.closeModal();
                     Swal.fire('Success', 'The status has been changed', 'success');
                 });;
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            this.updateStatus = [];
-            Swal.fire(
-              'Cancelled',
-              '',
-              'error'
-            )
-          }
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                this.updateStatus = [];
+                Swal.fire(
+                    'Cancelled',
+                    '',
+                    'error'
+                )
+            }
         })
     }
 
@@ -163,6 +166,35 @@ export class AnswerComponent implements OnInit {
 
     }
 
-    
+
+
+    validate() {
+        if (this.insAnswer['answer'].length < 5) {
+            this.toastr.error("Answer has more than 5 letters");
+            return false;
+        }
+        if (this.insAnswer['point'] < 0 || this.insAnswer['point'] > 6) {
+            this.toastr.error("Point must be in range from 1 to 6");
+            return false;
+        }
+        this.checkAdd = true;
+        return true;
+    }
+
+    validateUpdate() {
+
+        if (this.updAnswer['answer'].length < 5) {
+            this.toastr.error("Answer has more than 5 letters");
+            this.checkUpd = false;
+            return false;
+        }
+        if (this.updAnswer['point'] < 0 || this.updAnswer['point'] > 6) {
+            this.toastr.error("Point must be in range from 1 to 6");
+            this.checkUpd = false;
+            return false;
+        }
+        this.checkUpd = true;
+        return true;
+    }
 
 }
