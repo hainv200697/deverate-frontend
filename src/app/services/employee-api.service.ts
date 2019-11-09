@@ -34,4 +34,9 @@ export class EmployeeApiService {
         const param = new HttpParams().set('companyId',companyId);
         return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employees,{ params: param });
     }
+
+    // putUpdateAccount(employee) {
+    //     const API = 'api/Employee/UpdateAccountRole';
+    //     return this.httpClient.put<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employee);
+    // }
 }   

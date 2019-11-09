@@ -21,11 +21,12 @@ export class EmployeeComponent implements OnInit {
         private globalservice: GloblaService
     ) { }
     public loading = false;
-    iconIsActive=true;
+    iconIsActive = true;
     private stepper: Stepper;
     companyId = Number(sessionStorage.getItem('CompanyId'));
     // Excel
     index = 1;
+    checkExcel = true;
     searchText = '';
     checkFile = false;
     arrayBuffer: any;
@@ -36,27 +37,28 @@ export class EmployeeComponent implements OnInit {
     insEmployee = {};
     employees = [];
     updateEmployee = [];
-    listUser:String[] = [];
-    listId:number[] = [];
+    listUser: String[] = [];
+    listId: number[] = [];
+    updRole = {};
     ngOnInit() {
         this.getEmployee(this.iconIsActive);
     }
-    async next(){
+    async next() {
         this.index = 2;
         await this.formatExcel();
         this.stepper.next();
     }
-    back(){
-        this.index=1;
+    back() {
+        this.index = 1;
         this.employees = [];
         this.stepper.previous();
     }
     // Excel
     incomingfile(event) {
         this.file = event.target.files[0];
-        if(this.file != null && this.file != undefined){
+        if (this.file != null && this.file != undefined) {
             var name = this.file.name.split('.');
-            let type = name[name.length-1]+"";
+            let type = name[name.length - 1] + "";
             if (type != 'xlsx') {
                 this.checkFile = false;
                 this.toastr.error('File must be excel file');
@@ -102,12 +104,58 @@ export class EmployeeComponent implements OnInit {
             console.log(list);
             list.forEach(element => {
                 this.insEmployee = {};
+                if (element.fullname == null ||
+                    element.fullname == undefined ) {
+                    this.toastr.error("Full name"+element.fullname+" is invalid");
+                    this.checkExcel = false;
+                }else if(element.fullname.length < 5 ||
+                    element.fullname.length > 200){
+                        this.toastr.error("Full name"+element.fullname+" is in range from 5 to 200 letters");
+                        this.checkExcel = false;
+                    }
+                if (element.email == null ||
+                    element.email == undefined ||
+                    element.email.length < 5 ||
+                    element.email.length > 200) 
+                {
+                    this.toastr.error("Email"+element.email+" is invalid");
+                    this.checkExcel = false;
+                }
+                if (element.role != "Employee" || element.role != "Test Owner" || element.role == null || element.role == undefined) 
+                {
+                    this.toastr.error("Role of "+element.fullname+" is invalid");
+                    this.checkExcel = false;
+                }else if(element.role == "Employee"){
+                    element.role = 3;
+                }else if(element.role == "Test Owner"){
+                    element.role = 4;
+                }
                 this.insEmployee['companyId'] = this.companyId;
                 this.insEmployee['fullname'] = element.fullname;
                 this.insEmployee['email'] = element.email;
-                this.insEmployee['role'] = 3;
+
+                this.insEmployee['role'] = element.role;
+
                 this.employees.push(this.insEmployee);
             });
+            let listEmail = [];
+            let existedEmail: String[] = null;
+            var valueArr = this.employees.map(function (item) {
+                var existItem = listEmail.some(email => email == item.email);
+                if (existItem) {
+                    existedEmail.push(item.email);
+                }
+                else {
+                    listEmail.push(item.email);
+                }
+            });
+            if (existedEmail != null ) {
+                const email = existedEmail.slice(0, 3);
+                const message = `Email ${email.join(',')}${existedEmail.length > 3 ? ',...' : ''} existed`;
+                this.toastr.error(message);
+                this.checkExcel = false;
+            }
+
         } catch (err) {
             this.toastr.error(err);
         }
@@ -119,10 +167,9 @@ export class EmployeeComponent implements OnInit {
     }
 
     getEmployee(status) {
-        this.iconIsActive =status;
-        this.employeeService.getAllEmployee(this.companyId,this.iconIsActive).subscribe(
+        this.iconIsActive = status;
+        this.employeeService.getAllEmployee(this.companyId, this.iconIsActive).subscribe(
             (data) => {
-                console.log(data);
                 this.employeeList = data;
             }
         );
@@ -161,9 +208,8 @@ export class EmployeeComponent implements OnInit {
             if (!this.validdate) {
                 return;
             }
-            this.employees=[];
+            this.employees = [];
             this.insEmployee['companyId'] = this.companyId;
-            this.insEmployee['role'] = 3;
             this.employees.push(this.insEmployee);
             this.insertEmployee();
             this.getEmployee(this.iconIsActive);
@@ -173,7 +219,7 @@ export class EmployeeComponent implements OnInit {
 
     insertEmployeeExcel() {
         this.insertEmployee();
-        
+
     }
 
 
@@ -181,100 +227,104 @@ export class EmployeeComponent implements OnInit {
     // function 
     // insert Employee function
     insertEmployee() {
-        this.loading = true; 
-        console.log(this.employees);
-        this.employeeService.postCreateEmployee(this.employees).subscribe(
-            results => {
-                this.loading = false;
-                this.toastr.success("Create success");
-                this.employees = [];
-                this.insEmployee = {};
-                this.getEmployee(this.iconIsActive);
-                this.closeModal();
-            },  
-            (error)=>{
-                this.loading = false;
-                const email = error.error.slice(0, 3);
-                const message = `Email ${email.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
-                this.toastr.error(message);
-                this.closeModal();
-            }
-        );
+        if(this.validdate()){
+            this.loading = true;
+            this.employeeService.postCreateEmployee(this.employees).subscribe(
+                results => {
+                    this.loading = false;
+                    this.toastr.success("Create success");
+                    this.employees = [];
+                    this.insEmployee = {};
+                    this.getEmployee(this.iconIsActive);
+                    this.closeModal();
+                },
+                (error) => {
+                    this.loading = false;
+                    const email = error.error.slice(0, 3);
+                    const message = `Email ${email.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
+                    this.toastr.error(message);
+                    this.closeModal();
+                }
+            );
+        }
     }
 
 
     // change status
-// change status
-clickButtonChangeStatus(status: boolean) {
-    
-    Swal.fire({
-        title: 'Are you sure?',
-        text: 'Status will be change!',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, change it!',
-        cancelButtonText: 'No, keep it'
-    }).then((result) => {
-        if (result.value) {
-            for (let i = 0; i < this.updateEmployee.length; i++) {
-                this.listId.push(this.updateEmployee[i].accountId)
-            }
-            this.loading = true;
-            this.employeeService.disableEmployee(this.listId,status).subscribe(data => {
-                this.loading = false;
-                this.getEmployee(this.iconIsActive);
-                this.closeModal();
-                Swal.fire('Success', 'The status has been change', 'success');
-            });;
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.updateEmployee = [];
-        Swal.fire(
-          'Cancelled',
-          '',
-          'error'
-        )
-      }
-    })
-}
+    clickButtonChangeStatus(status: boolean) {
 
-// send pass
-resendmail() {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: 'Password will be send!',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, send it!',
-        cancelButtonText: 'No, Do not send it'
-    }).then((result) => {
-        if (result.value) {
-            this.updateEmployee.forEach(element => {
-                this.listUser.push(element.username);
-            }); 
-            this.employeeService.resendpassword(this.listUser,this.companyId).subscribe(data => {
-                this.getEmployee(this.iconIsActive);
-                this.closeModal();
-                Swal.fire( {title:'Success',text: "Password was send to your email!",type:'success'});
-                this.listUser = [];
-            },error=>{
-                if(error.status == 400){
-                    const account = error.error.slice(0, 3);
-                    const message = `Account ${account.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
-                    Swal.fire({title:'Cancelled',
-                    text: message,
-                    type:'error'});
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Status will be change!',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, change it!',
+            cancelButtonText: 'No, keep it'
+        }).then((result) => {
+            if (result.value) {
+                for (let i = 0; i < this.updateEmployee.length; i++) {
+                    this.listId.push(this.updateEmployee[i].accountId)
                 }
-                if(error.status == 500){
-                    Swal.fire({title:'Cancelled',
-                    text: "System error",
-                    type:'error'});
-                }
+                this.loading = true;
+                this.employeeService.disableEmployee(this.listId, status).subscribe(data => {
+                    this.loading = false;
+                    this.getEmployee(this.iconIsActive);
+                    this.closeModal();
+                    Swal.fire('Success', 'The status has been change', 'success');
+                });;
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                this.updateEmployee = [];
+                Swal.fire(
+                    'Cancelled',
+                    '',
+                    'error'
+                )
             }
-            
-            );;
-      } 
-    })
-}
+        })
+    }
+
+    // send pass
+    resendmail() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Password will be send!',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, send it!',
+            cancelButtonText: 'No, Do not send it'
+        }).then((result) => {
+            if (result.value) {
+                this.updateEmployee.forEach(element => {
+                    this.listUser.push(element.username);
+                });
+                this.employeeService.resendpassword(this.listUser, this.companyId).subscribe(data => {
+                    this.getEmployee(this.iconIsActive);
+                    this.closeModal();
+                    Swal.fire({ title: 'Success', text: "Password was send to your email!", type: 'success' });
+                    this.listUser = [];
+                }, error => {
+                    if (error.status == 400) {
+                        const account = error.error.slice(0, 3);
+                        const message = `Account ${account.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
+                        Swal.fire({
+                            title: 'Cancelled',
+                            text: message,
+                            type: 'error'
+                        });
+                    }
+                    if (error.status == 500) {
+                        Swal.fire({
+                            title: 'Cancelled',
+                            text: "System error",
+                            type: 'error'
+                        });
+                    }
+                }
+
+                );;
+            }
+        })
+    }
 
     // select employee
     selectAll() {
@@ -301,7 +351,7 @@ resendmail() {
 
     }
     validdate() {
-        if (this.insEmployee['fullname'] == '') {
+        if (this.insEmployee['fullname'] == '' || this.insEmployee['fullname'] == null) {
             this.toastr.error('Message', 'Please input employee name');
             return false;
         } else if (this.insEmployee['fullname'].length < 3) {
@@ -309,9 +359,39 @@ resendmail() {
             return false;
         } else if (!this.globalservice.checkMail.test(String(this.insEmployee['email']).toUpperCase())) {
             this.toastr.error('Message', 'Email wrong format');
+            return false; 
+        }else if (this.insEmployee['email'] == '') {
+            this.toastr.error('Message', 'Email can not blank');
+            return false;
+        }else if (this.insEmployee['role'] == '') {
+            this.toastr.error('Message', 'Role can not blank');
+            return false;
+        }else if (this.insEmployee['role'] == isNaN) {
+            this.toastr.error('Message', 'RoleId mus be a number');
+            return false;
+        }else if (this.insEmployee['role'] < 3 || this.insEmployee['role'] > 4) {
+            this.toastr.error('Message', 'Role must be in the range of 3 to 4');
             return false;
         }
         return true;
     }
+
+    // updateStatus(item) {
+    //     this.loading = true;
+    //     this.updRole['accountId'] = item.accountId;
+    //     this.updRole['roleId'] = item.roleId;
+    //     this.employeeService.putUpdateAccount(this.updRole).subscribe(
+    //         results => {
+    //             this.loading = false;
+    //             this.toastr.success("Update success");
+    //             this.updRole = {};
+    //             this.getEmployee(this.iconIsActive);
+    //         },
+    //         (error) => {
+    //             this.loading = false;
+    //             this.toastr.error(error);
+    //         }
+    //     );
+    // }
 
 }
