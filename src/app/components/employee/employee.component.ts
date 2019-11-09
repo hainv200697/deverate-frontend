@@ -101,15 +101,18 @@ export class EmployeeComponent implements OnInit {
         try {
             let list: any;
             list = await this.readExcel();
+            console.log(list);
             list.forEach(element => {
                 this.insEmployee = {};
                 if (element.fullname == null ||
-                    element.fullname == undefined ||
-                    element.fullname.length < 5 ||
-                    element.fullname.length > 200) {
+                    element.fullname == undefined ) {
                     this.toastr.error("Full name"+element.fullname+" is invalid");
                     this.checkExcel = false;
-                }
+                }else if(element.fullname.length < 5 ||
+                    element.fullname.length > 200){
+                        this.toastr.error("Full name"+element.fullname+" is in range from 5 to 200 letters");
+                        this.checkExcel = false;
+                    }
                 if (element.email == null ||
                     element.email == undefined ||
                     element.email.length < 5 ||
@@ -118,34 +121,35 @@ export class EmployeeComponent implements OnInit {
                     this.toastr.error("Email"+element.email+" is invalid");
                     this.checkExcel = false;
                 }
-                if (element.role == null ||
-                    element.role == isNaN ||
-                    element.role == undefined ||
-                    element.role < 3 ||
-                    element.role > 4) 
+                if (element.role != "Employee" || element.role != "Test Owner" || element.role == null || element.role == undefined) 
                 {
                     this.toastr.error("Role of "+element.fullname+" is invalid");
                     this.checkExcel = false;
+                }else if(element.role == "Employee"){
+                    element.role = 3;
+                }else if(element.role == "Test Owner"){
+                    element.role = 4;
                 }
                 this.insEmployee['companyId'] = this.companyId;
                 this.insEmployee['fullname'] = element.fullname;
                 this.insEmployee['email'] = element.email;
+
                 this.insEmployee['role'] = element.role;
 
                 this.employees.push(this.insEmployee);
             });
             let listEmail = [];
-            let existedEmail: String[] = [];
+            let existedEmail: String[] = null;
             var valueArr = this.employees.map(function (item) {
                 var existItem = listEmail.some(email => email == item.email);
                 if (existItem) {
                     existedEmail.push(item.email);
                 }
                 else {
-                    listEmail.push(item.email)
+                    listEmail.push(item.email);
                 }
             });
-            if (existedEmail) {
+            if (existedEmail != null ) {
                 const email = existedEmail.slice(0, 3);
                 const message = `Email ${email.join(',')}${existedEmail.length > 3 ? ',...' : ''} existed`;
                 this.toastr.error(message);
