@@ -56,7 +56,13 @@
                                             <td class="col-md-6">
                                                 {{q.email}}
                                             </td>
-                                            <td class="col-md-2">
+                                            <td class="col-md-2" *ngIf="q.role==4">
+                                                Test Owner
+                                            </td>
+                                            <td class="col-md-2" *ngIf="q.role==3">
+                                                Employee
+                                            </td>
+                                            <td class="col-md-2" *ngIf="q.role != 3 && q.role != 4">
                                                 {{q.role}}
                                             </td>
                                         </tr>
@@ -90,24 +96,26 @@
                     <label>Account Information: </label>
                     <div class="form-group input-group">
                         <input type="text" placeholder="FullName" minlength="3" [(ngModel)]="insEmployee['fullname']"
-                        (change)="validdate()" name="ins_manager_fullname" class="form-control">
+                            (change)="validdate()" name="ins_manager_fullname" class="form-control">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="button"><i class="fa fa-user"></i></button>
                         </div>
                     </div>
                     <div class="form-group input-group">
                         <input class="form-control" type="email" placeholder="Email" [(ngModel)]="insEmployee['email']"
-                        (change)="validdate()" name="ins_manager_email">
+                            (change)="validdate()" name="ins_manager_email">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="button"><i class="fa fa-envelope"></i></button>
                         </div>
                     </div>
                     <div class="custom-control custom-radio">
-                        <input class="custom-control-input" type="radio" name="employee" id="employee" [(ngModel)]="insEmployee['role']" [value]="3">
+                        <input class="custom-control-input" type="radio" name="employee" id="employee"
+                            [(ngModel)]="insEmployee['role']" [value]="3">
                         <label class="custom-control-label" for="employee">Employee</label>
                     </div>
                     <div class="custom-control custom-radio">
-                        <input class="custom-control-input" type="radio" name="testOwner" id="testOwner" [(ngModel)]="insEmployee['role']" [value]="4">
+                        <input class="custom-control-input" type="radio" name="testOwner" id="testOwner"
+                            [(ngModel)]="insEmployee['role']" [value]="4">
                         <label class="custom-control-label" for="testOwner">Test Owner</label>
                     </div>
                 </div>
@@ -145,28 +153,53 @@
                         Create Employee
                     </button>
                 </div>
-                <div class="row justify-content-end" style="margin-top: 20px;">
-                    <button style="margin-right: 10px;" (click)="resendmail();" class="btn btn-lg btn-warning"
-                        data-toggle="button">
-                        <i class="fa fa-envelope" tooltip="{{'ReSendPass' | translate}}" placement="top"></i>
-                    </button>
-                    <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
-                        (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger" data-toggle="button">
-                        <i class="fa fa-ban" tooltip="{{'delete' | translate}}" placement="top"></i>
-                    </button>
-                    <button [hidden]="iconIsActive==true" style="margin-right: 10px;"
-                        (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success" data-toggle="button">
-                        <i class="fa fa-check" tooltip="{{'Active' | translate}}" placement="top"></i>
-                    </button>
-                    <button style="margin-right: 10px;" (click)="openModalExcel(excel);" class="btn btn-lg btn-success "
-                        data-toggle="button">
-                        <i class="fa fa-file-excel-o"></i>
-                    </button>
-                    <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
-                        class="btn btn-lg btn-primary" data-toggle="button">
-                        <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
-                            aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
-                    </button>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="row justify-content-end " style="margin-left: 20px; margin-top: 20px;">
+                            <div class=" col-md-4 custom-control custom-radio text-left">
+                                <input class="custom-control-input" type="radio" name="search_all" id="search_all"
+                                    (click)="getAccount(0)" [(ngModel)]="getRole" [value]="0">
+                                <label class="custom-control-label" for="search_all">All Account</label>
+                            </div>
+                            <div class=" col-md-4 custom-control custom-radio text-left">
+                                <input class="custom-control-input" type="radio" name="search_employee" id="search_employee"
+                                    (click)="getAccount(3)" [(ngModel)]="getRole" [value]="3">
+                                <label class="custom-control-label" for="search_employee">Employee</label>
+                            </div>
+                            <div class=" col-md-4 custom-control custom-radio text-left">
+                                <input class="custom-control-input" [(ngModel)]="getRole" type="radio" name="search_testOwner" id="search_testOwner"
+                                (click)="getAccount(4)" [value]="4">
+                                <label class="custom-control-label"  for="search_testOwner">Test Owner</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row justify-content-end" style="margin-top: 20px;">
+                            <button style="margin-right: 10px;" (click)="resendmail();" class="btn btn-lg btn-warning"
+                                data-toggle="button">
+                                <i class="fa fa-envelope" tooltip="{{'ReSendPass' | translate}}" placement="top"></i>
+                            </button>
+                            <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
+                                (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger"
+                                data-toggle="button">
+                                <i class="fa fa-ban" tooltip="{{'delete' | translate}}" placement="top"></i>
+                            </button>
+                            <button [hidden]="iconIsActive==true" style="margin-right: 10px;"
+                                (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success"
+                                data-toggle="button">
+                                <i class="fa fa-check" tooltip="{{'Active' | translate}}" placement="top"></i>
+                            </button>
+                            <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
+                                class="btn btn-lg btn-success " data-toggle="button">
+                                <i class="fa fa-file-excel-o"></i>
+                            </button>
+                            <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
+                                class="btn btn-lg btn-primary" data-toggle="button">
+                                <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}"
+                                    placement="top" aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -225,7 +258,7 @@
                         </select> -->
                         Test Owner
                     </td>
-                    <td [hidden]="item.roleId==4"class="text-center col-md-2">
+                    <td [hidden]="item.roleId==4" class="text-center col-md-2">
                         Employee
                     </td>
                     <td class="text-center col-md-1" [hidden]="item.gender==false">

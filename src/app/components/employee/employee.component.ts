@@ -40,6 +40,7 @@ export class EmployeeComponent implements OnInit {
     listUser: String[] = [];
     listId: number[] = [];
     updRole = {};
+    getRole = 0;
     ngOnInit() {
         this.getEmployee(this.iconIsActive);
     }
@@ -101,7 +102,7 @@ export class EmployeeComponent implements OnInit {
         try {
             let list: any;
             list = await this.readExcel();
-            console.log(list);
+            this.checkExcel = true;
             list.forEach(element => {
                 this.insEmployee = {};
                 if (element.fullname == null ||
@@ -120,10 +121,17 @@ export class EmployeeComponent implements OnInit {
                 {
                     this.toastr.error("Email"+element.email+" is invalid");
                     this.checkExcel = false;
+                }else if (!this.globalservice.checkMail.test(String(element.email).toUpperCase())) {
+                    this.toastr.error('Message', "Email "+element.email+" wrong format");
+                    this.checkExcel = false;
                 }
-                if (element.role != "Employee" || element.role != "Test Owner" || element.role == null || element.role == undefined) 
+                if (element.role !== 'Employee' && element.role+"" !== 'Test Owner' ) 
                 {
                     this.toastr.error("Role of "+element.fullname+" is invalid");
+                    this.checkExcel = false;
+                }else if( element.role == null || element.role == undefined){
+                    element.role =null;
+                    this.toastr.error("Role of "+element.fullname+" is blank");
                     this.checkExcel = false;
                 }else if(element.role == "Employee"){
                     element.role = 3;
@@ -135,9 +143,10 @@ export class EmployeeComponent implements OnInit {
                 this.insEmployee['email'] = element.email;
 
                 this.insEmployee['role'] = element.role;
-
+                
                 this.employees.push(this.insEmployee);
             });
+            
             let listEmail = [];
             let existedEmail: String[] = null;
             var valueArr = this.employees.map(function (item) {
@@ -239,11 +248,17 @@ export class EmployeeComponent implements OnInit {
                     this.closeModal();
                 },
                 (error) => {
-                    this.loading = false;
-                    const email = error.error.slice(0, 3);
-                    const message = `Email ${email.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
-                    this.toastr.error(message);
-                    this.closeModal();
+                    if(error.status == 500){
+                        this.loading = false;
+                        this.toastr.error("System error");
+                        this.closeModal();
+                    }else{
+                        this.loading = false;
+                        const email = error.error.slice(0, 3);
+                        const message = `Email ${email.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
+                        this.toastr.error(message);
+                        this.closeModal();
+                    }
                 }
             );
         }
@@ -394,4 +409,16 @@ export class EmployeeComponent implements OnInit {
     //     );
     // }
 
+    getAccount(item){
+        if(item == 0){
+            this.getEmployee(this.iconIsActive);
+        }
+        else{
+            this.employeeService.getAllWithRole(this.companyId, this.iconIsActive,item).subscribe(
+                (data) => {
+                    this.employeeList = data;
+                }
+            );
+        }
+    }
 }
