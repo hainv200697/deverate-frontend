@@ -7,8 +7,7 @@ export class CompanyFilterPipe implements PipeTransform {
     if (value) {
       return value.filter(item => {
           return (
-            (item.title.search(searchText) !== -1) ||
-            (item.duration.search(searchText) !== -1)
+            (item.title.search(searchText) !== -1)
           );
       });
     }

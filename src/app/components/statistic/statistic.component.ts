@@ -33,7 +33,7 @@ export class StatisticComponent implements OnInit {
   load = false;
   //vertical bar chart
   colorScheme = {
-    domain: ['#9370DB', '#87CEFA', '#FA8072', '#FF7F50', '#90EE90', '#9370DB']
+    domain: ['#9370DB', '#87CEFA', '#FA8072', '#FF7F50', '#90EE90', '#C7B42C']
   };
 
   multi = [];
@@ -147,7 +147,13 @@ export class StatisticComponent implements OnInit {
     this.loading = true
     this.historyApi.GetRankStatistic(id).subscribe(
       (data) => {
-        this.dataGroupChart = data;
+        let tmp;
+        tmp = data;
+        for(var i = 0; i < tmp.length; i++){
+          tmp[i].series.push(tmp[i].tested);
+          tmp[i].series.push(tmp[i].totalEmp);
+        }
+        this.dataGroupChart = tmp;
         this.load = true;
         this.loading = false;
       }

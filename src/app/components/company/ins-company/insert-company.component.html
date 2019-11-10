@@ -247,6 +247,10 @@
                             (click)="openDetail(update, c)" tooltip="{{'common_modify' | translate}}">
                                 <i class="fa fa-edit edit-icon"></i>
                             </button>
+                            <button class=" btn btn-circle shadow-item" (click)="resendmail(c.managerUserName, c.companyId)"
+                                tooltip="{{'mail' | translate}}">
+                                <i class="fa fa-envelope"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>
