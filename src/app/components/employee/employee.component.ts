@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import * as XLSX from 'ts-xlsx';
 import Stepper from 'bs-stepper';
 import { GloblaService } from 'src/assets/service/global.service';
+import { empty } from 'rxjs';
 @Component({
     selector: 'app-employee',
     templateUrl: './employee.component.html',
@@ -104,6 +105,7 @@ export class EmployeeComponent implements OnInit {
             list = await this.readExcel();
             this.checkExcel = true;
             list.forEach(element => {
+                console.log(element);
                 this.insEmployee = {};
                 if (element.fullname == null ||
                     element.fullname == undefined ) {
@@ -138,17 +140,18 @@ export class EmployeeComponent implements OnInit {
                 }else if(element.role == "Test Owner"){
                     element.role = 4;
                 }
+
                 this.insEmployee['companyId'] = this.companyId;
                 this.insEmployee['fullname'] = element.fullname;
                 this.insEmployee['email'] = element.email;
 
                 this.insEmployee['role'] = element.role;
-                
+                console.log(this.insEmployee);
                 this.employees.push(this.insEmployee);
             });
             
             let listEmail = [];
-            let existedEmail: String[] = null;
+            let existedEmail: String[] = [];
             var valueArr = this.employees.map(function (item) {
                 var existItem = listEmail.some(email => email == item.email);
                 if (existItem) {
@@ -158,7 +161,8 @@ export class EmployeeComponent implements OnInit {
                     listEmail.push(item.email);
                 }
             });
-            if (existedEmail != null ) {
+            console.log(existedEmail);
+            if (existedEmail.length > 0 ) {
                 const email = existedEmail.slice(0, 3);
                 const message = `Email ${email.join(',')}${existedEmail.length > 3 ? ',...' : ''} existed`;
                 this.toastr.error(message);
