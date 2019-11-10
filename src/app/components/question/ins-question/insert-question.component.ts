@@ -77,6 +77,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     public loading = false;
     cicid;
     check = true;
+    message = [];
     // Import excel file
     changeIns(key) {
         this.create = key;
@@ -110,9 +111,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 const first_sheet_name = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[first_sheet_name];
                 this.listDataExcel = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-
-
-
                 resolve(this.listDataExcel);
             };
             fileReader.readAsArrayBuffer(this.file);
@@ -138,33 +136,20 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                     this.check = false;
                 }
                 for (let i = 1; i <= 6; i++) {
-                    if (element['answer_' + i] == null || element['answer_' + i] == undefined) {
-                        element['answer_' + i] = null;
-                        this.toastr.error("Answer " + i + " is null!");
-                        questionObj.message.push("Answer #" + i + " is null!");
-                        this.check = false;
-                    } else if (element['answer_' + i].length < 3 || element['answer_' + i].length > 200) {
-                        questionObj.message.push("Answer #" + i + " must be in range from 3 to 200 letters!");
-                        this.toastr.error("Answer of " + element.Question + " must be in range from 3 to 200 letters!");
-                        this.check = false;
-                    }
-                    if (element['point_' + i] == null || element['point_' + i] == undefined) {
-                        element['point_' + i] = null;
-                        this.toastr.error("Point of " + element.Question + " is null!");
-                        questionObj.message.push("Point of answer #" + i + " is null!");
-                        this.check = false;
-                    } else if (element['point_' + i] < 1 || element['point_' + i] > 6) {
-                        this.toastr.error("Highest point of answer " + element.Question + " is 6!");
-                        questionObj.message.push("Point of answer #" + i + " is out of range!");
-                        this.check = false;
-                    }
                     const answerObj = new AnswerModel();
                     answerObj.answer1 = element['answer_' + i];
                     answerObj.point = element['point_' + i];
                     answerObj.isActive = true;
                     this.listAnswer.push(answerObj);
                 }
-
+                for(let i = this.listAnswer.length -1 ; i >= 0 ; i--){
+                    if(this.listAnswer[i].answer1 == null && this.listAnswer[i].point == null){
+                        this.listAnswer.splice(i,1);
+                    }
+                    else{
+                        break;
+                    }
+                }
                 questionObj.maxPoint = Math.max.apply(Math, this.listAnswer.map(function (o) { return o.point; }));
                 questionObj.answer = this.listAnswer;
                 console.log(questionObj);
