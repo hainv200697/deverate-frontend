@@ -89,9 +89,6 @@ export class InsertCompanyComponent implements OnInit {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
 
     }).catch((error) => {
-      this.toast.error(error.name);
-      this.loading = false;
-      this.closeModal()
     });;
   }
 
@@ -312,7 +309,8 @@ export class InsertCompanyComponent implements OnInit {
         Swal.fire('Success', 'The mail has been send', 'success');
       });
     }).catch((error) => {
-      this.toast.error(error.error);
+      this.loading = false;
+      this.toast.error(error.name);
     });
   }
 

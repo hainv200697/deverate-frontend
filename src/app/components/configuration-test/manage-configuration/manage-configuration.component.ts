@@ -276,6 +276,10 @@ export class ManageConfigurationComponent implements OnInit {
           }
         }
         this.ListRank = tmp;
+      },
+      (error) => {
+        this.loading = false;
+        this.toast.error(error.name);
       }
     );
 
@@ -293,8 +297,11 @@ export class ManageConfigurationComponent implements OnInit {
           }
         }
         this.catalogueList = tmp;
+      },
+      (error) => {
+        this.loading = false;
+        this.toast.error(error.name);
       }
-
     );
   }
 
@@ -314,6 +321,10 @@ export class ManageConfigurationComponent implements OnInit {
       (data) => {
         this.loading = false;
         this.Configurations = data;
+      },
+      (error) => {
+        this.loading = false;
+        this.toast.error(error.name);
       }
     );
   }
@@ -336,6 +347,10 @@ export class ManageConfigurationComponent implements OnInit {
         this.updateConfig['configurationRank'] = data['data']['data']['configurationRanks'];
         this.selectedItemsUpdate = data['data']['data']['catalogueInConfigs'];
         this.loading = false;
+      },
+      (error) => {
+        this.loading = false;
+        this.toast.error(error.name);
       }
     );
   }
@@ -482,6 +497,10 @@ export class ManageConfigurationComponent implements OnInit {
       (data) => {
 
         this.employeeInCompany = data;
+      },
+      (error) => {
+        this.loading = false;
+        this.toast.error(error.name);
       }
     );
   }
@@ -552,6 +571,8 @@ export class ManageConfigurationComponent implements OnInit {
       } else if (result.dismiss === Swal.DismissReason.cancel) {
       }
     }).catch((error) => {
+        this.loading = false;
+        this.toast.error(error.name);
     });
   }
 
