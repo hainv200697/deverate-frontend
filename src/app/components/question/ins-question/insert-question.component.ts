@@ -130,7 +130,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 this.listAnswer = [];
                 questionObj.question1 = element['Question'];
                 questionObj.isActive = true;
-                questionObj.createBy = this.accountId;
+                questionObj.accountId = this.accountId;
                 questionObj.cicid = this.cicid;
                 if (element['Question'] == null) {
                     this.toastr.error("Question " + element.Question + " is null");
@@ -405,7 +405,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.updQuestion['QuestionId'] = item['questionId'];
         this.updQuestion['question1'] = item['question1'];
         this.updQuestion['isActive'] = true;
-        this.updQuestion['createBy'] = this.accountId;
+        this.updQuestion['accountId'] = this.accountId;
         this.updQuestion['cicid'] = this.cicid;
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
         const a = document.querySelector('#stepper1');
@@ -506,7 +506,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
     addQuestion() {
         this.insQuestion['isActive'] = true;
-        this.insQuestion['createBy'] = this.accountId;
+        this.insQuestion['accountId'] = this.accountId;
         this.insQuestion['cicid'] = this.cicid;
         this.insQuestion['catalogueName'] = this.catalogueName;
         this.insertQuestion.push(this.insQuestion);

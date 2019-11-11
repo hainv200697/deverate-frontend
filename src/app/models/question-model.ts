@@ -6,6 +6,6 @@ export class QuestionModel{
     question1 : string
     maxPoint: number
     isActive : boolean
-    createBy: number
+    accountId: number
     answer :Array<AnswerModel> = []
 }
