@@ -104,6 +104,7 @@ export class TestComponent implements OnInit {
       },
         (error) => {
           this.error = true;
+          this.message = "Code is invalid!";
         });
 
   }
