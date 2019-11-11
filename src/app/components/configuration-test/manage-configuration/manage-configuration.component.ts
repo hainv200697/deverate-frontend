@@ -394,10 +394,22 @@ export class ManageConfigurationComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.loading = true;
+        let dev0 = [];
+        dev0 = this.selectedItems;
+        for (var i = 0; i < dev0.length; i++) {
+          dev0[i].weightPoint = "0";
+        }
+        this.ListRank.push({
+          catalogueInRank : dev0,
+          rankId : 4,
+          weightPoint: 0,
+          isActive: true,
+        })
         this.inputConfiguration['catalogueInConfigurations'] = this.selectedItems;
         this.inputConfiguration['configurationRank'] = this.ListRank;
         this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
         this.inputConfiguration['endDate'] = new Date(this.inputConfiguration['endDate']);
+        
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
           this.getConfigurationIsActive(true);
           this.closeModal();
@@ -508,7 +520,6 @@ export class ManageConfigurationComponent implements OnInit {
       },
       (error) => {
         this.loading = false;
-        this.toast.error(error.name);
       }
     );
   }
