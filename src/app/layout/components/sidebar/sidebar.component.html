@@ -15,6 +15,10 @@
             <i class="fa fa-user"></i>&nbsp;
             <span>{{ 'Manage Employee' | translate }}</span>
         </a>
+        <a [routerLink]="['/applicant']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Company Manager'">
+            <i class="fa fa-user"></i>&nbsp;
+            <span>{{ 'Applicant' | translate }}</span>
+        </a>
         <a [routerLink]="['/catalogue']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Company Manager'">
             <i class="fa fa-th-list"></i>&nbsp;
             <span>{{ 'Catalogue' | translate }}</span>

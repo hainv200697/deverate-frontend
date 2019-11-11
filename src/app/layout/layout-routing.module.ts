@@ -15,7 +15,7 @@ const routes: Routes = [
 
             // Company Manager
             { path: 'manage-employee', loadChildren: () => import('../components/employee/employee.module').then(m => m.EmployeeModule), canActivate: [CompanyGuard]},
-
+            { path: 'applicant', loadChildren: () => import('../components/applicant/applicant.module').then(m => m.ApplicantModule), canActivate: [CompanyGuard]},
             // Test Owner
 
             //Employee
