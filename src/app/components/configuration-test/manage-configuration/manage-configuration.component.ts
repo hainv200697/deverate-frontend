@@ -395,18 +395,42 @@ export class ManageConfigurationComponent implements OnInit {
       if (result.value) {
         this.loading = true;
         this.inputConfiguration['catalogueInConfigurations'] = this.selectedItems;
+        let dev0 = [];
+        this.selectedItems.forEach(x => {
+          dev0.push(new Object(
+            {
+              catalogueId: x.catalogueId,
+              name: x.name,
+              rank: x.rank,
+              weightPoint: x.weightPoint,
+            }
+          ));
+        });
+        for (var i = 0; i < dev0.length; i++) {
+          dev0[i].weightPoint = "0";
+        }
+        this.ListRank.push({
+          catalogueInRank: dev0,
+          rankId: 4,
+          weightPoint: 0,
+          isActive: true,
+        })
         this.inputConfiguration['configurationRank'] = this.ListRank;
         this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
         this.inputConfiguration['endDate'] = new Date(this.inputConfiguration['endDate']);
+
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
           this.getConfigurationIsActive(true);
           this.closeModal();
           this.index = 1;
           Swal.fire('Success', 'The configuration has been created', 'success');
         }, (error) => {
-          this.toast.error(error.name);
+          this.getConfigurationIsActive(true);
+          this.closeModal();
+          this.index = 1;
           this.loading = false;
         });
+        console.log(this.inputConfiguration)
       }
     });
   }
@@ -508,7 +532,6 @@ export class ManageConfigurationComponent implements OnInit {
       },
       (error) => {
         this.loading = false;
-        this.toast.error(error.name);
       }
     );
   }
