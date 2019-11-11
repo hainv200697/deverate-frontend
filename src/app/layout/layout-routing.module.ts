@@ -1,19 +1,26 @@
-import { StatisticModule } from './../components/statistic/statistic.module';
-import { StatisticComponent } from './../components/statistic/statistic.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LayoutComponent } from './layout.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ChangepassComponent } from '../components/changepass/changepass.component';
 import { RerankingComponent } from '../components/ranking/reranking/reranking.component';
-// import { InsertQuestionComponent } from '../components/question/ins-question/insert-question.component';
+import { SystemGuard, CompanyGuard, OwnerGuard, EmployeeGuard } from '../shared';
 
 const routes: Routes = [
     {
         path: '',
         component: LayoutComponent,
         children: [
-            //{ path: '', redirectTo: 'dashboard', pathMatch: 'prefix' },
+            // System Manager
+
+            // Company Manager
+            { path: 'manage-employee', loadChildren: () => import('../components/employee/employee.module').then(m => m.EmployeeModule), canActivate: [CompanyGuard]},
+
+            // Test Owner
+
+            //Employee
+
+            
             { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule), data: { breadcrumb: 'Home' } },
             { path: 'charts', loadChildren: () => import('./charts/charts.module').then(m => m.ChartsModule) },
             { path: 'tables', loadChildren: () => import('./tables/tables.module').then(m => m.TablesModule) },
@@ -32,7 +39,6 @@ const routes: Routes = [
             { path: 'manage-detail-test/:id', loadChildren: () => import('../components/default-test/defaut-test.module').then(m => m.DefautTestModule) },
             { path: 'reranking', component: RerankingComponent},
             { path: 'statistic', loadChildren: () => import('../components/statistic/statistic.module').then(m => m.StatisticModule)},
-            { path: 'manage-employee', loadChildren: () => import('../components/employee/employee.module').then(m => m.EmployeeModule)},
             { path: 'default-catalogue', loadChildren: () => import('../components/catalogue-default/catalogue-default.module').then(m => m.CatalogueDefaultModule)}
         ]
     }

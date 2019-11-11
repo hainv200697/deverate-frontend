@@ -1,97 +1,40 @@
 <nav class="sidebar" [ngClass]="{sidebarPushRight: isActive, collapsed: collapsed}">
     <div class="list-group">
-        <!-- <a routerLink="/dashboard" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-dashboard"></i>&nbsp;
-            <span>{{ 'Dashboard' | translate }}</span>
-        </a>
-        <a [routerLink]="['/charts']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-bar-chart-o"></i>&nbsp;
-            <span>{{ 'Charts' | translate }}</span>
-        </a>
-        <a [routerLink]="['/tables']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-table"></i>&nbsp;
-            <span>{{ 'Tables' | translate }}</span>
-        </a>
-        <a [routerLink]="['/forms']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-edit"></i>&nbsp;
-            <span>{{ 'Forms' | translate }}</span>
-        </a>
-        <a [routerLink]="['/bs-element']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-desktop"></i>&nbsp;
-            <span>{{ 'Bootstrap Element' | translate }}</span>
-        </a>
-        <a [routerLink]="['/grid']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-wrench"></i>&nbsp;
-            <span>{{ 'Bootstrap Grid' | translate }}</span>
-        </a>
-        <a [routerLink]="['/components']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-th-list"></i>&nbsp;
-            <span>{{ 'Component' | translate }}</span>
-        </a> -->
-        <!-- <a [routerLink]="['/manage-question']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-th-list"></i>&nbsp;
-            <span>{{ 'Manage Question' | translate }}</span>
-        </a> -->
-        <a [routerLink]="['/catalogue']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-th-list"></i>&nbsp;
-            <span>{{ 'Catalogue' | translate }}</span>
-        </a>
-        <a [routerLink]="['/default-catalogue']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-th-list"></i>&nbsp;
-            <span>{{ 'Catalogue Default' | translate }}</span>
-        </a>
-        <a [routerLink]="['/manage-company']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+        <!-- System Manager -->
+        <a [routerLink]="['/manage-company']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'System Manager'">
             <i class="fa fa-th-list"></i>&nbsp;
             <span>{{ 'Manage Company' | translate }}</span>
         </a>
-        <a [routerLink]="['/manage-configuration']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-cog"></i>&nbsp;
-            <span>{{ 'Manage Configuration' | translate }}</span>
+        <a [routerLink]="['/default-catalogue']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'System Manager'">
+            <i class="fa fa-th-list"></i>&nbsp;
+            <span>{{ 'Catalogue Default' | translate }}</span>
         </a>
-        <a [routerLink]="['/manage-employee']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+
+        <!-- Company Manager -->
+        <a [routerLink]="['/manage-employee']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Company Manager'">
             <i class="fa fa-user"></i>&nbsp;
             <span>{{ 'Manage Employee' | translate }}</span>
         </a>
-        <a [routerLink]="['/statistic']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+        <a [routerLink]="['/catalogue']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Company Manager'">
+            <i class="fa fa-th-list"></i>&nbsp;
+            <span>{{ 'Catalogue' | translate }}</span>
+        </a>
+
+        <!-- Test Owner -->
+        <a [routerLink]="['/manage-configuration']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
+            <i class="fa fa-cog"></i>&nbsp;
+            <span>{{ 'Manage Configuration' | translate }}</span>
+        </a>
+        <a [routerLink]="['/statistic']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
             <i class="fa fa-bar-chart"></i>&nbsp;
             <span>{{ 'Statistic' | translate }}</span>
         </a>
-        <div class="nested-menu">
-            <a class="list-group-item" (click)="addExpandClass('pages')">
-                <i class="fa fa-plus"></i>&nbsp;
-                <span>{{ 'Ranking' | translate }}</span>
-            </a>
-            <li class="nested" [class.expand]="showMenu === 'pages'">
-                <ul class="submenu">
-                    <li>
-                        <a [routerLink]="['/reranking']" [routerLinkActive]="['router-link-active']">
-                            <i class="fa fa-monument"></i>&nbsp;
-                            <span>{{ 'Reranking' | translate }}</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a>
-                            <i class="fa fa-monument"></i>&nbsp;
-                            <span>{{ 'Statistical' | translate }}</span>
-                        </a>
-                    </li>
-                    <!-- <li>
-                        <a href="javascript:void(0)">
-                            <i class="fa fa-monument"></i>&nbsp;
-                            <span>{{ 'Submenu' | translate }}</span>
-                        </a>
-                    </li> -->
-                </ul>
-            </li>
-        </div>
-        <!-- <a [routerLink]="['/blank-page']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-file-o"></i>&nbsp;
-            <span>{{ 'Blank Page' | translate }}</span>
+
+        <!-- Employee -->
+        <a [routerLink]="['/reranking']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Employee'">
+            <i class="fa fa-plus"></i>&nbsp;
+            <span>{{ 'Quiz' | translate }}</span>
         </a>
-        <a href="http://www.strapui.com/" class="list-group-item">
-            <i class="fa fa-caret-down"></i>&nbsp;
-            <span>{{ 'More Themes' | translate }}</span>
-        </a> -->
 
         <div class="header-fields">
             <a (click)="rltAndLtr()" class="list-group-item">
@@ -152,7 +95,7 @@
                                 <span><i class="fa fa-fw fa-user"></i> {{ 'Profile' | translate }}</span>
                             </a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="javascript:void(0)">
                                 <span><i class="fa fa-fw fa-envelope"></i> {{ 'Inbox' | translate }}</span>
                             </a>
@@ -161,7 +104,7 @@
                             <a href="javascript:void(0)">
                                 <span><i class="fa fa-fw fa-gear"></i> {{ 'Settings' | translate }}</span>
                             </a>
-                        </li>
+                        </li> -->
                         <li>
                             <a [routerLink]="['/login']" (click)="onLoggedout()">
                                 <span><i class="fa fa-fw fa-power-off"></i> {{ 'Log Out' | translate }}</span>

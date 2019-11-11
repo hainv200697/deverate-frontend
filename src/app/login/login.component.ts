@@ -31,17 +31,32 @@ export class LoginComponent implements OnInit {
         };
         this.authenticationService.login(account)
             .subscribe((res) => {
-                    const userInfo = this.getDecodedAccessToken(res.token);
-                    if (userInfo != null) {
-                        sessionStorage.setItem('isLoggedin', 'true');
-                        sessionStorage.setItem('Authorization', res.token);
-                        sessionStorage.setItem('Username', userInfo.username);
-                        sessionStorage.setItem('AccountId', userInfo.accountId);
-                        sessionStorage.setItem('Fullname', userInfo.fullname);
-                        sessionStorage.setItem('CompanyId', userInfo.companyId);
-                        sessionStorage.setItem('Role', userInfo.role);
-                        this.router.navigate(['/catalogue']);
+                const userInfo = this.getDecodedAccessToken(res.token);
+                if (userInfo != null) {
+                    sessionStorage.setItem('isLoggedin', 'true');
+                    sessionStorage.setItem('Authorization', res.token);
+                    sessionStorage.setItem('Username', userInfo.username);
+                    sessionStorage.setItem('AccountId', userInfo.accountId);
+                    sessionStorage.setItem('Fullname', userInfo.fullname);
+                    sessionStorage.setItem('CompanyId', userInfo.companyId);
+                    sessionStorage.setItem('Role', userInfo.role);
+                    switch (userInfo.role) {
+                        case 'System Manager':
+                            this.router.navigate(['/manage-company']);
+                            break;
+                        case 'Company Manager':
+                            this.router.navigate(['/manage-employee']);
+                            break;
+                        case 'Test Owner':
+                             this.router.navigate(['/manage-configuration']);
+                            break;
+                        case 'Employee':
+                             this.router.navigate(['/reranking']);
+                            break;
+                        default:
+                             this.router.navigate(['/forbidden']);
                     }
+                }
             }, (error) => {
                 alert(error);
             });
