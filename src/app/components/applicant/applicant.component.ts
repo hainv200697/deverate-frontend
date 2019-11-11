@@ -189,6 +189,7 @@ export class ApplicantComponent implements OnInit {
     }
 
     createTest(){
+        this.loading = true;
         this.applicantService.postCreateApplicant(this.applicantList).subscribe(
         results => {
             this.loading = false;
