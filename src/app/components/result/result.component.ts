@@ -55,19 +55,19 @@ export class ResultComponent implements OnInit {
         this.statistic = data['data']['data'];
         let tes = data['data']['data'].catalogueInRanks;
 
-        if (this.statistic.rank == "dev1") {
+        if (this.statistic.rank == "DEV01") {
           tes.splice(0,1);
           this.radarChartColor.splice(1,1);
         }
-        else if(this.statistic.rank == "dev0"){
+        else if(this.statistic.rank == "DEV0"){
           tes.splice(0,2);
           this.radarChartColor.splice(1,2);
         }
-        else if(this.statistic.rank == "dev2"){
+        else if(this.statistic.rank == "DEV02"){
           tes.splice(2,1); 
           this.radarChartColor.splice(3,1);
         }
-        else if(this.statistic.rank == "dev3"){
+        else if(this.statistic.rank == "DEV03"){
           tes.splice(2,1); 
         }
         
@@ -78,16 +78,16 @@ export class ResultComponent implements OnInit {
         this.catalogueTable = data['data']['data'].catalogueInConfigs;
         let dialValue = data['data']['data'].rank;
         let tmp = 0;
-        if (dialValue == "dev0") {
+        if (dialValue == "DEV0") {
           tmp = 12.5
         }
-        else if (dialValue == "dev1") {
+        else if (dialValue == "DEV01") {
           tmp = 12.5 + 25
         }
-        else if (dialValue == "dev2") {
+        else if (dialValue == "DEV02") {
           tmp = 12.5 + 50
         }
-        else if (dialValue == "dev3") {
+        else if (dialValue == "DEV03") {
           tmp = 12.5 + 75
         }
 
@@ -104,7 +104,7 @@ export class ResultComponent implements OnInit {
             }
           }
         }
-        if(this.statistic.rank == "dev3"){
+        if(this.statistic.rank == "DEV03"){
           this.radarChartData.splice(2,1);
           this.radarChartColor.splice(2,2);
         }
