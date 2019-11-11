@@ -25,6 +25,7 @@ export class TestComponent implements OnInit {
   config;
   key;
   error = false;
+  expired = false;
   message='';
   test = false;
   questionInTest = [];
@@ -53,7 +54,7 @@ export class TestComponent implements OnInit {
           this.closeModal();
           this.router.navigate(['/result', this.testId]);
         }else if(this.config.status == 'Expired '){
-          this.error = true;
+          this.expired = true;
           this.message = "Test expires!"
         }
       });
