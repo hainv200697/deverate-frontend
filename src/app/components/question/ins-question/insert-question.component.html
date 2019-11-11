@@ -372,12 +372,12 @@
                         <th class="col-md-3 text-center" scope="col">
                             <sv-default-sorter by='catalogueName'>Catalog</sv-default-sorter>
                         </th>
-                        <th class="col-md-3 text-center" scope="col">
+                        <th class="col-md-4 text-center" scope="col">
                             <sv-default-sorter by='question1'>Question</sv-default-sorter>
                         </th>
-                        <th class="col-md-1 text-center" scope="col">
-                            <sv-default-sorter by='createBy'>Create By</sv-default-sorter>
-                        </th>
+                        <!-- <th class="col-md-1 text-center" scope="col"> -->
+                            <!-- <sv-default-sorter by='createBy'>Create By</sv-default-sorter>
+                        </th> -->
                         <th class="col-md-1 text-center" scope="col">
                             <sv-default-sorter by='maxPoint'>Max Point</sv-default-sorter>
                         </th>
@@ -402,8 +402,8 @@
                             </label>
                         </td>
                         <td class="text-center col-md-3">{{catalogueName}}</td>
-                        <td class="text-center col-md-3">{{q.question1}}</td>
-                        <td class="text-center col-md-1">{{q.username}}</td>
+                        <td class="text-center col-md-4">{{q.question1}}</td>
+                        <!-- <td class="text-center col-md-1">{{q.fullname}}</td> -->
                         <td class="text-center col-md-1">{{q.maxPoint}}</td>
                         <td class="text-center col-md-1" [hidden]="q.isActive==true">
                             <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
