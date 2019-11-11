@@ -30,7 +30,7 @@
                         <input type="password" placeholder="Key" [(ngModel)]="key">
                         <div class="input-icon"><i class="fa fa-key"></i></div>
                         <br />
-                        <p [hidden]="!error" style="color: red;">Code invalid</p>
+                        <p [hidden]="!error" style="color: red;">{{message}}</p>
                     </div>
                 </div>
             </div>

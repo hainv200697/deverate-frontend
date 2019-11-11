@@ -6,8 +6,8 @@ import { AppSettings } from '../appsetting';
   providedIn: 'root'
 })
 export class TestService {
-  // URL = 'http://localhost:8080/';
-  URL = AppSettings.BASEURL;
+  URL = 'http://localhost:8080/';
+  // URL = AppSettings.BASEURL;
   constructor(private httpClient: HttpClient) { }
 
   getAllTestInfo(accountId) {
