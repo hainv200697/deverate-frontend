@@ -77,7 +77,8 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     public loading = false;
     cicid;
     check = true;
-    message = [];
+    message: Array<string> = [];
+    listMessage:Array<Array<string>> =[];
     // Import excel file
     changeIns(key) {
         this.create = key;
@@ -121,18 +122,18 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         try {
             let list: any;
             this.check = true;
+            this.listMessage = [];
             list = await this.readExcel();
-            list.forEach(element => {
+            list.forEach((element) => {
                 const questionObj = new QuestionModel();
                 this.listAnswer = [];
+                this.message = [];
                 questionObj.question1 = element['Question'];
                 questionObj.isActive = true;
-                questionObj.createBy = this.accountId;
+                questionObj.accountId = this.accountId;
                 questionObj.cicid = this.cicid;
-                questionObj.message = [];
                 if (element['Question'] == null) {
-                    this.toastr.error("Question is null");
-                    questionObj.message.push("Question is null");
+                    this.message.push("Question is blank");
                     this.check = false;
                 }
                 for (let i = 1; i <= 6; i++) {
@@ -150,11 +151,34 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                         break;
                     }
                 }
+                this.listAnswer.forEach((element,index) => {
+                    index++;
+                    if(element.answer1 === null || element.answer1 === undefined ){
+                        this.message.push("Answer #"+index+" is blank");
+                        this.check = false;
+                    }else if(element.answer1.length < 3 || element.answer1.length > 200 ){
+                        this.message.push("Answer #"+index+" must be in range form 3 to 200 letter ");
+                        this.check = false;
+                    }
+                    if(element.point === null || element.point === undefined ){
+                        this.message.push("Point of answer #"+index+" is blank!");
+                        this.check = false;
+                    }else if(isNaN(element.point)){
+                        this.message.push("Point of answer #"+index+" is not a number!");
+                        this.check = false;
+                    }
+                    else if(element.point < 1 || element.point > 6 ){
+                        this.message.push("Point of answer #"+index+" must be in range form 1 to 6! ");
+                        this.check = false;
+                    }
+                });
+                
                 questionObj.maxPoint = Math.max.apply(Math, this.listAnswer.map(function (o) { return o.point; }));
                 questionObj.answer = this.listAnswer;
-                console.log(questionObj);
+                this.listMessage.push(this.message);
                 this.listInsert.push(questionObj);
             });
+            
         } catch (err) {
             console.log(err);
         }
@@ -286,6 +310,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
     back() {
         this.listInsert = [];
+        this.listMessage = [];
         this.index = 1;
         this.stepper.previous();
     }
@@ -293,9 +318,11 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     async nextExcel() {
         await this.formatExcel();
         this.index = 2;
+        if(this.check == false){
+            this.toastr.error("View list to see details","File input is wrong fotmat!");
+        }
         const data = JSON.stringify(this.listInsert);
         this.insertQuestion = JSON.parse(data);
-        console.log(this.insertQuestion);
         this.stepper.next();
     }
 
@@ -361,6 +388,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     // Open modal
     open(content) {
         this.index = 1;
+        this.listInsert = [];
         this.modalService.open(content, { size: 'lg', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
@@ -371,6 +399,8 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
     openModalExcel(excel) {
         this.index = 1;
+        this.listMessage = [];
+        this.listInsert = [];
         this.modalService.open(excel, { size: 'lg', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
@@ -411,6 +441,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.modalService.dismissAll();
     }
     closeExcel() {
+        this.listMessage = [];
         this.modalService.dismissAll();
     }
 
@@ -496,7 +527,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
     addQuestion() {
         this.insQuestion['isActive'] = true;
-        this.insQuestion['createBy'] = this.accountId;
+        this.insQuestion['accountId'] = this.accountId;
         this.insQuestion['cicid'] = this.cicid;
         this.insQuestion['catalogueName'] = this.catalogueName;
         this.insertQuestion.push(this.insQuestion);

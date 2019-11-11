@@ -178,7 +178,7 @@
                                 <div class="col-md-12 question-ex">
                                     {{q.question1}}
                                 </div>
-                                <div class="col-md-12 question-ex" *ngFor="let mes of q.message">
+                                <div class="col-md-12 question-ex" *ngFor="let mes of listMessage[i]">
                                     <div *ngIf="mes != null" style="color: red;">
                                         {{mes}}
                                     </div>
@@ -403,7 +403,7 @@
                         </td>
                         <td class="text-center col-md-3">{{catalogueName}}</td>
                         <td class="text-center col-md-3">{{q.question1}}</td>
-                        <td class="text-center col-md-1">{{q.createBy}}</td>
+                        <td class="text-center col-md-1">{{q.username}}</td>
                         <td class="text-center col-md-1">{{q.maxPoint}}</td>
                         <td class="text-center col-md-1" [hidden]="q.isActive==true">
                             <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
