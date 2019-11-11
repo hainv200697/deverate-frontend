@@ -56,7 +56,7 @@ export class ResultComponent implements OnInit {
         let tes = data['data']['data'].catalogueInRanks;
 
         if (this.statistic.rank == "DEV01") {
-          tes.splice(0,1);
+          tes.splice(0,2);
           this.radarChartColor.splice(1,1);
         }
         else if(this.statistic.rank == "DEV0"){
@@ -64,11 +64,11 @@ export class ResultComponent implements OnInit {
           this.radarChartColor.splice(1,2);
         }
         else if(this.statistic.rank == "DEV02"){
-          tes.splice(2,1); 
+          tes.splice(2,2); 
           this.radarChartColor.splice(3,1);
         }
         else if(this.statistic.rank == "DEV03"){
-          tes.splice(2,1); 
+          tes.splice(0,3); 
         }
         
         this.catalogueInRanks = tes;
