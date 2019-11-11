@@ -26,6 +26,7 @@ const routes: Routes = [
             { path: 'manage-test/:id', loadChildren: () => import('../components/view-test/view-test.module').then(m => m.TestModule), canActivate: [OwnerGuard] },
             { path: 'manage-detail-test/:id', loadChildren: () => import('../components/default-test/defaut-test.module').then(m => m.DefautTestModule), canActivate: [OwnerGuard] },
             { path: 'statistic', loadChildren: () => import('../components/statistic/statistic.module').then(m => m.StatisticModule), canActivate: [OwnerGuard]},
+            { path: 'applicant', loadChildren: () => import('../components/applicant/applicant.module').then(m => m.ApplicantModule), canActivate: [OwnerGuard]},
 
             //Employee
             { path: 'reranking', component: RerankingComponent, canActivate: [EmployeeGuard]},
