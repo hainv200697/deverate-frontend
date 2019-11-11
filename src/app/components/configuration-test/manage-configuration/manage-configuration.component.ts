@@ -124,7 +124,7 @@ export class ManageConfigurationComponent implements OnInit {
 
   companyId = sessionStorage.getItem('CompanyId');
   employeeInCompany = [];
-  isSampleConfig= false;
+  isSampleConfig = false;
 
   ngOnInit() {
     this.getAllRank(true);
@@ -270,12 +270,16 @@ export class ManageConfigurationComponent implements OnInit {
         let tmp = []
         tmp = data['data']['data'];
         for (var i = 0; i < tmp.length; i++) {
-          if (tmp[i].name == "dev0") {
+          if (tmp[i].name == "DEV0") {
             tmp.splice(i, 1);
             break;
           }
         }
         this.ListRank = tmp;
+      },
+      (error) => {
+        this.loading = false;
+        this.toast.error(error.name);
       }
     );
 
@@ -293,8 +297,11 @@ export class ManageConfigurationComponent implements OnInit {
           }
         }
         this.catalogueList = tmp;
+      },
+      (error) => {
+        this.loading = false;
+        this.toast.error(error.name);
       }
-
     );
   }
 
@@ -314,6 +321,10 @@ export class ManageConfigurationComponent implements OnInit {
       (data) => {
         this.loading = false;
         this.Configurations = data;
+      },
+      (error) => {
+        this.loading = false;
+        this.toast.error(error.name);
       }
     );
   }
@@ -332,10 +343,14 @@ export class ManageConfigurationComponent implements OnInit {
         this.updateConfig['endDate'] = data['data']['data']['endDate'];
         this.updateConfig['duration'] = data['data']['data']['duration'];
         this.updateConfig['isActive'] = data['data']['data']['isActive'];
-        this.updateConfig['catalogueInConfigurations'] = data['data']['data']['catalogueInConfigurations'];
-        this.updateConfig['configurationRank'] = data['data']['data']['configurationRank'];
-        this.selectedItemsUpdate = data['data']['data']['catalogueInConfigurations'];
+        this.updateConfig['catalogueInConfigurations'] = data['data']['data']['catalogueInConfigs'];
+        this.updateConfig['configurationRank'] = data['data']['data']['configurationRanks'];
+        this.selectedItemsUpdate = data['data']['data']['catalogueInConfigs'];
         this.loading = false;
+      },
+      (error) => {
+        this.loading = false;
+        this.toast.error(error.name);
       }
     );
   }
@@ -380,17 +395,43 @@ export class ManageConfigurationComponent implements OnInit {
       if (result.value) {
         this.loading = true;
         this.inputConfiguration['catalogueInConfigurations'] = this.selectedItems;
+        let dev0 = [];
+        this.selectedItems.forEach(x => {
+          dev0.push(new Object(
+            {
+              catalogueId: x.catalogueId,
+              name: x.name,
+              rank: x.rank,
+              weightPoint: x.weightPoint,
+            }
+          ));
+        });
+        for (var i = 0; i < dev0.length; i++) {
+          dev0[i].weightPoint = "0";
+        }
+        this.ListRank.push({
+          catalogueInRank: dev0,
+          rankId: 4,
+          weightPoint: 0,
+          isActive: true,
+        })
         this.inputConfiguration['configurationRank'] = this.ListRank;
         this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
         this.inputConfiguration['endDate'] = new Date(this.inputConfiguration['endDate']);
+
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
           this.getConfigurationIsActive(true);
           this.closeModal();
           this.index = 1;
           Swal.fire('Success', 'The configuration has been created', 'success');
+        }, (error) => {
+          this.getConfigurationIsActive(true);
+          this.closeModal();
+          this.index = 1;
+          this.loading = false;
         });
+        console.log(this.inputConfiguration)
       }
-    }).catch((error) => {
     });
   }
 
@@ -411,9 +452,11 @@ export class ManageConfigurationComponent implements OnInit {
           this.closeModal();
           this.indexDetail = 1;
           Swal.fire('Success', 'The configuration has been updated', 'success');
+        }, (error) => {
+          this.toast.error(error.name);
+          this.loading = false;
         });
       }
-    }).catch((error) => {
     });
 
   }
@@ -438,12 +481,14 @@ export class ManageConfigurationComponent implements OnInit {
             this.getConfigurationIsActive(true);
             this.closeModal();
             Swal.fire('Success', 'The configuration has been deleted', 'success');
+          }, (error) => {
+            this.toast.error(error.name);
+            this.loading = false;
           });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           this.updateStatus = [];
           this.closeModal();
         }
-      }).catch((error) => {
       });
     } else {
       Swal.fire({
@@ -463,12 +508,14 @@ export class ManageConfigurationComponent implements OnInit {
             this.getConfigurationIsActive(true);
             this.closeModal();
             Swal.fire('Success', 'The configuration has been enabled', 'success');
+          }, (error) => {
+            this.toast.error(error.name);
+            this.loading = false;
           });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           this.updateStatus = [];
           this.closeModal();
         }
-      }).catch((error) => {
       });
     }
   }
@@ -482,6 +529,9 @@ export class ManageConfigurationComponent implements OnInit {
       (data) => {
 
         this.employeeInCompany = data;
+      },
+      (error) => {
+        this.loading = false;
       }
     );
   }
@@ -516,11 +566,11 @@ export class ManageConfigurationComponent implements OnInit {
       this.toast.error('Message', 'Total mark of catalogue must be 100');
       return false;
     } else if (this.index === 2) {
-      if(this.ListRank[0].weightPoint > 100){
+      if (this.ListRank[0].weightPoint > 100) {
         this.toast.error('Dev3\'s mark is smaller 100');
         return false;
       }
-      else if(this.ListRank[2].weightPoint < 0){
+      else if (this.ListRank[2].weightPoint < 0) {
         this.toast.error('Dev1\'s mark is large 100');
         return false;
       }
@@ -546,13 +596,18 @@ export class ManageConfigurationComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.configAPi.sendMail(id).subscribe(data => {
+          this.loading = true;
           Swal.fire('Success', 'The mail has been send', 'success');
+        }, (error) => {
+          this.toast.error(error.name);
+          this.loading = false;
         });
 
       } else if (result.dismiss === Swal.DismissReason.cancel) {
       }
-    }).catch((error) => {
-    });
+    },
+
+    );
   }
 
   checkIfRankSelected() {
@@ -579,7 +634,7 @@ export class ManageConfigurationComponent implements OnInit {
     }
     else if (value == 1) {
       this.inputConfiguration = option1;
-      for(var i = 0; i < this.catalogueList.length; i++){
+      for (var i = 0; i < this.catalogueList.length; i++) {
         this.selectedItems = this.catalogueList;
         this.selectedItems[i].weightPoint = option1.selectedItems[i].weightPoint;
       }
@@ -591,7 +646,7 @@ export class ManageConfigurationComponent implements OnInit {
     }
     else if (value == 2) {
       this.inputConfiguration = option2;
-      for(var i = 0; i < this.catalogueList.length; i++){
+      for (var i = 0; i < this.catalogueList.length; i++) {
         this.selectedItems = this.catalogueList;
         this.selectedItems[i].weightPoint = option2.selectedItems[i].weightPoint;
       }

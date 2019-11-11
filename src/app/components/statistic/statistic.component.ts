@@ -2,7 +2,8 @@ import { element } from 'protractor';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { StatisticApiService } from 'src/app/services/statistic-api.service';
 
 @Component({
@@ -85,6 +86,8 @@ export class StatisticComponent implements OnInit {
   constructor(
     private historyApi: StatisticApiService,
     private modalService: NgbModal,
+    private toast: ToastrService,
+    private router: Router,
   ) { }
 
   public loading = false;
@@ -139,6 +142,10 @@ export class StatisticComponent implements OnInit {
         });
         this.isLoaded = true;
         this.loading = false;
+      },
+      (error) => {
+        this.loading = false;
+        this.router.navigate(['/not-found']);
       }
     );
   }
@@ -156,6 +163,10 @@ export class StatisticComponent implements OnInit {
         this.dataGroupChart = tmp;
         this.load = true;
         this.loading = false;
+      },
+      (error) => {
+        this.loading = false;
+        this.router.navigate(['/not-found']);
       }
     );
   }
@@ -166,6 +177,10 @@ export class StatisticComponent implements OnInit {
       (data) => {
         this.dataEmployeeOverPoint = data;
         this.loading = false;
+      },
+      (error) => {
+        this.loading = false;
+        this.router.navigate(['/not-found']);
       }
     );
   }

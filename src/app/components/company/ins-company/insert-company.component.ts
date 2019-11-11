@@ -126,13 +126,15 @@ export class InsertCompanyComponent implements OnInit {
             this.getCompanyIsActive(status);
             this.closeModal();
             Swal.fire('Success', 'The company has been deleted', 'success');
+          }, (error) => {
+            this.toast.error(error.name);
+            this.loading = false;
           });
         }
         else if (result.dismiss === Swal.DismissReason.cancel) {
           this.updateStatus = [];
           this.closeModal();
         }
-      }).catch((error) => {
       });
     }
     else {
@@ -152,12 +154,14 @@ export class InsertCompanyComponent implements OnInit {
             this.getCompanyIsActive(status);
             this.closeModal();
             Swal.fire('Success', 'The company has been enabled', 'success');
+          }, (error) => {
+            this.toast.error(error.name);
+            this.loading = false;
           });;
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           this.updateStatus = [];
           this.closeModal();
         }
-      }).catch((error) => {
       });
     }
   }
@@ -189,6 +193,11 @@ export class InsertCompanyComponent implements OnInit {
       (data) => {
         this.loading = false;
         this.Companies = data['data']['data'];
+      },
+      (error) => {
+        this.toast.error(error.name);
+        this.loading = false;
+        this.closeModal()
       }
     );
   }
@@ -198,7 +207,10 @@ export class InsertCompanyComponent implements OnInit {
       (data) => {
         this.Account = data['data']['data'];
       }
-    );
+    ), (error) => {
+      this.toast.error(error.name);
+      this.loading = false;
+    };
 
   }
 
@@ -239,13 +251,15 @@ export class InsertCompanyComponent implements OnInit {
             this.getCompanyIsActive(true);
             this.closeModal();
             Swal.fire('Success', 'The company has been created', 'success');
+          }, (error) => {
+            this.toast.error(error.name);
+            this.loading = false;
           });
 
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           this.updateStatus = [];
           this.closeModal();
         }
-      }).catch((error) => {
       });
     }
   }
@@ -270,6 +284,9 @@ export class InsertCompanyComponent implements OnInit {
           this.getCompanyIsActive(true);
           this.closeModal();
           Swal.fire('Success', 'The company has been updated', 'success');
+        }, (error) => {
+          this.toast.error(error.name);
+          this.loading = false;
         });
 
 
@@ -277,7 +294,6 @@ export class InsertCompanyComponent implements OnInit {
         this.updateStatus = [];
         this.closeModal();
       }
-    }).catch((error) => {
     });
   }
 
@@ -291,17 +307,16 @@ export class InsertCompanyComponent implements OnInit {
       cancelButtonText: 'No, Do not send it'
     }).then((result) => {
       this.loading = true;
-      let manager : string[] = [];
+      let manager: string[] = [];
       manager.push(managerId);
-      console.log(manager)
-      console.log(companyId)
       this.employeeService.resendpassword(manager, companyId).subscribe(data => {
         this.getCompanyIsActive(true);
         this.closeModal();
         Swal.fire('Success', 'The mail has been send', 'success');
+      }, (error) => {
+        this.toast.error(error.name);
+        this.loading = false;
       });
-    }).catch((error) => {
-      this.toast.error(error.error);
     });
   }
 
