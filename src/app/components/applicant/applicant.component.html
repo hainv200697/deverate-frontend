@@ -54,14 +54,21 @@
                 <tr class="col-md-12 row no-padding-no-margin">
                     <td class="col-md-2 text-center" style="font-weight: bold">#</td>
                     <td class="col-md-4 text-center" style="font-weight: bold">Fullname</td>
-                    <td class="col-md-6 text-center" style="font-weight: bold">Email</td>
+                    <td class="col-md-5 text-center" style="font-weight: bold">Email</td>
+                    <td class="col-md-1 text-center" style="font-weight: bold">Actiom</td>
                 </tr>
             </thead>
             <tbody>
                 <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data; let i=index">
-                    <td class="col-md-2 text-center" style="font-weight: bold">{{i}}</td>
+                    <td class="col-md-2 text-center" style="font-weight: bold">{{i+1}}</td>
                     <td class="col-md-4 text-center" style="font-weight: bold">{{item.fullname}}</td>
-                    <td class="col-md-6 text-center" style="font-weight: bold">{{item.email}}</td>
+                    <td class="col-md-5 text-center" style="font-weight: bold">{{item.email}}</td>
+                    <td class="col-md-1 text-center" style="font-weight: bold">
+                        <button  (click)="delete(i);" class="btn btn-lg btn-danger"
+                            data-toggle="button">
+                            <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
             <tfoot>
@@ -121,7 +128,7 @@
                                         <tr class="col-md-12 row no-padding-no-margin"
                                             *ngFor="let q of applicants;let i=index">
                                             <td class="col-md-2">
-                                                {{i}}
+                                                {{i+1}}
                                             </td>
                                             <td class="col-md-4">
                                                 {{q.fullname}}

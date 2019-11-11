@@ -50,8 +50,13 @@ export class ApplicantComponent implements OnInit {
     // close modal
     closeModal() {
         this.applicants = [];
+        this.insApplicant = {};
         this.modalService.dismissAll();
 
+    }
+
+    delete(index){
+        this.applicantList.splice(index,1);
     }
 
     incomingfile(event) {
@@ -170,6 +175,7 @@ export class ApplicantComponent implements OnInit {
         this.applicants.forEach(element => {
             this.applicantList.push(element); 
         });
+        this.closeModal();
     }
 
     createApplicant() {
