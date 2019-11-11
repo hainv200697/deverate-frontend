@@ -189,6 +189,11 @@ export class InsertCompanyComponent implements OnInit {
       (data) => {
         this.loading = false;
         this.Companies = data['data']['data'];
+      },
+      (error) => {
+        this.toast.error(error.name);
+        this.loading = false;
+        this.closeModal()
       }
     );
   }
@@ -246,6 +251,9 @@ export class InsertCompanyComponent implements OnInit {
           this.closeModal();
         }
       }).catch((error) => {
+        this.toast.error(error.name);
+        this.loading = false;
+        this.closeModal()
       });
     }
   }
@@ -291,7 +299,7 @@ export class InsertCompanyComponent implements OnInit {
       cancelButtonText: 'No, Do not send it'
     }).then((result) => {
       this.loading = true;
-      let manager : string[] = [];
+      let manager: string[] = [];
       manager.push(managerId);
       console.log(manager)
       console.log(companyId)
@@ -301,7 +309,8 @@ export class InsertCompanyComponent implements OnInit {
         Swal.fire('Success', 'The mail has been send', 'success');
       });
     }).catch((error) => {
-      this.toast.error(error.error);
+      this.loading = false;
+      this.toast.error(error.name);
     });
   }
 

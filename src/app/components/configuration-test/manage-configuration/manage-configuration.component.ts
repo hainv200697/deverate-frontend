@@ -270,12 +270,16 @@ export class ManageConfigurationComponent implements OnInit {
         let tmp = []
         tmp = data['data']['data'];
         for (var i = 0; i < tmp.length; i++) {
-          if (tmp[i].name == "dev0") {
+          if (tmp[i].name == "DEV0") {
             tmp.splice(i, 1);
             break;
           }
         }
         this.ListRank = tmp;
+      },
+      (error) => {
+        this.loading = false;
+        this.toast.error(error.name);
       }
     );
 
@@ -293,8 +297,11 @@ export class ManageConfigurationComponent implements OnInit {
           }
         }
         this.catalogueList = tmp;
+      },
+      (error) => {
+        this.loading = false;
+        this.toast.error(error.name);
       }
-
     );
   }
 
@@ -314,6 +321,10 @@ export class ManageConfigurationComponent implements OnInit {
       (data) => {
         this.loading = false;
         this.Configurations = data;
+      },
+      (error) => {
+        this.loading = false;
+        this.toast.error(error.name);
       }
     );
   }
@@ -332,10 +343,14 @@ export class ManageConfigurationComponent implements OnInit {
         this.updateConfig['endDate'] = data['data']['data']['endDate'];
         this.updateConfig['duration'] = data['data']['data']['duration'];
         this.updateConfig['isActive'] = data['data']['data']['isActive'];
-        this.updateConfig['catalogueInConfigurations'] = data['data']['data']['catalogueInConfigurations'];
-        this.updateConfig['configurationRank'] = data['data']['data']['configurationRank'];
-        this.selectedItemsUpdate = data['data']['data']['catalogueInConfigurations'];
+        this.updateConfig['catalogueInConfigurations'] = data['data']['data']['catalogueInConfigs'];
+        this.updateConfig['configurationRank'] = data['data']['data']['configurationRanks'];
+        this.selectedItemsUpdate = data['data']['data']['catalogueInConfigs'];
         this.loading = false;
+      },
+      (error) => {
+        this.loading = false;
+        this.toast.error(error.name);
       }
     );
   }
@@ -482,6 +497,10 @@ export class ManageConfigurationComponent implements OnInit {
       (data) => {
 
         this.employeeInCompany = data;
+      },
+      (error) => {
+        this.loading = false;
+        this.toast.error(error.name);
       }
     );
   }
@@ -552,6 +571,8 @@ export class ManageConfigurationComponent implements OnInit {
       } else if (result.dismiss === Swal.DismissReason.cancel) {
       }
     }).catch((error) => {
+        this.loading = false;
+        this.toast.error(error.name);
     });
   }
 

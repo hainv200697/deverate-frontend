@@ -404,7 +404,7 @@
                                     style="margin-left: -55px;">
                                     <div class="form-group col-md-8">
                                         <input type="text" disabled="disabled" class="form-control"
-                                            style="font-size: 15px" [(ngModel)]="c['catalogueId']" />
+                                            style="font-size: 15px" [(ngModel)]="c['catalogueName']" />
                                     </div>
                                     <div class="form-group col-md-3">
                                         <input type="number" min="10" max="100" step="10" class="form-control"
@@ -431,7 +431,7 @@
                                 <div class="form-row" *ngFor="let rank of updateConfig['configurationRank']">
                                     <div class="form-group col-8">
                                         <label>Rank</label>
-                                        <input type="text" disabled="disabled" [value]="rank['rankId']"
+                                        <input type="text" disabled="disabled" [value]="rank['rank']"
                                             class="form-control " />
                                     </div>
                                     <div class="form-group col-3">
@@ -453,10 +453,10 @@
                                         <td class="col-md-3" style="font-weight: bold">
                                             Type
                                         </td>
-                                        <td class="col-md-9" [hidden]="updateConfig['type']=='false'">
+                                        <td class="col-md-9" [hidden]="updateConfig['type']==false">
                                             Employee
                                         </td>
-                                        <td class="col-md-9" [hidden]="updateConfig['type']=='true'">
+                                        <td class="col-md-9" [hidden]="updateConfig['type']==true">
                                             Applicant
                                         </td>
                                     </tr>
@@ -507,7 +507,7 @@
                                     <tr class="col-md-12 row no-padding-no-margin"
                                         *ngFor="let c of updateConfig['configurationRank']">
                                         <td class="col-md-9">
-                                            {{c['rankId']}}
+                                            {{c['rank']}}
                                         </td>
                                         <td class="col-md-3">
                                             {{c['weightPoint']}}
@@ -529,7 +529,7 @@
                                     <tr class="col-md-12 row no-padding-no-margin"
                                         *ngFor="let c of updateConfig['catalogueInConfigurations']">
                                         <td class="col-md-9">
-                                            {{c['catalogueId']}}
+                                            {{c['catalogueName']}}
                                         </td>
                                         <td class="col-md-3">
                                             {{c['weightPoint']}}
