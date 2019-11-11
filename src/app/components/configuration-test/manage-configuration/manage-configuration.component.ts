@@ -124,7 +124,7 @@ export class ManageConfigurationComponent implements OnInit {
 
   companyId = sessionStorage.getItem('CompanyId');
   employeeInCompany = [];
-  isSampleConfig= false;
+  isSampleConfig = false;
 
   ngOnInit() {
     this.getAllRank(true);
@@ -403,9 +403,11 @@ export class ManageConfigurationComponent implements OnInit {
           this.closeModal();
           this.index = 1;
           Swal.fire('Success', 'The configuration has been created', 'success');
+        }, (error) => {
+          this.toast.error(error.name);
+          this.loading = false;
         });
       }
-    }).catch((error) => {
     });
   }
 
@@ -426,9 +428,11 @@ export class ManageConfigurationComponent implements OnInit {
           this.closeModal();
           this.indexDetail = 1;
           Swal.fire('Success', 'The configuration has been updated', 'success');
+        }, (error) => {
+          this.toast.error(error.name);
+          this.loading = false;
         });
       }
-    }).catch((error) => {
     });
 
   }
@@ -453,12 +457,14 @@ export class ManageConfigurationComponent implements OnInit {
             this.getConfigurationIsActive(true);
             this.closeModal();
             Swal.fire('Success', 'The configuration has been deleted', 'success');
+          }, (error) => {
+            this.toast.error(error.name);
+            this.loading = false;
           });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           this.updateStatus = [];
           this.closeModal();
         }
-      }).catch((error) => {
       });
     } else {
       Swal.fire({
@@ -478,12 +484,14 @@ export class ManageConfigurationComponent implements OnInit {
             this.getConfigurationIsActive(true);
             this.closeModal();
             Swal.fire('Success', 'The configuration has been enabled', 'success');
+          }, (error) => {
+            this.toast.error(error.name);
+            this.loading = false;
           });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           this.updateStatus = [];
           this.closeModal();
         }
-      }).catch((error) => {
       });
     }
   }
@@ -535,11 +543,11 @@ export class ManageConfigurationComponent implements OnInit {
       this.toast.error('Message', 'Total mark of catalogue must be 100');
       return false;
     } else if (this.index === 2) {
-      if(this.ListRank[0].weightPoint > 100){
+      if (this.ListRank[0].weightPoint > 100) {
         this.toast.error('Dev3\'s mark is smaller 100');
         return false;
       }
-      else if(this.ListRank[2].weightPoint < 0){
+      else if (this.ListRank[2].weightPoint < 0) {
         this.toast.error('Dev1\'s mark is large 100');
         return false;
       }
@@ -565,15 +573,18 @@ export class ManageConfigurationComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.configAPi.sendMail(id).subscribe(data => {
+          this.loading = true;
           Swal.fire('Success', 'The mail has been send', 'success');
+        }, (error) => {
+          this.toast.error(error.name);
+          this.loading = false;
         });
 
       } else if (result.dismiss === Swal.DismissReason.cancel) {
       }
-    }).catch((error) => {
-        this.loading = false;
-        this.toast.error(error.name);
-    });
+    },
+
+    );
   }
 
   checkIfRankSelected() {
@@ -600,7 +611,7 @@ export class ManageConfigurationComponent implements OnInit {
     }
     else if (value == 1) {
       this.inputConfiguration = option1;
-      for(var i = 0; i < this.catalogueList.length; i++){
+      for (var i = 0; i < this.catalogueList.length; i++) {
         this.selectedItems = this.catalogueList;
         this.selectedItems[i].weightPoint = option1.selectedItems[i].weightPoint;
       }
@@ -612,7 +623,7 @@ export class ManageConfigurationComponent implements OnInit {
     }
     else if (value == 2) {
       this.inputConfiguration = option2;
-      for(var i = 0; i < this.catalogueList.length; i++){
+      for (var i = 0; i < this.catalogueList.length; i++) {
         this.selectedItems = this.catalogueList;
         this.selectedItems[i].weightPoint = option2.selectedItems[i].weightPoint;
       }
