@@ -584,6 +584,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.questionService.getQuestion(this.id, this.companyId, this.iconIsActive).subscribe(
             (data: any) => {
                 this.loading = false;
+                console.log(data);
                 this.catalogueName = data.catalogueName;
                 this.cicid = data.cicid;
                 this.allQuestions = data.questions;
