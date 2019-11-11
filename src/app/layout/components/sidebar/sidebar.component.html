@@ -15,10 +15,7 @@
             <i class="fa fa-user"></i>&nbsp;
             <span>{{ 'Manage Employee' | translate }}</span>
         </a>
-        <a [routerLink]="['/applicant']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Company Manager'">
-            <i class="fa fa-user"></i>&nbsp;
-            <span>{{ 'Applicant' | translate }}</span>
-        </a>
+        
         <a [routerLink]="['/catalogue']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Company Manager'">
             <i class="fa fa-th-list"></i>&nbsp;
             <span>{{ 'Catalogue' | translate }}</span>
@@ -33,7 +30,11 @@
             <i class="fa fa-bar-chart"></i>&nbsp;
             <span>{{ 'Statistic' | translate }}</span>
         </a>
-
+        <a [routerLink]="['/applicant']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
+            <i class="fa fa-user"></i>&nbsp;
+            <span>{{ 'Applicant' | translate }}</span>
+        </a>
+        
         <!-- Employee -->
         <a [routerLink]="['/reranking']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Employee'">
             <i class="fa fa-plus"></i>&nbsp;
