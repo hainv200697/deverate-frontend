@@ -425,7 +425,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.updQuestion['QuestionId'] = item['questionId'];
         this.updQuestion['question1'] = item['question1'];
         this.updQuestion['isActive'] = true;
-        this.updQuestion['createBy'] = this.accountId;
+        this.updQuestion['accountId'] = this.accountId;
         this.updQuestion['cicid'] = this.cicid;
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
         const a = document.querySelector('#stepper1');

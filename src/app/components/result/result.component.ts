@@ -65,11 +65,10 @@ export class ResultComponent implements OnInit {
         }
         else if(this.statistic.rank == "dev2"){
           tes.splice(2,1); 
-          this.radarChartColor.splice(1,2);
+          this.radarChartColor.splice(3,1);
         }
         else if(this.statistic.rank == "dev3"){
           tes.splice(2,1); 
-          this.radarChartColor.splice(1,2);
         }
         
         this.catalogueInRanks = tes;
@@ -104,6 +103,10 @@ export class ResultComponent implements OnInit {
               }
             }
           }
+        }
+        if(this.statistic.rank == "dev3"){
+          this.radarChartData.splice(2,1);
+          this.radarChartColor.splice(2,2);
         }
         for (var a = 0; a < this.catalogue.length; a++) {
           this.radarChartLabels.push(this.catalogue[a].name);

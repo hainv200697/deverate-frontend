@@ -18,8 +18,9 @@ export var option1 =
     "duration": 20,
     selectedItems:
         [
-            { "catalogueId": 1, "name": "Software Development Methods", "weightPoint": 40 },
-            { "catalogueId": 2, "name": "Software Requirement Analysis", "weightPoint": 60 },
+            { "weightPoint": 20 },
+            { "weightPoint": 20 },
+            { "weightPoint": 60 },
         ],
     "dev3": 70,
     "dev2": 60,
@@ -34,10 +35,10 @@ export var option2 =
     "duration": 25,
     selectedItems:
         [
-            { "catalogueId": 1, "name": "Software Development Methods", "weightPoint": 30 },
-            { "catalogueId": 2, "name": "Software Requirement Analysis", "weightPoint": 30 },
-            { "catalogueId": 3, "name": "Software Design Methods", "weightPoint": 20 },
-            { "catalogueId": 4, "name": "Software Programming Methods", "weightPoint": 20 },
+            { "weightPoint": 30 },
+            { "weightPoint": 30 },
+            { "weightPoint": 20 },
+            { "weightPoint": 20 },
         ],
     "dev3": 80,
     "dev2": 60,

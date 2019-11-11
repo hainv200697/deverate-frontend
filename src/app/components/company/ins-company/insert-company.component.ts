@@ -8,6 +8,7 @@ import Swal from 'sweetalert2'
 import { from } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { AccountApiService } from 'src/app/services/account-api.service';
+import { EmployeeApiService } from 'src/app/services/employee-api.service';
 
 
 @Component({
@@ -24,6 +25,7 @@ export class InsertCompanyComponent implements OnInit {
     private accountApi: AccountApiService,
     private toast: ToastrService,
     private globalservice: GloblaService,
+    private employeeService: EmployeeApiService,
   ) {
     this.page = 1;
     this.pageSize = 5;
@@ -187,6 +189,11 @@ export class InsertCompanyComponent implements OnInit {
       (data) => {
         this.loading = false;
         this.Companies = data['data']['data'];
+      },
+      (error) => {
+        this.toast.error(error.name);
+        this.loading = false;
+        this.closeModal()
       }
     );
   }
@@ -244,6 +251,9 @@ export class InsertCompanyComponent implements OnInit {
           this.closeModal();
         }
       }).catch((error) => {
+        this.toast.error(error.name);
+        this.loading = false;
+        this.closeModal()
       });
     }
   }
@@ -279,14 +289,43 @@ export class InsertCompanyComponent implements OnInit {
     });
   }
 
+  resendmail(managerId, companyId) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Password will be send!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, send it!',
+      cancelButtonText: 'No, Do not send it'
+    }).then((result) => {
+      this.loading = true;
+      let manager: string[] = [];
+      manager.push(managerId);
+      console.log(manager)
+      console.log(companyId)
+      this.employeeService.resendpassword(manager, companyId).subscribe(data => {
+        this.getCompanyIsActive(true);
+        this.closeModal();
+        Swal.fire('Success', 'The mail has been send', 'success');
+      });
+    }).catch((error) => {
+      this.loading = false;
+      this.toast.error(error.name);
+    });
+  }
+
   validdate() {
     for (var i = 0; i < this.Companies.length; i++) {
       if (this.Companies[i].name == this.inputCompany['name']) {
-        this.toast.error('Message', 'Company\'s name is exist');
+        this.toast.error('Company\'s name is exist');
         return false;
       }
-      else if(this.Companies[i].phone == this.inputCompany['phone']){
-        this.toast.error('Message', 'Company\'s phone is exist');
+      else if (this.Companies[i].phone == this.inputCompany['phone']) {
+        this.toast.error('Company\'s phone is exist');
+        return false;
+      }
+      else if (this.Companies[i].managerMail == this.inputManager['email']) {
+        this.toast.error('Manager\'s mail is exist');
         return false;
       }
     }
@@ -310,10 +349,12 @@ export class InsertCompanyComponent implements OnInit {
     else if (this.inputManager['fullname'] == '') {
       this.toast.error('Message', 'Please input manager name');
       return false;
-    } else if (this.inputManager['fullname'].length < 3) {
+    }
+    else if (this.inputManager['fullname'].length < 3) {
       this.toast.error('Message', 'Please input manager name min 3 letter');
       return false;
-    } else if (!this.globalservice.checkMail.test(String(this.inputManager['email']).toUpperCase())) {
+    }
+    else if (!this.globalservice.checkMail.test(String(this.inputManager['email']).toUpperCase())) {
       this.toast.error('Message', 'Email wrong format');
       return false;
     }

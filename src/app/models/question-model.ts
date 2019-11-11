@@ -7,5 +7,5 @@ export class QuestionModel{
     maxPoint: number
     isActive : boolean
     accountId: number
-    answer :Array<AnswerModel> = [];
+    answer :Array<AnswerModel> = []
 }

@@ -7,7 +7,7 @@ import { LanguageTranslationModule } from './shared/modules/language-translation
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthGuard } from './shared';
+import { AuthGuard, CompanyGuard, SystemGuard, OwnerGuard, EmployeeGuard } from './shared';
 import { ToastrModule } from 'ngx-toastr';
 import { TestModule } from './components/test/test.module';
 import * as $ from 'jquery';
@@ -28,7 +28,7 @@ import { JwtInterceptor } from './_helpers/jwt.interceptor';
     declarations: [
         AppComponent
     ],
-    providers: [AuthGuard, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },],
+    providers: [AuthGuard, SystemGuard, CompanyGuard, OwnerGuard, EmployeeGuard, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

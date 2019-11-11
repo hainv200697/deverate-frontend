@@ -12,6 +12,7 @@ export class SidebarComponent implements OnInit {
     collapsed: boolean;
     showMenu: string;
     pushRightClass: string;
+    role: string;
 
     @Output() collapsedEvent = new EventEmitter<boolean>();
 
@@ -28,6 +29,7 @@ export class SidebarComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.role = sessionStorage.getItem('Role');
         this.isActive = true;
         this.collapsed = true;
         this.showMenu = '';
