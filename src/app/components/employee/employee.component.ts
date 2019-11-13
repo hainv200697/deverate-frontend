@@ -102,6 +102,7 @@ export class EmployeeComponent implements OnInit {
     async formatExcel() {
         try {
             let list: any;
+            this.employees = [];
             list = await this.readExcel();
             this.checkExcel = true;
             list.forEach(element => {
