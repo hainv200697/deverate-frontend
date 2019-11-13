@@ -132,7 +132,7 @@ export class ResultComponent implements OnInit {
               "maxValue": data['data']['data'].configurationRanks[0].point,
               "code": "#62B58F",
             },{
-              "minValue": data['data']['data'].configurationRanks[1].point,
+              "minValue": data['data']['data'].configurationRanks[0].point,
               "maxValue": data['data']['data']['point'],
               "code": "#00CC00",
             },
