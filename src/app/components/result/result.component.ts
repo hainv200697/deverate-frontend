@@ -68,7 +68,7 @@ export class ResultComponent implements OnInit {
           this.radarChartColor.splice(3,1);
         }
         else if(this.statistic.rank == "DEV03"){
-          tes.splice(0,3); 
+          tes.splice(1,3); 
         }
         
         this.catalogueInRanks = tes;
@@ -77,19 +77,6 @@ export class ResultComponent implements OnInit {
         this.pointRank = data['data']['data'].configurationRanks;
         this.catalogueTable = data['data']['data'].catalogueInConfigs;
         let dialValue = data['data']['data'].rank;
-        let tmp = 0;
-        if (dialValue == "DEV0") {
-          tmp = 12.5
-        }
-        else if (dialValue == "DEV01") {
-          tmp = 12.5 + 25
-        }
-        else if (dialValue == "DEV02") {
-          tmp = 12.5 + 50
-        }
-        else if (dialValue == "DEV03") {
-          tmp = 12.5 + 75
-        }
 
         for (var i = 0; i < this.catalogueInRanks.length; i++) {
           this.catalogue = this.catalogueInRanks[i].catalogues
@@ -133,60 +120,55 @@ export class ResultComponent implements OnInit {
           },
           "colorRange": {
             "color": [{
-              "minValue": 0,
-              "maxValue": 25,
+              "minValue": data['data']['data'].configurationRanks[3].point,
+              "maxValue": data['data']['data'].configurationRanks[2].point,
               "code": "#F2726F",
             }, {
-              "minValue": 25,
-              "maxValue": 50,
+              "minValue": data['data']['data'].configurationRanks[2].point,
+              "maxValue": data['data']['data'].configurationRanks[1].point,
               "code": "#FFC533",
             }, {
-              "minValue": 50,
-              "maxValue": 75,
+              "minValue": data['data']['data'].configurationRanks[1].point,
+              "maxValue": data['data']['data'].configurationRanks[0].point,
               "code": "#62B58F",
-            }, {
-              "minValue": 75,
-              "maxValue": 100,
-              "code": "#00FF00",
-            }]
+            },{
+              "minValue": data['data']['data'].configurationRanks[1].point,
+              "maxValue": data['data']['data']['point'],
+              "code": "#00CC00",
+            },
+          ]
           },
           "trendPoints": {
             "point": [
               {
-                "startValue": 0,
+                "startValue": data['data']['data'].configurationRanks[3].point,
                 "color": "#0075c2",
                 "dashed": "3",
                 "displayValue": "dev0",
               },
               {
-                "startValue": 25,
+                "startValue": data['data']['data'].configurationRanks[2].point,
                 "color": "#0075c2",
                 "dashed": "3",
                 "displayValue": "dev1",
               },
               {
-                "startValue": 50,
+                "startValue": data['data']['data'].configurationRanks[1].point,
                 "color": "#0075c2",
                 "dashed": "1",
                 "displayValue": "dev2",
               },
               {
-                "startValue": 75,
+                "startValue": data['data']['data'].configurationRanks[0].point,
                 "color": "#0075c2",
                 "dashed": "2",
                 "displayValue": "dev3"
-              },
-              {
-                "startValue": 100,
-                "color": "#0075c2",
-                "dashed": "2",
-                "displayValue": "dev4"
               },
             ]
           },
           "dials": {
             "dial": [{
-              "value": tmp,
+              "value": data['data']['data']['point'],
               "showValue": "0",
               "valueFontSize": "25"
 
