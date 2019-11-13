@@ -32,17 +32,19 @@ export class TestComponent implements OnInit {
   alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   testId;
   time = 0;
-  accountId= Number(sessionStorage.getItem('AccountId'));
+  accountId= sessionStorage.getItem('AccountId');
   sub: Subscription;
   ngOnInit() {
     this.testId = this.route.snapshot.paramMap.get('testId');
     this.config = this.testService.getConfig(this.testId)
       .subscribe(res => {
         this.config = res;
-        if(this.config.accountId != null && this.accountId == 0){
+        if(this.config.accountId != null && this.accountId == undefined){
           this.router.navigate(['login']);
+          return;
         } else if(this.config.accountId != null && this.accountId != this.config.accountId){
           this.router.navigate(['**']);
+          return;
         }else{
 
           this.config.title = this.config.title.toUpperCase();
@@ -50,12 +52,14 @@ export class TestComponent implements OnInit {
           this.config.endDate = moment(this.config.endDate).format('LLLL');
           $('#openModalButton').click();
         }
-        if(this.config.status == 'Summitted'){
+        if(this.config.status == 'Submitted'){
           this.closeModal();
           this.router.navigate(['/result', this.testId]);
+          return;
         }else if(this.config.status == 'Expired '){
           this.expired = true;
           this.message = "Test expires!"
+          return;
         }
       });
 
@@ -75,7 +79,7 @@ export class TestComponent implements OnInit {
   quiz() {
     const testInfo = {
       testId : this.testId ,
-      accountId: Number(sessionStorage.getItem('AccountId')),
+      accountId: this.accountId,
       configId: this.config.configId,
       code: this.key
     };
@@ -150,7 +154,7 @@ export class TestComponent implements OnInit {
 
   autoSave() {
     const userTest = {
-      accountId: Number(sessionStorage.getItem('AccountId')),
+      accountId: this.accountId,
       testId: this.testId,
       code: this.key,
       questionInTest: this.questionInTest
@@ -167,7 +171,7 @@ export class TestComponent implements OnInit {
 
   submitTest() {
     const userTest = {
-      accountId: Number(sessionStorage.getItem('AccountId')),
+      accountId: this.accountId,
       testId: this.testId,
       code: this.key,
       questionInTest: this.questionInTest
