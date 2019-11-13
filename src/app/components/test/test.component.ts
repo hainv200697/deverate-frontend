@@ -56,7 +56,8 @@ export class TestComponent implements OnInit {
           this.closeModal();
           this.router.navigate(['/result', this.testId]);
           return;
-        }else if(this.config.status == 'Expired '){
+        }
+        if(this.config.status == 'Expired '){
           this.expired = true;
           this.message = "Test expires!"
           return;
