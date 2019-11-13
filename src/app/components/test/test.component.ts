@@ -26,42 +26,41 @@ export class TestComponent implements OnInit {
   key;
   error = false;
   expired = false;
-  message='';
+  message = '';
   test = false;
   questionInTest = [];
   alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   testId;
   time = 0;
-  accountId= sessionStorage.getItem('AccountId');
+  accountId = sessionStorage.getItem('AccountId');
   sub: Subscription;
   ngOnInit() {
     this.testId = this.route.snapshot.paramMap.get('testId');
     this.config = this.testService.getConfig(this.testId)
       .subscribe(res => {
         this.config = res;
-        if(this.config.accountId != null && this.accountId == undefined){
+        if (this.config.accountId != null && this.accountId == undefined) {
           this.router.navigate(['login']);
           return;
-        } else if(this.config.accountId != null && this.accountId != this.config.accountId){
+        }
+        if (this.config.accountId != null && this.accountId != this.config.accountId) {
           this.router.navigate(['**']);
           return;
-        }else{
-
-          this.config.title = this.config.title.toUpperCase();
-          this.config.startDate = moment(this.config.startDate).format('LLLL');
-          this.config.endDate = moment(this.config.endDate).format('LLLL');
-          $('#openModalButton').click();
         }
-        if(this.config.status == 'Submitted'){
+        if (this.config.status == 'Submitted') {
           this.closeModal();
           this.router.navigate(['/result', this.testId]);
           return;
         }
-        if(this.config.status == 'Expired '){
+        if (this.config.status == 'Expired') {
           this.expired = true;
           this.message = "Test expires!"
           return;
         }
+        this.config.title = this.config.title.toUpperCase();
+        this.config.startDate = moment(this.config.startDate).format('LLLL');
+        this.config.endDate = moment(this.config.endDate).format('LLLL');
+        $('#openModalButton').click();
       });
 
   }
@@ -79,7 +78,7 @@ export class TestComponent implements OnInit {
 
   quiz() {
     const testInfo = {
-      testId : this.testId ,
+      testId: this.testId,
       accountId: this.accountId,
       configId: this.config.configId,
       code: this.key
@@ -92,7 +91,7 @@ export class TestComponent implements OnInit {
         const now = moment();
         const startDay = moment(res.startTime);
         const timer = now.diff(startDay) / 1000;
-        this.time = this.config.duration *60  - timer;
+        this.time = this.config.duration * 60 - timer;
         if (this.time > 0) {
           this.closeModal();
           this.questionInTest.forEach(element => {
@@ -134,15 +133,15 @@ export class TestComponent implements OnInit {
   }
 
   handleEvent($event) {
-    
-    if(!this.test){
+
+    if (!this.test) {
       return;
     }
     switch ($event.action) {
       case 'notify':
-        if($event.left == 30000){
-        $('.count-down span').css("color","red");
-        }else{
+        if ($event.left == 30000) {
+          $('.count-down span').css("color", "red");
+        } else {
           $('.count-down span').html("Time Up!");
         }
         break;
@@ -150,7 +149,7 @@ export class TestComponent implements OnInit {
         this.submitTest();
         break;
     }
-    
+
   }
 
   autoSave() {
