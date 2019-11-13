@@ -14,7 +14,7 @@
                     <div class="step" data-target="#test-l-1">
                         <button [disabled]="index != 1" class="step-trigger">
                             <span class="bs-stepper-circle">1</span>
-                            <span class="bs-stepper-label">Create Question</span>
+                            <span class="bs-stepper-label">Create Account</span>
                         </button>
                     </div>
                     <div class="line"></div>
@@ -34,6 +34,13 @@
                                 <input type="file" style="display: inline-block;" (change)="incomingfile($event)"
                                     placeholder="Upload file" accept=".xlsx">
                             </div>
+                            <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="message != null">
+                                <div class="col-sm-12 col-md-12 col-lg-12" *ngFor="let item of message"
+                                    style="color: red;">
+                                    {{item}}
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     <div id="test-l-2" class="content">
@@ -96,27 +103,24 @@
                     <label>Account Information: </label>
                     <div class="form-group input-group">
                         <input type="text" placeholder="FullName" minlength="3" [(ngModel)]="insEmployee['fullname']"
-                            (change)="validdate()" name="ins_manager_fullname" class="form-control">
+                            (change)="validdate()" name="ins_manage_fullname" class="form-control">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="button"><i class="fa fa-user"></i></button>
                         </div>
                     </div>
                     <div class="form-group input-group">
                         <input class="form-control" type="email" placeholder="Email" [(ngModel)]="insEmployee['email']"
-                            (change)="validdate()" name="ins_manager_email">
+                            (change)="validdate()" name="ins_manage_email">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="button"><i class="fa fa-envelope"></i></button>
                         </div>
                     </div>
-                    <div class="custom-control custom-radio">
-                        <input class="custom-control-input" type="radio" name="employee" id="employee"
-                            [(ngModel)]="insEmployee['role']" [value]="3">
-                        <label class="custom-control-label" for="employee">Employee</label>
-                    </div>
-                    <div class="custom-control custom-radio">
-                        <input class="custom-control-input" type="radio" name="testOwner" id="testOwner"
-                            [(ngModel)]="insEmployee['role']" [value]="4">
-                        <label class="custom-control-label" for="testOwner">Test Owner</label>
+                    <div class="form-group input-group">
+                        <select name="ins_manage_role" class="form-control col-md-12" (change)="validdateRole()" [(ngModel)]="insEmployee['role']">
+                            <option disabled [value]=0>-- Choosing role of account</option>
+                            <option [value]=3>Employee</option>
+                            <option [value]=4>Test Owner</option>
+                        </select>
                     </div>
                 </div>
             </form>
@@ -162,14 +166,14 @@
                                 <label class="custom-control-label" for="search_all">All Account</label>
                             </div>
                             <div class=" col-md-4 custom-control custom-radio text-left">
-                                <input class="custom-control-input" type="radio" name="search_employee" id="search_employee"
-                                    (click)="getAccount(3)" [(ngModel)]="getRole" [value]="3">
+                                <input class="custom-control-input" type="radio" name="search_employee"
+                                    id="search_employee" (click)="getAccount(3)" [(ngModel)]="getRole" [value]="3">
                                 <label class="custom-control-label" for="search_employee">Employee</label>
                             </div>
                             <div class=" col-md-4 custom-control custom-radio text-left">
-                                <input class="custom-control-input" [(ngModel)]="getRole" type="radio" name="search_testOwner" id="search_testOwner"
-                                (click)="getAccount(4)" [value]="4">
-                                <label class="custom-control-label"  for="search_testOwner">Test Owner</label>
+                                <input class="custom-control-input" [(ngModel)]="getRole" type="radio"
+                                    name="search_testOwner" id="search_testOwner" (click)="getAccount(4)" [value]="4">
+                                <label class="custom-control-label" for="search_testOwner">Test Owner</label>
                             </div>
                         </div>
                     </div>

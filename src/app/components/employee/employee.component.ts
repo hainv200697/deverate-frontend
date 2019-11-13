@@ -42,13 +42,19 @@ export class EmployeeComponent implements OnInit {
     listId: number[] = [];
     updRole = {};
     getRole = 0;
+    message: Array<string> = [];
     ngOnInit() {
         this.getEmployee(this.iconIsActive);
+        this.insEmployee['role'] = 0;
     }
     async next() {
-        this.index = 2;
         await this.formatExcel();
-        this.stepper.next();
+        if (this.checkExcel == true) {
+            this.index = 2;
+            this.stepper.next();
+        } else {
+            this.toastr.error("File is wrong format");
+        }
     }
     back() {
         this.index = 1;
@@ -102,42 +108,46 @@ export class EmployeeComponent implements OnInit {
     async formatExcel() {
         try {
             let list: any;
+            this.employees = [];
+            this.message = [];
             list = await this.readExcel();
             this.checkExcel = true;
             list.forEach(element => {
-                console.log(element);
                 this.insEmployee = {};
                 if (element.fullname == null ||
-                    element.fullname == undefined ) {
-                    this.toastr.error("Full name"+element.fullname+" is invalid");
+                    element.fullname == undefined) {
+                    this.message.push("Full name" + element.fullname + " is invalid");
                     this.checkExcel = false;
-                }else if(element.fullname.length < 5 ||
-                    element.fullname.length > 200){
-                        this.toastr.error("Full name"+element.fullname+" is in range from 5 to 200 letters");
-                        this.checkExcel = false;
-                    }
-                if (element.email == null ||
-                    element.email == undefined ||
-                    element.email.length < 5 ||
-                    element.email.length > 200) 
-                {
-                    this.toastr.error("Email"+element.email+" is invalid");
-                    this.checkExcel = false;
-                }else if (!this.globalservice.checkMail.test(String(element.email).toUpperCase())) {
-                    this.toastr.error('Message', "Email "+element.email+" wrong format");
+                } else if (element.fullname.length < 5 ||
+                    element.fullname.length > 200) {
+                    this.message.push("Full name" + element.fullname + " must be in range from 5 to 200 letters");
                     this.checkExcel = false;
                 }
-                if (element.role !== 'Employee' && element.role+"" !== 'Test Owner' ) 
-                {
-                    this.toastr.error("Role of "+element.fullname+" is invalid");
+                if (element.email == null ||
+                    element.email == undefined) {
+                    this.message.push("Length of email can be blank");
                     this.checkExcel = false;
-                }else if( element.role == null || element.role == undefined){
-                    element.role =null;
-                    this.toastr.error("Role of "+element.fullname+" is blank");
+                }else if (element.email.length < 5) {
+                    this.message.push("Length of email " + element.email + " is more than 5");
                     this.checkExcel = false;
-                }else if(element.role == "Employee"){
+                } if (element.email.length > 200) {
+                    this.message.push("Length of email " + element.email + " is less than 200");
+                    this.checkExcel = false;
+                }
+                else if (!this.globalservice.checkMail.test(String(element.email).toUpperCase())) {
+                    this.message.push("Email " + element.email + " is invalid");
+                    this.checkExcel = false;
+                }
+                if (element.role !== 'Employee' && element.role + "" !== 'Test Owner') {
+                    this.message.push("Role of email " + element.email + " is invalid");
+                    this.checkExcel = false;
+                } else if (element.role == null || element.role == undefined) {
+                    element.role = null;
+                    this.message.push("Role of email " + element.email + " is not null");
+                    this.checkExcel = false;
+                } else if (element.role == "Employee") {
                     element.role = 3;
-                }else if(element.role == "Test Owner"){
+                } else if (element.role == "Test Owner") {
                     element.role = 4;
                 }
 
@@ -146,10 +156,9 @@ export class EmployeeComponent implements OnInit {
                 this.insEmployee['email'] = element.email;
 
                 this.insEmployee['role'] = element.role;
-                console.log(this.insEmployee);
                 this.employees.push(this.insEmployee);
             });
-            
+
             let listEmail = [];
             let existedEmail: String[] = [];
             var valueArr = this.employees.map(function (item) {
@@ -161,11 +170,10 @@ export class EmployeeComponent implements OnInit {
                     listEmail.push(item.email);
                 }
             });
-            console.log(existedEmail);
-            if (existedEmail.length > 0 ) {
+            if (existedEmail.length > 0) {
                 const email = existedEmail.slice(0, 3);
-                const message = `Email ${email.join(',')}${existedEmail.length > 3 ? ',...' : ''} existed`;
-                this.toastr.error(message);
+                const message = `Email ${email.join(',')}${existedEmail.length > 3 ? ',...' : ''} duplicate`;
+                this.message.push(message);
                 this.checkExcel = false;
             }
 
@@ -180,6 +188,7 @@ export class EmployeeComponent implements OnInit {
     }
 
     getEmployee(status) {
+        this.getRole = 0;
         this.iconIsActive = status;
         this.employeeService.getAllEmployee(this.companyId, this.iconIsActive).subscribe(
             (data) => {
@@ -240,7 +249,7 @@ export class EmployeeComponent implements OnInit {
     // function 
     // insert Employee function
     insertEmployee() {
-        if(this.validdate()){
+        if (this.validdate() && this.validdateRole()) {
             this.loading = true;
             this.employeeService.postCreateEmployee(this.employees).subscribe(
                 results => {
@@ -252,11 +261,11 @@ export class EmployeeComponent implements OnInit {
                     this.closeModal();
                 },
                 (error) => {
-                    if(error.status == 500){
+                    if (error.status == 500) {
                         this.loading = false;
                         this.toastr.error("System error");
                         this.closeModal();
-                    }else{
+                    } else {
                         this.loading = false;
                         const email = error.error.slice(0, 3);
                         const message = `Email ${email.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
@@ -378,17 +387,17 @@ export class EmployeeComponent implements OnInit {
             return false;
         } else if (!this.globalservice.checkMail.test(String(this.insEmployee['email']).toUpperCase())) {
             this.toastr.error('Message', 'Email wrong format');
-            return false; 
-        }else if (this.insEmployee['email'] == '') {
+            return false;
+        } else if (this.insEmployee['email'] == '') {
             this.toastr.error('Message', 'Email can not blank');
             return false;
-        }else if (this.insEmployee['role'] == '') {
+        } else if (this.insEmployee['role'] == '') {
             this.toastr.error('Message', 'Role can not blank');
             return false;
-        }else if (this.insEmployee['role'] == isNaN) {
+        } else if (this.insEmployee['role'] == isNaN) {
             this.toastr.error('Message', 'RoleId mus be a number');
             return false;
-        }else if (this.insEmployee['role'] < 3 || this.insEmployee['role'] > 4) {
+        } else if (this.insEmployee['role'] < 3 || this.insEmployee['role'] > 4) {
             this.toastr.error('Message', 'Role must be in the range of 3 to 4');
             return false;
         }
@@ -413,16 +422,24 @@ export class EmployeeComponent implements OnInit {
     //     );
     // }
 
-    getAccount(item){
-        if(item == 0){
+    getAccount(item) {
+        this.getRole = item;
+        if (this.getRole == 0) {
             this.getEmployee(this.iconIsActive);
         }
-        else{
-            this.employeeService.getAllWithRole(this.companyId, this.iconIsActive,item).subscribe(
+        else {
+            this.employeeService.getAllWithRole(this.companyId, this.iconIsActive, this.getRole).subscribe(
                 (data) => {
                     this.employeeList = data;
                 }
             );
         }
+    }
+    validdateRole(){
+        if(this.insEmployee['role'] == 0){
+            this.toastr.error('Message', 'Please choosing role of account!');
+            return false;
+        }
+        return true;
     }
 }
