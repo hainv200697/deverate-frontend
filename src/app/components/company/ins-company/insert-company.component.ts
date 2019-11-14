@@ -246,6 +246,7 @@ export class InsertCompanyComponent implements OnInit {
         cancelButtonText: 'No, don not create '
       }).then((result) => {
         if (result.value) {
+          console.log(inputCompanyData)
           this.loading = true;
           this.companyApi.insertCompany(inputCompanyData).subscribe(data => {
             this.getCompanyIsActive(true);
@@ -343,15 +344,26 @@ export class InsertCompanyComponent implements OnInit {
       this.toast.error("Message", "Please input company's address");
       return false;
     }
+    else if (this.inputCompany['address'].length > 50) {
+      this.toast.error("Message", "Address is invalid");
+      return false;
+    }
     else if (this.inputCompany['phone'] == "") {
       this.toast.error("Message", "Please input company's phone");
+      return false;
+    }
+    else if (this.inputCompany['phone'].length < 10 || this.inputCompany['phone'].length > 11) {
+      this.toast.error("Message", "Phone number is invalid");
       return false;
     }
     else if (this.inputCompany['fax'] == "") {
       this.toast.error("Message", 'Please input company\'s fax');
       return false;
     }
-
+    else if (this.inputCompany['fax'] > 10) {
+      this.toast.error("Message", 'Fax is invalid');
+      return false;
+    }
     else if (this.inputManager['fullname'] == '') {
       this.toast.error('Message', 'Please input manager name');
       return false;
