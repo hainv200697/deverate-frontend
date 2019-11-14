@@ -651,7 +651,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     downloadTemplate() {
         let link = document.createElement("a");
         link.download = "Question_Template";
-        link.href = "/assets/images/question.xlsx";
+        link.href = "/assets/file/question.xlsx";
         link.click();
     }
 }
