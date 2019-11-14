@@ -143,8 +143,8 @@ export class EmployeeComponent implements OnInit {
                     this.message.push("Phone of "+element.Fullname+" is not a number!");
                     this.checkExcel = false;
                 }
-                else if(phone.length < 10 && phone.length > 11){
-                    this.message.push("Phone of "+element.Fullname+" must have 10 of 11 numbers! ");
+                else if(phone.length != 10){
+                    this.message.push("Phone of "+element.Fullname+" must has 10 numbers! ");
                     this.checkExcel = false;
                 }
                 if (element.Email == null ||
@@ -509,8 +509,7 @@ export class EmployeeComponent implements OnInit {
             this.toastr.error('Message', 'Please choosing phone of account!');
             return false;
         }else if (isNaN(this.insEmployee['phone']) || 
-                    phone.length > 11 || 
-                    phone.length < 10) {
+                    phone.length != 10 ) {
             this.toastr.error('Message', 'Phone number is invalid');
             return false;
         }
@@ -525,4 +524,11 @@ export class EmployeeComponent implements OnInit {
         return true;
     }
     
+    downloadTemplate(){
+        console.log('aaaaaaaa');
+        let link = document.createElement("a");
+        link.download = "Emplyee_Template";
+        link.href = "/assets/file/employee.xlsx";
+        link.click();
+    }
 }

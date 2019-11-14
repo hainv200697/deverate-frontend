@@ -10,7 +10,7 @@
     <div class="container">
         <div id="stepper1" class="bs-stepper">
             <div class="modal-header header-custom text-center">
-                <div class="bs-stepper-header">
+                <div class="bs-stepper-header" style="padding-left: 20%;">
                     <div class="step" data-target="#test-l-1">
                         <button [disabled]="index != 1" class="step-trigger">
                             <span class="bs-stepper-circle">1</span>
@@ -30,9 +30,11 @@
                 <div class="bs-stepper-content">
                     <div id="test-l-1" class="content">
                         <div class="modal-body">
-                            <div class="create-file">
-                                <input type="file" style="display: inline-block;" (change)="incomingfile($event)"
-                                    placeholder="Upload file" accept=".xlsx">
+                            <div class="col-sm-12 col-md-12 col-lg-12 ">
+                                <div class="col-sm-6 col-md-6 col-lg-6 create-file">
+                                    <input type="file" style="display: inline-block;" (change)="incomingfile($event)"
+                                        placeholder="Upload file" accept=".xlsx">
+                                </div>
                             </div>
                             <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="message != null">
                                 <div class="col-sm-12 col-md-12 col-lg-12" *ngFor="let item of message"
@@ -87,6 +89,10 @@
         </div>
     </div>
     <div class="modal-footer">
+        <button [hidden]="index == 2" class="shadow-item btn btn-success " (click)="downloadTemplate()" data-toggle="button">
+            Download Template
+            <i class="fa fa-download" tooltip="{{'Download' | translate}}" placement="top"></i>
+        </button>
         <button [hidden]="index == 1" class="shadow-item btn btn-secondary back" (click)="back()">Back</button>
         <button [hidden]="index == 2" [disabled]="checkFile==false" (click)="next()"
             class="shadow-item btn btn-primary">Next</button>
@@ -127,19 +133,21 @@
                         </div>
                     </div>
                     <div class="form-group input-group">
-                        <input class="form-control" type="text" placeholder="address" [(ngModel)]="insEmployee['address']"
-                            (change)="validateAddress()" name="ins_manage_address">
+                        <input class="form-control" type="text" placeholder="address"
+                            [(ngModel)]="insEmployee['address']" (change)="validateAddress()" name="ins_manage_address">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="button"><i class="fa fa-home"></i></button>
                         </div>
                     </div>
                     <div class="form-group input-group  justify-content-between ">
-                        <select name="ins_manage_role" class="form-control col-md-5" (change)="validateRole()" [(ngModel)]="insEmployee['role']">
+                        <select name="ins_manage_role" class="form-control col-md-5" (change)="validateRole()"
+                            [(ngModel)]="insEmployee['role']">
                             <option disabled [value]=0>-- Choosing role of account</option>
                             <option [value]=3>Employee</option>
                             <option [value]=4>Test Owner</option>
                         </select>
-                        <select name="ins_manage_gender" (change)="validateGender()" class="form-control col-md-5"  [(ngModel)]="insEmployee['gender']">
+                        <select name="ins_manage_gender" (change)="validateGender()" class="form-control col-md-5"
+                            [(ngModel)]="insEmployee['gender']">
                             <option disabled [value]=-1>-- Choosing gender</option>
                             <option [value]=true>Male</option>
                             <option [value]=false>Female</option>
