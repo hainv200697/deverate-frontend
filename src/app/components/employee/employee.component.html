@@ -9,7 +9,7 @@
 <ng-template #excel let-modal>
     <div class="container">
         <div id="stepper1" class="bs-stepper">
-            <div class="modal-header header-custom">
+            <div class="modal-header header-custom text-center">
                 <div class="bs-stepper-header">
                     <div class="step" data-target="#test-l-1">
                         <button [disabled]="index != 1" class="step-trigger">
@@ -51,8 +51,9 @@
                                     <thead>
                                         <tr class="col-md-12 row no-padding-no-margin">
                                             <td class="col-md-4" style="font-weight: bold">Fullname</td>
-                                            <td class="col-md-6" style="font-weight: bold">Email</td>
+                                            <td class="col-md-4" style="font-weight: bold">Email</td>
                                             <td class="col-md-2" style="font-weight: bold">Role</td>
+                                            <td class="col-md-2" style="font-weight: bold">Gender</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -60,7 +61,7 @@
                                             <td class="col-md-4">
                                                 {{q.fullname}}
                                             </td>
-                                            <td class="col-md-6">
+                                            <td class="col-md-4">
                                                 {{q.email}}
                                             </td>
                                             <td class="col-md-2" *ngIf="q.role==4">
@@ -69,8 +70,11 @@
                                             <td class="col-md-2" *ngIf="q.role==3">
                                                 Employee
                                             </td>
-                                            <td class="col-md-2" *ngIf="q.role != 3 && q.role != 4">
-                                                {{q.role}}
+                                            <td class="col-md-2" *ngIf="q.gender==true">
+                                                Male
+                                            </td>
+                                            <td class="col-md-2" *ngIf="q.gender==false">
+                                                Female
                                             </td>
                                         </tr>
                                     </tbody>
@@ -103,23 +107,42 @@
                     <label>Account Information: </label>
                     <div class="form-group input-group">
                         <input type="text" placeholder="FullName" minlength="3" [(ngModel)]="insEmployee['fullname']"
-                            (change)="validdate()" name="ins_manage_fullname" class="form-control">
+                            (change)="validate()" name="ins_manage_fullname" class="form-control">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="button"><i class="fa fa-user"></i></button>
                         </div>
                     </div>
                     <div class="form-group input-group">
                         <input class="form-control" type="email" placeholder="Email" [(ngModel)]="insEmployee['email']"
-                            (change)="validdate()" name="ins_manage_email">
+                            (change)="validate()" name="ins_manage_email">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="button"><i class="fa fa-envelope"></i></button>
                         </div>
                     </div>
                     <div class="form-group input-group">
-                        <select name="ins_manage_role" class="form-control col-md-12" (change)="validdateRole()" [(ngModel)]="insEmployee['role']">
+                        <input class="form-control" type="number" placeholder="Phone" [(ngModel)]="insEmployee['phone']"
+                            (change)="validatePhone()" name="ins_manage_phone">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="button"><i class="fa fa-phone"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group input-group">
+                        <input class="form-control" type="text" placeholder="address" [(ngModel)]="insEmployee['address']"
+                            (change)="validateAddress()" name="ins_manage_address">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="button"><i class="fa fa-home"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group input-group  justify-content-between ">
+                        <select name="ins_manage_role" class="form-control col-md-5" (change)="validateRole()" [(ngModel)]="insEmployee['role']">
                             <option disabled [value]=0>-- Choosing role of account</option>
                             <option [value]=3>Employee</option>
                             <option [value]=4>Test Owner</option>
+                        </select>
+                        <select name="ins_manage_gender" (change)="validateGender()" class="form-control col-md-5"  [(ngModel)]="insEmployee['gender']">
+                            <option disabled [value]=-1>-- Choosing gender</option>
+                            <option [value]=true>Male</option>
+                            <option [value]=false>Female</option>
                         </select>
                     </div>
                 </div>

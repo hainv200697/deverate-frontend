@@ -45,9 +45,11 @@ export class EmployeeComponent implements OnInit {
     message: Array<string> = [];
     ngOnInit() {
         this.getEmployee(this.iconIsActive);
-        this.insEmployee['role'] = 0;
+        
     }
     async next() {
+        this.employees = [];
+        this.message = [];
         await this.formatExcel();
         if (this.checkExcel == true) {
             this.index = 2;
@@ -112,50 +114,87 @@ export class EmployeeComponent implements OnInit {
             this.message = [];
             list = await this.readExcel();
             this.checkExcel = true;
+            console.log(list);
             list.forEach(element => {
                 this.insEmployee = {};
-                if (element.fullname == null ||
-                    element.fullname == undefined) {
-                    this.message.push("Full name" + element.fullname + " is invalid");
+                const phone = element.Phone+"";
+                if (element.Fullname == null ||
+                    element.Fullname == undefined) {
+                    this.message.push("Full name" + element.Fullname + " is invalid");
                     this.checkExcel = false;
-                } else if (element.fullname.length < 5 ||
-                    element.fullname.length > 200) {
-                    this.message.push("Full name" + element.fullname + " must be in range from 5 to 200 letters");
-                    this.checkExcel = false;
-                }
-                if (element.email == null ||
-                    element.email == undefined) {
-                    this.message.push("Length of email can be blank");
-                    this.checkExcel = false;
-                }else if (element.email.length < 5) {
-                    this.message.push("Length of email " + element.email + " is more than 5");
-                    this.checkExcel = false;
-                } if (element.email.length > 200) {
-                    this.message.push("Length of email " + element.email + " is less than 200");
+                } else if (element.Fullname.length < 5 ||
+                    element.Fullname.length > 200) {
+                    this.message.push("Full name" + element.Fullname + " must be in range from 5 to 200 letters");
                     this.checkExcel = false;
                 }
-                else if (!this.globalservice.checkMail.test(String(element.email).toUpperCase())) {
-                    this.message.push("Email " + element.email + " is invalid");
+                if (element.Address == null ||
+                    element.Address == undefined) {
+                    this.message.push("Address of " + element.Fullname + " is blank!");
+                    this.checkExcel = false;
+                } else if (element.Address.length < 5 ||
+                    element.Address.length > 200) {
+                    this.message.push("Address of " + element.Fullname + " must be in range from 5 to 200 letters");
                     this.checkExcel = false;
                 }
-                if (element.role !== 'Employee' && element.role + "" !== 'Test Owner') {
-                    this.message.push("Role of email " + element.email + " is invalid");
+                if(element.Phone === null || element.Phone === undefined ){
+                    this.message.push("Phone of "+element.Fullname+" is blank!");
                     this.checkExcel = false;
-                } else if (element.role == null || element.role == undefined) {
+                }else if(isNaN(element.Phone)){
+                    this.message.push("Phone of "+element.Fullname+" is not a number!");
+                    this.checkExcel = false;
+                }
+                else if(phone.length < 10 && phone.length > 11){
+                    this.message.push("Phone of "+element.Fullname+" must have 10 of 11 numbers! ");
+                    this.checkExcel = false;
+                }
+                if (element.Email == null ||
+                    element.Email == undefined) {
+                    this.message.push("Email of "+element.Fullname+" is blank!");
+                    this.checkExcel = false;
+                }else if (element.Email.length < 5) {
+                    this.message.push("Length of email " + element.Email + " is more than 5");
+                    this.checkExcel = false;
+                } if (element.Email.length > 200) {
+                    this.message.push("Length of email " + element.Email + " is less than 200");
+                    this.checkExcel = false;
+                }
+                else if (!this.globalservice.checkMail.test(String(element.Email).toUpperCase())) {
+                    this.message.push("Email " + element.Email + " is invalid");
+                    this.checkExcel = false;
+                }
+                if (element.Role !== 'Employee' && element.Role  !== 'Test Owner') {
+                    this.message.push("Role of email " + element.Email + " is invalid");
+                    this.checkExcel = false;
+                } else if (element.Role == null || element.Role == undefined) {
                     element.role = null;
-                    this.message.push("Role of email " + element.email + " is not null");
+                    this.message.push("Role of email " + element.Email + " is blank!");
                     this.checkExcel = false;
-                } else if (element.role == "Employee") {
-                    element.role = 3;
-                } else if (element.role == "Test Owner") {
-                    element.role = 4;
+                } else if (element.Role == "Employee") {
+                    element.Role = 3;
+                } else if (element.Role == "Test Owner") {
+                    element.Role = 4;
                 }
-
+                if (element.Gender !== 'Male' && element.Gender !== 'Female') {
+                    this.message.push("Gender of account " + element.Fullname + " is invalid!");
+                    this.checkExcel = false;
+                } else if (element.Gender == null || element.Gender == undefined) {
+                    element.Gender = null;
+                    this.message.push("Gender of account " + element.Fullname + " is blank!!");
+                    this.checkExcel = false;
+                } else if (element.Gender == "Male") {
+                    element.Gender = true;
+                } else if (element.Gender == "Female") {
+                    element.Gender = false;
+                }
+                
                 this.insEmployee['companyId'] = this.companyId;
-                this.insEmployee['fullname'] = element.fullname;
-                this.insEmployee['email'] = element.email;
-
-                this.insEmployee['role'] = element.role;
+                this.insEmployee['fullname'] = element.Fullname;
+                this.insEmployee['email'] = element.Email;
+                this.insEmployee['fullname'] = element.Fullname;
+                this.insEmployee['role'] = element.Role;
+                this.insEmployee['gender'] = element.Gender;
+                this.insEmployee['phone'] = element.Phone;
+                this.insEmployee['address'] = element.Address;
                 this.employees.push(this.insEmployee);
             });
 
@@ -193,6 +232,9 @@ export class EmployeeComponent implements OnInit {
         this.employeeService.getAllEmployee(this.companyId, this.iconIsActive).subscribe(
             (data) => {
                 this.employeeList = data;
+                this.insEmployee = {};
+                this.insEmployee['role'] = 0;
+                this.insEmployee['gender']=-1;
             }
         );
     }
@@ -205,6 +247,8 @@ export class EmployeeComponent implements OnInit {
 
     openModalExcel(excel) {
         this.index = 1;
+        this.employees = [];
+        this.message = [];
         this.modalService.open(excel, { size: 'lg', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
@@ -227,7 +271,7 @@ export class EmployeeComponent implements OnInit {
         if (key === 'excel') {
             this.insertEmployeeExcel();
         } else {
-            if (!this.validdate) {
+            if (!this.validate()) {
                 return;
             }
             this.employees = [];
@@ -235,6 +279,7 @@ export class EmployeeComponent implements OnInit {
             this.employees.push(this.insEmployee);
             this.insertEmployee();
             this.getEmployee(this.iconIsActive);
+
         }
     }
 
@@ -249,13 +294,14 @@ export class EmployeeComponent implements OnInit {
     // function 
     // insert Employee function
     insertEmployee() {
-        if (this.validdate() && this.validdateRole()) {
+        if (this.validate() && this.validateRole() && this.validateAddress() && this.validatePhone() && this.validateGender()) {
             this.loading = true;
             this.employeeService.postCreateEmployee(this.employees).subscribe(
                 results => {
                     this.loading = false;
                     this.toastr.success("Create success");
                     this.employees = [];
+
                     this.insEmployee = {};
                     this.getEmployee(this.iconIsActive);
                     this.closeModal();
@@ -378,7 +424,7 @@ export class EmployeeComponent implements OnInit {
         }
 
     }
-    validdate() {
+    validate() {
         if (this.insEmployee['fullname'] == '' || this.insEmployee['fullname'] == null) {
             this.toastr.error('Message', 'Please input employee name');
             return false;
@@ -435,11 +481,48 @@ export class EmployeeComponent implements OnInit {
             );
         }
     }
-    validdateRole(){
+    validateRole(){
         if(this.insEmployee['role'] == 0){
             this.toastr.error('Message', 'Please choosing role of account!');
             return false;
         }
         return true;
     }
+
+    validateAddress(){
+        if(this.insEmployee['address'] == null || this.insEmployee['address'] == undefined){
+            this.toastr.error('Message', 'Please choosing address of account!');
+            return false;
+        }else if (this.insEmployee['address'].length < 3) {
+            this.toastr.error('Message', 'Please input employee address min 3 letter');
+            return false;
+        }
+        else if (this.insEmployee['address'].length > 200) {
+            this.toastr.error('Message', 'Employee address max 3 letter');
+            return false;
+        }
+        return true;
+    }
+    validatePhone(){
+        const phone = this.insEmployee['phone']+"";
+        if(this.insEmployee['phone'] == null || this.insEmployee['phone'] == undefined){
+            this.toastr.error('Message', 'Please choosing phone of account!');
+            return false;
+        }else if (isNaN(this.insEmployee['phone']) || 
+                    phone.length > 11 || 
+                    phone.length < 10) {
+            this.toastr.error('Message', 'Phone number is invalid');
+            return false;
+        }
+        return true;
+    }
+    validateGender(){
+        console.log(this.insEmployee['gender']);
+        if(this.insEmployee['gender'] == -1){
+            this.toastr.error('Message', 'Please choosing gender of account!');
+            return false;
+        }
+        return true;
+    }
+    
 }
