@@ -163,9 +163,15 @@
                 <div class="bs-stepper-content">
                     <div id="test-l-1" class="content">
                         <div class="modal-body">
-                            <div class="create-file">
+                            <div class="col-sm-12 col-md-12 col-lg-12 create-file">
                                 <input type="file" style="display: inline-block;" (change)="incomingfile($event)"
                                     placeholder="Upload file" accept=".xlsx">
+                            </div>
+
+                            <div class="col-sm-12 col-md-12 col-lg-12 question-ex" *ngFor="let mes of message">
+                                <div class="col-sm-12 col-md-12 col-lg-12" style="color: red;">
+                                    {{mes}}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -177,14 +183,6 @@
                             <div class="col-md-5 question-ex">
                                 <div class="col-md-12 question-ex">
                                     {{q.question1}}
-                                </div>
-                                <div class="col-md-12 question-ex" *ngFor="let mes of listMessage[i]">
-                                    <div *ngIf="mes != null" style="color: red;">
-                                        {{mes}}
-                                    </div>
-                                    <div *ngIf="mes == null" style="color: green;">
-                                        Success
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6 question-ex">
@@ -219,7 +217,11 @@
         </div>
         <div class="modal-footer">
             <button [hidden]="index == 1" class="shadow-item btn btn-secondary back" (click)="back()">Back</button>
-            <button [hidden]="index == 2" [disabled]="checkFile==false" (click)="nextExcel()"
+            <button (click)="downloadTemplate()" [hidden]="index==2" class="btn btn-success" data-toggle="button">
+                    Download Template
+                    <i class="fa fa-download"></i>
+                </button>
+            <button [hidden]="index == 2" (click)="nextExcel()"
                 class="shadow-item btn btn-primary">Next</button>
             <button [disabled]="check==false" [hidden]="index == 1" class="btn btn-success save"
                 (click)="insertQuestionSubmit('excel')">Create</button>
@@ -376,7 +378,7 @@
                             <sv-default-sorter by='question1'>Question</sv-default-sorter>
                         </th>
                         <!-- <th class="col-md-1 text-center" scope="col"> -->
-                            <!-- <sv-default-sorter by='createBy'>Create By</sv-default-sorter>
+                        <!-- <sv-default-sorter by='createBy'>Create By</sv-default-sorter>
                         </th> -->
                         <th class="col-md-1 text-center" scope="col">
                             <sv-default-sorter by='maxPoint'>Max Point</sv-default-sorter>
@@ -439,5 +441,5 @@
 
     </div>
 </ng-template>
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true  }"  [template]="customLoadingTemplate">
 </ngx-loading>
