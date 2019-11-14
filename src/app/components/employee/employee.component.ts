@@ -117,6 +117,7 @@ export class EmployeeComponent implements OnInit {
             list.forEach(element => {
                 this.insEmployee = {};
                 const phone = element.Phone+"";
+                const checkPhone = this.globalservice.checkPhoneVn.test(element.Phone);
                 if (element.Fullname == null ||
                     element.Fullname == undefined) {
                     this.message.push("Full name" + element.Fullname + " is invalid");
@@ -135,15 +136,8 @@ export class EmployeeComponent implements OnInit {
                     this.message.push("Address of " + element.Fullname + " must be in range from 5 to 200 letters");
                     this.checkExcel = false;
                 }
-                if(element.Phone === null || element.Phone === undefined ){
-                    this.message.push("Phone of "+element.Fullname+" is blank!");
-                    this.checkExcel = false;
-                }else if(isNaN(element.Phone)){
-                    this.message.push("Phone of "+element.Fullname+" is not a number!");
-                    this.checkExcel = false;
-                }
-                else if(phone.length != 10){
-                    this.message.push("Phone of "+element.Fullname+" must has 10 numbers! ");
+                if(!checkPhone ){
+                    this.message.push("Phone of "+element.Fullname+" is invalid!");
                     this.checkExcel = false;
                 }
                 if (element.Email == null ||
@@ -274,10 +268,10 @@ export class EmployeeComponent implements OnInit {
                 return;
             }
             this.employees = [];
+            this.insEmployee['fullname'] = this.insEmployee['fullname'].trim();
             this.insEmployee['companyId'] = this.companyId;
             this.employees.push(this.insEmployee);
             this.insertEmployee();
-            this.getEmployee(this.iconIsActive);
 
         }
     }
@@ -293,7 +287,7 @@ export class EmployeeComponent implements OnInit {
     // function 
     // insert Employee function
     insertEmployee() {
-        if (this.validate() && this.validateRole() && this.validateAddress() && this.validatePhone() && this.validateGender()) {
+        if (this.validate() && this.validateRole() && this.validateAddress()  && this.validateGender()) {
             this.loading = true;
             this.employeeService.postCreateEmployee(this.employees).subscribe(
                 results => {
@@ -497,18 +491,17 @@ export class EmployeeComponent implements OnInit {
             return false;
         }
         else if (this.insEmployee['address'].length > 200) {
-            this.toastr.error('Message', 'Employee address max 3 letter');
+            this.toastr.error('Message', 'Please input employee Employee address max 200 letter');
             return false;
         }
         return true;
     }
     validatePhone(){
-        const phone = this.insEmployee['phone']+"";
+        const check =this.globalservice.checkPhoneVn.test(this.insEmployee['phone']);
         if(this.insEmployee['phone'] == null || this.insEmployee['phone'] == undefined){
             this.toastr.error('Message', 'Please choosing phone of account!');
             return false;
-        }else if (isNaN(this.insEmployee['phone']) || 
-                    phone.length != 10 ) {
+        }else if (!check) {
             this.toastr.error('Message', 'Phone number is invalid');
             return false;
         }
