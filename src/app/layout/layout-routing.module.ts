@@ -14,13 +14,13 @@ const routes: Routes = [
             // System Manager
             { path: 'default-catalogue', loadChildren: () => import('../components/catalogue-default/catalogue-default.module').then(m => m.CatalogueDefaultModule), canActivate: [SystemGuard]},
             { path: 'manage-company', loadChildren: () => import('../components/company/ins-company/insert-company.module').then(m => m.InsertCompanyModule), canActivate: [SystemGuard]},
-
+            
             // Company Manager
             { path: 'manage-employee', loadChildren: () => import('../components/employee/employee.module').then(m => m.EmployeeModule), canActivate: [CompanyGuard]},
             { path: 'catalogue', loadChildren: () => import('../components/catalogue/catalogue.module').then(m => m.CatalogueModule),canActivate: [CompanyGuard] },
             { path: 'manage-question/:id', loadChildren: () => import('../components/question/ins-question/insert-question.module').then(m => m.InsertQuestionModule),canActivate: [CompanyGuard] },
             { path: 'manage-answer/:id', loadChildren: () => import('../components/answer/answer.module').then(m => m.AnswerModule),canActivate: [CompanyGuard] },
-
+            { path: 'stastistic-manager', loadChildren: () => import('../components/statistic-companymanager/statistic-companymanager.module').then(m => m.StatisticManagerModule),canActivate: [CompanyGuard]},
             // Test Owner
             { path: 'manage-configuration', loadChildren: () => import('../components/configuration-test/manage-configuration/manage-configuration.module').then(m => m.ManageConfigurationModule), canActivate: [OwnerGuard] },
             { path: 'manage-test/:id', loadChildren: () => import('../components/view-test/view-test.module').then(m => m.TestModule), canActivate: [OwnerGuard] },
@@ -32,7 +32,6 @@ const routes: Routes = [
             { path: 'reranking', component: RerankingComponent, canActivate: [EmployeeGuard]},
 
             
-            { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule), data: { breadcrumb: 'Home' } },
             { path: 'profile', component: ProfileComponent },
             { path: 'changepass', component: ChangepassComponent },
         ]

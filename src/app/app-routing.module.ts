@@ -11,7 +11,6 @@ const routes: Routes = [
     { path: 'signup', loadChildren: () => import('./signup/signup.module').then(m => m.SignupModule) },
     { path: 'forgotpass', loadChildren: () => import('./components/forgotpass/forgotpass.module').then(m => m.ForgotpassModule) },
     { path: 'error', loadChildren: () => import('./server-error/server-error.module').then(m => m.ServerErrorModule) },
-    { path: 'access-denied', loadChildren: () => import('./access-denied/access-denied.module').then(m => m.AccessDeniedModule) },
     { path: 'not-found', loadChildren: () => import('./not-found/not-found.module').then(m => m.NotFoundModule) },
     { path: 'forbidden', loadChildren: () => import('./forbidden/forbidden.module').then(m => m.ForbiddenModule) },
     { path: '**', redirectTo: 'not-found' }
