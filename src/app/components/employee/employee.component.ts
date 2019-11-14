@@ -114,7 +114,6 @@ export class EmployeeComponent implements OnInit {
             this.message = [];
             list = await this.readExcel();
             this.checkExcel = true;
-            console.log(list);
             list.forEach(element => {
                 this.insEmployee = {};
                 const phone = element.Phone+"";
@@ -193,7 +192,7 @@ export class EmployeeComponent implements OnInit {
                 this.insEmployee['fullname'] = element.Fullname;
                 this.insEmployee['role'] = element.Role;
                 this.insEmployee['gender'] = element.Gender;
-                this.insEmployee['phone'] = element.Phone;
+                this.insEmployee['phone'] = phone;
                 this.insEmployee['address'] = element.Address;
                 this.employees.push(this.insEmployee);
             });
@@ -516,7 +515,6 @@ export class EmployeeComponent implements OnInit {
         return true;
     }
     validateGender(){
-        console.log(this.insEmployee['gender']);
         if(this.insEmployee['gender'] == -1){
             this.toastr.error('Message', 'Please choosing gender of account!');
             return false;
@@ -525,7 +523,6 @@ export class EmployeeComponent implements OnInit {
     }
     
     downloadTemplate(){
-        console.log('aaaaaaaa');
         let link = document.createElement("a");
         link.download = "Emplyee_Template";
         link.href = "/assets/file/employee.xlsx";

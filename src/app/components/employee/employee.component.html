@@ -89,7 +89,8 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button [hidden]="index == 2" class="shadow-item btn btn-success " (click)="downloadTemplate()" data-toggle="button">
+        <button [hidden]="index == 2" class="shadow-item btn btn-success " (click)="downloadTemplate()"
+            data-toggle="button">
             Download Template
             <i class="fa fa-download" tooltip="{{'Download' | translate}}" placement="top"></i>
         </button>
@@ -189,7 +190,7 @@
                     </button>
                 </div>
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <div class="row justify-content-end " style="margin-left: 20px; margin-top: 20px;">
                             <div class=" col-md-4 custom-control custom-radio text-left">
                                 <input class="custom-control-input" type="radio" name="search_all" id="search_all"
@@ -208,8 +209,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="row justify-content-end" style="margin-top: 20px;">
+                            <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
+                                class="btn btn-lg btn-secondary " data-toggle="button">
+                                <i class="fa fa-download"></i>
+                            </button>
                             <button style="margin-right: 10px;" (click)="resendmail();" class="btn btn-lg btn-warning"
                                 data-toggle="button">
                                 <i class="fa fa-envelope" tooltip="{{'ReSendPass' | translate}}" placement="top"></i>
