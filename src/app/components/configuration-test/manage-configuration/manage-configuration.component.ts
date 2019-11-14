@@ -139,7 +139,9 @@ export class ManageConfigurationComponent implements OnInit {
 
   onSelectAll(item: any) { }
 
-  onDeSelectAll(item: any) { }
+  onDeSelectAll(item: any) { 
+    this.selectedItems = []
+  }
 
   OnItemDeSelect(item: any) {
     this.inputConfiguration['totalQuestion'] -= 5;
@@ -153,12 +155,23 @@ export class ManageConfigurationComponent implements OnInit {
     for (let i = 0; i < select.length; i++) {
       if (select[i]['catalogueId'] == item['catalogueId']) {
         select.splice(i, 1);
+        this.updateConfig['catalogueInConfigurations'].splice(i,1);
       }
     }
   }
 
   onItemUpdateSelect(item) {
+    this.updateConfig['catalogueInConfigurations'].push(item)
+    console.log(item)
+  }
 
+  OnItemUpdateDeSelect(item){
+    for (let i = 0; i < this.updateConfig['catalogueInConfigurations'].length; i++) {
+      if (this.updateConfig['catalogueInConfigurations'][i]['catalogueId'] == item['catalogueId']) {
+        this.updateConfig['catalogueInConfigurations'].splice(i, 1);
+        this.updateConfig['catalogueInConfigurations'].splice(i,1);
+      }
+    }
   }
   open(content) {
     if (this.catalogueList.length == 0) {
@@ -346,6 +359,19 @@ export class ManageConfigurationComponent implements OnInit {
         this.updateConfig['catalogueInConfigurations'] = data['data']['data']['catalogueInConfigs'];
         this.updateConfig['configurationRank'] = data['data']['data']['configurationRanks'];
         this.selectedItemsUpdate = data['data']['data']['catalogueInConfigs'];
+        let tmp = data['data']['data']['catalogueInConfigs'];
+        tmp.forEach(x => {
+          this.selectedItemsUpdate.push(new Object(
+            {
+              cicId: x.cicId,
+              configId: x.configId,
+              catalogueId: x.catalogueId,
+              catalogueName: x.catalogueName,
+              weightPoint: x.weightPoint,
+              isActive: x.isActive,
+            }
+          ));
+        });
         this.loading = false;
       },
       (error) => {
@@ -425,6 +451,7 @@ export class ManageConfigurationComponent implements OnInit {
           this.index = 1;
           Swal.fire('Success', 'The configuration has been created', 'success');
         }, (error) => {
+          console.log(error)
           this.getConfigurationIsActive(true);
           this.closeModal();
           this.index = 1;
@@ -545,11 +572,17 @@ export class ManageConfigurationComponent implements OnInit {
       this.toast.error('Message', 'Please input title config');
       return false;
     }
+    else if(this.inputConfiguration['title'].length > 20){
+      this.toast.error('Message', 'The maximum exam name is 20');
+      return false;
+    }
     else if (this.inputConfiguration['totalQuestion'] < 1 || this.inputConfiguration['totalQuestion'] > 100) {
       this.toast.error('Message', 'Total question must be range 1 to 100');
+      this.inputConfiguration['totalQuestion'] = 0;
       return false;
     } else if (this.inputConfiguration['duration'] < 15 || this.inputConfiguration['duration'] > 180) {
       this.toast.error('Message', 'duration must be range 15 to 200');
+      this.inputConfiguration['duration'] = 15
       return false;
     } else if (this.selectedItems.length === 0) {
       this.toast.error('Message', 'Please select the catalogue');
@@ -594,9 +627,9 @@ export class ManageConfigurationComponent implements OnInit {
       confirmButtonText: 'Yes, send it!',
       cancelButtonText: 'No, keep it'
     }).then((result) => {
+      this.loading = true;
       if (result.value) {
         this.configAPi.sendMail(id).subscribe(data => {
-          this.loading = true;
           Swal.fire('Success', 'The mail has been send', 'success');
         }, (error) => {
           this.toast.error(error.name);
@@ -624,35 +657,64 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   onChangeSampleConfig(value) {
+    this.inputConfiguration = {};
+    this.selectedItems = [];
     if (value == "none") {
       this.inputConfiguration = option0;
       this.selectedItems = option0.selectedItems;
-      this.ListRank[0].weightPoint = option0.dev3;
-      this.ListRank[1].weightPoint = option0.dev2;
-      this.ListRank[2].weightPoint = option0.dev1;
       this.isSampleConfig = false;
     }
     else if (value == 1) {
-      this.inputConfiguration = option1;
-      for (var i = 0; i < this.catalogueList.length; i++) {
-        this.selectedItems = this.catalogueList;
+      this.inputConfiguration = (new Object(
+        {
+          duration: option1.duration,
+          title: option1.title,
+          totalQuestion: option1.totalQuestion,
+          testOwnerId: option1.testOwnerId,
+          type: option1.type,
+        }
+      ));
+      this.catalogueList.forEach(x => {
+        this.selectedItems.push(new Object(
+          {
+            catalogueId: x.catalogueId,
+            description: x.description,
+            isActive: x.isActive,
+            name: x.name,
+            weightPoint: x.weightPoint,
+          }
+        ));
+      });
+      for (var i = 0; i < this.selectedItems.length; i++) {
         this.selectedItems[i].weightPoint = option1.selectedItems[i].weightPoint;
       }
-      this.ListRank[0].weightPoint = option1.dev3;
-      this.ListRank[1].weightPoint = option1.dev2;
-      this.ListRank[2].weightPoint = option1.dev1;
       this.point = Point;
       this.isSampleConfig = true;
     }
     else if (value == 2) {
-      this.inputConfiguration = option2;
-      for (var i = 0; i < this.catalogueList.length; i++) {
-        this.selectedItems = this.catalogueList;
+      this.inputConfiguration = (new Object(
+        {
+          duration: option2.duration,
+          title: option2.title,
+          totalQuestion: option2.totalQuestion,
+          testOwnerId: option2.testOwnerId,
+          type: option2.type,
+        }
+      ));
+      this.catalogueList.forEach(x => {
+        this.selectedItems.push(new Object(
+          {
+            catalogueId: x.catalogueId,
+            description: x.description,
+            isActive: x.isActive,
+            name: x.name,
+            weightPoint: x.weightPoint,
+          }
+        ));
+      });
+      for (var i = 0; i < this.selectedItems.length; i++) {
         this.selectedItems[i].weightPoint = option2.selectedItems[i].weightPoint;
       }
-      this.ListRank[0].weightPoint = option2.dev3;
-      this.ListRank[1].weightPoint = option2.dev2;
-      this.ListRank[2].weightPoint = option2.dev1;
       this.point = Point;
       this.isSampleConfig = true;
     }

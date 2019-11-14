@@ -5,7 +5,7 @@
                 <div class="step" data-target="#test-l-1">
                     <button [disabled]="index != 1" class="step-trigger">
                         <span class="bs-stepper-circle">1</span>
-                        <span class="bs-stepper-label">Create Configuration</span>
+                        <span class="bs-stepper-label">Create Test</span>
                     </button>
                 </div>
                 <div class="line"></div>
@@ -37,9 +37,9 @@
 
                             <div class="col-md-5 row" style="margin-left: 33px;">
                                 <label class="col-md-6" style="text-align: right;">Type:</label>
-                                <select class="col-md-4" [(ngModel)]="inputConfiguration['type']">
-                                    <option [ngValue]="true">Employee</option>
-                                    <option [ngValue]="false">Applicant</option>
+                                <select class="col-md-4" [(ngModel)]="inputConfiguration['type']" style="font-size: 9px;">
+                                    <option [ngValue]="true" style="font-size: 12px;" >Employee</option>
+                                    <option [ngValue]="false" style="font-size: 12px;">Applicant</option>
                                 </select>
                             </div>
 
@@ -395,7 +395,7 @@
 
                                 <angular2-multiselect class="form-control" [data]="catalogueList" style="width: 87%"
                                     [(ngModel)]="selectedItemsUpdate" [settings]="dropdownSettingsDetail"
-                                    (onSelect)="onItemUpdateSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
+                                    (onSelect)="onItemUpdateSelect($event)" (onDeSelect)="OnItemUpdateDeSelect($event)"
                                     (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
                                 </angular2-multiselect>
                             </div>
@@ -404,7 +404,7 @@
                                     style="margin-left: -55px;">
                                     <div class="form-group col-md-8">
                                         <input type="text" disabled="disabled" class="form-control"
-                                            style="font-size: 15px" [(ngModel)]="c['catalogueName']" />
+                                            style="font-size: 15px" [(ngModel)]="c.name" />
                                     </div>
                                     <div class="form-group col-md-3">
                                         <input type="number" min="10" max="100" step="10" class="form-control"
@@ -529,10 +529,10 @@
                                     <tr class="col-md-12 row no-padding-no-margin"
                                         *ngFor="let c of updateConfig['catalogueInConfigurations']">
                                         <td class="col-md-9">
-                                            {{c['catalogueName']}}
+                                            {{c.name}}
                                         </td>
                                         <td class="col-md-3">
-                                            {{c['weightPoint']}}
+                                            {{c.weightPoint}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -563,14 +563,14 @@
     </div>
 </ng-template>
 
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true  }" [template]="customLoadingTemplate">
 </ngx-loading>
 <!-- Search -->
 
 <!-- Table question -->
 
 <div class="insert-form col-md-12">
-    <app-page-header [heading]="'Configuration'"></app-page-header>
+    <app-page-header [heading]="'Manager Test'"></app-page-header>
     <div class="card mb-3 shadow-card">
         <div class="table-responsive col-md-12 datatable" style="overflow: unset;">
             <div class="row mb-1">
@@ -585,7 +585,7 @@
                         </div>
                         <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
                             <i class="fa fa-fw fa-plus"></i>
-                            Create Configuration
+                            Create Test
                         </button>
                     </div>
                     <div class="row justify-content-end" style="margin-top: 20px;">
