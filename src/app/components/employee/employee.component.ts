@@ -113,11 +113,14 @@ export class EmployeeComponent implements OnInit {
             this.employees = [];
             this.message = [];
             list = await this.readExcel();
+            console.log(list);
             this.checkExcel = true;
+            // const regex = this.globalservice.checkPhoneVn;
             list.forEach(element => {
                 this.insEmployee = {};
-                const phone = element.Phone+"";
-                const checkPhone = this.globalservice.checkPhoneVn.test(element.Phone);
+                const phone = element.Phone;
+                // let checkPhone = regex.test(String(phone));
+                let checkPhone =  /((09|03|07|08|05)+([0-9]{8})\b)/g.test(phone);
                 if (element.Fullname == null ||
                     element.Fullname == undefined) {
                     this.message.push("Full name" + element.Fullname + " is invalid");
@@ -497,7 +500,7 @@ export class EmployeeComponent implements OnInit {
         return true;
     }
     validatePhone(){
-        const check =this.globalservice.checkPhoneVn.test(this.insEmployee['phone']);
+        const check =/((09|03|07|08|05)+([0-9]{8})\b)/g.test(this.insEmployee['phone']);
         if(this.insEmployee['phone'] == null || this.insEmployee['phone'] == undefined){
             this.toastr.error('Message', 'Please choosing phone of account!');
             return false;
