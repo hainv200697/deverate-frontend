@@ -139,7 +139,9 @@ export class ManageConfigurationComponent implements OnInit {
 
   onSelectAll(item: any) { }
 
-  onDeSelectAll(item: any) { }
+  onDeSelectAll(item: any) { 
+    this.selectedItems = []
+  }
 
   OnItemDeSelect(item: any) {
     this.inputConfiguration['totalQuestion'] -= 5;
@@ -449,6 +451,7 @@ export class ManageConfigurationComponent implements OnInit {
           this.index = 1;
           Swal.fire('Success', 'The configuration has been created', 'success');
         }, (error) => {
+          console.log(error)
           this.getConfigurationIsActive(true);
           this.closeModal();
           this.index = 1;
@@ -569,11 +572,17 @@ export class ManageConfigurationComponent implements OnInit {
       this.toast.error('Message', 'Please input title config');
       return false;
     }
+    else if(this.inputConfiguration['title'].length > 20){
+      this.toast.error('Message', 'The maximum exam name is 20');
+      return false;
+    }
     else if (this.inputConfiguration['totalQuestion'] < 1 || this.inputConfiguration['totalQuestion'] > 100) {
       this.toast.error('Message', 'Total question must be range 1 to 100');
+      this.inputConfiguration['totalQuestion'] = 0;
       return false;
     } else if (this.inputConfiguration['duration'] < 15 || this.inputConfiguration['duration'] > 180) {
       this.toast.error('Message', 'duration must be range 15 to 200');
+      this.inputConfiguration['duration'] = 15
       return false;
     } else if (this.selectedItems.length === 0) {
       this.toast.error('Message', 'Please select the catalogue');
@@ -685,11 +694,11 @@ export class ManageConfigurationComponent implements OnInit {
     else if (value == 2) {
       this.inputConfiguration = (new Object(
         {
-          duration: option1.duration,
-          title: option1.title,
-          totalQuestion: option1.totalQuestion,
-          testOwnerId: option1.testOwnerId,
-          type: option1.type,
+          duration: option2.duration,
+          title: option2.title,
+          totalQuestion: option2.totalQuestion,
+          testOwnerId: option2.testOwnerId,
+          type: option2.type,
         }
       ));
       this.catalogueList.forEach(x => {
@@ -704,7 +713,7 @@ export class ManageConfigurationComponent implements OnInit {
         ));
       });
       for (var i = 0; i < this.selectedItems.length; i++) {
-        this.selectedItems[i].weightPoint = option1.selectedItems[i].weightPoint;
+        this.selectedItems[i].weightPoint = option2.selectedItems[i].weightPoint;
       }
       this.point = Point;
       this.isSampleConfig = true;

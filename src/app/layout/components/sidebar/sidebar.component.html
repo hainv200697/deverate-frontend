@@ -28,7 +28,7 @@
         <!-- Test Owner -->
         <a [routerLink]="['/manage-configuration']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
             <i class="fa fa-cog"></i>&nbsp;
-            <span>{{ 'Manage Configuration' | translate }}</span>
+            <span>{{ 'Manage Test' | translate }}</span>
         </a>
         <a [routerLink]="['/statistic']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
             <i class="fa fa-bar-chart"></i>&nbsp;
