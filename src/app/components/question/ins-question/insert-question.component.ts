@@ -77,7 +77,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     public loading = false;
     cicid;
     check = true;
-    message: Array<string> = [];
+    public message: Array<string> = [];
     // Import excel file
     changeIns(key) {
         this.create = key;
@@ -122,8 +122,25 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             let list: any;
             this.checkFile = true;
             this.message = [];
+            let listQues = [];
+            let existedQues: string[] = [];
             list = await this.readExcel();
-            list.forEach((element,ind) => {
+            var valueArr = list.map(function (item) {
+                var existItem = listQues.some(Question => Question == item.Question);
+                if (existItem) {
+                    existedQues.push("Question  "+item.Question+" is duplicate");
+                }
+                else {
+                    listQues.push(item.Question);
+                }
+            });
+            if(existedQues != null){
+                existedQues.forEach(element => {
+                    this.message.push(element);
+                });
+                this.checkFile = false;
+            }
+            list.forEach((element, ind) => {
                 ind = ind + 2;
                 const questionObj = new QuestionModel();
                 this.listAnswer = [];
@@ -132,7 +149,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 questionObj.accountId = this.accountId;
                 questionObj.cicid = this.cicid;
                 if (element['Question'] == null) {
-                    this.message.push("Question at # "+ind+" is blank");
+                    this.message.push("Question at # " + ind + " is blank");
                     this.checkFile = false;
                 }
                 for (let i = 1; i <= 6; i++) {
@@ -142,48 +159,57 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                     answerObj.isActive = true;
                     this.listAnswer.push(answerObj);
                 }
-                for(let i = this.listAnswer.length -1 ; i >= 0 ; i--){
-                    if(this.listAnswer[i].answer1 == null && this.listAnswer[i].point == null){
-                        this.listAnswer.splice(i,1);
+                for (let i = this.listAnswer.length - 1; i >= 0; i--) {
+                    if (this.listAnswer[i].answer1 == null && this.listAnswer[i].point == null) {
+                        this.listAnswer.splice(i, 1);
                     }
-                    else{
+                    else {
                         break;
                     }
                 }
-                console.log(this.message);
-                this.listAnswer.forEach((element,index) => {
-                    index++;
-                    if(element.answer1 === null || element.answer1 === undefined ){
-                        this.message.push("Answer #"+index+" of question #"+ind+" is blank");
-                        this.checkFile = false;
-                        console.log(this.message);
-                    }else if(element.answer1.length < 3 || element.answer1.length > 200 ){
-                        this.message.push("Answer #"+index+" of question #"+ind+" must be in range form 3 to 200 letter ");
-                        this.checkFile = false;
-                        console.log(this.message);
-                    }
-                    if(element.point === null || element.point === undefined ){
-                        this.message.push("Point of answer #"+index+" in question #"+ind+" is blank!");
-                        this.checkFile = false;
-                        console.log(this.message);
-                    }else if(isNaN(element.point)){
-                        this.message.push("Point of answer #"+index+" in question #"+ind+" is not a number!");
-                        this.checkFile = false;
-                        console.log(this.message);
-                    }
-                    else if(element.point < 1 || element.point > 6 ){
-                        this.message.push("Point of answer #"+index+" in question #"+ind+" must be in range form 1 to 6! ");
-                        this.checkFile = false;
-                        console.log(this.message);
+                let ans = [];
+                let dupAns : string[] = []
+                this.listAnswer.map(function (item) {
+                    var existItem = ans.find(x => x.answer1 == item.answer1);
+                    if (existItem){
+                        dupAns.push("Question #" + ind + " has duplicate answer");
+                    }else{
+                        ans.push(item);
                     }
                 });
                 
+                if(dupAns != null){
+                    dupAns.forEach(element => {
+                        this.message.push(element);
+                    });
+                    this.checkFile = false;
+                }
+                this.listAnswer.forEach((element, index) => {
+                    index++;
+                    if (element.answer1 === null || element.answer1 === undefined) {
+                        this.message.push("Answer #" + index + " of question #" + ind + " is blank");
+                        this.checkFile = false;
+                    } else if (element.answer1.length < 3 || element.answer1.length > 200) {
+                        this.message.push("Answer #" + index + " of question #" + ind + " must be in range form 3 to 200 letter ");
+                        this.checkFile = false;
+                    }
+                    if (element.point === null || element.point === undefined) {
+                        this.message.push("Point of answer #" + index + " in question #" + ind + " is blank!");
+                        this.checkFile = false;
+                    } else if (isNaN(element.point)) {
+                        this.message.push("Point of answer #" + index + " in question #" + ind + " is not a number!");
+                        this.checkFile = false;
+                    }
+                    else if (element.point < 1 || element.point > 6) {
+                        this.message.push("Point of answer #" + index + " in question #" + ind + " must be in range form 1 to 6! ");
+                        this.checkFile = false;
+                    }
+                });
+
                 questionObj.maxPoint = Math.max.apply(Math, this.listAnswer.map(function (o) { return o.point; }));
                 questionObj.answer = this.listAnswer;
                 this.listInsert.push(questionObj);
-               
             });
-            console.log(this.message);
         } catch (err) {
             console.log(err);
         }
@@ -322,16 +348,16 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
     async nextExcel() {
         await this.formatExcel();
-        if(this.checkFile == false){
-            this.toastr.error("View list to see details","File input is wrong fotmat!");
-        }else{
+        if (this.checkFile == false) {
+            this.toastr.error("View list to see details", "File input is wrong fotmat!");
+        } else {
             this.index = 2;
             this.stepper.next();
             const data = JSON.stringify(this.listInsert);
             this.insertQuestion = JSON.parse(data);
         }
-        
-        
+
+
     }
 
     onSubmit() {
@@ -592,7 +618,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.questionService.getQuestion(this.id, this.companyId, this.iconIsActive).subscribe(
             (data: any) => {
                 this.loading = false;
-                console.log(data);
                 this.catalogueName = data.catalogueName;
                 this.cicid = data.cicid;
                 this.allQuestions = data.questions;
@@ -603,10 +628,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             }
         );
     }
-
-
-
-
 
     // reset
     reset() {
@@ -627,10 +648,10 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.router.navigate(['/manage-answer/', item['questionId']]);
     }
 
-    downloadTemplate(){
+    downloadTemplate() {
         let link = document.createElement("a");
         link.download = "Question_Template";
-        link.href= "/assets/images/question.xlsx";
+        link.href = "/assets/images/question.xlsx";
         link.click();
     }
 }
