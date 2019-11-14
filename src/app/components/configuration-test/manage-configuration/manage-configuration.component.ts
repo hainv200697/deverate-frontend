@@ -630,6 +630,7 @@ export class ManageConfigurationComponent implements OnInit {
       this.loading = true;
       if (result.value) {
         this.configAPi.sendMail(id).subscribe(data => {
+          this.loading = false;
           Swal.fire('Success', 'The mail has been send', 'success');
         }, (error) => {
           this.toast.error(error.name);

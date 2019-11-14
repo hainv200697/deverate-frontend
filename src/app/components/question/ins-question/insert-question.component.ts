@@ -124,6 +124,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             this.message = [];
             let listQues = [];
             let existedQues: string[] = [];
+            
             list = await this.readExcel();
             var valueArr = list.map(function (item) {
                 var existItem = listQues.some(Question => Question == item.Question);
@@ -134,7 +135,8 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                     listQues.push(item.Question);
                 }
             });
-            if(existedQues != null){
+            if(existedQues != null && existedQues.length != 0){
+                console.log(existedQues);
                 existedQues.forEach(element => {
                     this.message.push(element);
                 });
@@ -178,7 +180,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                     }
                 });
                 
-                if(dupAns != null){
+                if(dupAns != null && dupAns.length != 0){
                     dupAns.forEach(element => {
                         this.message.push(element);
                     });
