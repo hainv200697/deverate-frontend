@@ -6,10 +6,12 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { ToastrService } from 'ngx-toastr';
 declare var $: any;
+import {ViewEncapsulation} from '@angular/core';
 @Component({
     selector: 'app-catalogue-default',
     templateUrl: './catalogue-default.component.html',
-    styleUrls: ['./catalogue-default.component.scss']
+    styleUrls: ['./catalogue-default.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class CatalogueDefaultComponent implements OnInit {
     constructor(
@@ -106,9 +108,7 @@ export class CatalogueDefaultComponent implements OnInit {
     selectAll() {
         this.updateStatus = [];
         for (let i = 0; i < this.catalogueList.length; i++) {
-            if(this.catalogueList[i].type){
-                this.catalogueList[i].selected = this.selectedAll;
-            }
+            this.catalogueList[i].selected = this.selectedAll;
             this.updateStatus.push(this.catalogueList[i]);
         }
     }
@@ -158,6 +158,7 @@ export class CatalogueDefaultComponent implements OnInit {
                 }
                 this.catelogueService.removeCatalogueDefault(this.updateStatus).subscribe(data => {
                     this.getAllCatalogue(this.iconIsActive);
+                    this.selectedAll = false;
                     this.closeModal();
                     Swal.fire('Success', 'The company has been change', 'success');
                 });;

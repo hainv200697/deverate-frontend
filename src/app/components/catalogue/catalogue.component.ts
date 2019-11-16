@@ -163,6 +163,7 @@ export class CatalogueComponent implements OnInit {
                 }
                 this.catelogueService.removeCatalogue(this.updateStatus).subscribe(data => {
                     this.getAllCatalogue(this.iconIsActive);
+                    this.selectedAll =false;
                     this.closeModal();
                     Swal.fire('Success', 'The company has been change', 'success');
                 });;

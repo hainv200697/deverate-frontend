@@ -3,7 +3,7 @@
 
     </div>
 </ng-template>
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true}" [template]="customLoadingTemplate">
 </ngx-loading>
 <div [hidden]="check == 1" class="catalog-form col-md-12">
 
@@ -31,18 +31,18 @@
                     </div>
                     <div class="row justify-content-end" style="margin-top: 20px;">
                         <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
-                            (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger"
-                            data-toggle="button">
-                            <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
+                            (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger" placement="top" ngbTooltip="Disable"
+                            data-toggle="button"> 
+                            <i class="fa fa-trash-o delete-icon" ></i>
                         </button>
                         <button [hidden]="iconIsActive==true" style="margin-right: 10px;"
-                            (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success"
+                            (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success" placement="top" ngbTooltip="Active"
                             data-toggle="button">
-                            <i class="fa fa-check" tooltip="{{'Active' | translate}}" placement="top"></i>
+                            <i class="fa fa-check"  placement="top"></i>
                         </button>
-                        <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
+                        <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)" placement="top" ngbTooltip="Refresh"
                             class="btn btn-lg btn-primary" data-toggle="button">
-                            <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
+                            <i #refesh class="fa fa-refresh"  placement="top"
                                 aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
                         </button>
                     </div>
@@ -102,11 +102,11 @@
                         </td>
                         <td class="col-md-2 text-center nowrap text-center action-column" style="color: red;">
                             <button class="btn-primary btn btn-circle shadow-item" (click)="viewCatalog(item);"
-                                tooltip="view">
+                            placement="top" ngbTooltip="View Catalog">
                                 <i class="fa fa fa-eye"></i>
                             </button>
                             <button class="btn-warning btn btn-circle shadow-item"
-                                (click)="openUpdateModal(item,update)" tooltip="{{'common_modify' | translate}}">
+                                (click)="openUpdateModal(item,update)" placement="top" ngbTooltip="Update">
                                 <i class="fa fa-edit edit-icon"></i>
                             </button>
                         </td>
@@ -137,14 +137,14 @@
                                 <label>Catalog:</label>
                                 <input (change)="validdate()" type="text" [(ngModel)]="insCatalogue['Name']" name="ins_Catalogue"
                                     class="form-control input-underline input-lg" id=""
-                                    placeholder="{{ 'catalogue' | translate }}">
+                                    placeholder="catalogue">
                             </div>
                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                 <label>Description:</label>
                                 <!-- <textarea  [(ngModel)]="insCatalogue['Description']" rows="30" cols="120" name="ins_Catalogue" class="form-control input-underline input-lg"
-                                    id="" placeholder="{{ 'Description' | translate }}"> -->
+                                    id="" placeholder="Description"> -->
                                 <textarea class="form-control" rows="3" [(ngModel)]="insCatalogue['Description']"
-                                    placeholder="{{ 'Catalogue' | translate }}" name="ins_Catalogue"></textarea>
+                                    placeholder="Catalogue" name="ins_Catalogue"></textarea>
                             </div>
                         </div>
                     </form>
@@ -171,12 +171,12 @@
                                 <label>Catalog:</label>
                                 <input type="text" [(ngModel)]="updCatalogue['Name']" name="upd_Catalogue_name"
                                     class="form-control input-underline input-lg" id=""
-                                    placeholder="{{ 'Catalogue' | translate }}">
+                                    placeholder="Catalogue">
                             </div>
                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                 <label>Description:</label>
                                 <textarea class="form-control" rows="3" [(ngModel)]="updCatalogue['Description']"
-                                    placeholder="{{ 'description' | translate }}"
+                                    placeholder="description"
                                     name="upd_Catalogue_description"></textarea>
                             </div>
                         </div>

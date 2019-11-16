@@ -338,6 +338,7 @@ export class EmployeeComponent implements OnInit {
                 this.loading = true;
                 this.employeeService.disableEmployee(this.listId, status).subscribe(data => {
                     this.loading = false;
+                    this.selectedAll = false;
                     this.getEmployee(this.iconIsActive);
                     this.closeModal();
                     Swal.fire('Success', 'The status has been change', 'success');
@@ -369,6 +370,7 @@ export class EmployeeComponent implements OnInit {
                 });
                 this.employeeService.resendpassword(this.listUser, this.companyId).subscribe(data => {
                     this.getEmployee(this.iconIsActive);
+                    this.selectedAll =false;
                     this.closeModal();
                     Swal.fire({ title: 'Success', text: "Password was send to your email!", type: 'success' });
                     this.listUser = [];
