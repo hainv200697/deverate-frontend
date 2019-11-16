@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 
 declare var d3: any;
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
@@ -55,34 +56,31 @@ export class ResultComponent implements OnInit {
         this.statistic = data['data']['data'];
         let tes = data['data']['data'].catalogueInRanks;
 
-        if (this.statistic.rank == "DEV01") {
-          tes.splice(0,2);
-          this.radarChartColor.splice(1,1);
-        }
-        else if(this.statistic.rank == "DEV0"){
-          tes.splice(0,2);
-          this.radarChartColor.splice(1,2);
-        }
-        else if(this.statistic.rank == "DEV02"){
-          tes.splice(2,2); 
-          this.radarChartColor.splice(3,1);
-        }
-        else if(this.statistic.rank == "DEV03"){
-          tes.splice(1,3); 
-        }
-        
         this.catalogueInRanks = tes;
 
         this.catalogueOverpoint = data['data']['data'].catalogues;
         this.pointRank = data['data']['data'].configurationRanks;
         this.catalogueTable = data['data']['data'].catalogueInConfigs;
         let dialValue = data['data']['data'].rank;
+        console.log(dialValue)
 
         for (var i = 0; i < this.catalogueInRanks.length; i++) {
+          var chartDateElement = {
+            data: [],
+            label: '',
+            hidden: true
+          }
           this.catalogue = this.catalogueInRanks[i].catalogues
-          this.radarChartData[i + 1].label = this.catalogueInRanks[i].rank
+          chartDateElement.label = this.catalogueInRanks[i].rank
+          if (chartDateElement.label === dialValue) {
+            chartDateElement.hidden = false;
+            var length = this.radarChartData.length;
+            if (this.radarChartData.length > 1) {
+              this.radarChartData[length - 1].hidden = false;
+            }
+          }
           for (var j = 0; j < this.catalogue.length; j++) {
-            this.radarChartData[i + 1].data.push(this.catalogue[j].thresholdPoint);
+            chartDateElement.data.push(this.catalogue[j].thresholdPoint);
             for (var z = 0; z < this.catalogueOverpoint.length; z++) {
               if (this.catalogue[j].CatalogueId == this.catalogueOverpoint[z].CatalogueId) {
                 this.catalogue[j].overallPoint = this.catalogueOverpoint[z].overallPoint;
@@ -90,15 +88,15 @@ export class ResultComponent implements OnInit {
               }
             }
           }
+          this.radarChartData.push(chartDateElement);
         }
-        if(this.statistic.rank == "DEV03"){
-          this.radarChartData.splice(2,1);
-          this.radarChartColor.splice(2,2);
-        }
+
         for (var a = 0; a < this.catalogue.length; a++) {
           this.radarChartLabels.push(this.catalogue[a].name);
           this.radarChartData[0].data.push(this.catalogue[a].overallPoint)
         }
+        console.log(this.radarChartData);
+
         this.datasource = {
           "chart": {
             "caption": "",
@@ -130,13 +128,13 @@ export class ResultComponent implements OnInit {
             }, {
               "minValue": data['data']['data'].configurationRanks[1].point,
               "maxValue": data['data']['data'].configurationRanks[0].point,
-              "code": "#62B58F",
-            },{
+              "code": "#00CC00",
+            }, {
               "minValue": data['data']['data'].configurationRanks[0].point,
               "maxValue": data['data']['data']['point'],
-              "code": "#00CC00",
+              "code": "#62B58F",
             },
-          ]
+            ]
           },
           "trendPoints": {
             "point": [
@@ -213,34 +211,6 @@ export class ResultComponent implements OnInit {
 
   }
 
-  onChangeRank(newValue) {
-
-  }
-
-  onChangeRankData(rankId) {
-    this.catalogue = [];
-    this.radarChartLabels = [];
-    this.radarChartData = [
-      { data: [], label: 'Assement Result' },
-      { data: [], label: 'Threshold Point' }
-    ];
-    for (var i = 0; i < this.catalogueInRanks.length; i++) {
-      if (rankId == this.catalogueInRanks[i].rankId) {
-        this.catalogue = this.catalogueInRanks[i].catalogues
-        for (var j = 0; j < this.catalogue.length; j++) {
-          for (var z = 0; z < this.catalogueOverpoint.length; z++) {
-            if (this.catalogue[j].CatalogueId == this.catalogueOverpoint[z].CatalogueId) {
-              this.catalogue[j].overallPoint = this.catalogueOverpoint[z].overallPoint;
-            }
-          }
-          this.radarChartLabels.push(this.catalogue[j].name);
-          this.radarChartData[0].data.push(this.catalogue[j].overallPoint);
-          this.radarChartData[1].data.push(this.catalogue[j].thresholdPoint);
-        }
-      }
-    }
-  }
-
   // Radar
 
   public radarChartLabels: string[] = [];
@@ -248,8 +218,6 @@ export class ResultComponent implements OnInit {
 
   public radarChartData: any = [
     { data: [], label: 'Assement Result' },
-    { data: [], label: '' },
-    { data: [], label: '' },
   ];
 
   public radarChartColor = [
@@ -262,12 +230,6 @@ export class ResultComponent implements OnInit {
       pointBorderColor: "rgba(133, 0, 97, 1)",
     },
     {
-      borderColor: "rgb(0, 204, 0)",
-      fill: false,
-      strokeColor: "rgb(0, 204, 0)",
-      pointBorderColor: "rgba(133, 0, 97, 1)",
-    },
-    {
       borderColor: "rgb(78, 144, 114)",
       fill: false,
       strokeColor: "rgb(78, 144, 114)",
@@ -275,11 +237,23 @@ export class ResultComponent implements OnInit {
 
     },
     {
+      borderColor: "rgb(0, 204, 0)",
+      fill: false,
+      strokeColor: "rgb(0, 204, 0)",
+      pointBorderColor: "rgba(133, 0, 97, 1)",
+    },
+    {
       borderColor: "rgb(204, 157, 40)",
       fill: false,
       strokeColor: "rgb(204, 157, 40)",
       pointBorderColor: "rgba(133, 0, 97, 1)",
     },
+    {
+      borderColor: "rgb(242, 114, 111)",
+      fill: false,
+      strokeColor: "rgb(242, 114, 111)",
+      pointBorderColor: "rgba(133, 0, 97, 1)",
+    }
 
   ]
 
@@ -319,13 +293,5 @@ export class ResultComponent implements OnInit {
   ];
   public lineChartLegend: boolean;
   public lineChartType: string;
-
-  // events
-  public chartClicked(e: any): void {
-    // console.log(e);
-  }
-
-  public chartHovered(e: any): void {
-    // console.log(e);
-  }
+  // console.log(e);
 }
