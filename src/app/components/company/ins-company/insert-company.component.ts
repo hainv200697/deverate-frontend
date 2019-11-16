@@ -40,8 +40,20 @@ export class InsertCompanyComponent implements OnInit {
   Account = {};
   Company: {};
 
-  inputCompany = {};
-  inputManager = {};
+  inputCompany = {
+    name : '',
+    address : '',
+    phone : '', 
+    fax : '', 
+    isActive : true,
+  };
+  inputManager = {
+    fullname : '',
+    phone : '',
+    email : '',
+    address : '',
+    gender : true,
+  };
 
   searchText = "";
 
@@ -56,17 +68,6 @@ export class InsertCompanyComponent implements OnInit {
 
   ngOnInit() {
     this.getCompanyIsActive(true);
-    this.inputCompany['name'] = '';
-    this.inputCompany['address'] = '';
-    this.inputCompany['phone'] = '';
-    this.inputCompany['fax'] = '';
-    this.inputCompany['isActive'] = true;
-
-    this.inputManager['fullname'] = "";
-    this.inputManager['phone'] = "";
-    this.inputManager['email'] = "";
-    this.inputManager['address'] = "";
-    this.inputManager['gender'] = true;
   }
 
   open(content) {
