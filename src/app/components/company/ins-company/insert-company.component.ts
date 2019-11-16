@@ -68,6 +68,7 @@ export class InsertCompanyComponent implements OnInit {
 
   ngOnInit() {
     this.getCompanyIsActive(true);
+    this.restartData();
   }
 
   open(content) {
@@ -76,18 +77,24 @@ export class InsertCompanyComponent implements OnInit {
     });
   }
 
+  restartData(){
+    this.inputCompany = {
+      name : '',
+      address : '',
+      phone : '', 
+      fax : '', 
+      isActive : true,
+    };
+    this.inputManager = {
+      fullname : '',
+      phone : '',
+      email : '',
+      address : '',
+      gender : true,
+    };
+  }
   closeModal() {
-    this.inputCompany['name'] = '';
-    this.inputCompany['address'] = '';
-    this.inputCompany['phone'] = '';
-    this.inputCompany['fax'] = '';
-    this.inputCompany['isActive'] = true;
-
-    this.inputManager['fullname'] = "";
-    this.inputManager['phone'] = "";
-    this.inputManager['email'] = "";
-    this.inputManager['address'] = "";
-    this.inputManager['gender'] = true;
+    this.restartData();
     this.modalService.dismissAll();
   }
 
