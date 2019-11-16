@@ -40,20 +40,8 @@ export class InsertCompanyComponent implements OnInit {
   Account = {};
   Company: {};
 
-  inputCompany = {
-    name : '',
-    address : '',
-    phone : '', 
-    fax : '', 
-    isActive : true,
-  };
-  inputManager = {
-    fullname : '',
-    phone : '',
-    email : '',
-    address : '',
-    gender : true,
-  };
+  inputCompany = {};
+  inputManager = {};
 
   searchText = "";
 
