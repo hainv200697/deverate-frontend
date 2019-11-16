@@ -88,7 +88,10 @@ export class TestComponent implements OnInit {
       .subscribe((res) => {
         this.test = true;
         this.questionInTest = res.questionInTest;
-        this.time = this.config.duration*60;
+        const now = moment();
+        const startDay = moment.utc(res.startTime).local();
+        const timer = now.diff(startDay) / 1000;
+        this.time = this.config.duration * 60 - timer;
         if (this.time > 0) {
           this.closeModal();
           this.questionInTest.forEach(element => {
