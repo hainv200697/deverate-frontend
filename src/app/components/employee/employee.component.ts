@@ -290,7 +290,7 @@ export class EmployeeComponent implements OnInit {
     // function 
     // insert Employee function
     insertEmployee() {
-        if (this.validate() && this.validateRole() && this.validateAddress()  && this.validateGender()) {
+        if (this.validate() && this.validateRole() && this.validatePhone() && this.validateAddress()  && this.validateGender()) {
             this.loading = true;
             this.employeeService.postCreateEmployee(this.employees).subscribe(
                 results => {
@@ -410,7 +410,6 @@ export class EmployeeComponent implements OnInit {
         this.updateEmployee = [];
         this.selectedAll = this.employeeList.every(function (item: any) {
             return item.selected === true;
-
         });
         for (let i = 0; i < this.employeeList.length; i++) {
             if (this.employeeList[i].selected === true) {
@@ -427,24 +426,10 @@ export class EmployeeComponent implements OnInit {
         } else if (this.insEmployee['fullname'].length < 3) {
             this.toastr.error('Message', 'Please input employee name min 3 letter');
             return false;
-        } else if (!this.globalservice.checkMail.test(String(this.insEmployee['email']).toUpperCase())) {
-            this.toastr.error('Message', 'Email wrong format');
-            return false;
-        } else if (this.insEmployee['email'] == '') {
-            this.toastr.error('Message', 'Email can not blank');
-            return false;
-        } else if (this.insEmployee['role'] == '') {
-            this.toastr.error('Message', 'Role can not blank');
-            return false;
-        } else if (this.insEmployee['role'] == isNaN) {
-            this.toastr.error('Message', 'RoleId mus be a number');
-            return false;
-        } else if (this.insEmployee['role'] < 3 || this.insEmployee['role'] > 4) {
-            this.toastr.error('Message', 'Role must be in the range of 3 to 4');
-            return false;
-        }
+        } 
         return true;
     }
+
 
     // updateStatus(item) {
     //     this.loading = true;
@@ -480,6 +465,7 @@ export class EmployeeComponent implements OnInit {
     validateRole(){
         if(this.insEmployee['role'] == 0){
             this.toastr.error('Message', 'Please choosing role of account!');
+            this.errorMessage('ins_manage_role');
             return false;
         }
         return true;
@@ -488,13 +474,16 @@ export class EmployeeComponent implements OnInit {
     validateAddress(){
         if(this.insEmployee['address'] == null || this.insEmployee['address'] == undefined){
             this.toastr.error('Message', 'Please choosing address of account!');
+            this.errorMessage('ins_manage_addres');
             return false;
         }else if (this.insEmployee['address'].length < 3) {
             this.toastr.error('Message', 'Please input employee address min 3 letter');
+            this.errorMessage('ins_manage_addres');
             return false;
         }
         else if (this.insEmployee['address'].length > 200) {
             this.toastr.error('Message', 'Please input employee Employee address max 200 letter');
+            this.errorMessage('ins_manage_addres');
             return false;
         }
         return true;
@@ -503,9 +492,11 @@ export class EmployeeComponent implements OnInit {
         const check =/((09|03|07|08|05)+([0-9]{8})\b)/g.test(this.insEmployee['phone']);
         if(this.insEmployee['phone'] == null || this.insEmployee['phone'] == undefined){
             this.toastr.error('Message', 'Please choosing phone of account!');
+            this.errorMessage('ins_manage_phone');
             return false;
         }else if (!check) {
             this.toastr.error('Message', 'Phone number is invalid');
+            this.errorMessage('ins_manage_phone');
             return false;
         }
         return true;
@@ -513,6 +504,16 @@ export class EmployeeComponent implements OnInit {
     validateGender(){
         if(this.insEmployee['gender'] == -1){
             this.toastr.error('Message', 'Please choosing gender of account!');
+            this.errorMessage('ins_manage_gender');
+            return false;
+        }
+        return true;
+    }
+
+    validateEmail(){
+        if (!this.globalservice.checkMail.test(String(this.insEmployee['email']).toUpperCase())) {
+            this.toastr.error('Message', 'Email wrong format');
+            this.errorMessage('ins_manage_email');
             return false;
         }
         return true;
@@ -523,5 +524,10 @@ export class EmployeeComponent implements OnInit {
         link.download = "Emplyee_Template";
         link.href = "/assets/file/employee.xlsx";
         link.click();
+    }
+
+    errorMessage(id){
+        let input = document.getElementById(id);
+        input.setAttribute("style",  "border: 1px solid red;")
     }
 }

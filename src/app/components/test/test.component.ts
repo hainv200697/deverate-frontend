@@ -58,8 +58,8 @@ export class TestComponent implements OnInit {
           return;
         }
         this.config.title = this.config.title.toUpperCase();
-        this.config.startDate = moment(this.config.startDate).format('LLLL');
-        this.config.endDate = moment(this.config.endDate).format('LLLL');
+        this.config.startDate = moment.utc(this.config.startDate).local().format('LLLL');
+        this.config.endDate = moment.utc(this.config.endDate).local().format('LLLL');
         $('#openModalButton').click();
       });
 
@@ -89,7 +89,7 @@ export class TestComponent implements OnInit {
         this.test = true;
         this.questionInTest = res.questionInTest;
         const now = moment();
-        const startDay = moment(res.startTime);
+        const startDay = moment.utc(res.startTime).local();
         const timer = now.diff(startDay) / 1000;
         this.time = this.config.duration * 60 - timer;
         if (this.time > 0) {
@@ -105,7 +105,6 @@ export class TestComponent implements OnInit {
               this.autoSave()
             });
         }
-
       },
         (error) => {
           this.error = true;

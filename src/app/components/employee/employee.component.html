@@ -3,7 +3,7 @@
 
     </div>
 </ng-template>
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true }" [template]="customLoadingTemplate">
 </ngx-loading>
 
 <ng-template #excel let-modal>
@@ -113,41 +113,41 @@
                 <div class="form-group col-md-12">
                     <label>Account Information: </label>
                     <div class="form-group input-group">
-                        <input type="text" placeholder="FullName" minlength="3" [(ngModel)]="insEmployee['fullname']"
+                        <input id="ins_manage_fullname" type="text" placeholder="FullName" minlength="3" [(ngModel)]="insEmployee['fullname']"
                             (change)="validate()" name="ins_manage_fullname" class="form-control">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="button"><i class="fa fa-user"></i></button>
                         </div>
                     </div>
                     <div class="form-group input-group">
-                        <input class="form-control" type="email" placeholder="Email" [(ngModel)]="insEmployee['email']"
-                            (change)="validate()" name="ins_manage_email">
+                        <input id="ins_manage_email" class="form-control" type="email" placeholder="Email" [(ngModel)]="insEmployee['email']"
+                            (change)="validateEmail()" name="ins_manage_email">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="button"><i class="fa fa-envelope"></i></button>
                         </div>
                     </div>
                     <div class="form-group input-group">
-                        <input class="form-control" type="text" placeholder="Phone" [(ngModel)]="insEmployee['phone']"
+                        <input id="ins_manage_phone" class="form-control" type="text" placeholder="Phone" [(ngModel)]="insEmployee['phone']"
                             (change)="validatePhone()" name="ins_manage_phone">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="button"><i class="fa fa-phone"></i></button>
                         </div>
                     </div>
                     <div class="form-group input-group">
-                        <input class="form-control" type="text" placeholder="address"
+                        <input id="ins_manage_address" class="form-control" type="text" placeholder="address"
                             [(ngModel)]="insEmployee['address']" (change)="validateAddress()" name="ins_manage_address">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="button"><i class="fa fa-home"></i></button>
                         </div>
                     </div>
                     <div class="form-group input-group  justify-content-between ">
-                        <select name="ins_manage_role" class="form-control col-md-5" (change)="validateRole()"
+                        <select id="ins_manage_role" name="ins_manage_role" class="form-control col-md-5" (change)="validateRole()"
                             [(ngModel)]="insEmployee['role']">
                             <option disabled [value]=0>-- Choosing role of account</option>
                             <option [value]=3>Employee</option>
                             <option [value]=4>Test Owner</option>
                         </select>
-                        <select name="ins_manage_gender" (change)="validateGender()" class="form-control col-md-5"
+                        <select id="ins_manage_gender" name="ins_manage_gender" (change)="validateGender()" class="form-control col-md-5"
                             [(ngModel)]="insEmployee['gender']">
                             <option disabled [value]=-1>-- Choosing gender</option>
                             <option [value]=true>Male</option>

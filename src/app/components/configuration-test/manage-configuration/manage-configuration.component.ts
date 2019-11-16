@@ -442,9 +442,8 @@ export class ManageConfigurationComponent implements OnInit {
           isActive: true,
         })
         this.inputConfiguration['configurationRank'] = this.ListRank;
-        this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
-        this.inputConfiguration['endDate'] = new Date(this.inputConfiguration['endDate']);
-
+        this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']).toJSON();
+        this.inputConfiguration['endDate'] = new Date(this.inputConfiguration['endDate']).toJSON();
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
           this.getConfigurationIsActive(true);
           this.closeModal();

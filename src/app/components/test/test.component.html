@@ -7,7 +7,7 @@
     </div>
 </ng-template>
 
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true }" [template]="customLoadingTemplate">
 </ngx-loading>
 <div class="text-center" [hidden]="!test">
     <h2>{{config.title}}</h2>
