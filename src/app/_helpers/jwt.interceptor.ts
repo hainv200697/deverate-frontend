@@ -6,10 +6,10 @@ import { Observable } from 'rxjs';
 export class JwtInterceptor implements HttpInterceptor {
     constructor() { }
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        if (sessionStorage.getItem('Authorization')) {
+        if (localStorage.getItem('Authorization')) {
             request = request.clone({
                 setHeaders: {
-                    Authorization: `Bearer ${sessionStorage.getItem('Authorization')}`
+                    Authorization: `Bearer ${localStorage.getItem('Authorization')}`
                 }
             });
         }

@@ -21,7 +21,7 @@ export class ApplicantComponent implements OnInit {
     public loading = false;
     iconIsActive = true;
     private stepper: Stepper;
-    companyId = Number(sessionStorage.getItem('CompanyId'));
+    companyId = Number(localStorage.getItem('CompanyId'));
     // Excel
     index = 1;
     checkExcel = true;

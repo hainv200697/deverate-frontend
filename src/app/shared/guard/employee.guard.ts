@@ -7,7 +7,7 @@ export class EmployeeGuard implements CanActivate {
     constructor(private router: Router) {}
 
     canActivate() {
-        if (sessionStorage.getItem('Role') === 'Employee') {
+        if (localStorage.getItem('Role') === 'Employee') {
             return true;
         }
 

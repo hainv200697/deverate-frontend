@@ -43,7 +43,7 @@ export class ResultComponent implements OnInit {
     this.isLoaded = false;
     var testId = this.route.snapshot.paramMap.get('testId');
     this.getStatistic(Number(testId), 1);
-    this.isLogin = sessionStorage.getItem('isLoggedin');
+    this.isLogin = localStorage.getItem('isLoggedin');
   }
 
   getStatistic(id: number, rankId: number) {

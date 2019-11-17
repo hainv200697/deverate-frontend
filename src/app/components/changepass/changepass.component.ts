@@ -21,7 +21,7 @@ export class ChangepassComponent implements OnInit {
             return;
         }
         const user = {
-            username: sessionStorage.getItem('Username'),
+            username: localStorage.getItem('Username'),
             oldPassword: this.oldPassword,
             newPassword: this.newPassword
         }
