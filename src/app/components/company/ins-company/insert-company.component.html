@@ -8,24 +8,24 @@
                 <label>Company Information: </label>
 
                 <div class="">
-                    <div class="input-group input-group-icon">
-                        <input type="text" [(ngModel)]="inputCompany['name']" name="ins_company_name" id=""
+                    <div class="input-group input-group-icon" >
+                        <input type="text" [(ngModel)]="inputCompany['name']" name="ins_company_name" (change)="validateCompanyName()"
                             placeholder="{{ 'Name' | translate }}">
-                        <div class="input-icon"><i class="fa fa-institution"></i></div>
+                        <div class="input-icon"><i class="fa fa-institution"></i><label style="color: red;">*</label></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Address" [(ngModel)]="inputCompany['address']"
-                            name="ins_company_address" id="">
-                        <div class="input-icon"><i class="fa fa-map-marker"></i></div>
+                        <input type="text" placeholder="Address" [(ngModel)]="inputCompany['address']" (change)="validateCompanyAddress()"
+                            name="ins_company_address" id="companyAddress">
+                        <div class="input-icon"><i class="fa fa-map-marker"></i><label style="color: red;">*</label></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="number" placeholder="Phone" [(ngModel)]="inputCompany['phone']"
-                            name="ins_company_phone" id="">
-                        <div class="input-icon"><i class="fa fa-phone"></i></div>
+                        <input type="text" placeholder="Phone" [(ngModel)]="inputCompany['phone']" (change)="validateCompanyPhone()"
+                            name="ins_company_phone" id="companyPhone">
+                        <div class="input-icon"><i class="fa fa-phone"></i><label style="color: red;">*</label></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Fax" [(ngModel)]="inputCompany['fax']" name="ins_company_fax"
-                            id="">
+                        <input type="text" placeholder="Fax" [(ngModel)]="inputCompany['fax']" name="ins_company_fax" 
+                            id="companyFax">
                         <div class="input-icon"><i class="fa fa-fax"></i></div>
                     </div>
                 </div>
@@ -35,43 +35,37 @@
                 <label>Manager Information: </label>
                 <div class="">
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="FullName" minlength="3" [(ngModel)]="inputManager['fullname']"
-                            name="ins_manager_fullname">
-                        <div class="input-icon"><i class="fa fa-user"></i></div>
+                        <input type="text" placeholder="FullName" minlength="3" [(ngModel)]="inputManager['fullname']" (change)="validateManagerFullName()"
+                            name="ins_manager_fullname" id="managerFullname">
+                        <div class="input-icon"><i class="fa fa-user"></i><label style="color: red;">*</label></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="email" placeholder="Email" [(ngModel)]="inputManager['email']"
-                            name="ins_manager_email">
-                        <div class="input-icon"><i class="fa fa-envelope"></i></div>
+                        <input type="email" placeholder="Email" [(ngModel)]="inputManager['email']" (change)="validateManagerMail()"
+                            name="ins_manager_email" id="managerEmail">
+                        <div class="input-icon"><i class="fa fa-envelope"></i><label style="color: red;">*</label></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="number" placeholder="Phone" [(ngModel)]="inputManager['phone']"
-                            name="ins_manager_phone">
-                        <div class="input-icon"><i class="fa fa-mobile"></i></div>
+                        <input type="text" placeholder="Phone" [(ngModel)]="inputManager['phone']" (change)="validateManagerPhone()"
+                            name="ins_manager_phone" id="managerPhone">
+                        <div class="input-icon"><i class="fa fa-mobile"></i><label style="color: red;">*</label></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Address" [(ngModel)]="inputManager['address']"
-                            name="ins_manager_address">
+                        <input type="text" placeholder="Address" minlength="2" [(ngModel)]="inputManager['address']"
+                            name="ins_manager_address" id="managerAddress">
                         <div class="input-icon"><i class="fa fa-home"></i></div>
                     </div>
                     <div class="col-half">
                         <label> Gender</label>
                         <div class="input-group">
-                            <input type="radio" name="Gender" [(ngModel)]="inputManager['gender']" value="true"
+                            <input type="radio" name="Gender" [(ngModel)]="inputManager['gender']" value=true
                                 checked="checked" id="gender-male" />
                             <label for="gender-male">Male</label>
-                            <input type="radio" [ngModel]="inputManager['gender']" value="false" name="Gender"
+                            <input type="radio" [ngModel]="inputManager['gender']" value=false name="Gender"
                                 id="gender-female" />
                             <label for="gender-female">Female</label>
                         </div>
                     </div>
                 </div>
-
-
-                <!-- <input type="radio" [(ngModel)]="inputManager['Gender']" [value]="true" name="Gender"
-                    checked="checked">Male
-                <input style="margin-left: 20px;" type="radio" [(ngModel)]="inputManager['Gender']" [value]="false"
-                    name="Gender"> Female -->
             </div>
         </form>
     </div>
@@ -242,12 +236,12 @@
                         <td class="text-center col-md-1" [hidden]="c.isActive==false">
                             <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
                         </td>
-                        <td class="nowrap text-center action-column col-md-1">
-                            <button class="btn-warning btn btn-circle shadow-item"
+                        <td class=" text-center col-md-1">
+                            <button class="btn-warning btn btn-circle shadow-item col-md-6"
                             (click)="openDetail(update, c)" tooltip="{{'common_modify' | translate}}">
                                 <i class="fa fa-edit edit-icon"></i>
                             </button>
-                            <button class=" btn btn-circle shadow-item" (click)="resendmail(c.managerUserName, c.companyId)"
+                            <button class=" btn btn-circle shadow-item col-md-6" (click)="resendmail(c.managerUserName, c.companyId)"
                                 tooltip="{{'mail' | translate}}">
                                 <i class="fa fa-envelope"></i>
                             </button>

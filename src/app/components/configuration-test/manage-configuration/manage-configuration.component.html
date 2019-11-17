@@ -66,7 +66,7 @@
                             <div class="col-md-7 row ">
                                 <label class="col-md-4" style="text-align: right">Start Date:</label>
                                 <div class="col-md-7">
-                                    <angular2-date-picker id="datetimepicker" [(ngModel)]="startDate" name="mydate"
+                                    <angular2-date-picker [(ngModel)]="startDate" name="mydate"
                                         (dateChanged)="onDateChanged($event)" [settings]="settings1">
                                     </angular2-date-picker>
                                 </div>
@@ -570,7 +570,7 @@
 <!-- Table question -->
 
 <div class="insert-form col-md-12">
-    <app-page-header [heading]="'Manager Test'"></app-page-header>
+    <app-page-header [heading]="'Test Management'"></app-page-header>
     <div class="card mb-3 shadow-card">
         <div class="table-responsive col-md-12 datatable" style="overflow: unset;">
             <div class="row mb-1">

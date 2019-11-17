@@ -48,6 +48,7 @@ export class InsertCompanyComponent implements OnInit {
   updateCompany = {};
   updateManager = {};
   updateStatus = [];
+  check = true;
 
   PageSize(test: number) {
     this.pageSize = test;
@@ -55,17 +56,7 @@ export class InsertCompanyComponent implements OnInit {
 
   ngOnInit() {
     this.getCompanyIsActive(true);
-    this.inputCompany['name'] = '';
-    this.inputCompany['address'] = '';
-    this.inputCompany['phone'] = '';
-    this.inputCompany['fax'] = '';
-    this.inputCompany['isActive'] = true;
-
-    this.inputManager['fullname'] = "";
-    this.inputManager['phone'] = "";
-    this.inputManager['email'] = "";
-    this.inputManager['email'] = "";
-    this.inputManager['gender'] = true;
+    this.restartData();
   }
 
   open(content) {
@@ -74,7 +65,24 @@ export class InsertCompanyComponent implements OnInit {
     });
   }
 
+  restartData(){
+    this.inputCompany = {
+      name : '',
+      address : '',
+      phone : '', 
+      fax : '', 
+      isActive : true,
+    };
+    this.inputManager = {
+      fullname : '',
+      phone : '',
+      email : '',
+      address : '',
+      gender : true,
+    };
+  }
   closeModal() {
+    this.restartData();
     this.modalService.dismissAll();
   }
 
@@ -228,12 +236,12 @@ export class InsertCompanyComponent implements OnInit {
   }
 
   Save() {
-    if (this.validdate() == false) {
+    var inputCompanyData = {};
+    this.validdate();
+    if (this.check == false) {
       return;
     }
     else {
-      this.loading = false;
-      var inputCompanyData = {};
       inputCompanyData['companyDTO'] = this.inputCompany;
       inputCompanyData['accountDTO'] = this.inputManager;
 
@@ -249,6 +257,7 @@ export class InsertCompanyComponent implements OnInit {
           console.log(inputCompanyData)
           this.loading = true;
           this.companyApi.insertCompany(inputCompanyData).subscribe(data => {
+            this.loading = false;
             this.getCompanyIsActive(true);
             this.closeModal();
             Swal.fire('Success', 'The company has been created', 'success');
@@ -307,75 +316,161 @@ export class InsertCompanyComponent implements OnInit {
       confirmButtonText: 'Yes, send it!',
       cancelButtonText: 'No, Do not send it'
     }).then((result) => {
-      this.loading = true;
-      let manager: string[] = [];
-      manager.push(managerId);
-      this.employeeService.resendpassword(manager, companyId).subscribe(data => {
-        this.getCompanyIsActive(true);
-        this.closeModal();
-        Swal.fire('Success', 'The mail has been send', 'success');
-      }, (error) => {
-        this.toast.error(error.name);
-        this.loading = false;
-      });
+      if (result.value) {
+        this.loading = true;
+        let manager: string[] = [];
+        manager.push(managerId);
+        this.employeeService.resendpassword(manager, companyId).subscribe(data => {
+          this.getCompanyIsActive(true);
+          this.closeModal();
+          Swal.fire('Success', 'The mail has been send', 'success');
+        }, (error) => {
+          this.toast.error(error.name);
+          this.loading = false;
+        });
+      }
     });
   }
 
-  validdate() {
+  validateCompanyName() {
     for (var i = 0; i < this.Companies.length; i++) {
       if (this.Companies[i].name == this.inputCompany['name']) {
         this.toast.error('Company\'s name is exist');
-        return false;
+        this.check = false;
+      }
+    }
+    if (this.inputCompany['name'] == "" || this.inputCompany['name'] == undefined) {
+      this.toast.error('Please input company\'s name');
+      this.check = false;
+    }
+    else if (this.inputCompany['name'].length < 3) {
+      this.toast.error('Please input comapany name min 3 letter');
+      this.check = false;
+    }
+  }
+
+  validateCompanyAddress() {
+    if (this.inputCompany['address'] == null || this.inputCompany['address'] == '') {
+      this.toast.error('Please input address of company');
+      this.check = false;
+    } else if (this.inputCompany['address'].length < 3) {
+      this.toast.error('Please input company address min 3 letter');
+      this.check = false;
+    }
+    else if (this.inputCompany['address'].length > 200) {
+      this.toast.error('Please input company address max 200 letter');
+      this.check = false;
+    }
+  }
+
+  validateCompanyPhone(){
+    const checkphone =/((09|03|07|08|05)+([0-9]{8})\b)/g.test(this.inputCompany['phone']);
+    if(this.inputCompany['phone'] == null || this.inputCompany['phone'] == ''){
+        this.toast.error('Message', 'Please input phone of company');
+        this.check = false;
+    }else if (!checkphone) {
+        this.toast.error('Message', 'Company\'s Phone number is invalid');
+        this.check = false;
+    }
+  }
+
+  validateManagerFullName(){
+    var str = this.inputManager['fullname'].split(" ");
+    console.log(str)
+    if (this.inputManager['fullname'] == "" || this.inputManager['fullname'] == null) {
+      this.toast.error('Please input manager\'s name');
+      this.check = false;
+    }
+    else if(str.length < 2){
+      this.toast.error('Manager\'s name min 2 leter');
+      this.check = false;
+    }
+  }
+
+  validateManagerMail(){
+    if (this.inputManager['email'] == "" || this.inputManager['email'] == null) {
+      this.toast.error('Please input manager\'s email');
+      this.check = false;
+    }
+    else if (!this.globalservice.checkMail.test(String(this.inputManager['email']).toUpperCase())) {
+      this.toast.error('Manager email wrong format');
+      this.check = false;
+    }
+  }
+
+  validateManagerPhone(){
+    const checkphoneManager =/((09|03|07|08|05)+([0-9]{8})\b)/g.test(this.inputManager['phone']);
+    if(this.inputManager['phone'] == null || this.inputManager['phone'] == ''){
+        this.toast.error('Please input phone of manager');
+        this.check = false;
+    }else if (!checkphoneManager) {
+        this.toast.error('Manager\'s Phone number is invalid');
+        this.check = false;
+    }
+  }
+  validdate() {
+    this.check = true;
+    for (var i = 0; i < this.Companies.length; i++) {
+      if (this.Companies[i].name == this.inputCompany['name']) {
+        this.toast.error('Company\'s name is exist');
+        this.check = false;
       }
       else if (this.Companies[i].phone == this.inputCompany['phone']) {
         this.toast.error('Company\'s phone is exist');
-        return false;
+        this.check = false;
       }
       else if (this.Companies[i].managerMail == this.inputManager['email']) {
         this.toast.error('Manager\'s mail is exist');
-        return false;
+        this.check = false;
       }
     }
-    if (this.inputCompany['name'] == "") {
-      this.toast.error('Message', 'Please input company name');
-      return false;
+    if (this.inputCompany['name'] == "" || this.inputCompany['name'] == null) {
+      this.toast.error('Please input company\'s name');
+      this.check = false;
     }
-    else if (this.inputCompany['address'] == "") {
-      this.toast.error("Message", "Please input company's address");
-      return false;
+    else if (this.inputCompany['name'].length < 3) {
+      this.toast.error('Please input comapany name min 3 letter');
+      this.check = false;
     }
-    else if (this.inputCompany['address'].length > 50) {
-      this.toast.error("Message", "Address is invalid");
-      return false;
+    if (this.inputCompany['address'] == null || this.inputCompany['address'] == '') {
+      this.toast.error('Please input address of company');
+      this.check = false;
+    } else if (this.inputCompany['address'].length < 3) {
+      this.toast.error('Please input company address min 3 letter');
+      this.check = false;
     }
-    else if (this.inputCompany['phone'] == "") {
-      this.toast.error("Message", "Please input company's phone");
-      return false;
+    else if (this.inputCompany['address'].length > 200) {
+      this.toast.error('Please input company address max 200 letter');
+      this.check = false;
     }
-    else if (this.inputCompany['phone'].length < 10 || this.inputCompany['phone'].length > 11) {
-      this.toast.error("Message", "Phone number is invalid");
-      return false;
+    const checkPhone = /((09|03|07|08|05)+([0-9]{8})\b)/g.test(this.inputCompany['phone']);
+    if (!checkPhone) {
+      this.toast.error('Company phone is invalid');
+      this.check = false;
     }
-    else if (this.inputCompany['fax'] == "") {
-      this.toast.error("Message", 'Please input company\'s fax');
-      return false;
+    var str = this.inputManager['fullname'].split(" ");
+    console.log(str)
+    if (this.inputManager['fullname'] == "" || this.inputManager['fullname'] == null) {
+      this.toast.error('Please input manager\'s name');
+      this.check = false;
     }
-    else if (this.inputCompany['fax'] > 10) {
-      this.toast.error("Message", 'Fax is invalid');
-      return false;
+    else if(str.length < 2){
+      this.toast.error('Manager\'s name min 2 letter');
+      this.check = false;
     }
-    else if (this.inputManager['fullname'] == '') {
-      this.toast.error('Message', 'Please input manager name');
-      return false;
+    if (!this.globalservice.checkMail.test(String(this.inputManager['email']).toUpperCase())) {
+      this.toast.error('Manager\'s email wrong format');
+      this.check = false;
     }
-    else if (this.inputManager['fullname'].length < 3) {
-      this.toast.error('Message', 'Please input manager name min 3 letter');
-      return false;
+    const checkphoneManager =/((09|03|07|08|05)+([0-9]{8})\b)/g.test(this.inputManager['phone']);
+    if(this.inputManager['phone'] == null || this.inputManager['phone'] == ''){
+        this.toast.error('Please input phone of manager');
+        this.check = false;
+    }else if (!checkphoneManager) {
+        this.toast.error('Manager\'s Phone number is invalid');
+        this.check = false;
     }
-    else if (!this.globalservice.checkMail.test(String(this.inputManager['email']).toUpperCase())) {
-      this.toast.error('Message', 'Email wrong format');
-      return false;
-    }
+    return this.check;
   }
 
 }
