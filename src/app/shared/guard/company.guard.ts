@@ -7,7 +7,7 @@ export class CompanyGuard implements CanActivate {
     constructor(private router: Router) {}
 
     canActivate() {
-        if (sessionStorage.getItem('Role') === 'Company Manager') {
+        if (localStorage.getItem('Role') === 'Company Manager') {
             return true;
         }
 

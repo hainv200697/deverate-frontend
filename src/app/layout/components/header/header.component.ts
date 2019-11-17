@@ -24,7 +24,7 @@ export class HeaderComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.fullname = sessionStorage.getItem('Fullname');
+        this.fullname = localStorage.getItem('Fullname');
         this.pushRightClass = 'push-right';
     }
 
@@ -44,7 +44,7 @@ export class HeaderComponent implements OnInit {
     }
 
     onLoggedout() {
-        sessionStorage.clear();
+        localStorage.clear();
     }
 
     changeLang(language: string) {

@@ -3,7 +3,7 @@
 
     </div>
 </ng-template>
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true }" [template]="customLoadingTemplate">
 </ngx-loading>
 
 <ng-template #excel let-modal>
@@ -90,9 +90,9 @@
     </div>
     <div class="modal-footer">
         <button [hidden]="index == 2" class="shadow-item btn btn-success " (click)="downloadTemplate()"
-            data-toggle="button">
+            data-toggle="button" placement="top" ngbTooltip="Download Template">
             Download Template
-            <i class="fa fa-download" tooltip="{{'Download' | translate}}" placement="top"></i>
+            <i class="fa fa-download" ></i>
         </button>
         <button [hidden]="index == 1" class="shadow-item btn btn-secondary back" (click)="back()">Back</button>
         <button [hidden]="index == 2" [disabled]="checkFile==false" (click)="next()"
@@ -215,28 +215,27 @@
                                 class="btn btn-lg btn-secondary " data-toggle="button">
                                 <i class="fa fa-download"></i>
                             </button>
-                            <button style="margin-right: 10px;" (click)="resendmail();" class="btn btn-lg btn-warning"
+                            <button style="margin-right: 10px;" (click)="resendmail();" class="btn btn-lg btn-warning" placement="top" ngbTooltip="Resend passwword"
                                 data-toggle="button">
-                                <i class="fa fa-envelope" tooltip="{{'ReSendPass' | translate}}" placement="top"></i>
+                                <i class="fa fa-envelope" ></i>
                             </button>
                             <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
-                                (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger"
+                                (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger" placement="top" ngbTooltip="Disable account"
                                 data-toggle="button">
-                                <i class="fa fa-ban" tooltip="{{'delete' | translate}}" placement="top"></i>
+                                <i class="fa fa-ban"  ></i>
                             </button>
                             <button [hidden]="iconIsActive==true" style="margin-right: 10px;"
                                 (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success"
-                                data-toggle="button">
-                                <i class="fa fa-check" tooltip="{{'Active' | translate}}" placement="top"></i>
+                                data-toggle="button" placement="top" ngbTooltip="Active account">
+                                <i class="fa fa-check"  ></i>
                             </button>
                             <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
-                                class="btn btn-lg btn-success " data-toggle="button">
+                                class="btn btn-lg btn-success " data-toggle="button" placement="top" ngbTooltip="Import By Excel">
                                 <i class="fa fa-file-excel-o"></i>
                             </button>
                             <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
-                                class="btn btn-lg btn-primary" data-toggle="button">
-                                <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}"
-                                    placement="top" aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                                class="btn btn-lg btn-primary" data-toggle="button" placement="top" ngbTooltip="Refresh">
+                                <i #refesh class="fa fa-refresh"  aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
                             </button>
                         </div>
                     </div>

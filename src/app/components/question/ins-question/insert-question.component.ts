@@ -38,8 +38,8 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     // catalogue
     id: number = this.activeRoute.snapshot.params.id;
     catalogueName = '';
-    accountId = Number(sessionStorage.getItem('AccountId'))
-    companyId = Number(sessionStorage.getItem('CompanyId'));
+    accountId = Number(localStorage.getItem('AccountId'))
+    companyId = Number(localStorage.getItem('CompanyId'));
     // excel param
     checkFile = true;
     searchText = '';
@@ -520,6 +520,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 }
                 this.questionService.removeQuestion(this.updateStatus).subscribe(
                     (results) => {
+                        this.selectedAll =false;
                         this.getQuestionById(this.iconIsActive);
                         this.toastr.success("Changed success");
                     }

@@ -129,6 +129,7 @@ export class AnswerComponent implements OnInit {
                 }
                 this.answerService.disableAnswer(this.updateStatus).subscribe(data => {
                     this.getAnswerById(this.iconIsActive);
+                    this.selectedAll =false;
                     this.closeModal();
                     Swal.fire('Success', 'The status has been changed', 'success');
                 });;

@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        if (sessionStorage.getItem('Authorization')) {
+        if (localStorage.getItem('Authorization')) {
             this.router.navigate(['/catalogue']);
         }
     }
@@ -33,13 +33,13 @@ export class LoginComponent implements OnInit {
             .subscribe((res) => {
                 const userInfo = this.getDecodedAccessToken(res.token);
                 if (userInfo != null) {
-                    sessionStorage.setItem('isLoggedin', 'true');
-                    sessionStorage.setItem('Authorization', res.token);
-                    sessionStorage.setItem('Username', userInfo.username);
-                    sessionStorage.setItem('AccountId', userInfo.accountId);
-                    sessionStorage.setItem('Fullname', userInfo.fullname);
-                    sessionStorage.setItem('CompanyId', userInfo.companyId);
-                    sessionStorage.setItem('Role', userInfo.role);
+                    localStorage.setItem('isLoggedin', 'true');
+                    localStorage.setItem('Authorization', res.token);
+                    localStorage.setItem('Username', userInfo.username);
+                    localStorage.setItem('AccountId', userInfo.accountId);
+                    localStorage.setItem('Fullname', userInfo.fullname);
+                    localStorage.setItem('CompanyId', userInfo.companyId);
+                    localStorage.setItem('Role', userInfo.role);
                     switch (userInfo.role) {
                         case 'System Manager':
                             this.router.navigate(['/manage-company']);

@@ -29,7 +29,7 @@ export class SidebarComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.role = sessionStorage.getItem('Role');
+        this.role = localStorage.getItem('Role');
         this.isActive = true;
         this.collapsed = true;
         this.showMenu = '';

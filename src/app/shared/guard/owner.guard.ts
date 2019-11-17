@@ -7,7 +7,7 @@ export class OwnerGuard implements CanActivate {
     constructor(private router: Router) {}
 
     canActivate() {
-        if (sessionStorage.getItem('Role') === 'Test Owner') {
+        if (localStorage.getItem('Role') === 'Test Owner') {
             return true;
         }
 
