@@ -520,6 +520,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 }
                 this.questionService.removeQuestion(this.updateStatus).subscribe(
                     (results) => {
+                        this.selectedAll =false;
                         this.getQuestionById(this.iconIsActive);
                         this.toastr.success("Changed success");
                     }

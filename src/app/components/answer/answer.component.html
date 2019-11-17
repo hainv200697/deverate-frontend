@@ -3,7 +3,7 @@
 
     </div>
 </ng-template>
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true }" [template]="customLoadingTemplate">
 </ngx-loading>
 
 <app-page-header [heading]="'Answer'"></app-page-header>
@@ -30,17 +30,17 @@
                 </div>
                 <div class="row justify-content-end" style="margin-top: 20px;">
                     <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
-                        (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger" data-toggle="button">
-                        <i class="fa fa-ban" tooltip="{{'delete' | translate}}" placement="top"></i>
+                        (click)="clickButtonChangeStatus(false);" placement="top" ngbTooltip="Disable" class="btn btn-lg btn-danger" data-toggle="button">
+                        <i class="fa fa-ban" ></i>
                     </button>
-                    <button [hidden]="iconIsActive==true" style="margin-right: 10px;"
+                    <button [hidden]="iconIsActive==true" style="margin-right: 10px;" placement="top" ngbTooltip="Active"
                             (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success"
                             data-toggle="button">
-                            <i class="fa fa-check" tooltip="{{'Active' | translate}}" placement="top"></i>
+                            <i class="fa fa-check" ></i>
                         </button>
-                    <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
+                    <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)" placement="top" ngbTooltip="Refresh"
                         class="btn btn-lg btn-primary" data-toggle="button">
-                        <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
+                        <i #refesh class="fa fa-refresh"
                             aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
                     </button>
                 </div>
@@ -90,7 +90,7 @@
                     </td>
                     <td class="col-md-2 text-center nowrap text-center action-column" style="color: red;">
                         <button class="btn-warning btn btn-circle shadow-item" (click)="openUpdateModal(item,update)"
-                            tooltip="{{'common_modify' | translate}}">
+                        placement="top" ngbTooltip="Update">
                             <i class="fa fa-edit edit-icon"></i>
                         </button>
                     </td>

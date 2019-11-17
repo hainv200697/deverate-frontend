@@ -89,7 +89,7 @@ export class TestComponent implements OnInit {
         this.test = true;
         this.questionInTest = res.questionInTest;
         const now = moment();
-        const startDay = moment(res.startTime);
+        const startDay = moment.utc(res.startTime).local();
         const timer = now.diff(startDay) / 1000;
         this.time = this.config.duration * 60 - timer;
         if (this.time > 0) {
