@@ -32,7 +32,7 @@ export class TestComponent implements OnInit {
   alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   testId;
   time = 0;
-  accountId = sessionStorage.getItem('AccountId');
+  accountId = localStorage.getItem('AccountId');
   sub: Subscription;
   ngOnInit() {
     this.testId = this.route.snapshot.paramMap.get('testId');

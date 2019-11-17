@@ -7,7 +7,7 @@ export class SystemGuard implements CanActivate {
     constructor(private router: Router) {}
 
     canActivate() {
-        if (sessionStorage.getItem('Role') === 'System Manager') {
+        if (localStorage.getItem('Role') === 'System Manager') {
             return true;
         }
 

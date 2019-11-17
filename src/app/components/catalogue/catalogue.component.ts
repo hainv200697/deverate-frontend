@@ -30,7 +30,7 @@ export class CatalogueComponent implements OnInit {
     insCatalogue = {};
     updCatalogue = {};
     updateStatus = [];
-    companyId = Number(sessionStorage.getItem('CompanyId'));
+    companyId = Number(localStorage.getItem('CompanyId'));
     ngOnInit() {
         this.getAllCatalogue(true);
     }
@@ -88,13 +88,14 @@ export class CatalogueComponent implements OnInit {
 
     // Insert catalogue
     insertCatalogueSubmit() {
-        this.insCata();
-        this.closeModal();
-        this.getAllCatalogue(this.iconIsActive);
+        if(this.validate()){
+            this.insCata();
+            this.closeModal();
+        }
     }
 
     insCata() {
-        if(this.validdate()){
+        if(this.validate()){
             this.insCatalogue['companyId'] = this.companyId;
             this.loading = true;
             this.catelogueService.insertCatalogue(this.insCatalogue).subscribe(
@@ -132,8 +133,10 @@ export class CatalogueComponent implements OnInit {
     }
     // Update catalogue
     updateCatalogueSubmit() {
-        this.updCata();
-        this.closeModal();
+        if(this.validateUpdate()){
+            this.updCata();
+            this.closeModal();
+        }
     }
 
     updCata() {
@@ -188,12 +191,41 @@ export class CatalogueComponent implements OnInit {
         this.router.navigate(['/manage-question/', item['catalogueId']]);
     } 
 
-    validdate() {
-        if (this.insCatalogue['Name'] == '') {
+    validate() {
+        if (this.insCatalogue['Name'] == null || this.insCatalogue['Name'] == undefined) {
             this.toastr.error('Message', 'Please input catalogue name');
+            document.getElementById('ins_Catalogue_name').style.borderColor = 'red';
+            document.getElementById('ins_Catalogue_name').focus();
             return false;
         } else if (this.insCatalogue['Name'].length < 3) {
             this.toastr.error('Message', 'Please input catalogue name min 3 letter');
+            document.getElementById('ins_Catalogue_name').style.borderColor = 'red';
+            document.getElementById('ins_Catalogue_name').focus();
+            return false;
+        }else if (this.insCatalogue['Name'].length > 200) {
+            this.toastr.error('Message', 'Please input catalogue name max 200 letter');
+            document.getElementById('ins_Catalogue_name').style.borderColor = 'red';
+            document.getElementById('ins_Catalogue_name').focus();
+            return false;
+        }
+        return true;
+    }
+
+    validateUpdate() {
+        if (this.updCatalogue['Name'] == null || this.insCatalogue['Name'] == undefined) {
+            this.toastr.error('Message', 'Please input catalogue name');
+            document.getElementById('upd_Catalogue_name').style.borderColor = 'red';
+            document.getElementById('upd_Catalogue_name').focus();
+            return false;
+        } else if (this.updCatalogue['Name'].length < 3) {
+            this.toastr.error('Message', 'Please input catalogue name min 3 letter');
+            document.getElementById('upd_Catalogue_name').style.borderColor = 'red';
+            document.getElementById('upd_Catalogue_name').focus();
+            return false;
+        }else if (this.updCatalogue['Name'].length > 200) {
+            this.toastr.error('Message', 'Please input catalogue name max 200 letter');
+            document.getElementById('upd_Catalogue_name').style.borderColor = 'red';
+            document.getElementById('upd_Catalogue_name').focus();
             return false;
         }
         return true;

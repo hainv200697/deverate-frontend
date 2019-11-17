@@ -23,7 +23,7 @@ export class RerankingComponent implements OnInit {
   test = true;
   error = false;
   ngOnInit() {
-    const accountId = sessionStorage.getItem('AccountId');
+    const accountId = localStorage.getItem('AccountId');
     this.testService.getAllTestInfo(accountId)
       .subscribe(res => {
         console.log(res);
@@ -47,7 +47,7 @@ export class RerankingComponent implements OnInit {
   quiz() {
 
     const testInfo = {
-      accountId: Number(sessionStorage.getItem('AccountId')),
+      accountId: Number(localStorage.getItem('AccountId')),
       configId: this.configId,
       code: this.key
     };
