@@ -3,7 +3,8 @@
 
     </div>
 </ng-template>
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true }" [template]="customLoadingTemplate">
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true }"
+    [template]="customLoadingTemplate">
 </ngx-loading>
 
 <ng-template #excel let-modal>
@@ -92,7 +93,7 @@
         <button [hidden]="index == 2" class="shadow-item btn btn-success " (click)="downloadTemplate()"
             data-toggle="button" placement="top" ngbTooltip="Download Template">
             Download Template
-            <i class="fa fa-download" ></i>
+            <i class="fa fa-download"></i>
         </button>
         <button [hidden]="index == 1" class="shadow-item btn btn-secondary back" (click)="back()">Back</button>
         <button [hidden]="index == 2" [disabled]="checkFile==false" (click)="next()"
@@ -113,41 +114,49 @@
                 <div class="form-group col-md-12">
                     <label>Account Information: </label>
                     <div class="form-group input-group">
-                        <input type="text" placeholder="FullName" minlength="3" [(ngModel)]="insEmployee['fullname']"
+                        <div class="input-group-append">
+                            <button disabled="true" class="btn btn-secondary" type="button"><i
+                                    class="fa fa-user"></i></button>
+                        </div>
+                        <input id="ins_manage_fullname" type="text" placeholder="FullName" minlength="3" [(ngModel)]="insEmployee['fullname']"
                             (change)="validate()" name="ins_manage_fullname" class="form-control">
-                        <div class="input-group-append">
-                            <button class="btn btn-secondary" type="button"><i class="fa fa-user"></i></button>
-                        </div>
+
                     </div>
                     <div class="form-group input-group">
-                        <input class="form-control" type="email" placeholder="Email" [(ngModel)]="insEmployee['email']"
-                            (change)="validate()" name="ins_manage_email">
                         <div class="input-group-append">
-                            <button class="btn btn-secondary" type="button"><i class="fa fa-envelope"></i></button>
+                            <button disabled="true" class="btn btn-secondary" type="button"><i
+                                    class="fa fa-envelope"></i></button>
                         </div>
+                        <input id="ins_manage_email" class="form-control" type="email" placeholder="Email" [(ngModel)]="insEmployee['email']"
+                            (change)="validateEmail()" name="ins_manage_email">
+
                     </div>
                     <div class="form-group input-group">
-                        <input class="form-control" type="text" placeholder="Phone" [(ngModel)]="insEmployee['phone']"
+                        <div class="input-group-append">
+                            <button disabled="true" class="btn btn-secondary" type="button"><i
+                                    class="fa fa-phone"></i></button>
+                        </div>
+                        <input id="ins_manage_phone" class="form-control" type="text" placeholder="Phone" [(ngModel)]="insEmployee['phone']"
                             (change)="validatePhone()" name="ins_manage_phone">
-                        <div class="input-group-append">
-                            <button class="btn btn-secondary" type="button"><i class="fa fa-phone"></i></button>
-                        </div>
+
                     </div>
                     <div class="form-group input-group">
-                        <input class="form-control" type="text" placeholder="address"
-                            [(ngModel)]="insEmployee['address']" (change)="validateAddress()" name="ins_manage_address">
                         <div class="input-group-append">
-                            <button class="btn btn-secondary" type="button"><i class="fa fa-home"></i></button>
+                            <button disabled="true" class="btn btn-secondary" type="button"><i
+                                    class="fa fa-home"></i></button>
                         </div>
+                        <input id="ins_manage_address" class="form-control" type="text" placeholder="address"
+                            [(ngModel)]="insEmployee['address']" (change)="validateAddress()" name="ins_manage_address">
+
                     </div>
                     <div class="form-group input-group  justify-content-between ">
-                        <select name="ins_manage_role" class="form-control col-md-5" (change)="validateRole()"
+                        <select id="ins_manage_role" name="ins_manage_role" class="form-control col-md-5" (change)="validateRole()"
                             [(ngModel)]="insEmployee['role']">
                             <option disabled [value]=0>-- Choosing role of account</option>
                             <option [value]=3>Employee</option>
                             <option [value]=4>Test Owner</option>
                         </select>
-                        <select name="ins_manage_gender" (change)="validateGender()" class="form-control col-md-5"
+                        <select id="ins_manage_gender" name="ins_manage_gender" (change)="validateGender()" class="form-control col-md-5"
                             [(ngModel)]="insEmployee['gender']">
                             <option disabled [value]=-1>-- Choosing gender</option>
                             <option [value]=true>Male</option>
@@ -212,30 +221,33 @@
                     <div class="col-md-6">
                         <div class="row justify-content-end" style="margin-top: 20px;">
                             <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
-                                class="btn btn-lg btn-secondary " data-toggle="button">
+                            placement="top" ngbTooltip="Export Excel" class="btn btn-lg btn-secondary " data-toggle="button">
                                 <i class="fa fa-download"></i>
                             </button>
-                            <button style="margin-right: 10px;" (click)="resendmail();" class="btn btn-lg btn-warning" placement="top" ngbTooltip="Resend passwword"
-                                data-toggle="button">
-                                <i class="fa fa-envelope" ></i>
+                            <button style="margin-right: 10px;" (click)="resendmail();" class="btn btn-lg btn-warning"
+                                placement="top" ngbTooltip="Resend passwword" data-toggle="button">
+                                <i class="fa fa-envelope"></i>
                             </button>
                             <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
-                                (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger" placement="top" ngbTooltip="Disable account"
-                                data-toggle="button">
-                                <i class="fa fa-ban"  ></i>
+                                (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger" placement="top"
+                                ngbTooltip="Disable account" data-toggle="button">
+                                <i class="fa fa-ban"></i>
                             </button>
                             <button [hidden]="iconIsActive==true" style="margin-right: 10px;"
                                 (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success"
                                 data-toggle="button" placement="top" ngbTooltip="Active account">
-                                <i class="fa fa-check"  ></i>
+                                <i class="fa fa-check"></i>
                             </button>
                             <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
-                                class="btn btn-lg btn-success " data-toggle="button" placement="top" ngbTooltip="Import By Excel">
+                                class="btn btn-lg btn-success " data-toggle="button" placement="top"
+                                ngbTooltip="Import By Excel">
                                 <i class="fa fa-file-excel-o"></i>
                             </button>
                             <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
-                                class="btn btn-lg btn-primary" data-toggle="button" placement="top" ngbTooltip="Refresh">
-                                <i #refesh class="fa fa-refresh"  aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                                class="btn btn-lg btn-primary" data-toggle="button" placement="top"
+                                ngbTooltip="Refresh">
+                                <i #refesh class="fa fa-refresh" aria-hidden="true"
+                                    [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
                             </button>
                         </div>
                     </div>
@@ -247,28 +259,28 @@
             #sv="svDataTable" [svRowsOnPage]="5" svSortBy="name" svSortOrder="asc">
             <thead>
                 <tr class="col-md-12 row no-padding-no-margin">
-                    <th class="text-center col-md-1" scope="col">
+                    <th class="text-center one" scope="col">
                         <input class="btn" type="checkbox" value="" [(ngModel)]="selectedAll" (change)="selectAll();">
                     </th>
-                    <th class="col-md-1 text-center" scope="col">
+                    <th class="two text-center" scope="col">
                         <sv-default-sorter by='username'>Username</sv-default-sorter>
                     </th>
-                    <th class="col-md-3 text-center" scope="col">
+                    <th class="four text-center" scope="col">
                         <sv-default-sorter by='fullname'>Fullname</sv-default-sorter>
                     </th>
-                    <th class="col-md-2 text-center" scope="col">
+                    <th class="four text-center" scope="col">
                         <sv-default-sorter by='email'>Email</sv-default-sorter>
                     </th>
-                    <th class="col-md-2 text-center" scope="col">
+                    <th class="three text-center" scope="col">
                         Role
                     </th>
-                    <th class="col-md-1 text-center" scope="col">
+                    <th class="two text-center" scope="col">
                         <sv-default-sorter by='gender'>Gender</sv-default-sorter>
                     </th>
-                    <th class="col-md-1 text-center" scope="col">
+                    <th class="two text-center" scope="col">
                         <sv-default-sorter by='joinDate'>JoinDate</sv-default-sorter>
                     </th>
-                    <th class="col-md-1 text-center" scope="col">Status
+                    <th class="two text-center" scope="col">Status
                         <div ngbDropdown class="d-inline-block dropdown">
                             <button class=" icon-btn" ngbDropdownToggle style="color: black"></button>
                             <div ngbDropdownMenu>
@@ -279,38 +291,38 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody *ngIf="sv.data.length != 0;  else searchNull">
                 <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data">
-                    <td class="text-center col-md-1">
+                    <td class="text-center one">
                         <label>
                             <input type="checkbox" value="" [(ngModel)]="item.selected" class="btn"
                                 (change)="checkIfAllSelected();">
                         </label>
                     </td>
-                    <td class="col-md-1 text-center">{{ item.username }}</td>
-                    <td class="col-md-3 text-center">{{ item.fullname }}</td>
-                    <td class="col-md-2 text-center">{{ item.email }}</td>
-                    <td [hidden]="item.roleId==3" class="text-center col-md-2">
+                    <td class="two text-center">{{ item.username }}</td>
+                    <td class="four text-center">{{ item.fullname }}</td>
+                    <td class="four text-center">{{ item.email }}</td>
+                    <td [hidden]="item.roleId==3" class="text-center three">
                         <!-- <select class="custom-select" (change)="updateStatus(item)" [(ngModel)]="item.roleId">
                             <option [ngValue]="3">Employee</option>
                             <option [ngValue]="4">Test Owner</option>
                         </select> -->
                         Test Owner
                     </td>
-                    <td [hidden]="item.roleId==4" class="text-center col-md-2">
+                    <td [hidden]="item.roleId==4" class="text-center three">
                         Employee
                     </td>
-                    <td class="text-center col-md-1" [hidden]="item.gender==false">
+                    <td class="text-center two" [hidden]="item.gender==false">
                         Male
                     </td>
-                    <td class="text-center col-md-1" [hidden]="item.gender==true">
+                    <td class="text-center two" [hidden]="item.gender==true">
                         Female
                     </td>
-                    <td class="col-md-1 text-center">{{ item.joinDate.split('T')[0] }}</td>
+                    <td class="two text-center">{{ item.joinDate.split('T')[0] }}</td>
                     <td class="text-center col-md-1" [hidden]="item.isActive==true">
                         <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
                     </td>
-                    <td class="text-center col-md-1" [hidden]="item.isActive==false">
+                    <td class="text-center two" [hidden]="item.isActive==false">
                         <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
                     </td>
                 </tr>
@@ -325,3 +337,9 @@
         </table>
     </div>
 </div>
+
+<ng-template #searchNull>
+    <tr class="col-md-12 row no-padding-no-margin">
+        <th class="text-center col-md-12" scope="col">No data</th>
+    </tr>
+</ng-template>

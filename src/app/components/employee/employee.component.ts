@@ -26,6 +26,7 @@ export class EmployeeComponent implements OnInit {
     private stepper: Stepper;
     companyId = Number(localStorage.getItem('CompanyId'));
     // Excel
+    selected= false;
     index = 1;
     checkExcel = true;
     searchText = '';
@@ -45,7 +46,7 @@ export class EmployeeComponent implements OnInit {
     message: Array<string> = [];
     ngOnInit() {
         this.getEmployee(this.iconIsActive);
-        
+
     }
     async next() {
         this.employees = [];
@@ -65,6 +66,7 @@ export class EmployeeComponent implements OnInit {
     }
     // Excel
     incomingfile(event) {
+        this.message = null;
         this.file = event.target.files[0];
         if (this.file != null && this.file != undefined) {
             var name = this.file.name.split('.');
@@ -116,49 +118,50 @@ export class EmployeeComponent implements OnInit {
             console.log(list);
             this.checkExcel = true;
             // const regex = this.globalservice.checkPhoneVn;
-            list.forEach(element => {
+            list.forEach((element, index) => {
                 this.insEmployee = {};
+                index = index + 2;
                 const phone = element.Phone;
                 // let checkPhone = regex.test(String(phone));
-                let checkPhone =  /((09|03|07|08|05)+([0-9]{8})\b)/g.test(phone);
+                let checkPhone = /((09|03|07|08|05)+([0-9]{8})\b)/g.test(phone);
                 if (element.Fullname == null ||
                     element.Fullname == undefined) {
-                    this.message.push("Full name" + element.Fullname + " is invalid");
+                    this.message.push("Full name at # " + index + " is invalid");
                     this.checkExcel = false;
                 } else if (element.Fullname.length < 5 ||
                     element.Fullname.length > 200) {
-                    this.message.push("Full name" + element.Fullname + " must be in range from 5 to 200 letters");
+                    this.message.push("Full name at #" + index + " must be in range from 5 to 200 letters");
                     this.checkExcel = false;
                 }
-                if (element.Address == null ||
-                    element.Address == undefined) {
-                    this.message.push("Address of " + element.Fullname + " is blank!");
-                    this.checkExcel = false;
-                } else if (element.Address.length < 5 ||
-                    element.Address.length > 200) {
-                    this.message.push("Address of " + element.Fullname + " must be in range from 5 to 200 letters");
-                    this.checkExcel = false;
+                if (element.Address != null || element.Address != undefined) {
+                    if (element.Address.length < 5 ||
+                        element.Address.length > 200) {
+                        this.message.push("Address at #" + index + " must be in range from 5 to 200 letters");
+                        this.checkExcel = false;
+                    }
                 }
-                if(!checkPhone ){
-                    this.message.push("Phone of "+element.Fullname+" is invalid!");
-                    this.checkExcel = false;
+                if (element.Phone != null || element.Phone != undefined) {
+                    if (!checkPhone) {
+                        this.message.push("Phone at #" + index + " is invalid!");
+                        this.checkExcel = false;
+                    }
                 }
                 if (element.Email == null ||
                     element.Email == undefined) {
-                    this.message.push("Email of "+element.Fullname+" is blank!");
+                    this.message.push("Email at #" + index + " is blank!");
                     this.checkExcel = false;
-                }else if (element.Email.length < 5) {
-                    this.message.push("Length of email " + element.Email + " is more than 5");
+                } else if (element.Email.length < 5) {
+                    this.message.push("Length of email at #" + index + " is more than 5");
                     this.checkExcel = false;
                 } if (element.Email.length > 200) {
-                    this.message.push("Length of email " + element.Email + " is less than 200");
+                    this.message.push("Length of email at #" + index + " is less than 200");
                     this.checkExcel = false;
                 }
                 else if (!this.globalservice.checkMail.test(String(element.Email).toUpperCase())) {
-                    this.message.push("Email " + element.Email + " is invalid");
+                    this.message.push("Email at #" + index + " is invalid");
                     this.checkExcel = false;
                 }
-                if (element.Role !== 'Employee' && element.Role  !== 'Test Owner') {
+                if (element.Role !== 'Employee' && element.Role !== 'Test Owner') {
                     this.message.push("Role of email " + element.Email + " is invalid");
                     this.checkExcel = false;
                 } else if (element.Role == null || element.Role == undefined) {
@@ -171,18 +174,18 @@ export class EmployeeComponent implements OnInit {
                     element.Role = 4;
                 }
                 if (element.Gender !== 'Male' && element.Gender !== 'Female') {
-                    this.message.push("Gender of account " + element.Fullname + " is invalid!");
+                    this.message.push("Gender of account at #" + index + " is invalid!");
                     this.checkExcel = false;
                 } else if (element.Gender == null || element.Gender == undefined) {
                     element.Gender = null;
-                    this.message.push("Gender of account " + element.Fullname + " is blank!!");
+                    this.message.push("Gender of account at #" + index + " is blank!!");
                     this.checkExcel = false;
                 } else if (element.Gender == "Male") {
                     element.Gender = true;
                 } else if (element.Gender == "Female") {
                     element.Gender = false;
                 }
-                
+
                 this.insEmployee['companyId'] = this.companyId;
                 this.insEmployee['fullname'] = element.Fullname;
                 this.insEmployee['email'] = element.Email;
@@ -225,12 +228,17 @@ export class EmployeeComponent implements OnInit {
     getEmployee(status) {
         this.getRole = 0;
         this.iconIsActive = status;
+        this.loading = true;
         this.employeeService.getAllEmployee(this.companyId, this.iconIsActive).subscribe(
             (data) => {
+                this.loading = false;
+                this.selectedAll = false;
                 this.employeeList = data;
                 this.insEmployee = {};
                 this.insEmployee['role'] = 0;
-                this.insEmployee['gender']=-1;
+                this.insEmployee['gender'] = -1;
+                this.selected = false;
+                this.selectedAll= false;
             }
         );
     }
@@ -238,7 +246,7 @@ export class EmployeeComponent implements OnInit {
     // modal
     // insert
     open(create) {
-        this.modalService.open(create, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
+        this.modalService.open(create, { ariaLabelledBy: 'modal-basic-title' });
     }
 
     openModalExcel(excel) {
@@ -282,7 +290,6 @@ export class EmployeeComponent implements OnInit {
 
     insertEmployeeExcel() {
         this.insertEmployee();
-
     }
 
 
@@ -290,7 +297,7 @@ export class EmployeeComponent implements OnInit {
     // function 
     // insert Employee function
     insertEmployee() {
-        if (this.validate() && this.validateRole() && this.validateAddress()  && this.validateGender()) {
+        if (this.validate() && this.validateRole() && this.validateAddress() && this.validateGender()) {
             this.loading = true;
             this.employeeService.postCreateEmployee(this.employees).subscribe(
                 results => {
@@ -322,80 +329,97 @@ export class EmployeeComponent implements OnInit {
 
     // change status
     clickButtonChangeStatus(status: boolean) {
-
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'Status will be change!',
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, change it!',
-            cancelButtonText: 'No, keep it'
-        }).then((result) => {
-            if (result.value) {
-                for (let i = 0; i < this.updateEmployee.length; i++) {
-                    this.listId.push(this.updateEmployee[i].accountId)
+        if (this.selectedAll == true || this.selected == true ) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Status will be change!',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, change it!',
+                cancelButtonText: 'No, keep it'
+            }).then((result) => {
+                if (result.value) {
+                    for (let i = 0; i < this.updateEmployee.length; i++) {
+                        this.listId.push(this.updateEmployee[i].accountId)
+                    }
+                    this.loading = true;
+                    this.employeeService.disableEmployee(this.listId, status).subscribe(data => {
+                        this.loading = false;
+                        this.selectedAll = false;
+                        this.getEmployee(this.iconIsActive);
+                        this.closeModal();
+                        Swal.fire('Success', 'The status has been change', 'success');
+                    });;
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    this.updateEmployee = [];
+                    Swal.fire(
+                        'Cancelled',
+                        '',
+                        'error'
+                    )
                 }
-                this.loading = true;
-                this.employeeService.disableEmployee(this.listId, status).subscribe(data => {
-                    this.loading = false;
-                    this.selectedAll = false;
-                    this.getEmployee(this.iconIsActive);
-                    this.closeModal();
-                    Swal.fire('Success', 'The status has been change', 'success');
-                });;
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                this.updateEmployee = [];
-                Swal.fire(
-                    'Cancelled',
-                    '',
-                    'error'
-                )
-            }
-        })
+            })
+        } else {
+            this.updateEmployee = [];
+            Swal.fire(
+                'Cancelled',
+                'Please choose employee!',
+                'error'
+            )
+        }
     }
 
     // send pass
     resendmail() {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'Password will be send!',
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, send it!',
-            cancelButtonText: 'No, Do not send it'
-        }).then((result) => {
-            if (result.value) {
-                this.updateEmployee.forEach(element => {
-                    this.listUser.push(element.username);
-                });
-                this.employeeService.resendpassword(this.listUser, this.companyId).subscribe(data => {
-                    this.getEmployee(this.iconIsActive);
-                    this.selectedAll =false;
-                    this.closeModal();
-                    Swal.fire({ title: 'Success', text: "Password was send to your email!", type: 'success' });
-                    this.listUser = [];
-                }, error => {
-                    if (error.status == 400) {
-                        const account = error.error.slice(0, 3);
-                        const message = `Account ${account.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
-                        Swal.fire({
-                            title: 'Cancelled',
-                            text: message,
-                            type: 'error'
-                        });
+        if (this.selectedAll == true || this.selected == true ) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Password will be send!',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, send it!',
+                cancelButtonText: 'No, Do not send it'
+            }).then((result) => {
+                if (result.value) {
+                    this.updateEmployee.forEach(element => {
+                        this.listUser.push(element.username);
+                    });
+                    this.employeeService.resendpassword(this.listUser, this.companyId).subscribe(data => {
+                        this.getEmployee(this.iconIsActive);
+                        this.selectedAll = false;
+                        this.closeModal();
+                        Swal.fire({ title: 'Success', text: "Password was send to your email!", type: 'success' });
+                        this.listUser = [];
+                    }, error => {
+                        if (error.status == 400) {
+                            const account = error.error.slice(0, 3);
+                            const message = `Account ${account.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
+                            Swal.fire({
+                                title: 'Cancelled',
+                                text: message,
+                                type: 'error'
+                            });
+                        }
+                        if (error.status == 500) {
+                            Swal.fire({
+                                title: 'Cancelled',
+                                text: "System error",
+                                type: 'error'
+                            });
+                        }
                     }
-                    if (error.status == 500) {
-                        Swal.fire({
-                            title: 'Cancelled',
-                            text: "System error",
-                            type: 'error'
-                        });
-                    }
-                }
 
-                );;
-            }
-        })
+                    );;
+                }
+            })
+        } else {
+            this.updateEmployee = [];
+            Swal.fire(
+                'Cancelled',
+                'Please choose employee!',
+                'error'
+            )
+        }
     }
 
     // select employee
@@ -410,40 +434,31 @@ export class EmployeeComponent implements OnInit {
 
     checkIfAllSelected() {
         this.updateEmployee = [];
+        this.selected = false;
         this.selectedAll = this.employeeList.every(function (item: any) {
             return item.selected === true;
-
         });
         for (let i = 0; i < this.employeeList.length; i++) {
             if (this.employeeList[i].selected === true) {
+                this.selected = true;
                 this.employeeList[i].companyId = this.companyId;
                 this.updateEmployee.push(this.employeeList[i]);
             }
         }
-
     }
     validate() {
         if (this.insEmployee['fullname'] == '' || this.insEmployee['fullname'] == null) {
             this.toastr.error('Message', 'Please input employee name');
+            document.getElementById('ins_manage_fullname').style.borderColor = 'red';
+            document.getElementById('ins_manage_fullname').focus();
             return false;
         } else if (this.insEmployee['fullname'].length < 3) {
             this.toastr.error('Message', 'Please input employee name min 3 letter');
+            document.getElementById('ins_manage_fullname').style.borderColor = 'red';
+            document.getElementById('ins_manage_fullname').focus();
             return false;
-        } else if (!this.globalservice.checkMail.test(String(this.insEmployee['email']).toUpperCase())) {
-            this.toastr.error('Message', 'Email wrong format');
-            return false;
-        } else if (this.insEmployee['email'] == '') {
-            this.toastr.error('Message', 'Email can not blank');
-            return false;
-        } else if (this.insEmployee['role'] == '') {
-            this.toastr.error('Message', 'Role can not blank');
-            return false;
-        } else if (this.insEmployee['role'] == isNaN) {
-            this.toastr.error('Message', 'RoleId mus be a number');
-            return false;
-        } else if (this.insEmployee['role'] < 3 || this.insEmployee['role'] > 4) {
-            this.toastr.error('Message', 'Role must be in the range of 3 to 4');
-            return false;
+        }else{
+            document.getElementById('ins_manage_fullname').style.borderColor = 'green';
         }
         return true;
     }
@@ -479,51 +494,94 @@ export class EmployeeComponent implements OnInit {
             );
         }
     }
-    validateRole(){
-        if(this.insEmployee['role'] == 0){
+    validateRole() {
+        if (this.insEmployee['role'] == 0) {
             this.toastr.error('Message', 'Please choosing role of account!');
+            document.getElementById('ins_manage_role').style.borderColor = 'red';
+            document.getElementById('ins_manage_role').focus();
             return false;
+        }else{
+            document.getElementById('ins_manage_role').style.borderColor = 'green';
         }
         return true;
     }
 
-    validateAddress(){
-        if(this.insEmployee['address'] == null || this.insEmployee['address'] == undefined){
-            this.toastr.error('Message', 'Please choosing address of account!');
-            return false;
-        }else if (this.insEmployee['address'].length < 3) {
-            this.toastr.error('Message', 'Please input employee address min 3 letter');
-            return false;
-        }
-        else if (this.insEmployee['address'].length > 200) {
-            this.toastr.error('Message', 'Please input employee Employee address max 200 letter');
-            return false;
-        }
-        return true;
-    }
-    validatePhone(){
-        const check =/((09|03|07|08|05)+([0-9]{8})\b)/g.test(this.insEmployee['phone']);
-        if(this.insEmployee['phone'] == null || this.insEmployee['phone'] == undefined){
-            this.toastr.error('Message', 'Please choosing phone of account!');
-            return false;
-        }else if (!check) {
-            this.toastr.error('Message', 'Phone number is invalid');
-            return false;
+    validateAddress() {
+        if (this.insEmployee['address'] != '' || this.insEmployee['address'] != null || this.insEmployee['address'] != undefined) {
+            if (this.insEmployee['address'].length < 3) {
+                this.toastr.error('Message', 'Please input employee address min 3 letter');
+                document.getElementById('ins_manage_address').style.borderColor = 'red';
+                document.getElementById('ins_manage_address').focus();
+                return false;
+            }
+            else if (this.insEmployee['address'].length > 200) {
+                this.toastr.error('Message', 'Please input employee Employee address max 200 letter');
+                document.getElementById('ins_manage_address').style.borderColor = 'red';
+                document.getElementById('ins_manage_address').focus();
+                return false;
+            }else{
+                document.getElementById('ins_manage_address').style.borderColor = 'green';
+            }
         }
         return true;
     }
-    validateGender(){
-        if(this.insEmployee['gender'] == -1){
+    validatePhone() {
+        const check = /((09|03|07|08|05)+([0-9]{8})\b)/g.test(this.insEmployee['phone']);
+        if (this.insEmployee['phone'] != '' || this.insEmployee['phone'] != null || this.insEmployee['phone'] != undefined) {
+            if (!check) {
+                this.toastr.error('Message', 'Phone number is invalid');
+                document.getElementById('ins_manage_phone').style.borderColor = 'red';
+                document.getElementById('ins_manage_phone').focus();
+                return false;
+            }else{
+                document.getElementById('ins_manage_phone').style.borderColor = 'green';
+            }
+        }
+        return true;
+    }
+    validateGender() {
+        if (this.insEmployee['gender'] == -1) {
             this.toastr.error('Message', 'Please choosing gender of account!');
+            document.getElementById('ins_manage_gender').style.borderColor = 'red';
+            document.getElementById('ins_manage_gender').focus();
             return false;
+        }else{
+            document.getElementById('ins_manage_gender').style.borderColor = 'green';
         }
         return true;
     }
-    
-    downloadTemplate(){
+
+    downloadTemplate() {
         let link = document.createElement("a");
         link.download = "Emplyee_Template";
         link.href = "/assets/file/employee.xlsx";
         link.click();
+    }
+
+    validateEmail() {
+        if (this.insEmployee['email'] == '' || this.insEmployee['email'] == null || this.insEmployee['email'] == undefined) {
+            this.toastr.error('Message', 'Email can not blank');
+            document.getElementById('ins_manage_email').style.borderColor = 'red';
+            document.getElementById('ins_manage_email').focus();
+            return false;
+        } else if (!this.globalservice.checkMail.test(String(this.insEmployee['email']).toUpperCase())) {
+            this.toastr.error('Message', 'Email wrong format');
+            document.getElementById('ins_manage_email').style.borderColor = 'red';
+            document.getElementById('ins_manage_email').focus();
+            return false;
+        } else  {
+            this.employeeList.forEach(element => {
+                if (this.insEmployee['email'] === element.email) {
+                    this.toastr.error('Message', 'Email is existed');
+                    document.getElementById('ins_manage_email').style.borderColor = 'red';
+                    document.getElementById('ins_manage_email').focus();
+                    return false;
+                }else{
+                    document.getElementById('ins_manage_email').style.borderColor = 'green';
+                }
+            });
+        }
+        
+        return true;
     }
 }

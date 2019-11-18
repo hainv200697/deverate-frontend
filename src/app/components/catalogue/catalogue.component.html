@@ -145,11 +145,11 @@
                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                 <label>Description</label>
                                 <!-- <textarea  [(ngModel)]="insCatalogue['Description']" rows="30" cols="120" name="ins_Catalogue" class="form-control input-underline input-lg"
-                                    id="" placeholder="{{ 'Description' | translate }}"> -->
+                                    id="" placeholder="Description"> -->
                                 <textarea  class="form-control" rows="3" 
                                     [(ngModel)]="insCatalogue['Description']"
-                                    placeholder="{{ 'Catalogue' | translate }}" name="ins_Catalogue_des"
-                                    id="" placeholder="Description"></textarea>
+                                    placeholder="Catalogue" name="ins_Catalogue_des"
+                                    id="ins_Catalogue_des" placeholder="Description"></textarea>
                             </div>
                         </div>
 
@@ -182,7 +182,7 @@
                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                 <label>Description:</label>
                                 <textarea class="form-control" rows="3" [(ngModel)]="updCatalogue['Description']"
-                                    placeholder="description"
+                                    placeholder="description" id="upd_Catalogue_description"
                                     name="upd_Catalogue_description"></textarea>
                             </div>
                         </div>
