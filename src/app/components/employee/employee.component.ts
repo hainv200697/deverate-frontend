@@ -112,7 +112,6 @@ export class EmployeeComponent implements OnInit {
             this.employees = [];
             this.message = [];
             list = await this.readExcel();
-            console.log(list);
             this.checkExcel = true;
             // const regex = this.globalservice.checkPhoneVn;
             list.forEach((element, index) => {
@@ -292,9 +291,29 @@ export class EmployeeComponent implements OnInit {
             this.insEmployee['fullname'] = this.insEmployee['fullname'];
             this.insEmployee['companyId'] = this.companyId;
             this.employees.push(this.insEmployee);
-            if (!this.validate() || !this.validateRole() || !this.validateAddress() || !this.validateGender()) {
-                return;
-            }else{
+            let check = true;
+            if (!this.validate()) {
+                check = false;
+            }
+            if(!this.validateRole()){
+                check = false;
+            }
+            if(!this.validateAddress()){
+                check = false;
+            }
+            if(!this.validateGender()){
+                check = false;
+            }
+            if(!this.validateRole()){
+                check = false;
+            }
+            if(!this.validateEmail()){
+                check = false;
+            }
+            if(!this.validatePhone()){
+                check = false;
+            }
+            if(check == true){
                 this.insertEmployee();
             }
 
@@ -309,7 +328,6 @@ export class EmployeeComponent implements OnInit {
     // insert Employee function
     insertEmployee() {
         this.loading = true;
-        console.log(this.employees);
         this.employeeService.postCreateEmployee(this.employees).subscribe(
             results => {
                 this.loading = false;
@@ -521,7 +539,6 @@ export class EmployeeComponent implements OnInit {
     validateAddress() {
         if (this.insEmployee['address'] != undefined) {
             if (this.insEmployee['address'] != '') {
-                console.log(this.insEmployee['address']);
                 if (this.insEmployee['address'].length < 3) {
                     this.toastr.error('Please input employee address min 3 characters');
                     document.getElementById('ins_manage_address').style.borderColor = 'red';
@@ -542,14 +559,16 @@ export class EmployeeComponent implements OnInit {
     }
     validatePhone() {
         const check = /((09|03|07|08|05)+([0-9]{8})\b)/g.test(this.insEmployee['phone']);
-        if (this.insEmployee['phone'] != '' || this.insEmployee['phone'] != null || this.insEmployee['phone'] != undefined) {
-            if (!check) {
-                this.toastr.error('Phone number is invalid');
-                document.getElementById('ins_manage_phone').style.borderColor = 'red';
-                document.getElementById('ins_manage_phone').focus();
-                return false;
-            } else {
-                document.getElementById('ins_manage_phone').style.borderColor = 'green';
+        if(this.insEmployee['phone'] != undefined){
+            if (this.insEmployee['phone'] != '') {
+                if (!check) {
+                    this.toastr.error('Phone number is invalid');
+                    document.getElementById('ins_manage_phone').style.borderColor = 'red';
+                    document.getElementById('ins_manage_phone').focus();
+                    return false;
+                } else {
+                    document.getElementById('ins_manage_phone').style.borderColor = 'green';
+                }
             }
         }
         return true;
