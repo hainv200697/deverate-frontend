@@ -122,7 +122,7 @@ export class ManageConfigurationComponent implements OnInit {
     this.pageSize = test;
   }
 
-  companyId = sessionStorage.getItem('CompanyId');
+  companyId = localStorage.getItem('CompanyId');
   employeeInCompany = [];
   isSampleConfig = false;
 
@@ -184,6 +184,7 @@ export class ManageConfigurationComponent implements OnInit {
     this.endDate = new Date();
     this.inputConfiguration['title'] = "";
     this.inputConfiguration['testOwnerId'] = sessionStorage.getItem("AccountId");
+    this.inputConfiguration['testOwnerId'] = localStorage.getItem("AccountId");
     this.inputConfiguration['totalQuestion'] = 0;
     this.inputConfiguration['title'] = '';
     this.inputConfiguration['type'] = true;

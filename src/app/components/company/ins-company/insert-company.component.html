@@ -8,23 +8,25 @@
                 <label>Company Information: </label>
 
                 <div class="">
-                    <div class="input-group input-group-icon" >
-                        <input type="text" [(ngModel)]="inputCompany['name']" name="ins_company_name" (change)="validateCompanyName()"
-                            placeholder="{{ 'Name' | translate }}">
-                        <div class="input-icon"><i class="fa fa-institution"></i><label style="color: red;">*</label></div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" [(ngModel)]="inputCompany['name']" name="ins_company_name" id="companyName"
+                            (change)="validateCompanyName()" placeholder="{{ 'Name' | translate }}">
+                        <div class="input-icon"><i class="fa fa-institution"></i><label style="color: red;">*</label>
+                        </div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Address" [(ngModel)]="inputCompany['address']" (change)="validateCompanyAddress()"
-                            name="ins_company_address" id="companyAddress">
-                        <div class="input-icon"><i class="fa fa-map-marker"></i><label style="color: red;">*</label></div>
+                        <input type="text" placeholder="Address" [(ngModel)]="inputCompany['address']"
+                            (change)="validateCompanyAddress()" name="ins_company_address" id="companyAddress">
+                        <div class="input-icon"><i class="fa fa-map-marker"></i><label style="color: red;">*</label>
+                        </div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Phone" [(ngModel)]="inputCompany['phone']" (change)="validateCompanyPhone()"
-                            name="ins_company_phone" id="companyPhone">
+                        <input type="text" placeholder="Phone" [(ngModel)]="inputCompany['phone']"
+                            (change)="validateCompanyPhone()" name="ins_company_phone" id="companyPhone">
                         <div class="input-icon"><i class="fa fa-phone"></i><label style="color: red;">*</label></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Fax" [(ngModel)]="inputCompany['fax']" name="ins_company_fax" 
+                        <input type="text" placeholder="Fax" [(ngModel)]="inputCompany['fax']" name="ins_company_fax"
                             id="companyFax">
                         <div class="input-icon"><i class="fa fa-fax"></i></div>
                     </div>
@@ -35,18 +37,18 @@
                 <label>Manager Information: </label>
                 <div class="">
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="FullName" minlength="3" [(ngModel)]="inputManager['fullname']" (change)="validateManagerFullName()"
-                            name="ins_manager_fullname" id="managerFullname">
+                        <input type="text" placeholder="FullName" minlength="3" [(ngModel)]="inputManager['fullname']"
+                            (change)="validateManagerFullName()" name="ins_manager_fullname" id="managerFullname">
                         <div class="input-icon"><i class="fa fa-user"></i><label style="color: red;">*</label></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="email" placeholder="Email" [(ngModel)]="inputManager['email']" (change)="validateManagerMail()"
-                            name="ins_manager_email" id="managerEmail">
+                        <input type="email" placeholder="Email" [(ngModel)]="inputManager['email']"
+                            (change)="validateManagerMail()" name="ins_manager_email" id="managerEmail">
                         <div class="input-icon"><i class="fa fa-envelope"></i><label style="color: red;">*</label></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Phone" [(ngModel)]="inputManager['phone']" (change)="validateManagerPhone()"
-                            name="ins_manager_phone" id="managerPhone">
+                        <input type="text" placeholder="Phone" [(ngModel)]="inputManager['phone']"
+                            (change)="validateManagerPhone()" name="ins_manager_phone" id="managerPhone">
                         <div class="input-icon"><i class="fa fa-mobile"></i><label style="color: red;">*</label></div>
                     </div>
                     <div class="input-group input-group-icon">
@@ -76,40 +78,74 @@
 
 <ng-template #update let-modal>
     <div class="modal-header">
-        <h4 class="modal-title modal-header" id="modal-basic-title"></h4>
+        <h4 class="modal-title modal-header" id="modal-basic-title">Company Information</h4>
     </div>
     <div class="modal-body modal-basic-title col-md-12 row no-padding-no-margin">
         <form class="col-md-12 no-padding-no-margin row">
-            <div class="form-group col-md-12">
+            <div class="form-group col-md-6">
                 <label>Company Information: </label>
 
                 <div class="">
                     <div class="input-group input-group-icon">
-                        <input type="text" [(ngModel)]="updateCompany['name']" name="update_company_name" id=""
-                            placeholder="{{ 'Name' | translate }}">
+                        <input type="text" [(ngModel)]="updateCompany['name']" name="update_company_name"
+                            [disabled]="this.updateCompany['isActive']==false" id="updateCompanyName"
+                            (change)="validateUpdateCompanyName()">
                         <div class="input-icon"><i class="fa fa-institution"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Address" [(ngModel)]="updateCompany['address']"
-                            name="update_company_address" id="">
+                        <input type="text" [(ngModel)]="updateCompany['address']"
+                            [disabled]="this.updateCompany['isActive']==false" id="updateCompanyAddress"
+                            name="update_company_address" id="" (change)="validateUpdateCompanyAddress()">
                         <div class="input-icon"><i class="fa fa-map-marker"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Phone" [(ngModel)]="updateCompany['phone']"
-                            name="update_company_phone" id="">
+                        <input type="text" [(ngModel)]="updateCompany['phone']"
+                            [disabled]="this.updateCompany['isActive']==false" id="updateCompanyPhone"
+                            name="update_company_phone" (change)="validateUpdateCompanyPhone()">
                         <div class="input-icon"><i class="fa fa-phone"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Fax" [(ngModel)]="updateCompany['fax']"
-                            name="update_company_fax" id="">
+                        <input type="text" [(ngModel)]="updateCompany['fax']" id="updateCompanyFax"
+                            [disabled]="this.updateCompany['isActive']==false" name="update_company_fax" id="">
                         <div class="input-icon"><i class="fa fa-fax"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label>Manager Information: </label>
+                <div class="">
+                    <div class="input-group input-group-icon">
+                        <input type="text"  minlength="3" [(ngModel)]="account.fullname" disabled
+                            (change)="validateManagerFullName()" name="ins_manager_fullname" id="managerFullname">
+                        <div class="input-icon"><i class="fa fa-user"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="email"  [(ngModel)]="account.email" disabled
+                            (change)="validateManagerMail()" name="ins_manager_email" id="managerEmail">
+                        <div class="input-icon"><i class="fa fa-envelope"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" [(ngModel)]="account.phone" disabled
+                            (change)="validateManagerPhone()" name="ins_manager_phone" id="managerPhone">
+                        <div class="input-icon"><i class="fa fa-mobile"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <input type="text" minlength="2" [(ngModel)]="account.address" disabled
+                            name="ins_manager_address" id="managerAddress">
+                        <div class="input-icon"><i class="fa fa-home"></i></div>
+                    </div>
+                    <div class="input-group input-group-icon">
+                        <label> Gender:</label>
+                        <label style="padding-left: 10px;" [hidden]="account.gender == false">Male</label>
+                        <label style="padding-left: 10px;" [hidden]="account.gender == true">FeMale</label>
                     </div>
                 </div>
             </div>
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success save shadow-card" (click)="Update()">Update</button>
+        <button type="button" class="btn btn-success save shadow-card" [hidden]="this.updateCompany['isActive']==false"
+            (click)="Update()">Update</button>
     </div>
 </ng-template>
 
@@ -125,14 +161,15 @@
     </div>
 </ng-template>
 
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true  }" [template]="customLoadingTemplate">
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true  }"
+    [template]="customLoadingTemplate">
 </ngx-loading>
 
 <!-- Search -->
 
 <!-- Table question -->
 <div class="insert-form col-md-12">
-    <app-page-header [heading]="'Company'"></app-page-header>
+    <app-page-header [heading]="'Company Management'"></app-page-header>
 
     <div class="card mb-3 shadow-card">
         <div class="card-header">
@@ -144,14 +181,14 @@
                 <div class="col">
                     <div class="row" style="margin-top: 20px;">
                         <div class="form-group input-group col-md-6 row" style="margin-left: 21px;">
-                            <input class="col-md-10 no-padding-no-margin" type="search"
-                                placeholder="{{'Enter data' | translate}}" [(ngModel)]="searchText"
-                                style="height: 38px;">
+                            <input class="col-md-10" type="search" placeholder="{{'Enter data' | translate}}"
+                                [(ngModel)]="searchText" style="height: 38px;">
                             <div class="input-group-append col-md-2 no-padding-no-margin d-flex align-items-start">
                                 <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
                             </div>
                         </div>
-                        <div class="form-group input-group col-md-6 row d-flex justify-content-end">
+                        <div class="form-group input-group col-md-6 row d-flex justify-content-end"
+                            style="padding-right: 0px;">
                             <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
                                 <i class="fa fa-fw fa-plus"></i>
                                 Create Company
@@ -164,8 +201,8 @@
                             data-toggle="button">
                             <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
                         </button>
-                        <button [hidden]="iconIsActive==true" style="margin-right: 10px;" (click)="clickButtonChangeStatus(true);"
-                            class="btn btn-lg btn-success">
+                        <button [hidden]="iconIsActive==true" style="margin-right: 10px;"
+                            (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success">
                             <i class="fa fa-check" tooltip="{{'Active' | translate}}" placement="top"></i>
                         </button>
                         <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
@@ -185,7 +222,8 @@
                     <button class="dropdown-item" (click)="PageSize(50)">50</button>
                 </div>
             </div>
-            <table class="table  table-hover customtable" [svData]="Companies|CompanyFilterPipe:searchText" #sv="svDataTable">
+            <table class="table  table-hover customtable" [svData]="Companies|CompanyFilterPipe:searchText"
+                #sv="svDataTable">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin pt-3">
                         <th class="text-center col-md-1" scope="col"><input class="btn" type="checkbox" value=""
@@ -206,14 +244,9 @@
                             <sv-default-sorter by="Create_At">Creat At
                             </sv-default-sorter>
                         </th>
-                        <th class="text-center col-md-1" scope="col">Status
-                            <div ngbDropdown class="d-inline-block dropdown">
-                                <button class=" icon-btn" ngbDropdownToggle></button>
-                                <div ngbDropdownMenu>
-                                    <button class="dropdown-item" (click)="getCompanyIsActive(true)">Active</button>
-                                    <button class="dropdown-item" (click)="getCompanyIsActive(false)">Disable</button>
-                                </div>
-                            </div>
+                        <th class="text-center col-md-1" scope="col">
+                            <sv-default-sorter by="isActive">Status
+                            </sv-default-sorter>
                         </th>
                         <th class="text-center col-md-1" scope="col">Action</th>
                     </tr>
@@ -228,7 +261,7 @@
                         <td class="text-center col-md-1">{{i+1}}</td>
                         <td class="text-center col-md-2">{{c.name}}</td>
                         <td class="text-center col-md-2">{{c.managerName}}</td>
-                        <td class="text-center col-md-2">{{c.phone}}</td>
+                        <td class="text-center col-md-2">0{{c.phone}}</td>
                         <td class="text-center col-md-2">{{c.create_At.split('T')[0]}}</td>
                         <td class="text-center col-md-1" [hidden]="c.isActive==true">
                             <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
@@ -236,14 +269,20 @@
                         <td class="text-center col-md-1" [hidden]="c.isActive==false">
                             <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
                         </td>
-                        <td class=" text-center col-md-1">
+                        <td class=" text-center col-md-1" [hidden]="c.isActive==false">
                             <button class="btn-warning btn btn-circle shadow-item col-md-6"
-                            (click)="openDetail(update, c)" tooltip="{{'common_modify' | translate}}">
+                                (click)="openDetail(update, c.companyId)">
                                 <i class="fa fa-edit edit-icon"></i>
                             </button>
-                            <button class=" btn btn-circle shadow-item col-md-6" (click)="resendmail(c.managerUserName, c.companyId)"
-                                tooltip="{{'mail' | translate}}">
+                            <button class=" btn btn-circle shadow-item col-md-6"
+                                (click)="resendmail(c.managerUserName, c.companyId)" tooltip="{{'mail' | translate}}">
                                 <i class="fa fa-envelope"></i>
+                            </button>
+                        </td>
+                        <td class=" text-center col-md-1" [hidden]="c.isActive==true">
+                            <button class="btn-warning btn btn-circle shadow-item col-md-6"
+                                (click)="openDetail(update, c.companyId)">
+                                <i class="fa fa-edit edit-icon"></i>
                             </button>
                         </td>
                     </tr>
