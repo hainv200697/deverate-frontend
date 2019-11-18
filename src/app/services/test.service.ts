@@ -27,14 +27,14 @@ export class TestService {
 
   postSubmitTest(userTest) {
     const API = 'api/Test/SubmitTest';
-    return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST+ API, userTest);
+    return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST + API, userTest);
   }
 
   postAutoSaveTest(userTest) {
     const API = 'api/Test/AutoSave';
     return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST + API, userTest);
   }
-  getTestByConfigId(id){
+  getTestByConfigId(id) {
     const param = new HttpParams().set('id', id);
     const API = 'api/Test/GetAllTest/';
     return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_TEST + API, { params: param });
@@ -42,12 +42,17 @@ export class TestService {
 
   getAllQuestionManager(info) {
     const API = 'api/Test/ManagerInTest';
-    return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST  + API, info);
+    return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST + API, info);
+  }
+
+  getAllQuestionSample(sampleTest) {
+    const API = 'api/Test/GenerateSampleTest';
+    return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST + API, sampleTest);
   }
 
   sendMail(listId) {
     const API = 'api/Test/SendTestCode';
-    return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST  + API, listId);
+    return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST + API, listId);
   }
 
 }

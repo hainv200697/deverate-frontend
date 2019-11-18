@@ -139,7 +139,7 @@ export class ManageConfigurationComponent implements OnInit {
 
   onSelectAll(item: any) { }
 
-  onDeSelectAll(item: any) { 
+  onDeSelectAll(item: any) {
     this.selectedItems = []
   }
 
@@ -155,7 +155,7 @@ export class ManageConfigurationComponent implements OnInit {
     for (let i = 0; i < select.length; i++) {
       if (select[i]['catalogueId'] == item['catalogueId']) {
         select.splice(i, 1);
-        this.updateConfig['catalogueInConfigurations'].splice(i,1);
+        this.updateConfig['catalogueInConfigurations'].splice(i, 1);
       }
     }
   }
@@ -165,11 +165,11 @@ export class ManageConfigurationComponent implements OnInit {
     console.log(item)
   }
 
-  OnItemUpdateDeSelect(item){
+  OnItemUpdateDeSelect(item) {
     for (let i = 0; i < this.updateConfig['catalogueInConfigurations'].length; i++) {
       if (this.updateConfig['catalogueInConfigurations'][i]['catalogueId'] == item['catalogueId']) {
         this.updateConfig['catalogueInConfigurations'].splice(i, 1);
-        this.updateConfig['catalogueInConfigurations'].splice(i,1);
+        this.updateConfig['catalogueInConfigurations'].splice(i, 1);
       }
     }
   }
@@ -183,7 +183,6 @@ export class ManageConfigurationComponent implements OnInit {
 
     this.endDate = new Date();
     this.inputConfiguration['title'] = "";
-    this.inputConfiguration['testOwnerId'] = sessionStorage.getItem("AccountId");
     this.inputConfiguration['testOwnerId'] = localStorage.getItem("AccountId");
     this.inputConfiguration['totalQuestion'] = 0;
     this.inputConfiguration['title'] = '';
@@ -402,9 +401,23 @@ export class ManageConfigurationComponent implements OnInit {
     }
   }
 
+  Sample() {
+    const sampleTest = {
+      totalQuestion: this.inputConfiguration['totalQuestion'],
+      catalogueInConfigurations: this.selectedItems
+    }
+    localStorage.setItem("SampleTest", JSON.stringify(sampleTest));
+    const link = document.createElement('a');
+    link.setAttribute('type', 'hidden');
+    link.setAttribute('target', '_blank');
+    link.href = '/sample-test';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+  }
 
   Create() {
-
     this.loading = false;
     if (this.inputConfiguration['duration'] === '' || this.inputConfiguration['totalQuestion'] === '') {
       Swal.fire('Error', 'Something went wrong', 'error');
@@ -573,7 +586,7 @@ export class ManageConfigurationComponent implements OnInit {
       this.toast.error('Message', 'Please input title config');
       return false;
     }
-    else if(this.inputConfiguration['title'].length > 20){
+    else if (this.inputConfiguration['title'].length > 20) {
       this.toast.error('Message', 'The maximum exam name is 20');
       return false;
     }
