@@ -330,7 +330,7 @@ export class ManageConfigurationComponent implements OnInit {
   getConfigurationIsActive(status: boolean) {
     this.loading = true;
     this.iconIsActive = status;
-    this.configAPi.getAllConfiguration(status, this.companyId).subscribe(
+    this.configAPi.getAllConfiguration(true, this.companyId).subscribe(
       (data) => {
         this.loading = false;
         this.Configurations = data;
@@ -345,21 +345,22 @@ export class ManageConfigurationComponent implements OnInit {
   GetConfigurationCatalogueByConfigId(id: number) {
     this.loading = true;
     this.configAPi.GetConfigurationCatalogueByConfigId(id).subscribe(
-      (data) => {
-        this.updateConfig['ConfigId'] = data['data']['data']['configId'];
-        this.updateConfig['testOwnerId'] = data['data']['data']['testOwnerId'];
-        this.updateConfig['type'] = data['data']['data']['type'];
-        this.updateConfig['title'] = data['data']['data']['title'];
-        this.updateConfig['totalQuestion'] = data['data']['data']['totalQuestion'];
-        this.updateConfig['createDate'] = data['data']['data']['createDate'];
-        this.updateConfig['startDate'] = data['data']['data']['startDate'];
-        this.updateConfig['endDate'] = data['data']['data']['endDate'];
-        this.updateConfig['duration'] = data['data']['data']['duration'];
-        this.updateConfig['isActive'] = data['data']['data']['isActive'];
-        this.updateConfig['catalogueInConfigurations'] = data['data']['data']['catalogueInConfigs'];
-        this.updateConfig['configurationRank'] = data['data']['data']['configurationRanks'];
-        this.selectedItemsUpdate = data['data']['data']['catalogueInConfigs'];
-        let tmp = data['data']['data']['catalogueInConfigs'];
+      (res) => {
+        console.log(res)
+        this.updateConfig['ConfigId'] = res['configId'];
+        this.updateConfig['testOwnerId'] = res['testOwnerId'];
+        this.updateConfig['type'] = res['type'];
+        this.updateConfig['title'] = res['title'];
+        this.updateConfig['totalQuestion'] = res['totalQuestion'];
+        this.updateConfig['createDate'] = res['createDate'];
+        this.updateConfig['startDate'] = res['startDate'];
+        this.updateConfig['endDate'] = res['endDate'];
+        this.updateConfig['duration'] = res['duration'];
+        this.updateConfig['isActive'] = res['isActive'];
+        this.updateConfig['catalogueInConfigurations'] = res['catalogueInConfigs'];
+        
+        this.updateConfig['configurationRank'] = res['configurationRanks'];
+        let tmp = res['catalogueInConfigs'];
         tmp.forEach(x => {
           this.selectedItemsUpdate.push(new Object(
             {
@@ -594,8 +595,8 @@ export class ManageConfigurationComponent implements OnInit {
       this.toast.error('Message', 'Total question must be range 1 to 100');
       this.inputConfiguration['totalQuestion'] = 0;
       return false;
-    } else if (this.inputConfiguration['duration'] < 15 || this.inputConfiguration['duration'] > 180) {
-      this.toast.error('Message', 'duration must be range 15 to 200');
+    } else if (this.inputConfiguration['duration'] < 5 || this.inputConfiguration['duration'] > 180) {
+      this.toast.error('Message', 'duration must be range 1 to 200');
       this.inputConfiguration['duration'] = 15
       return false;
     } else if (this.selectedItems.length === 0) {
@@ -641,8 +642,8 @@ export class ManageConfigurationComponent implements OnInit {
       confirmButtonText: 'Yes, send it!',
       cancelButtonText: 'No, keep it'
     }).then((result) => {
-      this.loading = true;
       if (result.value) {
+        this.loading = true;
         this.configAPi.sendMail(id).subscribe(data => {
           this.loading = false;
           Swal.fire('Success', 'The mail has been send', 'success');
@@ -650,8 +651,6 @@ export class ManageConfigurationComponent implements OnInit {
           this.toast.error(error.name);
           this.loading = false;
         });
-
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
       }
     },
 

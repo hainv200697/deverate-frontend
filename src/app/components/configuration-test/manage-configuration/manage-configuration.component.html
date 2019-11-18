@@ -38,7 +38,7 @@
                             <div class="col-md-5 row" style="margin-left: 33px;">
                                 <label class="col-md-6" style="text-align: right;">Type:</label>
                                 <select class="col-md-4" [(ngModel)]="inputConfiguration['type']" style="font-size: 9px;">
-                                    <option [ngValue]="true" style="font-size: 12px;" >Employee</option>
+                                    <option [ngValue]="true" style="font-size: 12px;" [hidden]="employeeInCompany.length==0" >Employee</option>
                                     <option [ngValue]="false" style="font-size: 12px;">Applicant</option>
                                 </select>
                             </div>
@@ -297,8 +297,8 @@
         </div>
     </div>
     <div class="modal-footer">
-        <label>Sample Config</label>
-        <select (change)="onChangeSampleConfig($event.target.value)">
+        <label [hidden]="index != 1">Sample Config</label>
+        <select [hidden]="index != 1" (change)="onChangeSampleConfig($event.target.value)">
             <option>none</option>
             <option [ngValue]="1">1</option>
             <option [ngValue]="2">2</option>
@@ -592,15 +592,15 @@
                     <div class="row justify-content-end" style="margin-top: 20px;">
                         <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
                             (click)="DisableConfiguration(false);" class="btn btn-lg btn-danger" data-toggle="button">
-                            <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
+                            <i class="fa fa-trash-o delete-icon" placement="top"></i>
                         </button>
                         <button [hidden]="iconIsActive==true" (click)="DisableConfiguration(true);"
                             class="btn btn-lg btn-success" style="margin-right: 10px;">
-                            <i class="fa fa-check" tooltip="{{'Active' | translate}}" placement="top"></i>
+                            <i class="fa fa-check" placement="top"></i>
                         </button>
                         <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
                             class="btn btn-lg btn-primary" data-toggle="button">
-                            <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
+                            <i #refesh class="fa fa-refresh" placement="top"
                                 aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
                         </button>
                         <div class="col-md-12"></div>
@@ -678,15 +678,13 @@
                         <td
                             class="nowrap text-center action-column col-md-2 row no-padding-no-margin d-flex justify-content-center">
                             <button class="btn-warning btn btn-circle shadow-item"
-                                (click)="openDetail(update, c.configId)" tooltip="{{'common_modify' | translate}}">
+                                (click)="openDetail(update, c.configId)">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <button class="btn-primary btn btn-circle shadow-item" (click)="viewTest(c.configId)"
-                                tooltip="{{'view' | translate}}">
+                            <button class="btn-primary btn btn-circle shadow-item" (click)="viewTest(c.configId)">
                                 <i class="fa fa fa-eye"></i>
                             </button>
-                            <button class=" btn btn-circle shadow-item" (click)="sendMail(c.configId)"
-                                tooltip="{{'mail' | translate}}">
+                            <button class=" btn btn-circle shadow-item" (click)="sendMail(c.configId)">
                                 <i class="fa fa-envelope"></i>
                             </button>
                         </td>
