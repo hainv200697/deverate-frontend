@@ -1,3 +1,4 @@
+
 import { GloblaService } from './../../../../assets/service/global.service';
 import { CompanyApiService } from './../../../services/company-api.service';
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
@@ -34,7 +35,6 @@ export class InsertCompanyComponent implements OnInit {
   iconIsActive: boolean;
   page: number;
   pageSize: number;
-  element: HTMLElement;
   selectedAll: any;
   Companies = [];
   Account = {};
@@ -109,11 +109,18 @@ export class InsertCompanyComponent implements OnInit {
   }
 
   selectAll() {
-    this.updateStatus = [];
+    if (this.updateStatus.length != 0) {
+      this.updateStatus = [];
+      this.Companies.forEach(element => {
+        element.selected = false
+      });
+      return;
+    }
     for (var i = 0; i < this.Companies.length; i++) {
       this.Companies[i].selected = this.selectedAll;
       this.updateStatus.push(this.Companies[i].companyId)
     }
+    console.log(this.updateStatus)
   }
 
   clickButtonRefresh(refesh) {
@@ -141,16 +148,24 @@ export class InsertCompanyComponent implements OnInit {
             this.loading = false;
             this.getCompanyIsActive();
             this.closeModal();
-            Swal.fire('Success', 'The company has been deleted', 'success');
+            this.toast.success('The company has been deleted')
             this.selectedAll = false;
           }, (error) => {
-            this.toast.error(error.name);
+            if (error.status == 0) {
+              this.toast.error('Server is not availiable');
+            }
+            if (error.status == 404) {
+              this.toast.error('Not found');
+            }
+            if (error.status == 500) {
+              this.toast.error('Server error');
+            }
             this.loading = false;
+            this.closeModal();
           });
         }
         else if (result.dismiss === Swal.DismissReason.cancel) {
-          this.updateStatus = [];
-          this.closeModal();
+          this.loading = false
         }
       });
     }
@@ -172,12 +187,20 @@ export class InsertCompanyComponent implements OnInit {
             Swal.fire('Success', 'The company has been enabled', 'success');
             this.selectedAll = false;
           }, (error) => {
-            this.toast.error(error.name);
+            if (error.status == 0) {
+              this.toast.error('Server is not availiable');
+            }
+            if (error.status == 404) {
+              this.toast.error('Not found');
+            }
+            if (error.status == 500) {
+              this.toast.error('Server error');
+            }
             this.loading = false;
+            this.closeModal();
           });;
         } else if (result.dismiss === Swal.DismissReason.cancel) {
-          this.updateStatus = [];
-          this.closeModal();
+          this.loading = false
         }
       });
     }
@@ -194,7 +217,6 @@ export class InsertCompanyComponent implements OnInit {
     this.updateStatus = [];
     this.selectedAll = this.Companies.every(function (item: any) {
       return item.selected == true;
-
     })
     for (var i = 0; i < this.Companies.length; i++) {
       if (this.Companies[i].selected == true) {
@@ -212,7 +234,15 @@ export class InsertCompanyComponent implements OnInit {
         this.updateCompany = data['data']['data'].companyDTO;
       },
       (error) => {
-        this.toast.error(error.name);
+        if (error.status == 0) {
+          this.toast.error('Server is not availiable');
+        }
+        if (error.status == 404) {
+          this.toast.error('Not found');
+        }
+        if (error.status == 500) {
+          this.toast.error('Server error');
+        }
         this.loading = false;
         this.closeModal()
       }
@@ -224,12 +254,21 @@ export class InsertCompanyComponent implements OnInit {
     this.companyApi.getAllCompany().subscribe(
       (data) => {
         this.loading = false;
-
+        console.log(data)
         this.Companies = data['data']['data'];
         console.log(this.Companies);
+        this.selectedAll = false;
       },
       (error) => {
-        this.toast.error(error.name);
+        if (error.status == 0) {
+          this.toast.error('Server is not availiable');
+        }
+        if (error.status == 404) {
+          this.toast.error('Not found');
+        }
+        if (error.status == 500) {
+          this.toast.error('Server error');
+        }
         this.loading = false;
         this.closeModal()
       }
@@ -286,10 +325,19 @@ export class InsertCompanyComponent implements OnInit {
             this.loading = false;
             this.getCompanyIsActive();
             this.closeModal();
-            Swal.fire('Success', 'The company has been created', 'success');
+            this.toast.success('Create company successful');
           }, (error) => {
-            this.toast.error(error.name);
+            if (error.status == 0) {
+              this.toast.error('Server is not availiable');
+            }
+            if (error.status == 404) {
+              this.toast.error('Not found');
+            }
+            if (error.status == 500) {
+              this.toast.error('Server error');
+            }
             this.loading = false;
+            this.closeModal()
           });
 
         }
@@ -316,10 +364,19 @@ export class InsertCompanyComponent implements OnInit {
         this.companyApi.updateCompany(this.updateCompany).subscribe(data => {
           this.getCompanyIsActive();
           this.closeModal();
-          Swal.fire('Success', 'The company has been updated', 'success');
+          this.toast.success('Update company successful');
         }, (error) => {
-          this.toast.error(error.name);
+          if (error.status == 0) {
+            this.toast.error('Server is not availiable');
+          }
+          if (error.status == 404) {
+            this.toast.error('Not found');
+          }
+          if (error.status == 500) {
+            this.toast.error('Server error');
+          }
           this.loading = false;
+          this.closeModal()
         });
 
 
@@ -346,10 +403,19 @@ export class InsertCompanyComponent implements OnInit {
         this.employeeService.resendpassword(manager, companyId).subscribe(data => {
           this.getCompanyIsActive();
           this.closeModal();
-          Swal.fire('Success', 'The mail has been send', 'success');
+          this.toast.success('The mail has been send');
         }, (error) => {
-          this.toast.error(error.name);
+          if (error.status == 0) {
+            this.toast.error('Server is not availiable');
+          }
+          if (error.status == 404) {
+            this.toast.error('Not found');
+          }
+          if (error.status == 500) {
+            this.toast.error('Server error');
+          }
           this.loading = false;
+          this.closeModal()
         });
       }
     });

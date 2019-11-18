@@ -118,12 +118,6 @@ select:focus,
 select:active,
 input:checked + label:before,
 select:focus,
-select:active {
-  background-color: #7ed321;
-  color: #fff;
-  border-color: #64ac15;
-}
-
 
 input:checked + label:after {
   opacity: 1;
@@ -309,11 +303,7 @@ select:focus,
 select:active,
 input:checked + label:before,
 select:focus,
-select:active {
-  background-color: #007bff;
-  color: #fff;
-  border-color: #007bff;
-}
+
 
 input:checked + label:after {
   opacity: 1;

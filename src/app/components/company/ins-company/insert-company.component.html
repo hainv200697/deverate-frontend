@@ -56,16 +56,14 @@
                             name="ins_manager_address" id="managerAddress">
                         <div class="input-icon"><i class="fa fa-home"></i></div>
                     </div>
-                    <div class="col-half">
-                        <label> Gender</label>
-                        <div class="input-group">
-                            <input type="radio" name="Gender" [(ngModel)]="inputManager['gender']" value=true
-                                checked="checked" id="gender-male" />
-                            <label for="gender-male">Male</label>
-                            <input type="radio" [ngModel]="inputManager['gender']" value=false name="Gender"
-                                id="gender-female" />
-                            <label for="gender-female">Female</label>
-                        </div>
+                    <div class="input-group input-group-icon">
+                        <label style="padding-top: 5%;">Gender</label>
+                        <select  style="height: auto; margin-left: 10px;" name="ins_manage_gender" class="form-control col-md-5"
+                            [(ngModel)]="inputManager['gender']">
+                            <option style="color: grey" disabled>-- Choosing gender</option>
+                            <option style="color: black;" [value]=true>Male</option>
+                            <option style="color: black;" [value]=false>Female</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -115,18 +113,18 @@
                 <label>Manager Information: </label>
                 <div class="">
                     <div class="input-group input-group-icon">
-                        <input type="text"  minlength="3" [(ngModel)]="account.fullname" disabled
+                        <input type="text" minlength="3" [(ngModel)]="account.fullname" disabled
                             (change)="validateManagerFullName()" name="ins_manager_fullname" id="managerFullname">
                         <div class="input-icon"><i class="fa fa-user"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="email"  [(ngModel)]="account.email" disabled
-                            (change)="validateManagerMail()" name="ins_manager_email" id="managerEmail">
+                        <input type="email" [(ngModel)]="account.email" disabled (change)="validateManagerMail()"
+                            name="ins_manager_email" id="managerEmail">
                         <div class="input-icon"><i class="fa fa-envelope"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" [(ngModel)]="account.phone" disabled
-                            (change)="validateManagerPhone()" name="ins_manager_phone" id="managerPhone">
+                        <input type="text" [(ngModel)]="account.phone" disabled (change)="validateManagerPhone()"
+                            name="ins_manager_phone" id="managerPhone">
                         <div class="input-icon"><i class="fa fa-mobile"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
@@ -196,19 +194,20 @@
                         </div>
                     </div>
                     <div class="row justify-content-end" style="margin-top: 20px;">
-                        <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
-                            (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger"
-                            data-toggle="button">
-                            <i class="fa fa-trash-o delete-icon" tooltip="{{'delete' | translate}}" placement="top"></i>
+                        <button [hidden]="iconIsActive==false" ngbTooltip="Disable" style="margin-right: 10px;"
+                            [hidden]="updateStatus.length ==0" (click)="clickButtonChangeStatus(false);"
+                            class="btn btn-lg btn-danger" data-toggle="button">
+                            <i class="fa fa-trash-o delete-icon" placement="top"></i>
                         </button>
-                        <button [hidden]="iconIsActive==true" style="margin-right: 10px;"
-                            (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success">
-                            <i class="fa fa-check" tooltip="{{'Active' | translate}}" placement="top"></i>
+                        <button [hidden]="iconIsActive==true" ngbTooltip="Active" style="margin-right: 10px;"
+                            [hidden]="updateStatus.length ==0" (click)="clickButtonChangeStatus(true);"
+                            class="btn btn-lg btn-success">
+                            <i class="fa fa-check" placement="top"></i>
                         </button>
-                        <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
+                        <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)" ngbTooltip="Refesh"
                             class="btn btn-lg btn-primary" data-toggle="button">
-                            <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
-                                aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                            <i #refesh class="fa fa-refresh" placement="top" aria-hidden="true"
+                                [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
                         </button>
                     </div>
                 </div>
@@ -270,17 +269,17 @@
                             <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
                         </td>
                         <td class=" text-center col-md-1" [hidden]="c.isActive==false">
-                            <button class="btn-warning btn btn-circle shadow-item col-md-6"
+                            <button class="btn-warning btn btn-circle shadow-item col-md-6" ngbTooltip="Edit"
                                 (click)="openDetail(update, c.companyId)">
                                 <i class="fa fa-edit edit-icon"></i>
                             </button>
-                            <button class=" btn btn-circle shadow-item col-md-6"
-                                (click)="resendmail(c.managerUserName, c.companyId)" tooltip="{{'mail' | translate}}">
+                            <button class=" btn btn-circle shadow-item col-md-6" ngbTooltip="Send Email"
+                                (click)="resendmail(c.managerUserName, c.companyId)">
                                 <i class="fa fa-envelope"></i>
                             </button>
                         </td>
                         <td class=" text-center col-md-1" [hidden]="c.isActive==true">
-                            <button class="btn-warning btn btn-circle shadow-item col-md-6"
+                            <button class="btn-warning btn btn-circle shadow-item col-md-6" ngbTooltip="Edit"
                                 (click)="openDetail(update, c.companyId)">
                                 <i class="fa fa-edit edit-icon"></i>
                             </button>
