@@ -1,4 +1,4 @@
-import { element } from 'protractor';
+
 import { GloblaService } from './../../../../assets/service/global.service';
 import { CompanyApiService } from './../../../services/company-api.service';
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
@@ -35,7 +35,6 @@ export class InsertCompanyComponent implements OnInit {
   iconIsActive: boolean;
   page: number;
   pageSize: number;
-  element: HTMLElement;
   selectedAll: any;
   Companies = [];
   Account = {};
@@ -154,18 +153,15 @@ export class InsertCompanyComponent implements OnInit {
           }, (error) => {
             if (error.status == 0) {
               this.toast.error('Server is not availiable');
-              this.loading = false;
-              this.closeModal()
             }
-            else if (error.status == 404) {
+            if (error.status == 404) {
               this.toast.error('Not found');
-              this.loading = false;
-              this.closeModal()
             }
-            else if (error.status == 500)
+            if (error.status == 500) {
               this.toast.error('Server error');
+            }
             this.loading = false;
-            this.closeModal()
+            this.closeModal();
           });
         }
         else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -193,18 +189,15 @@ export class InsertCompanyComponent implements OnInit {
           }, (error) => {
             if (error.status == 0) {
               this.toast.error('Server is not availiable');
-              this.loading = false;
-              this.closeModal()
             }
-            else if (error.status == 404) {
+            if (error.status == 404) {
               this.toast.error('Not found');
-              this.loading = false;
-              this.closeModal()
             }
-            else if (error.status == 500)
+            if (error.status == 500) {
               this.toast.error('Server error');
+            }
             this.loading = false;
-            this.closeModal()
+            this.closeModal();
           });;
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           this.loading = false
@@ -243,16 +236,13 @@ export class InsertCompanyComponent implements OnInit {
       (error) => {
         if (error.status == 0) {
           this.toast.error('Server is not availiable');
-          this.loading = false;
-          this.closeModal()
         }
-        else if (error.status == 404) {
+        if (error.status == 404) {
           this.toast.error('Not found');
-          this.loading = false;
-          this.closeModal()
         }
-        else if (error.status == 500)
+        if (error.status == 500) {
           this.toast.error('Server error');
+        }
         this.loading = false;
         this.closeModal()
       }
@@ -272,16 +262,13 @@ export class InsertCompanyComponent implements OnInit {
       (error) => {
         if (error.status == 0) {
           this.toast.error('Server is not availiable');
-          this.loading = false;
-          this.closeModal()
         }
-        else if (error.status == 404) {
+        if (error.status == 404) {
           this.toast.error('Not found');
-          this.loading = false;
-          this.closeModal()
         }
-        else if (error.status == 500)
+        if (error.status == 500) {
           this.toast.error('Server error');
+        }
         this.loading = false;
         this.closeModal()
       }
@@ -342,16 +329,13 @@ export class InsertCompanyComponent implements OnInit {
           }, (error) => {
             if (error.status == 0) {
               this.toast.error('Server is not availiable');
-              this.loading = false;
-              this.closeModal()
             }
-            else if (error.status == 404) {
+            if (error.status == 404) {
               this.toast.error('Not found');
-              this.loading = false;
-              this.closeModal()
             }
-            else if (error.status == 500)
+            if (error.status == 500) {
               this.toast.error('Server error');
+            }
             this.loading = false;
             this.closeModal()
           });
@@ -384,16 +368,13 @@ export class InsertCompanyComponent implements OnInit {
         }, (error) => {
           if (error.status == 0) {
             this.toast.error('Server is not availiable');
-            this.loading = false;
-            this.closeModal()
           }
-          else if (error.status == 404) {
+          if (error.status == 404) {
             this.toast.error('Not found');
-            this.loading = false;
-            this.closeModal()
           }
-          else if (error.status == 500)
+          if (error.status == 500) {
             this.toast.error('Server error');
+          }
           this.loading = false;
           this.closeModal()
         });
@@ -426,16 +407,13 @@ export class InsertCompanyComponent implements OnInit {
         }, (error) => {
           if (error.status == 0) {
             this.toast.error('Server is not availiable');
-            this.loading = false;
-            this.closeModal()
           }
-          else if (error.status == 404) {
+          if (error.status == 404) {
             this.toast.error('Not found');
-            this.loading = false;
-            this.closeModal()
           }
-          else if (error.status == 500)
+          if (error.status == 500) {
             this.toast.error('Server error');
+          }
           this.loading = false;
           this.closeModal()
         });
