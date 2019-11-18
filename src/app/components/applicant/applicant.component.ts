@@ -204,6 +204,7 @@ export class ApplicantComponent implements OnInit {
             this.insApplicant = {};
         },
         (error) => {
+            this.loading = false;
             if (error.status == 400) {
                 this.toastr.error("Input is invalid");
             }
@@ -221,7 +222,12 @@ export class ApplicantComponent implements OnInit {
         } else if (this.insApplicant['fullname'].length < 3) {
             this.toastr.error('Message', 'Please input applicant name min 3 letter');
             return false;
-        } else if (!this.globalservice.checkMail.test(String(this.insApplicant['email']).toUpperCase())) {
+        } 
+        return true;
+    }
+
+    validdateEmail() {
+        if (!this.globalservice.checkMail.test(String(this.insApplicant['email']).toUpperCase())) {
             this.toastr.error('Message', 'Email wrong format');
             return false;
         } else if (this.insApplicant['email'] == '') {
@@ -230,6 +236,5 @@ export class ApplicantComponent implements OnInit {
         }
         return true;
     }
-
 
 }
