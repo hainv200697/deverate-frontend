@@ -10,7 +10,7 @@ export var option1 =
 {
     "type": true,
     "title": "test developer",
-    "testOwnerId" : Number(sessionStorage.getItem("AccountId")),
+    "testOwnerId" : localStorage.getItem("AccountId"),
     "totalQuestion": 30,
     "duration": 20,
     selectedItems:
@@ -24,7 +24,7 @@ export var option2 =
 {
     "type": true,
     "title": "test manager",
-    "testOwnerId" : Number(sessionStorage.getItem("AccountId")),
+    "testOwnerId" : localStorage.getItem("AccountId"),
     "totalQuestion": 40,
     "duration": 25,
     selectedItems:
