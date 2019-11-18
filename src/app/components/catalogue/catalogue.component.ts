@@ -73,6 +73,14 @@ export class CatalogueComponent implements OnInit {
                 this.catalogueList = data;
                 this.selected = false;
                 this.selectedAll= false;
+            }, error => {
+                if (error.status == 500) {
+                    this.toastr.error('System error')
+                }
+                if (error.status == 0) {
+                    this.toastr.error('Connection error')
+                }
+                this.loading = false;
             }
         );
     }
@@ -98,6 +106,14 @@ export class CatalogueComponent implements OnInit {
                     this.loading = false;
                     this.getAllCatalogue(this.iconIsActive);
                     this.toastr.success(results['message']);
+                }, error => {
+                    if (error.status == 500) {
+                        this.toastr.error('System error')
+                    }
+                    if (error.status == 0) {
+                        this.toastr.error('Connection error')
+                    }
+                    this.loading = false;
                 }
             );
     }
@@ -142,6 +158,14 @@ export class CatalogueComponent implements OnInit {
                 this.loading = false;
                 this.getAllCatalogue(this.iconIsActive);
                 this.toastr.success(data['message']);
+            }, error => {
+                if (error.status == 500) {
+                    this.toastr.error('System error')
+                }
+                if (error.status == 0) {
+                    this.toastr.error('Connection error')
+                }
+                this.loading = false;
             }
         );
     }
@@ -166,22 +190,24 @@ export class CatalogueComponent implements OnInit {
                         this.selectedAll = false;
                         this.closeModal();
                         Swal.fire('Success', 'The catalogue has been change', 'success');
-                    });;
+                    }, error => {
+                        if (error.status == 500) {
+                            this.toastr.error('System error')
+                        }
+                        if (error.status == 0) {
+                            this.toastr.error('Connection error')
+                        }
+                        this.loading = false;
+                    }
+                    );
 
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    this.updateStatus = [];
-                    Swal.fire(
-                        'Cancelled',
-                        '',
-                        'error'
-                    )
                 }
             })
         }else {
             this.updateStatus = [];
             Swal.fire(
                 'Cancelled',
-                'Please choose employee!',
+                'Please choose Catalogue!',
                 'error'
             )
         }
@@ -207,14 +233,25 @@ export class CatalogueComponent implements OnInit {
             document.getElementById('ins_Catalogue_name').style.borderColor = 'red';
             document.getElementById('ins_Catalogue_name').focus();
             return false;
-        } else {
-            document.getElementById('ins_Catalogue_name').style.borderColor = 'green';
+        }else {
+            let checkDup = false;
+            this.catalogueList.forEach(element => {
+                if (this.insCatalogue['Name'] === element.name) {
+                    this.toastr.error('Message', 'Catalogue is existed');
+                    document.getElementById('ins_Catalogue_name').style.borderColor = 'red';
+                    document.getElementById('ins_Catalogue_name').focus();
+                    return checkDup = true;
+                } 
+            });
+            if(!checkDup){
+                document.getElementById('ins_Catalogue_name').style.borderColor = 'green';
+            }
         }
         return true;
     }
 
     validateUpdate() {
-        if (this.updCatalogue['Name'] == null || this.insCatalogue['Name'] == undefined) {
+        if (this.updCatalogue['Name'] == null || this.updCatalogue['Name'] == undefined) {
             this.toastr.error('Message', 'Please input catalogue name');
             document.getElementById('upd_Catalogue_name').style.borderColor = 'red';
             document.getElementById('upd_Catalogue_name').focus();

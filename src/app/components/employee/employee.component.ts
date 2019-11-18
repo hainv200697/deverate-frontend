@@ -26,7 +26,7 @@ export class EmployeeComponent implements OnInit {
     private stepper: Stepper;
     companyId = Number(localStorage.getItem('CompanyId'));
     // Excel
-    selected= false;
+    selected = false;
     index = 1;
     checkExcel = true;
     searchText = '';
@@ -100,9 +100,6 @@ export class EmployeeComponent implements OnInit {
                 const first_sheet_name = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[first_sheet_name];
                 this.listDataExcel = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-
-
-
                 resolve(this.listDataExcel);
             };
             fileReader.readAsArrayBuffer(this.file);
@@ -115,7 +112,6 @@ export class EmployeeComponent implements OnInit {
             this.employees = [];
             this.message = [];
             list = await this.readExcel();
-            console.log(list);
             this.checkExcel = true;
             // const regex = this.globalservice.checkPhoneVn;
             list.forEach((element, index) => {
@@ -185,6 +181,8 @@ export class EmployeeComponent implements OnInit {
                 } else if (element.Gender == "Female") {
                     element.Gender = false;
                 }
+                let checkDup = false;
+                
 
                 this.insEmployee['companyId'] = this.companyId;
                 this.insEmployee['fullname'] = element.Fullname;
@@ -194,6 +192,12 @@ export class EmployeeComponent implements OnInit {
                 this.insEmployee['gender'] = element.Gender;
                 this.insEmployee['phone'] = phone;
                 this.insEmployee['address'] = element.Address;
+                this.employeeList.forEach(element => {
+                    if (this.insEmployee['email'] === element.email) {
+                        this.message.push("Email at #"+ index+" is existed");
+                        this.checkExcel = false;
+                    }
+                });
                 this.employees.push(this.insEmployee);
             });
 
@@ -208,6 +212,7 @@ export class EmployeeComponent implements OnInit {
                     listEmail.push(item.email);
                 }
             });
+            
             if (existedEmail.length > 0) {
                 const email = existedEmail.slice(0, 3);
                 const message = `Email ${email.join(',')}${existedEmail.length > 3 ? ',...' : ''} duplicate`;
@@ -238,7 +243,13 @@ export class EmployeeComponent implements OnInit {
                 this.insEmployee['role'] = 0;
                 this.insEmployee['gender'] = -1;
                 this.selected = false;
-                this.selectedAll= false;
+                this.selectedAll = false;
+            }, (error) => {
+                if (error.status == 500) {
+                    this.loading = false;
+                    this.toastr.error("System error");
+                    this.closeModal();
+                }
             }
         );
     }
@@ -252,6 +263,7 @@ export class EmployeeComponent implements OnInit {
     openModalExcel(excel) {
         this.index = 1;
         this.employees = [];
+        this.checkFile = false;
         this.message = [];
         this.modalService.open(excel, { size: 'lg', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
@@ -275,61 +287,76 @@ export class EmployeeComponent implements OnInit {
         if (key === 'excel') {
             this.insertEmployeeExcel();
         } else {
-            if (!this.validate()) {
-                return;
-            }
             this.employees = [];
-            this.insEmployee['fullname'] = this.insEmployee['fullname'].trim();
+            this.insEmployee['fullname'] = this.insEmployee['fullname'];
             this.insEmployee['companyId'] = this.companyId;
             this.employees.push(this.insEmployee);
-            this.insertEmployee();
+            let check = true;
+            if (!this.validate()) {
+                check = false;
+            }
+            if(!this.validateRole()){
+                check = false;
+            }
+            if(!this.validateAddress()){
+                check = false;
+            }
+            if(!this.validateGender()){
+                check = false;
+            }
+            if(!this.validateRole()){
+                check = false;
+            }
+            if(!this.validateEmail()){
+                check = false;
+            }
+            if(!this.validatePhone()){
+                check = false;
+            }
+            if(check == true){
+                this.insertEmployee();
+            }
 
         }
     }
-
 
     insertEmployeeExcel() {
         this.insertEmployee();
     }
 
-
-
     // function 
     // insert Employee function
     insertEmployee() {
-        if (this.validate() && this.validateRole() && this.validateAddress() && this.validateGender()) {
-            this.loading = true;
-            this.employeeService.postCreateEmployee(this.employees).subscribe(
-                results => {
-                    this.loading = false;
-                    this.toastr.success("Create success");
-                    this.employees = [];
+        this.loading = true;
+        this.employeeService.postCreateEmployee(this.employees).subscribe(
+            results => {
+                this.loading = false;
+                this.toastr.success("Create success");
+                this.employees = [];
 
-                    this.insEmployee = {};
-                    this.getEmployee(this.iconIsActive);
+                this.insEmployee = {};
+                this.getEmployee(this.iconIsActive);
+                this.closeModal();
+            },
+            (error) => {
+                if (error.status == 500) {
+                    this.toastr.error("System error");
                     this.closeModal();
-                },
-                (error) => {
-                    if (error.status == 500) {
-                        this.loading = false;
-                        this.toastr.error("System error");
-                        this.closeModal();
-                    } else {
-                        this.loading = false;
-                        const email = error.error.slice(0, 3);
-                        const message = `Email ${email.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
-                        this.toastr.error(message);
-                        this.closeModal();
-                    }
+                } else {
+                    this.loading = false;
+                    const email = error.error.slice(0, 3);
+                    const message = `Email ${email.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
+                    this.toastr.error(message);
+                    this.closeModal();
                 }
-            );
-        }
+            }
+        );
     }
 
 
     // change status
     clickButtonChangeStatus(status: boolean) {
-        if (this.selectedAll == true || this.selected == true ) {
+        if (this.selectedAll == true || this.selected == true) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: 'Status will be change!',
@@ -349,14 +376,16 @@ export class EmployeeComponent implements OnInit {
                         this.getEmployee(this.iconIsActive);
                         this.closeModal();
                         Swal.fire('Success', 'The status has been change', 'success');
-                    });;
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    this.updateEmployee = [];
-                    Swal.fire(
-                        'Cancelled',
-                        '',
-                        'error'
-                    )
+                    }, (error) => {
+                        if (error.status == 500) {
+                            this.toastr.error('System error')
+                        }
+                        if (error.status == 0) {
+                            this.toastr.error('Connection error')
+                        }
+                        this.loading = false;
+                    }
+                    );
                 }
             })
         } else {
@@ -371,7 +400,7 @@ export class EmployeeComponent implements OnInit {
 
     // send pass
     resendmail() {
-        if (this.selectedAll == true || this.selected == true ) {
+        if (this.selectedAll == true || this.selected == true) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: 'Password will be send!',
@@ -407,6 +436,7 @@ export class EmployeeComponent implements OnInit {
                                 type: 'error'
                             });
                         }
+                        this.loading = false;
                     }
 
                     );;
@@ -448,16 +478,16 @@ export class EmployeeComponent implements OnInit {
     }
     validate() {
         if (this.insEmployee['fullname'] == '' || this.insEmployee['fullname'] == null) {
-            this.toastr.error('Message', 'Please input employee name');
+            this.toastr.error('Please input employee name');
             document.getElementById('ins_manage_fullname').style.borderColor = 'red';
             document.getElementById('ins_manage_fullname').focus();
             return false;
         } else if (this.insEmployee['fullname'].length < 3) {
-            this.toastr.error('Message', 'Please input employee name min 3 letter');
+            this.toastr.error('Please input employee name min 3 letter');
             document.getElementById('ins_manage_fullname').style.borderColor = 'red';
             document.getElementById('ins_manage_fullname').focus();
             return false;
-        }else{
+        } else {
             document.getElementById('ins_manage_fullname').style.borderColor = 'green';
         }
         return true;
@@ -496,56 +526,60 @@ export class EmployeeComponent implements OnInit {
     }
     validateRole() {
         if (this.insEmployee['role'] == 0) {
-            this.toastr.error('Message', 'Please choosing role of account!');
+            this.toastr.error('Please choosing role of account!');
             document.getElementById('ins_manage_role').style.borderColor = 'red';
             document.getElementById('ins_manage_role').focus();
             return false;
-        }else{
+        } else {
             document.getElementById('ins_manage_role').style.borderColor = 'green';
         }
         return true;
     }
 
     validateAddress() {
-        if (this.insEmployee['address'] != '' || this.insEmployee['address'] != null || this.insEmployee['address'] != undefined) {
-            if (this.insEmployee['address'].length < 3) {
-                this.toastr.error('Message', 'Please input employee address min 3 letter');
-                document.getElementById('ins_manage_address').style.borderColor = 'red';
-                document.getElementById('ins_manage_address').focus();
-                return false;
-            }
-            else if (this.insEmployee['address'].length > 200) {
-                this.toastr.error('Message', 'Please input employee Employee address max 200 letter');
-                document.getElementById('ins_manage_address').style.borderColor = 'red';
-                document.getElementById('ins_manage_address').focus();
-                return false;
-            }else{
-                document.getElementById('ins_manage_address').style.borderColor = 'green';
+        if (this.insEmployee['address'] != undefined) {
+            if (this.insEmployee['address'] != '') {
+                if (this.insEmployee['address'].length < 3) {
+                    this.toastr.error('Please input employee address min 3 characters');
+                    document.getElementById('ins_manage_address').style.borderColor = 'red';
+                    document.getElementById('ins_manage_address').focus();
+                    return false;
+                }
+                else if (this.insEmployee['address'].length > 200) {
+                    this.toastr.error('Please input employee Employee address max 200 characters');
+                    document.getElementById('ins_manage_address').style.borderColor = 'red';
+                    document.getElementById('ins_manage_address').focus();
+                    return false;
+                } else {
+                    document.getElementById('ins_manage_address').style.borderColor = 'green';
+                }
             }
         }
         return true;
     }
     validatePhone() {
         const check = /((09|03|07|08|05)+([0-9]{8})\b)/g.test(this.insEmployee['phone']);
-        if (this.insEmployee['phone'] != '' || this.insEmployee['phone'] != null || this.insEmployee['phone'] != undefined) {
-            if (!check) {
-                this.toastr.error('Message', 'Phone number is invalid');
-                document.getElementById('ins_manage_phone').style.borderColor = 'red';
-                document.getElementById('ins_manage_phone').focus();
-                return false;
-            }else{
-                document.getElementById('ins_manage_phone').style.borderColor = 'green';
+        if(this.insEmployee['phone'] != undefined){
+            if (this.insEmployee['phone'] != '') {
+                if (!check) {
+                    this.toastr.error('Phone number is invalid');
+                    document.getElementById('ins_manage_phone').style.borderColor = 'red';
+                    document.getElementById('ins_manage_phone').focus();
+                    return false;
+                } else {
+                    document.getElementById('ins_manage_phone').style.borderColor = 'green';
+                }
             }
         }
         return true;
     }
     validateGender() {
         if (this.insEmployee['gender'] == -1) {
-            this.toastr.error('Message', 'Please choosing gender of account!');
+            this.toastr.error('Please choosing gender of account!');
             document.getElementById('ins_manage_gender').style.borderColor = 'red';
             document.getElementById('ins_manage_gender').focus();
             return false;
-        }else{
+        } else {
             document.getElementById('ins_manage_gender').style.borderColor = 'green';
         }
         return true;
@@ -560,28 +594,30 @@ export class EmployeeComponent implements OnInit {
 
     validateEmail() {
         if (this.insEmployee['email'] == '' || this.insEmployee['email'] == null || this.insEmployee['email'] == undefined) {
-            this.toastr.error('Message', 'Email can not blank');
+            this.toastr.error('Email can not blank');
             document.getElementById('ins_manage_email').style.borderColor = 'red';
             document.getElementById('ins_manage_email').focus();
             return false;
         } else if (!this.globalservice.checkMail.test(String(this.insEmployee['email']).toUpperCase())) {
-            this.toastr.error('Message', 'Email wrong format');
+            this.toastr.error('Email wrong format');
             document.getElementById('ins_manage_email').style.borderColor = 'red';
             document.getElementById('ins_manage_email').focus();
             return false;
-        } else  {
+        } else {
+            let checkDup = false;
             this.employeeList.forEach(element => {
                 if (this.insEmployee['email'] === element.email) {
-                    this.toastr.error('Message', 'Email is existed');
+                    this.toastr.error('Email is existed');
                     document.getElementById('ins_manage_email').style.borderColor = 'red';
                     document.getElementById('ins_manage_email').focus();
-                    return false;
-                }else{
-                    document.getElementById('ins_manage_email').style.borderColor = 'green';
+                    return checkDup = true;
                 }
             });
+            if (!checkDup) {
+                document.getElementById('ins_manage_email').style.borderColor = 'green';
+            }
         }
-        
+
         return true;
     }
 }
