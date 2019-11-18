@@ -136,16 +136,16 @@
                         <div class="form-content row">
                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                 <label>Catalog:</label>
-                                <input type="text" [(ngModel)]="insCatalogue['Name']" name="ins_Catalogue"
-                                    class="form-control input-underline input-lg" id=""
+                                <input (change)="validate()" type="text" [(ngModel)]="insCatalogue['Name']" name="ins_Cataloguedf_name"
+                                    class="form-control input-underline input-lg" id="ins_Cataloguedf_name"
                                     placeholder="catalogue">
                             </div>
                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                 <label>Description:</label>
                                 <!-- <textarea  [(ngModel)]="insCatalogue['Description']" rows="30" cols="120" name="ins_Catalogue" class="form-control input-underline input-lg"
                                     id="" placeholder="Description"> -->
-                                <textarea class="form-control" rows="3" [(ngModel)]="insCatalogue['Description']"
-                                    placeholder="Catalogue" name="ins_Catalogue"></textarea>
+                                <textarea (change)="validateDes()" class="form-control" rows="3" [(ngModel)]="insCatalogue['Description']"
+                                    placeholder="Catalogue" id="ins_Cataloguedf_des" name="ins_Cataloguedf_des"></textarea>
                             </div>
                         </div>
                     </form>
@@ -162,7 +162,7 @@
     <ng-template #update let-modal>
         <div class="text-left mt-1 ">
             <div class="modal-header">
-                <h4 class="modal-title" id="modal-basic-title">Create Catalogue</h4>
+                <h4 class="modal-title" id="modal-basic-title">Update Catalogue</h4>
             </div>
             <div class="modal-body">
                 <div class="card-body">
@@ -170,15 +170,15 @@
                         <div class="form-content row">
                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                 <label>Catalog:</label>
-                                <input type="text" [(ngModel)]="updCatalogue['Name']" name="upd_Catalogue_name"
+                                <input type="text" [(ngModel)]="updCatalogue['Name']" name="upd_Cataloguedf_name"
                                     class="form-control input-underline input-lg" id=""
                                     placeholder="Catalogue">
                             </div>
                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                 <label>Description:</label>
-                                <textarea class="form-control" rows="3" [(ngModel)]="updCatalogue['Description']"
+                                <textarea (change)="validateUpdateDes()" class="form-control" rows="3" [(ngModel)]="updCatalogue['Description']"
                                     placeholder="description"
-                                    name="upd_Catalogue_description"></textarea>
+                                    name="upd_Cataloguedf_des" id="ins_Cataloguedf_des"></textarea>
                             </div>
                         </div>
                     </form>

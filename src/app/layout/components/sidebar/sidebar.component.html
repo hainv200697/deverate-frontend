@@ -2,7 +2,7 @@
     <div class="list-group">
         <!-- System Manager -->
         <a [routerLink]="['/manage-company']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'System Manager'">
-            <i class="fa fa-th-list"></i>&nbsp;
+            <i class="fa fa-institution"></i>&nbsp;
             <span>{{ 'Manage Company' | translate }}</span>
         </a>
         <a [routerLink]="['/default-catalogue']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'System Manager'">
