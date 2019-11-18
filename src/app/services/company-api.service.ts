@@ -12,11 +12,14 @@ export class CompanyApiService {
     getAllCompany(isActive: boolean) {
         const API = 'CompanyAPI/GetAllCompany?isActive=';
         return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API + isActive);
+    getAllCompany() {
+        const API = 'CompanyAPI/GetAllCompany';
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API);
     }
 
-    getCompanyById(id: number) {
+    getCompanyById(companyId) {
         const API = 'CompanyAPI/GetCompanyById?id=';
-        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API + id);
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API + companyId);
     }
 
     getCompanyByName(name: string) {
@@ -34,8 +37,8 @@ export class CompanyApiService {
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, CompanyModel);
     }
 
-    disableCompany(CompanyModel) {
-        const API = 'CompanyAPI/DisableCompany';
-        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, CompanyModel);
+    disableCompany(CompanyId, status) {
+        const API = 'CompanyAPI/DisableCompany?status=';
+        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API + status, CompanyId);
     }
 }
