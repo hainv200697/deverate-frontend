@@ -64,12 +64,12 @@ export class StatisticComponent implements OnInit {
   dataEmployeeOverPoint: any;
   chooseConfig = [];
 
-  companyId = Number(sessionStorage.getItem('CompanyId'));
+  companyId = Number(localStorage.getItem('CompanyId'));
   ngOnInit() {
     this.isLoaded = false;
     this.load = false;
-    this.GetGeneralStatistic(sessionStorage.getItem("AccountId"));
-    this.GetRankStatistic(sessionStorage.getItem("AccountId"));
+    this.GetGeneralStatistic(localStorage.getItem("AccountId"));
+    this.GetRankStatistic(localStorage.getItem("AccountId"));
     this.GetOverallPointStatistic(this.companyId);
     this.selectedItems = [];
     this.dropdownSettings = {

@@ -9,9 +9,6 @@ export class CompanyApiService {
     URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
 
-    getAllCompany(isActive: boolean) {
-        const API = 'CompanyAPI/GetAllCompany?isActive=';
-        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API + isActive);
     getAllCompany() {
         const API = 'CompanyAPI/GetAllCompany';
         return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API);

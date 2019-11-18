@@ -91,7 +91,7 @@
                 </div>
                 <div class="card-body">
                     <canvas baseChart height="100px" [datasets]="radarChartData" [labels]="radarChartLabels"
-                        [chartType]="radarChartType" (chartHover)="chartHovered($event)" [colors]="radarChartColor"
+                        [chartType]="radarChartType"  [colors]="radarChartColor"
                         (chartClick)="chartClicked($event)" *ngIf="isLoaded" >
                     </canvas>
                 </div>
