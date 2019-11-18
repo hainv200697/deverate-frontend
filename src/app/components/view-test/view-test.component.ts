@@ -39,11 +39,6 @@ export class ViewTestComponent implements OnInit {
 
   }
 
-  // tslint:disable-next-line:use-lifecycle-interface
-  ngOnDestroy() {
-
-  }
-
   getTestByConfig() {
     this.testService.getTestByConfigId(this.id).subscribe(
       (data: any) => {

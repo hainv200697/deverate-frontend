@@ -35,22 +35,25 @@
             </div>
         </div>
 
-        <table class="table  table-hover customtable" [svData]="listTest" #sv="svDataTable" [svRowsOnPage]="5"
+        <table class="table  table-hover customtable" [svData]="listTest" #sv="svDataTable" [svRowsOnPage]="25"
             svSortBy="name" svSortOrder="asc">
             <thead>
                 <tr class="col-md-12 row no-padding-no-margin">
                     <th class="text-center col-md-1" scope="col">
                         <input class="btn" type="checkbox" value="" [(ngModel)]="selectedAll" (change)="selectAll();">
                     </th>
+                    <th class="text-center col-md-1" scope="col">
+                        #
+                    </th>
                     <th class="col-md-4 text-center" scope="col">
                         <sv-default-sorter by='title'>Title</sv-default-sorter>
                     </th>
-                    <th class="col-md-4 text-center" scope="col">
-                        <sv-default-sorter by='title'>Employee</sv-default-sorter>
+                    <th class="col-md-3 text-center" scope="col">
+                        <sv-default-sorter by='accountName'>Employee</sv-default-sorter>
                     </th>
-                    <th class="col-md-1 text-center" scope="col">Status
+                    <th class="col-md-2 text-center" scope="col">Status
                     </th>
-                    <th class="col-md-2 text-center" scope="col">Action</th>
+                    <th class="col-md-1 text-center" scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,15 +64,22 @@
                                 (change)="checkIfAllSelected();">
                         </label>
                     </td>
+                    <td class="col-md-1 text-center">{{i+1}}</td>
                     <td class="col-md-4 text-center">{{ item.title }}</td>
-                    <td class="col-md-4 text-center">{{ item.accountName }}</td>
-                    <td class="text-center col-md-1" [hidden]="item.isActive==true">
-                        <span class="shadow-item text-center badge badge-pill badge-primary">Processing</span>
+                    <td class="col-md-3 text-center">{{ item.accountName }}</td>
+                    <td class="text-center col-md-2" [hidden]="item.status!='Submitted'">
+                        <span class="shadow-item text-center badge badge-pill badge-warning">Submitted</span>
                     </td>
-                    <td class="text-center col-md-1" [hidden]="item.isActive==false">
-                        <span class="shadow-item text-center badge badge-pill badge-success">Done</span>
+                    <td class="text-center col-md-2" [hidden]="item.status!='Pending'">
+                        <span class="shadow-item text-center badge badge-pill badge-secondary">Pending</span>
                     </td>
-                    <td class="col-md-2 text-center nowrap text-center action-column" style="color: red;">
+                    <td class="text-center col-md-2" [hidden]="item.status!='Expired'">
+                        <span class="shadow-item text-center badge badge-pill badge-danger">Expired</span>
+                    </td>
+                    <td class="text-center col-md-2" [hidden]="item.status!='Doing'">
+                        <span class="shadow-item text-center badge badge-pill  badge-success">Doing</span>
+                    </td>
+                    <td class="col-md-1 text-center nowrap text-center action-column" style="color: red;">
                         <button class="btn-warning btn btn-circle shadow-item" (click)="openViewTest(item.testId)"
                             tooltip="{{'common_modify' | translate}}">
                             <i class="fa fa fa-eye edit-icon"></i>
@@ -80,7 +90,7 @@
             <tfoot>
                 <tr>
                     <td colspan="4">
-                        <sv-bootstrap-paginator [rowsOnPageSet]="[4, 25, 50]"></sv-bootstrap-paginator>
+                        <sv-bootstrap-paginator [rowsOnPageSet]="[5, 25, 50]"></sv-bootstrap-paginator>
                     </td>
                 </tr>
             </tfoot>
