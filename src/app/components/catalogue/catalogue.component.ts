@@ -1,6 +1,5 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { CatalogueApiService } from '../../services/catalogue-api.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { element } from 'protractor';
@@ -14,13 +13,13 @@ declare var $: any;
 })
 export class CatalogueComponent implements OnInit {
     constructor(
-        private translate: TranslateService,
         public router: Router,
         private modalService: NgbModal,
         private catelogueService: CatalogueApiService,
         private toastr: ToastrService,
     ) {
     }
+    selected = false;
     public loading = false;
     iconIsActive: boolean;
     selectedAll: any;
@@ -68,34 +67,30 @@ export class CatalogueComponent implements OnInit {
     getAllCatalogue(status) {
         this.iconIsActive = status;
         this.loading = true;
-        this.catelogueService.getAllCatalogue(this.iconIsActive,this.companyId).subscribe(
-            (data :any[]) => {
+        this.catelogueService.getAllCatalogue(this.iconIsActive, this.companyId).subscribe(
+            (data: any[]) => {
                 this.loading = false;
                 this.catalogueList = data;
+                this.selected = false;
+                this.selectedAll= false;
             }
         );
     }
 
 
     clickButtonRefresh(refesh) {
-        refesh.classList.add('spin-animation');
-        setTimeout(function () {
-            
-            refesh.classList.remove('spin-animation');
-        }, 500);
         this.getAllCatalogue(this.iconIsActive);
     }
 
     // Insert catalogue
     insertCatalogueSubmit() {
-        if(this.validate()){
+        if (this.validate() && this.validateDes()) {
             this.insCata();
             this.closeModal();
         }
     }
 
     insCata() {
-        if(this.validate()){
             this.insCatalogue['companyId'] = this.companyId;
             this.loading = true;
             this.catelogueService.insertCatalogue(this.insCatalogue).subscribe(
@@ -105,13 +100,12 @@ export class CatalogueComponent implements OnInit {
                     this.toastr.success(results['message']);
                 }
             );
-        }
     }
 
     selectAll() {
         this.updateStatus = [];
         for (let i = 0; i < this.catalogueList.length; i++) {
-            if(this.catalogueList[i].type){
+            if (this.catalogueList[i].type) {
                 this.catalogueList[i].selected = this.selectedAll;
             }
             this.updateStatus.push(this.catalogueList[i]);
@@ -120,12 +114,14 @@ export class CatalogueComponent implements OnInit {
 
     checkIfAllSelected() {
         this.updateStatus = [];
+        this.selected =false;
         this.selectedAll = this.catalogueList.every(function (item: any) {
             return item.selected === true;
 
         });
         for (let i = 0; i < this.catalogueList.length; i++) {
             if (this.catalogueList[i].selected === true) {
+                this.selected = true;
                 this.updateStatus.push(this.catalogueList[i]);
             }
         }
@@ -133,7 +129,7 @@ export class CatalogueComponent implements OnInit {
     }
     // Update catalogue
     updateCatalogueSubmit() {
-        if(this.validateUpdate()){
+        if (this.validateUpdate() && this.validateUpdateDes) {
             this.updCata();
             this.closeModal();
         }
@@ -142,7 +138,7 @@ export class CatalogueComponent implements OnInit {
     updCata() {
         this.loading = true;
         this.catelogueService.updateCatalogue(this.updCatalogue).subscribe(
-            (data:any) => {
+            (data: any) => {
                 this.loading = false;
                 this.getAllCatalogue(this.iconIsActive);
                 this.toastr.success(data['message']);
@@ -151,45 +147,49 @@ export class CatalogueComponent implements OnInit {
     }
 
     clickButtonChangeStatus(status: boolean) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'This status will be change!',
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, change it!',
-            cancelButtonText: 'No, keep it'
-        }).then((result) => {
-            if (result.value) {
-                for (let i = 0; i < this.updateStatus.length; i++) {
-                    this.updateStatus[i].IsActive = status;
-                    this.updateStatus[i].companyId = this.companyId;
+        if (this.selectedAll == true || this.selected == true ) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This status will be change!',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, change it!',
+                cancelButtonText: 'No, keep it'
+            }).then((result) => {
+                if (result.value) {
+                    for (let i = 0; i < this.updateStatus.length; i++) {
+                        this.updateStatus[i].IsActive = status;
+                        this.updateStatus[i].companyId = this.companyId;
+                    }
+                    this.catelogueService.removeCatalogue(this.updateStatus).subscribe(data => {
+                        this.getAllCatalogue(this.iconIsActive);
+                        this.selectedAll = false;
+                        this.closeModal();
+                        Swal.fire('Success', 'The catalogue has been change', 'success');
+                    });;
+
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    this.updateStatus = [];
+                    Swal.fire(
+                        'Cancelled',
+                        '',
+                        'error'
+                    )
                 }
-                this.catelogueService.removeCatalogue(this.updateStatus).subscribe(data => {
-                    this.getAllCatalogue(this.iconIsActive);
-                    this.selectedAll =false;
-                    this.closeModal();
-                    Swal.fire('Success', 'The company has been change', 'success');
-                });;
-            Swal.fire(
-              'change',
-              '',
-              'success'
-            )
-            
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            })
+        }else {
             this.updateStatus = [];
             Swal.fire(
-              'Cancelled',
-              '',
-              'error'
+                'Cancelled',
+                'Please choose employee!',
+                'error'
             )
-          }
-        })
+        }
     }
 
-    viewCatalog(item){
+    viewCatalog(item) {
         this.router.navigate(['/manage-question/', item['catalogueId']]);
-    } 
+    }
 
     validate() {
         if (this.insCatalogue['Name'] == null || this.insCatalogue['Name'] == undefined) {
@@ -202,11 +202,13 @@ export class CatalogueComponent implements OnInit {
             document.getElementById('ins_Catalogue_name').style.borderColor = 'red';
             document.getElementById('ins_Catalogue_name').focus();
             return false;
-        }else if (this.insCatalogue['Name'].length > 200) {
+        } else if (this.insCatalogue['Name'].length > 200) {
             this.toastr.error('Message', 'Please input catalogue name max 200 letter');
             document.getElementById('ins_Catalogue_name').style.borderColor = 'red';
             document.getElementById('ins_Catalogue_name').focus();
             return false;
+        } else {
+            document.getElementById('ins_Catalogue_name').style.borderColor = 'green';
         }
         return true;
     }
@@ -222,11 +224,55 @@ export class CatalogueComponent implements OnInit {
             document.getElementById('upd_Catalogue_name').style.borderColor = 'red';
             document.getElementById('upd_Catalogue_name').focus();
             return false;
-        }else if (this.updCatalogue['Name'].length > 200) {
+        } else if (this.updCatalogue['Name'].length > 200) {
             this.toastr.error('Message', 'Please input catalogue name max 200 letter');
             document.getElementById('upd_Catalogue_name').style.borderColor = 'red';
             document.getElementById('upd_Catalogue_name').focus();
             return false;
+        } else {
+            document.getElementById('upd_Catalogue_name').style.borderColor = 'green';
+        }
+        return true;
+    }
+
+    validateDes() {
+        if (this.insCatalogue['Description'] != null || this.insCatalogue['Description'] != undefined) {
+            if (this.insCatalogue['Description'].length < 3) {
+                this.toastr.error('Message', 'Please input catalogue name min 3 letter');
+                document.getElementById('ins_Catalogue_des').style.borderColor = 'red';
+                document.getElementById('ins_Catalogue_des').focus();
+                return false;
+            } else if (this.insCatalogue['Description'].length > 200) {
+                this.toastr.error('Message', 'Please input catalogue name max 200 letter');
+                document.getElementById('ins_Catalogue_des').style.borderColor = 'red';
+                document.getElementById('ins_Catalogue_des').focus();
+                return false;
+            } else {
+                document.getElementById('ins_Catalogue_des').style.borderColor = 'green';
+            }
+        } else {
+            document.getElementById('ins_Catalogue_des').style.borderColor = 'green';
+        }
+        return true;
+    }
+
+    validateUpdateDes() {
+        if (this.updCatalogue['Description'] != '' || this.updCatalogue['Description'] != null || this.insCatalogue['Description'] != undefined) {
+            if (this.updCatalogue['Description'].length < 3) {
+                this.toastr.error('Message', 'Please input catalogue name min 3 letter');
+                document.getElementById('upd_Catalogue_description').style.borderColor = 'red';
+                document.getElementById('upd_Catalogue_description').focus();
+                return false;
+            } else if (this.updCatalogue['Description'].length > 200) {
+                this.toastr.error('Message', 'Please input catalogue name max 200 letter');
+                document.getElementById('upd_Catalogue_description').style.borderColor = 'red';
+                document.getElementById('upd_Catalogue_description').focus();
+                return false;
+            } else {
+                document.getElementById('upd_Catalogue_description').style.borderColor = 'green';
+            }
+        } else {
+            document.getElementById('upd_Catalogue_description').style.borderColor = 'green';
         }
         return true;
     }

@@ -1,12 +1,11 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { CatalogueApiService } from '../../services/catalogue-api.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { ToastrService } from 'ngx-toastr';
 declare var $: any;
-import {ViewEncapsulation} from '@angular/core';
+import { ViewEncapsulation } from '@angular/core';
 @Component({
     selector: 'app-catalogue-default',
     templateUrl: './catalogue-default.component.html',
@@ -15,7 +14,6 @@ import {ViewEncapsulation} from '@angular/core';
 })
 export class CatalogueDefaultComponent implements OnInit {
     constructor(
-        private translate: TranslateService,
         public router: Router,
         private modalService: NgbModal,
         private catelogueService: CatalogueApiService,
@@ -69,7 +67,7 @@ export class CatalogueDefaultComponent implements OnInit {
         this.iconIsActive = status;
         this.loading = true;
         this.catelogueService.getAllCatalogueDefault(this.iconIsActive).subscribe(
-            (data :any[]) => {
+            (data: any[]) => {
                 this.loading = false;
                 this.catalogueList = data;
                 console.log(this.catalogueList);
@@ -81,7 +79,7 @@ export class CatalogueDefaultComponent implements OnInit {
     clickButtonRefresh(refesh) {
         refesh.classList.add('spin-animation');
         setTimeout(function () {
-            
+
             refesh.classList.remove('spin-animation');
         }, 500);
         this.getAllCatalogue(this.iconIsActive);
@@ -89,9 +87,11 @@ export class CatalogueDefaultComponent implements OnInit {
 
     // Insert catalogue
     insertCatalogueSubmit() {
-        this.insCata();
-        this.closeModal();
-        this.getAllCatalogue(this.iconIsActive);
+        if (this.validate() && this.validateDes()) {
+            this.insCata();
+            this.closeModal();
+            this.getAllCatalogue(this.iconIsActive);
+        }
     }
 
     insCata() {
@@ -128,14 +128,16 @@ export class CatalogueDefaultComponent implements OnInit {
     }
     // Update catalogue
     updateCatalogueSubmit() {
-        this.updCata();
-        this.closeModal();
+        if (this.validateUpdate() && this.validateUpdateDes()) {
+            this.updCata();
+            this.closeModal();
+        }
     }
 
     updCata() {
         this.loading = true;
         this.catelogueService.updateCatalogueDefault(this.updCatalogue).subscribe(
-            (data:any) => {
+            (data: any) => {
                 this.loading = false;
                 this.getAllCatalogue(this.iconIsActive);
                 this.toastr.success(data['message']);
@@ -160,23 +162,105 @@ export class CatalogueDefaultComponent implements OnInit {
                     this.getAllCatalogue(this.iconIsActive);
                     this.selectedAll = false;
                     this.closeModal();
-                    Swal.fire('Success', 'The company has been change', 'success');
-                });;
-            Swal.fire(
-              'change',
-              '',
-              'success'
-            )
-            
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            this.updateStatus = [];
-            Swal.fire(
-              'Cancelled',
-              '',
-              'error'
-            )
-          }
+                    Swal.fire('Success', 'The Catalogue has been change', 'success');
+                });
+
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                this.updateStatus = [];
+                Swal.fire(
+                    'Cancelled',
+                    '',
+                    'error'
+                )
+            }
         })
     }
+
+    validate() {
+        if (this.insCatalogue['Name'] == null || this.insCatalogue['Name'] == undefined) {
+            this.toastr.error('Message', 'Please input catalogue name');
+            document.getElementById('ins_Cataloguedf_name').style.borderColor = 'red';
+            document.getElementById('ins_Cataloguedf_name').focus();
+            return false;
+        } else if (this.insCatalogue['Name'].length < 3) {
+            this.toastr.error('Message', 'Please input catalogue name min 3 letter');
+            document.getElementById('ins_Cataloguedf_name').style.borderColor = 'red';
+            document.getElementById('ins_Cataloguedf_name').focus();
+            return false;
+        } else if (this.insCatalogue['Name'].length > 200) {
+            this.toastr.error('Message', 'Please input catalogue name max 200 letter');
+            document.getElementById('ins_Cataloguedf_name').style.borderColor = 'red';
+            document.getElementById('ins_Cataloguedf_name').focus();
+            return false;
+        } else {
+            document.getElementById('ins_Cataloguedf_name').style.borderColor = 'green';
+        }
+        return true;
+    }
+
+    validateUpdate() {
+        if (this.updCatalogue['Name'] == null || this.insCatalogue['Name'] == undefined) {
+            this.toastr.error('Message', 'Please input catalogue name');
+            document.getElementById('upd_Cataloguedf_name').style.borderColor = 'red';
+            document.getElementById('upd_Cataloguedf_name').focus();
+            return false;
+        } else if (this.updCatalogue['Name'].length < 3) {
+            this.toastr.error('Message', 'Please input catalogue name min 3 letter');
+            document.getElementById('upd_Cataloguedf_name').style.borderColor = 'red';
+            document.getElementById('upd_Cataloguedf_name').focus();
+            return false;
+        } else if (this.updCatalogue['Name'].length > 200) {
+            this.toastr.error('Message', 'Please input catalogue name max 200 letter');
+            document.getElementById('upd_Cataloguedf_name').style.borderColor = 'red';
+            document.getElementById('upd_Cataloguedf_name').focus();
+            return false;
+        } else {
+            document.getElementById('upd_Cataloguedf_name').style.borderColor = 'green';
+        }
+        return true;
+    }
+
+    validateDes() {
+        if (this.insCatalogue['Description'] != null || this.insCatalogue['Description'] != undefined) {
+            if (this.insCatalogue['Description'].length < 3) {
+                this.toastr.error('Message', 'Please input catalogue name min 3 letter');
+                document.getElementById('ins_Cataloguedf_des').style.borderColor = 'red';
+                document.getElementById('ins_Cataloguedf_des').focus();
+                return false;
+            } else if (this.insCatalogue['Description'].length > 200) {
+                this.toastr.error('Message', 'Please input catalogue name max 200 letter');
+                document.getElementById('ins_Cataloguedf_des').style.borderColor = 'red';
+                document.getElementById('ins_Cataloguedf_des').focus();
+                return false;
+            } else {
+                document.getElementById('ins_Cataloguedf_des').style.borderColor = 'green';
+            }
+        } else {
+            document.getElementById('ins_Cataloguedf_des').style.borderColor = 'green';
+        }
+        return true;
+    }
+
+    validateUpdateDes() {
+        if (this.updCatalogue['Description'] != '' || this.updCatalogue['Description'] != null || this.insCatalogue['Description'] != undefined) {
+            if (this.updCatalogue['Description'].length < 3) {
+                this.toastr.error('Message', 'Please input catalogue name min 3 letter');
+                document.getElementById('upd_Cataloguedf_des').style.borderColor = 'red';
+                document.getElementById('upd_Cataloguedf_des').focus();
+                return false;
+            } else if (this.updCatalogue['Description'].length > 200) {
+                this.toastr.error('Message', 'Please input catalogue name max 200 letter');
+                document.getElementById('upd_Cataloguedf_des').style.borderColor = 'red';
+                document.getElementById('upd_Cataloguedf_des').focus();
+                return false;
+            } else {
+                document.getElementById('upd_Cataloguedf_des').style.borderColor = 'green';
+            }
+        } else {
+            document.getElementById('upd_Cataloguedf_des').style.borderColor = 'green';
+        }
+        return true;
+    }
+
 
 }
