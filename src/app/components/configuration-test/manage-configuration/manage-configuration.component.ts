@@ -132,17 +132,23 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   onItemSelect(item: any) {
-    this.inputConfiguration['totalQuestion'] += 5;
+    console.log(item)
+    this.inputConfiguration['totalQuestion'] += item.quescount
   }
 
-  onSelectAll(item: any) { }
+  onSelectAll(item: any) {
+    for(var i = 0 ; i < item.length; i++){
+      this.inputConfiguration['totalQuestion'] += item[i].quescount;
+    }
+   }
 
   onDeSelectAll(item: any) {
     this.selectedItems = []
+    this.inputConfiguration['totalQuestion'] = 0;
   }
 
   OnItemDeSelect(item: any) {
-    this.inputConfiguration['totalQuestion'] -= 5;
+    this.inputConfiguration['totalQuestion'] -= item.quescount
   }
 
   onDateSelect(item: any) {
@@ -152,22 +158,22 @@ export class ManageConfigurationComponent implements OnInit {
 
     for (let i = 0; i < select.length; i++) {
       if (select[i]['catalogueId'] == item['catalogueId']) {
+        this.inputConfiguration['totalQuestion'] -= item.quescount
         select.splice(i, 1);
-        this.updateConfig['catalogueInConfigurations'].splice(i, 1);
+        this.updateConfig['catalogueInConfigs'].splice(i, 1);
       }
     }
   }
 
   onItemUpdateSelect(item) {
-    this.updateConfig['catalogueInConfigurations'].push(item)
+    this.updateConfig['catalogueInConfigs'].push(item)
     console.log(item)
   }
 
   OnItemUpdateDeSelect(item) {
-    for (let i = 0; i < this.updateConfig['catalogueInConfigurations'].length; i++) {
-      if (this.updateConfig['catalogueInConfigurations'][i]['catalogueId'] == item['catalogueId']) {
-        this.updateConfig['catalogueInConfigurations'].splice(i, 1);
-        this.updateConfig['catalogueInConfigurations'].splice(i, 1);
+    for (let i = 0; i < this.updateConfig['catalogueInConfigs'].length; i++) {
+      if (this.updateConfig['catalogueInConfigs'][i]['catalogueId'] == item['catalogueId']) {
+        this.updateConfig['catalogueInConfigs'].splice(i, 1);
       }
     }
   }
@@ -344,7 +350,6 @@ export class ManageConfigurationComponent implements OnInit {
     this.loading = true;
     this.configAPi.GetConfigurationCatalogueByConfigId(id).subscribe(
       (res) => {
-        console.log(res)
         this.updateConfig['ConfigId'] = res['configId'];
         this.updateConfig['testOwnerId'] = res['testOwnerId'];
         this.updateConfig['type'] = res['type'];
@@ -355,10 +360,11 @@ export class ManageConfigurationComponent implements OnInit {
         this.updateConfig['endDate'] = res['endDate'];
         this.updateConfig['duration'] = res['duration'];
         this.updateConfig['isActive'] = res['isActive'];
-        this.updateConfig['catalogueInConfigurations'] = res['catalogueInConfigs'];
-        
-        this.updateConfig['configurationRank'] = res['configurationRanks'];
+        this.updateConfig['catalogueInConfigs'] = res['catalogueInConfigs'];
+
+        this.updateConfig['configurationRanks'] = res['configurationRanks'];
         let tmp = res['catalogueInConfigs'];
+        this.selectedItemsUpdate = [];
         tmp.forEach(x => {
           this.selectedItemsUpdate.push(new Object(
             {
@@ -402,6 +408,7 @@ export class ManageConfigurationComponent implements OnInit {
 
   Sample() {
     const sampleTest = {
+      companyId: this.companyId,
       totalQuestion: this.inputConfiguration['totalQuestion'],
       catalogueInConfigurations: this.selectedItems
     }
@@ -461,6 +468,7 @@ export class ManageConfigurationComponent implements OnInit {
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
           this.getConfigurationIsActive(true);
           this.closeModal();
+          localStorage.removeItem('SampleTest');
           this.index = 1;
           Swal.fire('Success', 'The configuration has been created', 'success');
         }, (error) => {
@@ -589,13 +597,13 @@ export class ManageConfigurationComponent implements OnInit {
       this.toast.error('Message', 'The maximum exam name is 20');
       return false;
     }
-    else if (this.inputConfiguration['totalQuestion'] < 1 || this.inputConfiguration['totalQuestion'] > 100) {
-      this.toast.error('Message', 'Total question must be range 1 to 100');
-      this.inputConfiguration['totalQuestion'] = 0;
+    else if (this.inputConfiguration['totalQuestion'] < this.selectedItems.length * 2 || this.inputConfiguration['totalQuestion'] > 100) {
+      this.toast.error('Message', 'Total question must be range ' + this.selectedItems.length * 2 + ' to 100');
+      this.inputConfiguration['totalQuestion'] = this.selectedItems.length * 2;
       return false;
-    } else if (this.inputConfiguration['duration'] < 5 || this.inputConfiguration['duration'] > 180) {
-      this.toast.error('Message', 'duration must be range 1 to 200');
-      this.inputConfiguration['duration'] = 15
+    } else if (this.inputConfiguration['duration'] < this.selectedItems.length * 5 || this.inputConfiguration['duration'] > 180) {
+      this.toast.error('Message', 'duration must be range ' + this.selectedItems.length * 5 + '\'' + ' to 200\'');
+      this.inputConfiguration['duration'] = this.selectedItems.length * 5
       return false;
     } else if (this.selectedItems.length === 0) {
       this.toast.error('Message', 'Please select the catalogue');
@@ -647,6 +655,7 @@ export class ManageConfigurationComponent implements OnInit {
           Swal.fire('Success', 'The mail has been send', 'success');
         }, (error) => {
           this.toast.error(error.name);
+          console.log(error)
           this.loading = false;
         });
       }

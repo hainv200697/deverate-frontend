@@ -38,7 +38,7 @@
                             <div class="col-md-5 row" style="margin-left: 33px;">
                                 <label class="col-md-6" style="text-align: right;">Type:</label>
                                 <select class="col-md-4" [(ngModel)]="inputConfiguration['type']" style="font-size: 9px;">
-                                    <option [ngValue]="true" style="font-size: 12px;" [hidden]="employeeInCompany.length==0" >Employee</option>
+                                    <option [ngValue]="true" style="font-size: 12px;" *ngIf="employeeInCompany.length==0" >Employee</option>
                                     <option [ngValue]="false" style="font-size: 12px;">Applicant</option>
                                 </select>
                             </div>
@@ -401,7 +401,7 @@
                                 </angular2-multiselect>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-row" *ngFor="let c of updateConfig['catalogueInConfigurations']"
+                                <div class="form-row" *ngFor="let c of updateConfig['catalogueInConfigs']"
                                     style="margin-left: -55px;">
                                     <div class="form-group col-md-8">
                                         <input type="text" disabled="disabled" class="form-control"
@@ -429,7 +429,7 @@
                         <div class="d-flex justify-content-center col-md-12">
                             <div class="list-group-item col-md-8 ">
                                 <h5 class="card-title"> </h5>
-                                <div class="form-row" *ngFor="let rank of updateConfig['configurationRank']">
+                                <div class="form-row" *ngFor="let rank of updateConfig['configurationRanks']">
                                     <div class="form-group col-8">
                                         <label>Rank</label>
                                         <input type="text" disabled="disabled" [value]="rank['rank']"
@@ -506,7 +506,7 @@
                                 </thead>
                                 <tbody>
                                     <tr class="col-md-12 row no-padding-no-margin"
-                                        *ngFor="let c of updateConfig['configurationRank']">
+                                        *ngFor="let c of updateConfig['configurationRanks']">
                                         <td class="col-md-9">
                                             {{c['rank']}}
                                         </td>
@@ -528,7 +528,7 @@
                                 </thead>
                                 <tbody>
                                     <tr class="col-md-12 row no-padding-no-margin"
-                                        *ngFor="let c of updateConfig['catalogueInConfigurations']">
+                                        *ngFor="let c of updateConfig['catalogueInConfigs']">
                                         <td class="col-md-9">
                                             {{c.name}}
                                         </td>
