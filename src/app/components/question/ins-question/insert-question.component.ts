@@ -128,6 +128,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 var existItem = listQues.some(Question => Question == item.Question);
                 if (existItem) {
                     existedQues.push("Question  "+item.Question+" is duplicate");
+                    this.checkFile = false;
                 }
                 else {
                     listQues.push(item.Question);

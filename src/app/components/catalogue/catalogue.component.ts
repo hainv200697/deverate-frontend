@@ -252,7 +252,7 @@ export class CatalogueComponent implements OnInit {
             let checkDup = false;
             this.catalogueList.forEach(element => {
                 if (this.insCatalogue['Name'] === element.name) {
-                    return checkDup = true;
+                    checkDup = true;
                 } 
             });
             if(!checkDup){
@@ -289,7 +289,7 @@ export class CatalogueComponent implements OnInit {
             let checkDup = false;
             this.catalogueList.forEach(element => {
                 if (this.updCatalogue['Name'] === element.name) {
-                    return checkDup = true;
+                    checkDup = true;
                 } 
             });
             if(!checkDup){

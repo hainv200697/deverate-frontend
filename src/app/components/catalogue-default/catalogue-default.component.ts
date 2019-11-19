@@ -211,16 +211,16 @@ export class CatalogueDefaultComponent implements OnInit {
             let checkDup = false;
             this.catalogueList.forEach(element => {
                 if (this.insCatalogue['Name'] === element.name) {
-                    this.toastr.error('Message', 'Catalogue is existed');
-                    document.getElementById('ins_Cataloguedf_name').style.borderColor = 'red';
-                    document.getElementById('ins_Cataloguedf_name').focus();
-                    return checkDup = true;
+                    checkDup = true;
                 } 
             });
             if(!checkDup){
                 document.getElementById('ins_Cataloguedf_name').style.borderColor = 'green';
                 return true;
             }else{
+                this.toastr.error('Message', 'Catalogue is existed');
+                document.getElementById('ins_Cataloguedf_name').style.borderColor = 'red';
+                document.getElementById('ins_Cataloguedf_name').focus();
                 return false;
             }
         }
@@ -247,16 +247,16 @@ export class CatalogueDefaultComponent implements OnInit {
             let checkDup = false;
             this.catalogueList.forEach(element => {
                 if (this.updCatalogue['Name'] === element.name) {
-                    this.toastr.error('Message', 'Catalogue is existed');
-                    document.getElementById('upd_Cataloguedf_name').style.borderColor = 'red';
-                    document.getElementById('upd_Cataloguedf_name').focus();
-                    return checkDup = true;
+                    checkDup = true;
                 } 
             });
             if(!checkDup){
                 document.getElementById('upd_Cataloguedf_name').style.borderColor = 'green';
                 return true;
             }else{
+                this.toastr.error('Message', 'Catalogue is existed');
+                document.getElementById('upd_Cataloguedf_name').style.borderColor = 'red';
+                document.getElementById('upd_Cataloguedf_name').focus();
                 return false;
             }
         }
