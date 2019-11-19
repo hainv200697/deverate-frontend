@@ -30,7 +30,7 @@
             <div class="row justify-content-end" style="margin-top: 20px;">
                 <button [hidden]="iconIsActive==false" style="margin-right: 20px;"
                     (click)="sendQuizCode();" class="btn btn-lg btn-warning" data-toggle="button">
-                    <i class="fa fa-envelope" tooltip="{{'Send mail' | translate}}" placement="top"></i>
+                    <i class="fa fa-envelope" tooltip="Send mail" placement="top"></i>
                 </button>
             </div>
         </div>
@@ -81,7 +81,7 @@
                     </td>
                     <td class="col-md-1 text-center nowrap text-center action-column" style="color: red;">
                         <button class="btn-warning btn btn-circle shadow-item" (click)="openViewTest(item.testId)"
-                            tooltip="{{'common_modify' | translate}}">
+                            tooltip="update">
                             <i class="fa fa fa-eye edit-icon"></i>
                         </button>
                     </td>

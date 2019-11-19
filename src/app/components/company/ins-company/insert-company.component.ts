@@ -3,7 +3,6 @@ import { GloblaService } from './../../../../assets/service/global.service';
 import { CompanyApiService } from './../../../services/company-api.service';
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2'
 import { from } from 'rxjs';
@@ -19,7 +18,6 @@ import { EmployeeApiService } from 'src/app/services/employee-api.service';
 })
 export class InsertCompanyComponent implements OnInit {
   constructor(
-    private translate: TranslateService,
     public router: Router,
     private modalService: NgbModal,
     private companyApi: CompanyApiService,
