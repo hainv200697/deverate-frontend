@@ -10,7 +10,7 @@
                 <div class="">
                     <div class="input-group input-group-icon">
                         <input type="text" [(ngModel)]="inputCompany['name']" name="ins_company_name" id="companyName"
-                            (change)="validateCompanyName()" placeholder="{{ 'Name' | translate }}">
+                            (change)="validateCompanyName()" placeholder="Name">
                         <div class="input-icon"><i class="fa fa-institution"></i><label style="color: red;">*</label>
                         </div>
                     </div>
@@ -179,7 +179,7 @@
                 <div class="col">
                     <div class="row" style="margin-top: 20px;">
                         <div class="form-group input-group col-md-6 row" style="margin-left: 21px;">
-                            <input class="col-md-10" type="search" placeholder="{{'Enter data' | translate}}"
+                            <input class="col-md-10" type="search" placeholder="Enter data"
                                 [(ngModel)]="searchText" style="height: 38px;">
                             <div class="input-group-append col-md-2 no-padding-no-margin d-flex align-items-start">
                                 <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
