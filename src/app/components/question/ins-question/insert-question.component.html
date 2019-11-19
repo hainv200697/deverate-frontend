@@ -37,7 +37,7 @@
                                         <label>Question:</label>
                                         <input type="text" [(ngModel)]="insQuestion['question1']"
                                             name="ins_question_question" class="form-control input-underline input-lg"
-                                            id="ins_question_question" placeholder="{{ 'Question' | translate }}">
+                                            id="ins_question_question" placeholder="Question">
                                     </div>
                                 </div>
                                 <!--Add answer  -->
@@ -268,7 +268,7 @@
                                     <label>Question:</label>
                                     <input type="text" [(ngModel)]="updQuestion['question1']"
                                         name="upd_question_question" class="form-control input-underline input-lg"
-                                        id="upd_question_question" placeholder="{{ 'Question' | translate }}">
+                                        id="upd_question_question" placeholder="Question">
                                 </div>
                             </div>
                         </div>
@@ -343,12 +343,12 @@
                         <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
                             (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger"
                             data-toggle="button">
-                            <i class="fa fa-ban" tooltip="{{'delete' | translate}}" placement="top"></i>
+                            <i class="fa fa-ban" tooltip="delete" placement="top"></i>
                         </button>
                         <button [hidden]="iconIsActive==true" style="margin-right: 10px;"
                             (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success"
                             data-toggle="button">
-                            <i class="fa fa-check" tooltip="{{'Active' | translate}}" placement="top"></i>
+                            <i class="fa fa-check" tooltip="Active" placement="top"></i>
                         </button>
                         <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
                             class="btn btn-lg btn-success " data-toggle="button">
@@ -356,7 +356,7 @@
                         </button>
                         <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
                             class="btn btn-lg btn-primary" data-toggle="button">
-                            <i #refesh class="fa fa-refresh" tooltip="{{'common_refresh' | translate}}" placement="top"
+                            <i #refesh class="fa fa-refresh" tooltip="common_refresh" placement="top"
                                 aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
                         </button>
                     </div>
@@ -395,7 +395,7 @@
                         <th class="col-md-2 text-center" scope="col">Action</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody *ngIf="sv.data.length != 0;  else searchNull">
                     <tr class="col-md-12 row no-padding-no-margin" *ngFor="let q of sv.data  ">
                         <td class="text-center col-md-1">
                             <label>
@@ -419,7 +419,7 @@
                                 <i class="fa fa fa-eye"></i>
                             </button>
                             <button class="btn-warning btn btn-circle shadow-item" (click)="openUpdate(q,update);"
-                                tooltip="{{'common_modify' | translate}}">
+                                tooltip="common_modify">
                                 <i class="fa fa-edit edit-icon"></i>
                             </button>
                         </td>
@@ -443,3 +443,8 @@
 </ng-template>
 <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true  }"  [template]="customLoadingTemplate">
 </ngx-loading>
+<ng-template #searchNull>
+    <tr class="col-md-12 row no-padding-no-margin">
+        <th class="text-center col-md-12" scope="col">No data</th>
+    </tr>
+</ng-template>

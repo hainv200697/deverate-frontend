@@ -3,46 +3,46 @@
         <!-- System Manager -->
         <a [routerLink]="['/manage-company']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'System Manager'">
             <i class="fa fa-institution"></i>&nbsp;
-            <span>{{ 'Manage Company' | translate }}</span>
+            <span>Manage Company</span>
         </a>
         <a [routerLink]="['/default-catalogue']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'System Manager'">
             <i class="fa fa-th-list"></i>&nbsp;
-            <span>{{ 'Catalogue Default' | translate }}</span>
+            <span>Catalogue Default</span>
         </a>
 
         <!-- Company Manager -->
         <a [routerLink]="['/manage-employee']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Company Manager'">
             <i class="fa fa-user"></i>&nbsp;
-            <span>{{ 'Manage Employee' | translate }}</span>
+            <span>Manage Employee</span>
         </a>
         
         <a [routerLink]="['/catalogue']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Company Manager'">
             <i class="fa fa-th-list"></i>&nbsp;
-            <span>{{ 'Catalogue' | translate }}</span>
+            <span>Catalogue</span>
         </a>
 
         <a [routerLink]="['/stastistic-manager']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Company Manager'">
             <i class="fa fa-bar-chart"></i>&nbsp;
-            <span>{{ 'Statistic' | translate }}</span>
+            <span>Statistic</span>
         </a>
         <!-- Test Owner -->
         <a [routerLink]="['/manage-configuration']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
             <i class="fa fa-cog"></i>&nbsp;
-            <span>{{ 'Manage Test' | translate }}</span>
+            <span>Manage Test</span>
         </a>
         <a [routerLink]="['/statistic']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
             <i class="fa fa-bar-chart"></i>&nbsp;
-            <span>{{ 'Statistic' | translate }}</span>
+            <span>Statistic</span>
         </a>
         <a [routerLink]="['/applicant']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
             <i class="fa fa-user"></i>&nbsp;
-            <span>{{ 'Applicant' | translate }}</span>
+            <span>Applicant</span>
         </a>
         
         <!-- Employee -->
         <a [routerLink]="['/reranking']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Employee'">
             <i class="fa fa-plus"></i>&nbsp;
-            <span>{{ 'Quiz' | translate }}</span>
+            <span>Quiz</span>
         </a>
 
         <div class="header-fields">
@@ -51,43 +51,43 @@
             </a>
             <div class="nested-menu">
                 <a class="list-group-item" (click)="addExpandClass('languages')">
-                    <span><i class="fa fa-language"></i>&nbsp; {{ 'Language' | translate }} <b class="caret"></b></span>
+                    <span><i class="fa fa-language"></i>&nbsp; Language <b class="caret"></b></span>
                 </a>
                 <li class="nested" [class.expand]="showMenu === 'languages'">
                     <ul class="submenu">
                         <li>
                             <a href="javascript:void(0)" (click)="changeLang('en')">
-                                {{ 'English' | translate }}
+                                English
                             </a>
                         </li>
                         <li>
                             <a href="javascript:void(0)" (click)="changeLang('fr')">
-                                {{ 'French' | translate }}
+                                French
                             </a>
                         </li>
                         <li>
                             <a href="javascript:void(0)" (click)="changeLang('ur')">
-                                {{ 'Urdu' | translate }}
+                                Urdu
                             </a>
                         </li>
                         <li>
                             <a href="javascript:void(0)" (click)="changeLang('es')">
-                                {{ 'Spanish' | translate }}
+                               Spanish
                             </a>
                         </li>
                         <li>
                             <a href="javascript:void(0)" (click)="changeLang('it')">
-                                {{ 'Italian' | translate }}
+                                Italian
                             </a>
                         </li>
                         <li>
                             <a href="javascript:void(0)" (click)="changeLang('fa')">
-                                {{ 'Farsi' | translate }}
+                                Farsi
                             </a>
                         </li>
                         <li>
                             <a href="javascript:void(0)" (click)="changeLang('de')">
-                                {{ 'German' | translate }}
+                                German
                             </a>
                         </li>
                     </ul>
@@ -101,22 +101,22 @@
                     <ul class="submenu">
                         <li>
                             <a href="javascript:void(0)">
-                                <span><i class="fa fa-fw fa-user"></i> {{ 'Profile' | translate }}</span>
+                                <span><i class="fa fa-fw fa-user"></i> Profile</span>
                             </a>
                         </li>
                         <!-- <li>
                             <a href="javascript:void(0)">
-                                <span><i class="fa fa-fw fa-envelope"></i> {{ 'Inbox' | translate }}</span>
+                                <span><i class="fa fa-fw fa-envelope"></i> Inbox</span>
                             </a>
                         </li>
                         <li>
                             <a href="javascript:void(0)">
-                                <span><i class="fa fa-fw fa-gear"></i> {{ 'Settings' | translate }}</span>
+                                <span><i class="fa fa-fw fa-gear"></i> Settings</span>
                             </a>
                         </li> -->
                         <li>
                             <a [routerLink]="['/login']" (click)="onLoggedout()">
-                                <span><i class="fa fa-fw fa-power-off"></i> {{ 'Log Out' | translate }}</span>
+                                <span><i class="fa fa-fw fa-power-off"></i> Log Out</span>
                             </a>
                         </li>
                     </ul>
@@ -126,6 +126,6 @@
     </div>
     <div class="toggle-button" [ngClass]="{collapsed: collapsed}" (click)="toggleCollapsed()">
         <i class="fa fa-fw fa-angle-double-{{collapsed?'right':'left'}}"></i>&nbsp;
-        <span>{{ 'Collapse Sidebar' | translate }}</span>
+        <span>Collapse Sidebar</span>
     </div>
 </nav>

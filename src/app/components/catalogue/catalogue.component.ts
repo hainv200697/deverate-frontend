@@ -92,7 +92,15 @@ export class CatalogueComponent implements OnInit {
 
     // Insert catalogue
     insertCatalogueSubmit() {
-        if (this.validate() && this.validateDes()) {
+        let check= true;
+        if (!this.validate()) {
+            check =false;
+        }
+        if(!this.validateDes()){
+            check =false;
+        }
+        console.log(check);
+        if(check==true){
             this.insCata();
             this.closeModal();
         }
@@ -145,7 +153,14 @@ export class CatalogueComponent implements OnInit {
     }
     // Update catalogue
     updateCatalogueSubmit() {
-        if (this.validateUpdate() && this.validateUpdateDes) {
+        let check= true;
+        if (!this.validateUpdate()) {
+            check =false;
+        }
+        if(!this.validateUpdateDes()){
+            check =false;
+        }
+        if(check==true){
             this.updCata();
             this.closeModal();
         }
@@ -237,15 +252,19 @@ export class CatalogueComponent implements OnInit {
             let checkDup = false;
             this.catalogueList.forEach(element => {
                 if (this.insCatalogue['Name'] === element.name) {
-                    this.toastr.error('Message', 'Catalogue is existed');
-                    document.getElementById('ins_Catalogue_name').style.borderColor = 'red';
-                    document.getElementById('ins_Catalogue_name').focus();
                     return checkDup = true;
                 } 
             });
             if(!checkDup){
                 document.getElementById('ins_Catalogue_name').style.borderColor = 'green';
+                return true;
+            }else{
+                this.toastr.error('Message', 'Catalogue is existed');
+                document.getElementById('ins_Catalogue_name').style.borderColor = 'red';
+                document.getElementById('ins_Catalogue_name').focus();
+                return false;
             }
+            
         }
         return true;
     }
@@ -267,7 +286,22 @@ export class CatalogueComponent implements OnInit {
             document.getElementById('upd_Catalogue_name').focus();
             return false;
         } else {
-            document.getElementById('upd_Catalogue_name').style.borderColor = 'green';
+            let checkDup = false;
+            this.catalogueList.forEach(element => {
+                if (this.updCatalogue['Name'] === element.name) {
+                    return checkDup = true;
+                } 
+            });
+            if(!checkDup){
+                document.getElementById('ins_Catalogue_name').style.borderColor = 'green';
+                return true;
+            }else{
+                this.toastr.error('Message', 'Catalogue is existed');
+                document.getElementById('ins_Catalogue_name').style.borderColor = 'red';
+                document.getElementById('ins_Catalogue_name').focus();
+                return false;
+            }
+            
         }
         return true;
     }

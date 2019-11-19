@@ -7,7 +7,6 @@ import { CompanyApiService } from '../../../services/company-api.service';
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import Stepper from 'bs-stepper';
@@ -23,7 +22,6 @@ declare var $: any;
 export class ManageConfigurationComponent implements OnInit {
   public rateCataOfRank: number[] = []
   constructor(
-    private translate: TranslateService,
     public router: Router,
     private modalService: NgbModal,
     private companyApi: CompanyApiService,

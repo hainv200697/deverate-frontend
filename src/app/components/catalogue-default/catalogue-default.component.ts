@@ -87,7 +87,15 @@ export class CatalogueDefaultComponent implements OnInit {
 
     // Insert catalogue
     insertCatalogueSubmit() {
-        if (this.validate() && this.validateDes()) {
+        let check= true;
+        if (!this.validate()) {
+            check =false;
+        }
+        if(!this.validateDes()){
+            check =false;
+        }
+        console.log(check);
+        if(check==true){
             this.insCata();
             this.closeModal();
             this.getAllCatalogue(this.iconIsActive);
@@ -128,7 +136,14 @@ export class CatalogueDefaultComponent implements OnInit {
     }
     // Update catalogue
     updateCatalogueSubmit() {
-        if (this.validateUpdate() && this.validateUpdateDes()) {
+        let check= true;
+        if (!this.validateUpdate()) {
+            check =false;
+        }
+        if(!this.validateUpdateDes()){
+            check =false;
+        }
+        if(check==true){
             this.updCata();
             this.closeModal();
         }
@@ -193,13 +208,27 @@ export class CatalogueDefaultComponent implements OnInit {
             document.getElementById('ins_Cataloguedf_name').focus();
             return false;
         } else {
-            document.getElementById('ins_Cataloguedf_name').style.borderColor = 'green';
+            let checkDup = false;
+            this.catalogueList.forEach(element => {
+                if (this.insCatalogue['Name'] === element.name) {
+                    this.toastr.error('Message', 'Catalogue is existed');
+                    document.getElementById('ins_Cataloguedf_name').style.borderColor = 'red';
+                    document.getElementById('ins_Cataloguedf_name').focus();
+                    return checkDup = true;
+                } 
+            });
+            if(!checkDup){
+                document.getElementById('ins_Cataloguedf_name').style.borderColor = 'green';
+                return true;
+            }else{
+                return false;
+            }
         }
         return true;
     }
 
     validateUpdate() {
-        if (this.updCatalogue['Name'] == null || this.insCatalogue['Name'] == undefined) {
+        if (this.updCatalogue['Name'] == null || this.updCatalogue['Name'] == undefined) {
             this.toastr.error('Message', 'Please input catalogue name');
             document.getElementById('upd_Cataloguedf_name').style.borderColor = 'red';
             document.getElementById('upd_Cataloguedf_name').focus();
@@ -215,7 +244,21 @@ export class CatalogueDefaultComponent implements OnInit {
             document.getElementById('upd_Cataloguedf_name').focus();
             return false;
         } else {
-            document.getElementById('upd_Cataloguedf_name').style.borderColor = 'green';
+            let checkDup = false;
+            this.catalogueList.forEach(element => {
+                if (this.updCatalogue['Name'] === element.name) {
+                    this.toastr.error('Message', 'Catalogue is existed');
+                    document.getElementById('upd_Cataloguedf_name').style.borderColor = 'red';
+                    document.getElementById('upd_Cataloguedf_name').focus();
+                    return checkDup = true;
+                } 
+            });
+            if(!checkDup){
+                document.getElementById('upd_Cataloguedf_name').style.borderColor = 'green';
+                return true;
+            }else{
+                return false;
+            }
         }
         return true;
     }

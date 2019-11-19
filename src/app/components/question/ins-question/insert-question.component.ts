@@ -1,6 +1,5 @@
 import { Component, Output, EventEmitter, OnInit, AfterViewInit } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { QuestionApiService } from '../../../services/question-api.service';
 import { CatalogueApiService } from '../../../services/catalogue-api.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -23,7 +22,6 @@ import { QuestionModel } from '../../../models/question-model';
 })
 export class InsertQuestionComponent implements OnInit, AfterViewInit {
     constructor(
-        private translate: TranslateService,
         public router: Router,
         private questionService: QuestionApiService,
         private catelogueService: CatalogueApiService,
@@ -243,15 +241,15 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 return;
             }
 
-            if (question.length < 10) {
-                this.toastr.error('Message', 'question must be more than 10 characters!');
+            if (question.length < 3) {
+                this.toastr.error('Message', 'question must be more than 3 characters!');
                 $('#ins_question_question').css('border-color', 'red');
                 $('#ins_question_question').focus();
                 return;
             }
 
-            if (question.length > 300) {
-                this.toastr.error('Message', 'question must be less than 300 characters!');
+            if (question.length > 200) {
+                this.toastr.error('Message', 'question must be less than 200 characters!');
                 $('#ins_question_question').css('border-color', 'red');
                 $('#ins_question_question').focus();
                 return;
@@ -263,8 +261,8 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 i++;
                 if (check === true) {
                     const ans = element['answer1'];
-                    if (ans === '' || ans.length < 5) {
-                        this.toastr.error('Message', 'Answer must be more than 5 characters!');
+                    if (ans === '' || ans.length < 3 || ans.length > 200) {
+                        this.toastr.error('Message', 'Answer must be more than 3 characters!');
                         check = false;
                         $('.ans-' + i).css('border-color', 'red');
                         $('.ans-' + i).focus();
@@ -321,15 +319,15 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 return;
             }
 
-            if (question.length < 10) {
-                this.toastr.error('Message', 'question must be more than 10 characters!');
+            if (question.length < 3) {
+                this.toastr.error('Message', 'question must be more than 3 characters!');
                 $('#upd_question_question').css('border-color', 'red');
                 $('#upd_question_question').focus();
                 return;
             }
 
-            if (question.length > 300) {
-                this.toastr.error('Message', 'question must be less than 300 characters!');
+            if (question.length > 200) {
+                this.toastr.error('Message', 'question must be less than 200 characters!');
                 $('#upd_question_question').css('border-color', 'red');
                 $('#upd_question_question').focus();
                 return;
