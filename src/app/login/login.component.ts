@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { routerTransition } from '../router.animations';
+import { ToastrService } from 'ngx-toastr';
 import { AuthenticationService } from '../services/authentication.service';
 import * as jwt_decode from 'jwt-decode';
 
@@ -13,8 +14,10 @@ import * as jwt_decode from 'jwt-decode';
 export class LoginComponent implements OnInit {
     username: string;
     password: string;
+    public loading = false;
     constructor(
         private router: Router,
+        private toast : ToastrService,
         private authenticationService: AuthenticationService
     ) { }
 
@@ -25,6 +28,7 @@ export class LoginComponent implements OnInit {
     }
 
     onLogin() {
+        this.loading = true;
         const account = {
             username: this.username,
             password: this.password
@@ -57,8 +61,10 @@ export class LoginComponent implements OnInit {
                              this.router.navigate(['/forbidden']);
                     }
                 }
+                this.loading = false
             }, (error) => {
-                alert(error);
+                this.toast.error('Username or password invalid');
+                this.loading = false
             });
     }
 

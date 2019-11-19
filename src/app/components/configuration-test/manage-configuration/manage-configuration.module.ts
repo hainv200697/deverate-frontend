@@ -8,6 +8,7 @@ import { ManageConfigurationComponent } from './manage-configuration.component';
 import { PageHeaderModule } from '../../../shared';
 import { ManageConfigurationRoutingModule } from './manage-configuration-routing.module';
 import {TooltipModule} from "ngx-tooltip";
+import { TooltipModule } from "ngx-tooltip";
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { DataTableModule } from 'ng-angular8-datatable';
 import { CompanyFilterPipe } from './company-filter.pipe';

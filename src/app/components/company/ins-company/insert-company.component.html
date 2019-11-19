@@ -10,7 +10,7 @@
                 <div class="">
                     <div class="input-group input-group-icon">
                         <input type="text" [(ngModel)]="inputCompany['name']" name="ins_company_name" id="companyName"
-                            (change)="validateCompanyName()" placeholder="{{ 'Name' | translate }}">
+                            (change)="validateCompanyName()" placeholder="Name">
                         <div class="input-icon"><i class="fa fa-institution"></i><label style="color: red;">*</label>
                         </div>
                     </div>
@@ -179,7 +179,7 @@
                 <div class="col">
                     <div class="row" style="margin-top: 20px;">
                         <div class="form-group input-group col-md-6 row" style="margin-left: 21px;">
-                            <input class="col-md-10" type="search" placeholder="{{'Enter data' | translate}}"
+                            <input class="col-md-10" type="search" placeholder="Enter data"
                                 [(ngModel)]="searchText" style="height: 38px;">
                             <div class="input-group-append col-md-2 no-padding-no-margin d-flex align-items-start">
                                 <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
@@ -225,60 +225,61 @@
                 #sv="svDataTable">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin pt-3">
-                        <th class="text-center col-md-1" scope="col"><input class="btn" type="checkbox" value=""
+                        <th class="text-center" style="width: 5%;" scope="col"><input class="btn" type="checkbox" value=""
                                 [(ngModel)]="selectedAll" (change)="selectAll();"></th>
-                        <th class="text-center col-md-1" scope="col">
+                        <th class="text-center" style="width: 5%;" scope="col">
                             No.
                         </th>
-                        <th class="text-center col-md-2" scope="col">
+                        <th class="text-center" style="width: 20%;" scope="col">
                             <sv-default-sorter by="Name">Company
                             </sv-default-sorter>
                         </th>
-                        <th class="text-center col-md-2" scope="col">
+                        <th class="text-center" style="width: 20%;" scope="col">
                             <sv-default-sorter by="ManagerName">Manager
                             </sv-default-sorter>
                         </th>
-                        <th class="text-center col-md-2" scope="col">Phone</th>
-                        <th class="text-center col-md-2" scope="col">
-                            <sv-default-sorter by="Create_At">Creat At
+                        <th class="text-center" style="width: 15%;" scope="col">Phone</th>
+                        <th class="text-center" scope="col" style="width: 15%;">
+                            <sv-default-sorter  by="Create_At">Creat At
                             </sv-default-sorter>
                         </th>
-                        <th class="text-center col-md-1" scope="col">
+                        <th class="text-center" style="width: 10%;" scope="col">
                             <sv-default-sorter by="isActive">Status
                             </sv-default-sorter>
                         </th>
-                        <th class="text-center col-md-1" scope="col">Action</th>
+                        <th class="text-center" style="width: 10%;" scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody *ngIf="sv.data.length != 0;  else searchNull">
                     <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px"
                         *ngFor="let c of sv.data | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index">
-                        <td class="text-center col-md-1">
+                        <td class="text-center" style="width: 5%;">
                             <input type="checkbox" value="" [(ngModel)]="c.selected" class="btn"
                                 (change)="checkIfAllSelected();">
                         </td>
-                        <td class="text-center col-md-1">{{i+1}}</td>
-                        <td class="text-center col-md-2">{{c.name}}</td>
-                        <td class="text-center col-md-2">{{c.managerName}}</td>
-                        <td class="text-center col-md-2">0{{c.phone}}</td>
-                        <td class="text-center col-md-2">{{c.create_At.split('T')[0]}}</td>
-                        <td class="text-center col-md-1" [hidden]="c.isActive==true">
+                        <td class="text-center" style="width: 5%;">{{i+1}}</td>
+                        <td class="text-center" style="width: 20%;" >{{c.name}}</td>
+                        <td class="text-center" style="width: 20%;" >{{c.managerName}}</td>
+                        <td class="text-center" style="width: 15%;">0{{c.phone}}</td>
+                        <td class="text-center" style="width: 15%;">{{c.create_At.split('T')[0]}}</td>
+                        <td class="text-center" style="width: 10%;" [hidden]="c.isActive==true">
                             <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
                         </td>
-                        <td class="text-center col-md-1" [hidden]="c.isActive==false">
+                        <td class="text-center" style="width: 10%;" [hidden]="c.isActive==false">
                             <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
                         </td>
-                        <td class=" text-center col-md-1" [hidden]="c.isActive==false">
+                        <td class=" text-center" style="width: 10%;" [hidden]="c.isActive==false">
                             <button class="btn-warning btn btn-circle shadow-item col-md-6" ngbTooltip="Edit"
                                 (click)="openDetail(update, c.companyId)">
                                 <i class="fa fa-edit edit-icon"></i>
                             </button>
+                            &nbsp;
                             <button class=" btn btn-circle shadow-item col-md-6" ngbTooltip="Send Email"
                                 (click)="resendmail(c.managerUserName, c.companyId)">
                                 <i class="fa fa-envelope"></i>
                             </button>
                         </td>
-                        <td class=" text-center col-md-1" [hidden]="c.isActive==true">
+                        <td class=" text-center" style="width: 10%;" [hidden]="c.isActive==true">
                             <button class="btn-warning btn btn-circle shadow-item col-md-6" ngbTooltip="Edit"
                                 (click)="openDetail(update, c.companyId)">
                                 <i class="fa fa-edit edit-icon"></i>
