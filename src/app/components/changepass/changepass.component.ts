@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-changepass',
@@ -9,14 +10,26 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
     animations: [routerTransition()]
 })
 export class ChangepassComponent implements OnInit {
-    constructor(private authenticationService: AuthenticationService) {}
-    oldPassword = '';
-    newPassword = '';
-    rePassword = ''
+    constructor
+        (
+            private authenticationService: AuthenticationService,
+            private toast: ToastrService,
+    ) { }
+    oldPassword;
+    newPassword;
+    rePassword;
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.clearData();
+     }
 
-    changePassword(){
+    clearData() {
+        this.oldPassword = '';
+        this.newPassword = '';
+        this.rePassword = ''
+    }
+
+    changePassword() {
         if (this.newPassword != this.rePassword) {
             return;
         }
@@ -26,12 +39,13 @@ export class ChangepassComponent implements OnInit {
             newPassword: this.newPassword
         }
         this.authenticationService.changePassword(user)
-        .subscribe((res) => {
-            alert("success")
-        }, (error) => {
-            if (error.status == 400) {
-                alert("Current password is invalid")
-            }
-        })
+            .subscribe((res) => {
+                this.toast.success("Success");
+                this.clearData();
+            }, (error) => {
+                if (error.status == 400) {
+                    this.toast.error("Current password is invalid");
+                }
+            })
     }
 }

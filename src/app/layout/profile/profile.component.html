@@ -1,3 +1,5 @@
+
+
 <div class="profile-body row col-md-12">
   <div class="col col-sm-8">
     <div class="card mb-3">
@@ -9,41 +11,37 @@
           <div class="form-content row">
             <div class="form-group col-sm-12 col-md-4 col-lg-4">
               <label>Username:</label>
-              <input type="text" class="form-control input-underline input-lg" readonly="readonly" id="" placeholder="{{account.Username}}">
+              <input type="text" class="form-control input-underline input-lg" disabled name="username" [value]="account?.username">
             </div>
             <div class="form-group col-sm-12 col-md-4 col-lg-4">
               <label>Full name:</label>
-              <input type="text" class="form-control input-underline input-lg" id="" placeholder="{{account.Fullname}}">
+              <input type="text" class="form-control input-underline input-lg" name="fullname" [(ngModel)]="account.fullname">
             </div>
             <div class="form-group col-sm-12 col-md-4 col-lg-4">
               <label>Phone:</label>
-              <input type="text" class="form-control input-underline input-lg" id="" placeholder="{{account.Phone}}">
+              <input type="text" class="form-control input-underline input-lg" name="phone" [(ngModel)]="account['phone']">
             </div>
             <div class="form-group col-sm-12 col-md-6 col-lg-6">
               <label>Email:</label>
-              <input type="text" class="form-control input-underline input-lg" id="" placeholder="{{account.Email}}">
+              <input disabled type="text" class="form-control input-underline input-lg" name="email" disabled [(ngModel)]="account['email']">
             </div>
             <div class="form-group col-sm-12 col-md-6 col-lg-6">
               <label>Address:</label>
-              <input type="text" class="form-control input-underline input-lg" id="" placeholder="{{account.Address}}">
+              <input type="text" class="form-control input-underline input-lg" name="address" [(ngModel)]="account['address']">
             </div>
             <fieldset class="form-group col-sm-12 col-md-6 col-lg-6">
               <label>Gender:</label>
               <div class="radio">
                 <label>
-                  <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked=""> Male
+                  <input type="radio" name="gender" [value]=true [(ngModel)]="account['gender']"> Male
                 </label>
               </div>
               <div class="radio">
                 <label>
-                  <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2"> Female
+                  <input type="radio" name="gender" [value]=false [(ngModel)]="account['gender']"> Female
                 </label>
               </div>
             </fieldset>
-            <div class="form-group col-sm-12 col-md-6 col-lg-6">
-              <label>Start Date:</label>
-              <input type="date" class="form-control input-underline input-lg" id="" placeholder="{{account.JoinDate}}">
-            </div>
           </div>
         </div>
         <div class="card-footer text-right">
@@ -64,10 +62,19 @@
         <a [routerLink]="['/changepass']"  href="javascript:void(0)">
           <i class="fa fa-fw fa-user"></i>Change password
         </a>
-        <p>"Description"</p>
       </div>
 
     </div>
   </div>
 
 </div>
+
+<ng-template #customLoadingTemplate>
+  <div class="custom-class">
+
+  </div>
+</ng-template>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true  }"
+  [template]="customLoadingTemplate">
+</ngx-loading>
