@@ -45,7 +45,7 @@
 
     <div class="row col-md-12">
         <div class="col-md-3 row" style="margin-top: 50px; margin-left: 3%;">
-            <div class="text-left timer " [hidden]="!test">
+            <div class="text-left timerr " [hidden]="!test">
                 <div class="text-left">
                     <button [ngClass]="{'hasAnswer': (item.answerId != null)}" (click)="scroll('question'+iq)"
                         *ngFor="let item of questionInTest, let iq = index"
