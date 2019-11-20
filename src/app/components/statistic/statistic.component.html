@@ -6,7 +6,8 @@
 <div class=" row col-md-12 d-flex justify-content-center no-padding-no-margin">
 
 
-    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true  }" [template]="customLoadingTemplate">
+    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true  }"
+        [template]="customLoadingTemplate">
     </ngx-loading>
 
 
@@ -60,7 +61,7 @@
                     Average Point Catalogue
                 </div>
                 <div class="card-body" *ngIf="isLoaded">
-                    <ngx-charts-line-chart [view]="[630, 450]" [scheme]="colorScheme" [results]="averageCatalogue"
+                    <ngx-charts-line-chart [view]="[630, 0]" [scheme]="colorScheme" [results]="averageCatalogue"
                         [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
                         [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
                         [yAxisLabel]="yAxisLabel" [legendTitle]="legendTitle" *ngIf="isLoaded">
@@ -74,37 +75,50 @@
                 <div class="card-header">
                     Statistic Rank
                 </div>
-                <div class="card-body" style="height: 490px; overflow: auto;">
+                <div class="card-body" style="height: 445px; overflow: auto;">
                     <table class="table table-hover table-bordered customtable">
                         <thead style="background-color: rgba(0, 0, 0, 0.03);">
                             <tr class="col-md-12 row no-padding-no-margin">
 
-                                <th class="text-center col-md-1 no-padding-no-margin">
+                                <th class="text-center no-padding-no-margin" style="width: 8%;">
                                     No.
                                 </th>
-                                <th class="text-center col-md-6">
+                                <th class="text-center" style="width: 25%;">
                                     Employee
-
                                 </th>
-                                <th class="text-center col-md-2">
+                                <th class="text-center" style="width: 12%;">
                                     Point
                                 </th>
-                                <th class="text-center col-md-3">
+                                <th class="text-center" style="width: 15%;">
+                                    Rank
+                                </th>
+                                <th class="text-center" style="width: 25%;">
                                     Date
                                 </th>
-
+                                <th class="text-center" style="width: 15%;">
+                                    Action
+                                </th>
                             </tr>
                         </thead>
                         <tbody style="background-color: white;">
                             <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px"
                                 *ngFor="let data of dataEmployeeOverPoint; let i = index">
 
-                                <td class="text-center col-md-1" style="font-size: 16px;">{{i+1}}</td>
-                                <td class="text-center col-md-6" style="font-size: 16px;">{{data.username}}</td>
-                                <td class="text-center col-md-2" style="font-size: 16px;">{{data.overallPoint}}
+                                <td class="text-center" style="width: 8%;">{{i+1}}</td>
+                                <td class="text-center" style="width: 25%;">{{data.username}}</td>
+                                <td class="text-center" style="width: 12%;">{{data.overallPoint}}
                                 </td>
-                                <td class="text-center col-md-3" style="font-size: 16px;">
-                                    {{data.configCreateDate}}</td>
+                                <td class="text-center" style="width: 15%;">{{data.rank}}
+                                </td>
+                                <td class="text-center" style="width: 25%;">
+                                    {{data?.startDate.split('T')[0]}}</td>
+                                <th class="text-center" style="width: 15%;">
+                                    <a href='result/{{data.testId}}' target="_blank">
+                                        <button class="btn btn-primary btn-xs btn-circle">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                    </a>
+                                </th>
                             </tr>
                         </tbody>
                     </table>

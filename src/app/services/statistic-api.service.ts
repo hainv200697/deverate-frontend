@@ -35,6 +35,11 @@ export class StatisticApiService {
 
     GetOverallPointStatistic(id){
         const API = 'api/Test/GetOverallPointStatistic?companyId=';
-        return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id);
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id + '&isEmployee=true');
+    }
+
+    GetAccountByTestId(testId){
+        const API = 'api/Test/GetAccountByTestId?testId=';
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + testId);
     }
 }

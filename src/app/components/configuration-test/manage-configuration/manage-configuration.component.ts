@@ -573,10 +573,10 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   getAllEmployee() {
-    this.employeeApi.getAllEmployee(this.companyId, true).subscribe(
+    this.employeeApi.getAllWithRole(this.companyId, true, 3).subscribe(
       (data) => {
-
         this.employeeInCompany = data;
+        console.log(this.employeeInCompany)
       },
       (error) => {
         this.loading = false;

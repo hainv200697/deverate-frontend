@@ -5,6 +5,7 @@ import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { RankApiService } from 'src/app/services/rank-api.services';
 import { StatisticApiService } from 'src/app/services/statistic-api.service';
 import { ActivatedRoute } from '@angular/router';
+import { RadialChartOptions } from 'chart.js';
 
 @Component({
   selector: 'app-result',
@@ -32,8 +33,10 @@ export class ResultComponent implements OnInit {
   catalogueOverpoint: any;
   catalogueInConfigs: any;
   datasource: {};
+  accountInfo;
   isLogin;
   isLoaded;
+  roleName;
 
   constructor(private rankApi: RankApiService,
     private statisticApi: StatisticApiService,
@@ -44,7 +47,20 @@ export class ResultComponent implements OnInit {
     this.isLoaded = false;
     var testId = this.route.snapshot.paramMap.get('testId');
     this.getStatistic(Number(testId), 1);
+    this.getAccountInfo(testId);
     this.isLogin = localStorage.getItem('isLoggedin');
+    this.roleName = localStorage.getItem('Role');
+    console.log(localStorage.getItem('Role'))
+  }
+
+  getAccountInfo(testId){
+    this.loading = true;
+    this.statisticApi.GetAccountByTestId(testId).subscribe(
+      (data) => {
+        this.accountInfo = data;
+        this.loading = false;
+      }
+    )
   }
 
   getStatistic(id: number, rankId: number) {
@@ -219,6 +235,16 @@ export class ResultComponent implements OnInit {
   public radarChartData: any = [
     { data: [], label: 'Assement Result' },
   ];
+  
+  public radarChartOption : RadialChartOptions = {
+    scale: {
+      ticks: {
+        beginAtZero: true,
+        stepSize : 10,
+        max: 100
+      }
+    }
+}
 
   public radarChartColor = [
     {
