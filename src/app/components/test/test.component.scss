@@ -1,12 +1,12 @@
 .card {
     float: right;
 }
-.timer {
+.timerr {
     float: left;
     position: fixed;
-    width: 200px;
     top: 60px;
-    left: 5px;
+    left: 5%;
+    width: 200px;
     margin-left: 20px;
     z-index: 100;
     background-color: #E0E0E0;
@@ -32,6 +32,7 @@
 .test-card{
     box-shadow: 2px 8px 8px 2px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     background-color: rgba(114, 162, 207, 0.575);
+    max-width: 60%;
 }
 .question-test{
     margin-top: 20px;
