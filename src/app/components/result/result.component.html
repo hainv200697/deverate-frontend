@@ -17,6 +17,46 @@
     <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
     </ngx-loading>
 
+    <div *ngIf="roleName==='Test Owner'" class="row col-md-3 d-flex justify-content-start">
+        <table class="table table-striped table-bordered table-hover customtable">
+            <tbody>
+                <tr>
+                    <td style="font-weight: bold; width: 35%;">
+                        FullName
+                    </td>
+                    <td style="font-weight: bold; width: 65%;">
+                        {{accountInfo?.fullname}}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold; width: 35%;">
+                        Email
+                    </td>
+                    <td style="font-weight: bold; width: 35%;">
+                        {{accountInfo?.email}}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold; width: 35%;">
+                        Phone
+                    </td>
+                    <td style="font-weight: bold; width: 35%;">
+                        {{accountInfo?.phone}}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold; width: 35%;">
+                        Address
+                    </td>
+                    <td style="font-weight: bold; width: 35%;">
+                        {{accountInfo?.address}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row col-md-9">
+    </div>
 
     <div class="row col-md-12 d-flex justify-content-center">
         <b>
@@ -42,7 +82,7 @@
 
                         </th>
                         <th class="text-center col-md-2">
-                            WeightPoint
+                            Weight
                         </th>
                         <th class="text-center col-md-4">
                             Assessment Result
@@ -91,7 +131,7 @@
                 </div>
                 <div class="card-body">
                     <canvas baseChart height="100px" [datasets]="radarChartData" [labels]="radarChartLabels"
-                        [chartType]="radarChartType"  [colors]="radarChartColor"
+                        [chartType]="radarChartType"  [colors]="radarChartColor" [options]="radarChartOption"
                         (chartClick)="chartClicked($event)" *ngIf="isLoaded" >
                     </canvas>
                 </div>

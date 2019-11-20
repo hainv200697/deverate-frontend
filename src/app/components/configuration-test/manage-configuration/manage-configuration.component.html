@@ -38,7 +38,7 @@
                             <div class="col-md-5 row" style="margin-left: 33px;">
                                 <label class="col-md-6" style="text-align: right;">Type:</label>
                                 <select class="col-md-4" [(ngModel)]="inputConfiguration['type']" style="font-size: 9px;">
-                                    <option [ngValue]="true" style="font-size: 12px;" *ngIf="employeeInCompany.length==0" >Employee</option>
+                                    <option [ngValue]="true" style="font-size: 12px;" *ngIf="employeeInCompany.length!=0" >Employee</option>
                                     <option [ngValue]="false" style="font-size: 12px;">Applicant</option>
                                 </select>
                             </div>
@@ -56,12 +56,12 @@
                                 <label class="col-md-8" style="text-align: right">Total
                                     Question:</label>
                                 <input class="col-md-4" type="number" [(ngModel)]="inputConfiguration['totalQuestion']"
-                                    name="ins_config_totalquestion" (change)="validateConfiguration()" [min]="5"
+                                    name="ins_config_totalquestion" (change)="validateConfiguration()" [min]="selectedItems.length * 2"
                                     style="height: 30px">
                                 <label class="col-md-12"></label>
                                 <label class="col-md-8" style="text-align: right;">Duration:</label>
                                 <input class="col-md-4" type="number" [(ngModel)]="inputConfiguration['duration']"
-                                    name="ins_config_durartion" step="5" [min]="15" style="height: 30px">
+                                    name="ins_config_durartion" step="5" [min]="selectedItems.length * 5" style="height: 30px">
                             </div>
                             <div class="col-md-7 row ">
                                 <label class="col-md-4" style="text-align: right">Start Date:</label>
@@ -240,7 +240,7 @@
                                             {{c['name']}}
                                         </td>
                                         <td class="col-md-3">
-                                            {{c['weightPoint']}}
+                                            {{c['weightPoint'] | number}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -511,7 +511,7 @@
                                             {{c['rank']}}
                                         </td>
                                         <td class="col-md-3">
-                                            {{c['weightPoint']}}
+                                            {{c['weightPoint'] | number}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -667,7 +667,7 @@
                         <td class="text-center col-md-2" [hidden]="!c.type">Employee</td>
                         <td class="text-center col-md-2" [hidden]="c.type">Applicant</td>
                         <td class="text-center col-md-2">{{c.title}}</td>
-                        <td class="text-center col-md-2">{{c.createDate.split('T')[0]}}</td>
+                        <td class="text-center col-md-2">{{c?.createDate.split('T')[0]}}</td>
                         <td class="text-center col-md-1">{{c.duration}}'</td>
                         <td class="text-center col-md-1" [hidden]="c.isActive==true">
                             <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
