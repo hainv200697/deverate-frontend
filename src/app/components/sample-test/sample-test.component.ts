@@ -22,6 +22,8 @@ export class SampleTestComponent implements OnInit {
   questionInTest = [];
   alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   testId;
+  catalogues;
+  color = ['Red', 'Blue', '#990000', 'Purple', 'Teal', 'Fuchsia', 'Maroon', 'Olive', 'Yellow', 'Lime', 'Green', 'Navy', 'White', 'Black'];
   ngOnInit() {
     this.getTest();
   }
@@ -38,6 +40,11 @@ export class SampleTestComponent implements OnInit {
         console.log(res);
         this.test = true;
         this.questionInTest = res.questions;
+        this.catalogues = res.catalogues;
+        for (var i = 0; i < this.questionInTest.length; i++) {
+          var index = this.catalogues.findIndex(c => c.catalogueId == this.questionInTest[i].catalogueId);
+          this.questionInTest[i].color = this.color[index];
+        }
       },
         (error) => {
           this.error = true;

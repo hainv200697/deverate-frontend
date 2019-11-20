@@ -7,8 +7,7 @@ export class CatalogueDefaultFilterPipe implements PipeTransform {
     if (value) {
       return value.filter(item => {
           return (
-            (item.name.search(searchText) !== -1) ||
-            (item.description.search(searchText) !== -1)
+            (item.name.search(searchText) !== -1)
           );
       });
     }
