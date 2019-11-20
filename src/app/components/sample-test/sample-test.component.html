@@ -1,21 +1,31 @@
-
 <div class="title">
     <div class="text-center">
-            <h2 style="color: red;">Sample Test</h2>
+        <h2 style="color: red;">Sample Test</h2>
     </div>
 </div>
-<div class="test-card">
-    <div class="row col-md-12" style="padding-top: 50px;">
-        <div class=" shadow-card col-md-10" [hidden]="!test">
-            <div class="col-md-12 question-test" *ngFor="let item of questionInTest, let iq = index">
-                <div class="col-md-12">
-                    <div class="question" id="question{{iq}}">
-                        <h5>{{iq+1}}. {{item['question']}}</h5>
-                    </div>
-                    <div class="radio answer" *ngFor="let ans of item.answers; let ia = index"> 
-                        <label style="padding-top: 5px;">
-                            {{alpha[ia]}}. {{ans.answer}}
-                        </label>
+<div class="row col-md-12">
+    <div class="col-md-3 row" style="margin-top: 50px;  margin-left: 3%;">
+        
+        <div class="col-md-12 text-left timer" style="margin-top: 52px; width: 22%;">
+            <div class="text-center">
+                <p style="font-size: 17px; color: red;"><strong>Catalogue in Test</strong></p>
+            </div>
+            <p *ngFor="let item of catalogues;let i= index" style="font-size: 16px;"><font color="{{color[i]}}"> {{item.name}}</font> : {{item.numberOfQuestion}} questions</p>
+        </div>
+    </div>
+    <div class="test-card col-md-9">
+        <div class="row col-md-12" style="padding-top: 25px;">
+            <div class=" shadow-card col-md-10" [hidden]="!test">
+                <div class="col-md-12 question-test" *ngFor="let item of questionInTest, let iq = index">
+                    <div class="col-md-12">
+                        <div class="question" id="question{{iq}}">
+                            <h5 ><font color="{{item.color}}">{{iq+1}}. {{item['question']}}</font></h5>
+                        </div>
+                        <div class="radio answer" *ngFor="let ans of item.answers; let ia = index">
+                            <label style="padding-top: 5px;">
+                                {{alpha[ia]}}. {{ans.answer}}
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
