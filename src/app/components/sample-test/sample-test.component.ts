@@ -32,11 +32,12 @@ export class SampleTestComponent implements OnInit {
     if (sampleTest == null || sampleTest == undefined || sampleTest == '') {
       this.router.navigate(['/not-fount']);
     }
-    console.log(sampleTest);
+    console.log(JSON.stringify(sampleTest));
     this.testService.getAllQuestionSample(sampleTest)
       .subscribe((res) => {
+        console.log(res);
         this.test = true;
-        this.questionInTest = res;
+        this.questionInTest = res.questions;
       },
         (error) => {
           this.error = true;
