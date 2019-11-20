@@ -98,7 +98,7 @@ export class ResultComponent implements OnInit {
           for (var j = 0; j < this.catalogue.length; j++) {
             chartDateElement.data.push(this.catalogue[j].thresholdPoint);
             for (var z = 0; z < this.catalogueOverpoint.length; z++) {
-              if (this.catalogue[j].CatalogueId == this.catalogueOverpoint[z].CatalogueId) {
+              if (this.catalogue[j].catalogueId == this.catalogueOverpoint[z].catalogueId) {
                 this.catalogue[j].overallPoint = this.catalogueOverpoint[z].overallPoint;
                 this.catalogueTable[j].overallPoint = this.catalogueOverpoint[z].overallPoint;
               }
