@@ -113,29 +113,29 @@
                 <label>Manager Information: </label>
                 <div class="">
                     <div class="input-group input-group-icon">
-                        <input type="text" minlength="3" [(ngModel)]="account.fullname" disabled
+                        <input type="text" minlength="3" [ngModel]="account?.fullname" disabled
                             (change)="validateManagerFullName()" name="ins_manager_fullname" id="managerFullname">
                         <div class="input-icon"><i class="fa fa-user"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="email" [(ngModel)]="account.email" disabled (change)="validateManagerMail()"
+                        <input type="email" [ngModel]="account?.email" disabled (change)="validateManagerMail()"
                             name="ins_manager_email" id="managerEmail">
                         <div class="input-icon"><i class="fa fa-envelope"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" [(ngModel)]="account.phone" disabled (change)="validateManagerPhone()"
+                        <input type="text" [ngModel]="account?.phone" disabled (change)="validateManagerPhone()"
                             name="ins_manager_phone" id="managerPhone">
                         <div class="input-icon"><i class="fa fa-mobile"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
-                        <input type="text" minlength="2" [(ngModel)]="account.address" disabled
+                        <input type="text" minlength="2" [ngModel]="account?.address" disabled
                             name="ins_manager_address" id="managerAddress">
                         <div class="input-icon"><i class="fa fa-home"></i></div>
                     </div>
                     <div class="input-group input-group-icon">
                         <label> Gender:</label>
-                        <label style="padding-left: 10px;" [hidden]="account.gender == false">Male</label>
-                        <label style="padding-left: 10px;" [hidden]="account.gender == true">FeMale</label>
+                        <label style="padding-left: 10px;" [hidden]="account?.gender == false">Male</label>
+                        <label style="padding-left: 10px;" [hidden]="account?.gender == true">FeMale</label>
                     </div>
                 </div>
             </div>
@@ -259,7 +259,7 @@
                         </td>
                         <td class="text-center" style="width: 5%;">{{i+1}}</td>
                         <td class="text-center" style="width: 20%;" >{{c.name}}</td>
-                        <td class="text-center" style="width: 20%;" >{{c.managerName}}</td>
+                        <td class="text-center" style="width: 20%;" >{{c?.managerName}}</td>
                         <td class="text-center" style="width: 15%;">0{{c.phone}}</td>
                         <td class="text-center" style="width: 15%;">{{c.create_At.split('T')[0]}}</td>
                         <td class="text-center" style="width: 10%;" [hidden]="c.isActive==true">

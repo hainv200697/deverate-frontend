@@ -335,7 +335,6 @@ export class InsertCompanyComponent implements OnInit {
               this.toast.error('Server error');
             }
             this.loading = false;
-            this.closeModal()
           });
 
         }
