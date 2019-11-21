@@ -261,7 +261,7 @@ export class ApplicantComponent implements OnInit {
         return true;
     }
     getAllConfig(){
-        this.configurationApiService.getConfigForApplicant(true,this.companyId).subscribe(
+        this.configurationApiService.getConfigForApplicant(false,this.companyId).subscribe(
             (result)=>{
                 this.listConfig = result;
                 console.log(result);

@@ -41,7 +41,7 @@ export class ConfigurationApiService {
     }
 
     getConfigForApplicant(status,companyId){    
-        const param = new HttpParams().set('isActive', status).set('companyId',companyId);
+        const param = new HttpParams().set('type', status).set('companyId',companyId);
         const API = 'ConfigurationApi/GetConfigurationForApplicant';
         return this.httpClient.get<any[]>(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
