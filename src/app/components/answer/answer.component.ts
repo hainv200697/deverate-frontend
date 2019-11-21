@@ -170,7 +170,7 @@ export class AnswerComponent implements OnInit {
 
 
     validate() {
-        if (this.insAnswer['answer'].length < 5) {
+        if (this.insAnswer['answer'].trim().length < 5) {
             this.toastr.error("Answer has more than 5 letters");
             return false;
         }
@@ -184,7 +184,7 @@ export class AnswerComponent implements OnInit {
 
     validateUpdate() {
 
-        if (this.updAnswer['answer'].length < 5) {
+        if (this.updAnswer['answer'].trim().length < 5) {
             this.toastr.error("Answer has more than 5 letters");
             this.checkUpd = false;
             return false;

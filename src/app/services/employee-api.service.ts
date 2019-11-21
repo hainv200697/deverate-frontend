@@ -20,7 +20,7 @@ export class EmployeeApiService {
 
     postCreateEmployee(employees) {
         const API = 'api/Employee/CreateEmployee';
-        return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employees);
+        return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_AUTH+ API, employees);
     }
 
     disableEmployee(employees,status){

@@ -50,6 +50,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     // stepper
     private stepper: Stepper;
     selectedAll: any;
+    selected = false;
     updateStatus = [];
     checkDup = 0;
     ansForm: FormGroup;
@@ -76,6 +77,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     cicid;
     check = true;
     public message: Array<string> = [];
+    allError =[];
     // Import excel file
     changeIns(key) {
         this.create = key;
@@ -121,37 +123,45 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             this.checkFile = true;
             this.message = [];
             let listQues = [];
+            this.allError =[];
             let existedQues: string[] = [];
             
             list = await this.readExcel();
             var valueArr = list.map(function (item) {
                 var existItem = listQues.some(Question => Question == item.Question);
                 if (existItem) {
-                    existedQues.push("Question  "+item.Question+" is duplicate");
-                    this.checkFile = false;
+                    existedQues.push("Question  "+item.Question+" is duplicated");
                 }
                 else {
                     listQues.push(item.Question);
                 }
             });
-            if(existedQues != null && existedQues.length != 0){
-                console.log(existedQues);
-                existedQues.forEach(element => {
-                    this.message.push(element);
+            list.forEach(element => {
+                this.allQuestions.forEach(ques => {
+                    if(element.Question.trim() == ques.question1){
+                        existedQues.push("Question  "+element.Question+" is existed");
+                    }
                 });
+            });
+            if(existedQues != null && existedQues.length != 0){
+                let duplicate = {};
+                    duplicate['row'] = "Question duplicated:";
+                    duplicate['error'] = existedQues;
+                    this.allError.push(duplicate);
                 this.checkFile = false;
             }
             list.forEach((element, ind) => {
-                ind = ind + 2;
+                this.message = [];
+                let errorRow = {};
+                ind = ind + 1;
                 const questionObj = new QuestionModel();
                 this.listAnswer = [];
-                questionObj.question1 = element['Question'];
+                questionObj.question1 = element['Question'].trim();
                 questionObj.isActive = true;
                 questionObj.accountId = this.accountId;
                 questionObj.cicid = this.cicid;
                 if (element['Question'] == null) {
                     this.message.push("Question at # " + ind + " is blank");
-                    this.checkFile = false;
                 }
                 for (let i = 1; i <= 6; i++) {
                     const answerObj = new AnswerModel();
@@ -173,7 +183,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 this.listAnswer.map(function (item) {
                     var existItem = ans.find(x => x.answer1 == item.answer1);
                     if (existItem){
-                        dupAns.push("Question #" + ind + " has duplicate answer");
+                        dupAns.push("Question #" + ind + " has duplicated answer");
                     }else{
                         ans.push(item);
                     }
@@ -188,29 +198,35 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 this.listAnswer.forEach((element, index) => {
                     index++;
                     if (element.answer1 === null || element.answer1 === undefined) {
-                        this.message.push("Answer #" + index + " of question #" + ind + " is blank");
+                        this.message.push("Answer #" + index +" is blank");
                         this.checkFile = false;
-                    } else if (element.answer1.length < 3 || element.answer1.length > 200) {
-                        this.message.push("Answer #" + index + " of question #" + ind + " must be in range form 3 to 200 letter ");
+                    } else if (element.answer1.trim().length < 3 || element.answer1.trim().length > 200) {
+                        this.message.push("Answer #" + index +" must be in range from 3 to 200 characters ");
                         this.checkFile = false;
                     }
                     if (element.point === null || element.point === undefined) {
-                        this.message.push("Point of answer #" + index + " in question #" + ind + " is blank!");
+                        this.message.push("Point of answer #" + index +  " is blank!");
                         this.checkFile = false;
                     } else if (isNaN(element.point)) {
-                        this.message.push("Point of answer #" + index + " in question #" + ind + " is not a number!");
+                        this.message.push("Point of answer #" + index + " is not a number!");
                         this.checkFile = false;
                     }
                     else if (element.point < 1 || element.point > 6) {
-                        this.message.push("Point of answer #" + index + " in question #" + ind + " must be in range form 1 to 6! ");
+                        this.message.push("Point of answer #" + index + " must be in range from 1 to 6! ");
                         this.checkFile = false;
                     }
                 });
 
                 questionObj.maxPoint = Math.max.apply(Math, this.listAnswer.map(function (o) { return o.point; }));
                 questionObj.answer = this.listAnswer;
+                errorRow['row'] = "Row: "+ind;
+                errorRow['error'] = this.message;
+                if(this.message.length > 0){
+                   this.allError.push(errorRow);
+                }
                 this.listInsert.push(questionObj);
             });
+            console.log(this.allError);
         } catch (err) {
             console.log(err);
         }
@@ -240,16 +256,12 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 $('#ins_question_question').css('border-color', 'red');
                 $('#ins_question_question').focus();
                 return;
-            }
-
-            if (question.length < 3) {
+            }else if (question.trim().length < 3) {
                 this.toastr.error('Message', 'question must be more than 3 characters!');
                 $('#ins_question_question').css('border-color', 'red');
                 $('#ins_question_question').focus();
                 return;
-            }
-
-            if (question.length > 200) {
+            }else if (question.trim().length > 200) {
                 this.toastr.error('Message', 'question must be less than 200 characters!');
                 $('#ins_question_question').css('border-color', 'red');
                 $('#ins_question_question').focus();
@@ -258,6 +270,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
 
             let i = -1;
+            let checkDup=[];
             this.insAnswer.forEach(element => {
                 i++;
                 if (check === true) {
@@ -269,6 +282,15 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                         $('.ans-' + i).focus();
                         return;
                     }
+                    checkDup.forEach(element => {
+                        if(ans == element){
+                            this.toastr.error('Message', 'Answer is exist!');
+                            check = false;
+                            $('.ans-' + i).css('border-color', 'red');
+                            $('.ans-' + i).focus();
+                            return;
+                        }
+                    });
                     const mark: number = element['point'];
                     if (mark === null || mark === undefined) {
                         this.toastr.error('Message', 'Mark can not be blank!');
@@ -277,7 +299,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                         $('.mark-' + i).focus();
                         return;
                     }
-                    if (6 < mark || mark < 1) {
+                    if (6 < mark ) {
                         this.toastr.error('Message', 'Mark can not be bigger than 6!');
                         check = false;
                         $('.mark-' + i).css('border-color', 'red');
@@ -291,6 +313,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                         $('.mark-' + i).focus();
                         return;
                     }
+                    checkDup.push(ans);
                 } else {
                     return;
                 }
@@ -301,10 +324,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             }
 
         } else {
-            this.updAnswer = this.answerForm.controls['answers'].value;
             let check = true;
-            this.updQuestion['MaxPoint'] = Math.max.apply(Math, this.updAnswer.map(function (o) { return o.point; }));
-            this.updQuestion['answer'] = this.updAnswer;
             const catalog = this.id;
             if (catalog === undefined || catalog === null) {
                 this.toastr.error('Message', 'Cataloguecan not be blank!');
@@ -319,20 +339,18 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 $('#upd_question_question').focus();
                 return;
             }
-
-            if (question.length < 3) {
+            else if (question.trim().length < 3) {
                 this.toastr.error('Message', 'question must be more than 3 characters!');
                 $('#upd_question_question').css('border-color', 'red');
                 $('#upd_question_question').focus();
                 return;
-            }
-
-            if (question.length > 200) {
+            }else if (question.length > 200) {
                 this.toastr.error('Message', 'question must be less than 200 characters!');
                 $('#upd_question_question').css('border-color', 'red');
                 $('#upd_question_question').focus();
                 return;
             }
+            
             if (check === true) {
                 this.stepper.next();
                 this.index = 2;
@@ -348,16 +366,22 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     async nextExcel() {
-        await this.formatExcel();
-        if (this.checkFile == false) {
-            this.toastr.error("View list to see details", "File input is wrong fotmat!");
-        } else {
-            this.index = 2;
-            this.stepper.next();
-            const data = JSON.stringify(this.listInsert);
-            this.insertQuestion = JSON.parse(data);
+        this.listInsert = [];
+        this.message = [];
+        if(this.file != null){
+            await this.formatExcel();
+            if (this.checkFile == false) {
+                this.toastr.error("View list to see details", "File input is wrong fotmat!");
+            } else {
+                this.index = 2;
+                this.stepper.next();
+                const data = JSON.stringify(this.listInsert);
+                this.insertQuestion = JSON.parse(data);
+            }
         }
-
+        else{
+            this.toastr.error("Please input file!");
+        }
 
     }
 
@@ -451,17 +475,13 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
     openUpdate(item, update) {
         this.count = 0;
-        this.answerForm = this.formBuilder.group({
-            answers: this.formBuilder.array([
-            ])
-        });
-
         this.index = 1;
         this.updQuestion['QuestionId'] = item['questionId'];
         this.updQuestion['question1'] = item['question1'];
         this.updQuestion['isActive'] = true;
         this.updQuestion['accountId'] = this.accountId;
         this.updQuestion['cicid'] = this.cicid;
+        console.log(this.updQuestion);
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
@@ -498,6 +518,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         });
         for (let i = 0; i < this.allQuestions.length; i++) {
             if (this.allQuestions[i].selected === true) {
+                this.selected = true;
                 this.updateStatus.push(this.allQuestions[i]);
             }
         }
@@ -505,41 +526,38 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     clickButtonChangeStatus(status: boolean) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'This catalogue will be changed!',
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, Change it!',
-            cancelButtonText: 'No, keep it'
-        }).then((result) => {
-            if (result.value) {
-                for (let i = 0; i < this.updateStatus.length; i++) {
-                    this.updateStatus[i].IsActive = status;
-                }
-                this.questionService.removeQuestion(this.updateStatus).subscribe(
-                    (results) => {
-                        this.selectedAll =false;
-                        this.getQuestionById(this.iconIsActive);
-                        this.toastr.success("Changed success");
+        if (this.selectedAll == true || this.selected == true) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This catalogue will be changed!',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Change it!',
+                cancelButtonText: 'No, keep it'
+            }).then((result) => {
+                if (result.value) {
+                    for (let i = 0; i < this.updateStatus.length; i++) {
+                        this.updateStatus[i].IsActive = status;
                     }
-                );
+                    this.loading =true;
+                    this.questionService.removeQuestion(this.updateStatus).subscribe(
+                        (results) => {
+                            this.selectedAll =false;
+                            this.getQuestionById(this.iconIsActive);
+                            this.toastr.success("Changed success");
+                        }
+                    );
 
-                Swal.fire(
-                    'Changed',
-                    '',
-                    'success'
-                );
-
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                this.updateStatus = [];
-                Swal.fire(
-                    'Cancelled',
-                    '',
-                    'error'
-                );
-            }
-        });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    this.updateStatus = [];
+                    Swal.fire(
+                        'Cancelled',
+                        '',
+                        'error'
+                    );
+                }
+            });
+        }
     }
 
 
@@ -550,7 +568,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         } else {
             this.addQuestion();
         }
-        this.closeModal();
     }
 
     clickButtonRefresh(refesh) {
@@ -571,17 +588,14 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             (results) => {
                 this.getQuestionById(this.iconIsActive);
                 this.toastr.success(results['message']);
+                this.closeModal();
             },
             (error) => {
                 if (error.status == 400) {
                     this.toastr.error('Input is invalid');
                 }
                 if (error.status == 500) {
-                    Swal.fire({
-                        title: 'Cancelled',
-                        text: "System error",
-                        type: 'error'
-                    });
+                    this.toastr.error('System error');
                 }
             }
         );
@@ -591,18 +605,28 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.questionService.insertQuestion(this.insertQuestion).subscribe(
             (results) => {
                 this.getQuestionById(this.iconIsActive);
+                this.toastr.success(results['message']);
+                this.closeModal();
+            },
+            (error) => {
+                if (error.status == 400) {
+                    this.toastr.error('Input is invalid');
+                }
+                if (error.status == 500) {
+                    this.toastr.error('System error');
+                }
             }
         );
     }
 
     updateQuestionSubmit() {
         this.updateQuestion();
-
         this.closeUpdateModal();
 
     }
 
     updateQuestion() {
+        console.log(this.updQuestion);
         this.questionService.updateQuestion(this.updQuestion).subscribe(
             (results) => {
                 this.getQuestionById(this.iconIsActive);
@@ -623,7 +647,8 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 this.catalogueName = data.catalogueName;
                 this.cicid = data.cicid;
                 this.allQuestions = data.questions;
-
+                this.selected = false;
+                this.selectedAll = false;
             },
             (error: any) => {
                 this.router.navigate(['**']);

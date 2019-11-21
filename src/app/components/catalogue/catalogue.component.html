@@ -86,7 +86,7 @@
                     <tr class="no-padding-no-margin" *ngFor="let item of sv.data; let i=index">
                         <td class="text-center col-md-1" style="width: 5%;">
                             <label>
-                                <input [disabled]="!item.type" type="checkbox" value="" [(ngModel)]="item.selected"
+                                <input type="checkbox" value="" [(ngModel)]="item.selected"
                                     class="btn" (change)="checkIfAllSelected();">
                             </label>
                         </td>
