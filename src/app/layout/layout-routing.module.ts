@@ -22,6 +22,7 @@ const routes: Routes = [
             { path: 'manage-answer/:id', loadChildren: () => import('../components/answer/answer.module').then(m => m.AnswerModule),canActivate: [CompanyGuard] },
             { path: 'stastistic-manager', loadChildren: () => import('../components/statistic-companymanager/statistic-companymanager.module').then(m => m.StatisticManagerModule),canActivate: [CompanyGuard]},
             // Test Owner
+            { path: 'manage-configuration-applicant', loadChildren: () => import('../components/configuration-test/manage-configuration-applicant/manage-configuration-applicant.module').then(m => m.ManageConfigurationApplicantModule), canActivate: [OwnerGuard] },
             { path: 'manage-configuration', loadChildren: () => import('../components/configuration-test/manage-configuration/manage-configuration.module').then(m => m.ManageConfigurationModule), canActivate: [OwnerGuard] },
             { path: 'manage-test/:id', loadChildren: () => import('../components/view-test/view-test.module').then(m => m.TestModule), canActivate: [OwnerGuard] },
             { path: 'manage-detail-test/:id', loadChildren: () => import('../components/default-test/defaut-test.module').then(m => m.DefautTestModule), canActivate: [OwnerGuard] },
