@@ -13,9 +13,9 @@ export class ApplicantApiService {
     ) { }
 
 
-    postCreateApplicant(applicants) {
-        const API = 'api/Applicant/CreateApplicant';
-        return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, applicants);
+    postCreateApplicant(applicants, configId) {
+        const API = 'api/Applicant/CreateApplicant?configId=';
+        return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE + API + configId, applicants);
     }
 
 
