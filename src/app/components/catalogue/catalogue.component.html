@@ -3,6 +3,7 @@
 
     </div>
 </ng-template>
+
 <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true}" [template]="customLoadingTemplate">
 </ngx-loading>
 <div [hidden]="check == 1" class="catalog-form col-md-12">
@@ -75,14 +76,14 @@
                                 <button class=" icon-btn" ngbDropdownToggle style="color: black"></button>
                                 <div ngbDropdownMenu>
                                     <button class="dropdown-item" (click)="getAllCatalogue(true)">Active</button>
-                                    <button class="dropdown-item" (click)="getAllCatalogue(false)">Disable</button>
+                                    <button class="dropdown-item" (click)="getAllCatalogue(false)">Deactive</button>
                                 </div>
                             </div>
                         </th>
                         <th class="text-center" scope="col" style="width: 10%;">Action</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody *ngIf="sv.data.length != 0;  else searchNull">
                     <tr class="no-padding-no-margin" *ngFor="let item of sv.data; let i=index">
                         <td class="text-center col-md-1" style="width: 5%;">
                             <label>
@@ -199,3 +200,8 @@
         </div>
     </ng-template>
 </div>
+<ng-template #searchNull>
+    <tr class="col-md-12 row no-padding-no-margin">
+        <th class="text-center col-md-12" scope="col">No data</th>
+    </tr>
+</ng-template>

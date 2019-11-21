@@ -270,6 +270,7 @@ export class CatalogueComponent implements OnInit {
     }
 
     validateUpdate() {
+        console.log(this.updCatalogue['Name']);
         if (this.updCatalogue['Name'] == null || this.updCatalogue['Name'] == undefined) {
             this.toastr.error('Message', 'Please input catalogue name');
             document.getElementById('upd_Catalogue_name').style.borderColor = 'red';
@@ -293,12 +294,12 @@ export class CatalogueComponent implements OnInit {
                 } 
             });
             if(!checkDup){
-                document.getElementById('ins_Catalogue_name').style.borderColor = 'green';
+                document.getElementById('upd_Catalogue_name').style.borderColor = 'green';
                 return true;
             }else{
                 this.toastr.error('Message', 'Catalogue is existed');
-                document.getElementById('ins_Catalogue_name').style.borderColor = 'red';
-                document.getElementById('ins_Catalogue_name').focus();
+                document.getElementById('upd_Catalogue_name').style.borderColor = 'red';
+                document.getElementById('upd_Catalogue_name').focus();
                 return false;
             }
             
