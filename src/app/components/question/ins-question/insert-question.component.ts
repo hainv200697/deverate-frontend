@@ -145,9 +145,9 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             });
             if(existedQues != null && existedQues.length != 0){
                 let duplicate = {};
-                    duplicate['row'] = "Question duplicated:";
-                    duplicate['error'] = existedQues;
-                    this.allError.push(duplicate);
+                duplicate['row'] = "Question duplicated:";
+                duplicate['error'] = existedQues;
+                this.allError.push(duplicate);
                 this.checkFile = false;
             }
             list.forEach((element, ind) => {
@@ -226,7 +226,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 }
                 this.listInsert.push(questionObj);
             });
-            console.log(this.allError);
         } catch (err) {
             console.log(err);
         }
