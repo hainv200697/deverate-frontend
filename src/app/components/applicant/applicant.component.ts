@@ -211,7 +211,8 @@ export class ApplicantComponent implements OnInit {
 
     createTest(){
         this.loading = true;
-        this.applicantService.postCreateApplicant(this.applicantList).subscribe(
+        console.log(this.insApplicant['config_id'])
+        this.applicantService.postCreateApplicant(this.applicantList,this.insApplicant['config_id']).subscribe(
         results => {
             this.loading = false;
             this.toastr.success("Create success");
