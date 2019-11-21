@@ -204,14 +204,12 @@ export class ApplicantComponent implements OnInit {
             });
             if(checkExist == false){
                 this.applicantList.push(this.insApplicant);   
-                this.insApplicant = {};     
             }
         }
     }
 
     createTest(){
         this.loading = true;
-        console.log(this.insApplicant['config_id'])
         this.applicantService.postCreateApplicant(this.applicantList,this.insApplicant['config_id']).subscribe(
         results => {
             this.loading = false;
