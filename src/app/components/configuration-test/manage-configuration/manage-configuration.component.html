@@ -36,11 +36,8 @@
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 row no-padding-no-margin">
 
                             <div class="col-md-5 row" style="margin-left: 33px;">
-                                <label class="col-md-6" style="text-align: right;">Type:</label>
-                                <select class="col-md-4" [(ngModel)]="inputConfiguration['type']" style="font-size: 9px;">
-                                    <option [ngValue]="true" style="font-size: 12px;" *ngIf="employeeInCompany.length!=0" >Employee</option>
-                                    <option [ngValue]="false" style="font-size: 12px;">Applicant</option>
-                                </select>
+                                <label class="col-md-12" style="text-align: center;">Type: &nbsp; &nbsp; &nbsp;
+                                    Employee</label>
                             </div>
 
                             <div class="col-md-7 row">
@@ -176,11 +173,8 @@
                                         <td class="col-md-3" style="font-weight: bold">
                                             Type
                                         </td>
-                                        <td class="col-md-9" [hidden]="inputConfiguration['type']==false">
+                                        <td class="col-md-9">
                                             Employee
-                                        </td>
-                                        <td class="col-md-9" [hidden]="inputConfiguration['type']==true">
-                                            Applicant
                                         </td>
                                     </tr>
                                     <tr class="col-md-12 row no-padding-no-margin">
@@ -353,7 +347,6 @@
                                 <label class="col-md-6" style="text-align: right;">Type:</label>
                                 <select disabled class="col-md-4" [(ngModel)]="updateConfig['type']">
                                     <option [value]="true">Employee</option>
-                                    <option [value]="false">Applicant</option>
                                 </select>
                             </div>
 

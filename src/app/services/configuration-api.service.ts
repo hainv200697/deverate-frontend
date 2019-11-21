@@ -10,7 +10,7 @@ export class ConfigurationApiService {
     constructor(private httpClient: HttpClient) { }
 
     getAllConfiguration(status: boolean, id) {
-        const API = 'ConfigurationAPI/GetAllConfiguration?isActive=';
+        const API = 'ConfigurationAPI/GetAllConfiguration?type=';
         return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API + status + '&companyId=' +id);
     }
 
