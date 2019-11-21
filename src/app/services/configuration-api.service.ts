@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AppSettings } from '../appsetting';
 @Injectable({
     providedIn: 'root'
 })
 export class ConfigurationApiService {
-    // URL = 'https://localhost:5001/';
-    URL = AppSettings.BASEURL;
+    // URL = 'http://localhost:9000/';
+    URL = AppSettings.BASEURL;   
     constructor(private httpClient: HttpClient) { }
 
     getAllConfiguration(status: boolean, id) {
@@ -38,5 +38,11 @@ export class ConfigurationApiService {
     sendMail(id){
         const API = 'api/System/SendTestMail/';
         return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id);
+    }
+
+    getConfigForApplicant(status,companyId){    
+        const param = new HttpParams().set('isActive', status).set('companyId',companyId);
+        const API = 'ConfigurationApi/GetConfigurationForApplicant';
+        return this.httpClient.get<any[]>(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
 }

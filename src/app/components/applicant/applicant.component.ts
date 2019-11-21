@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import * as XLSX from 'ts-xlsx';
 import Stepper from 'bs-stepper';
 import { GloblaService } from 'src/assets/service/global.service';
+import { ConfigurationApiService } from 'src/app/services/configuration-api.service';
 @Component({
     selector: 'app-applicant',
     templateUrl: './applicant.component.html',
@@ -14,6 +15,7 @@ import { GloblaService } from 'src/assets/service/global.service';
 export class ApplicantComponent implements OnInit {
     constructor(
         private applicantService: ApplicantApiService,
+        private configurationApiService: ConfigurationApiService,
         private modalService: NgbModal,
         private toastr: ToastrService,
         private globalservice: GloblaService
@@ -33,8 +35,9 @@ export class ApplicantComponent implements OnInit {
     applicantList = [];
     insApplicant = {};
     applicants = [];
+    listConfig = [];
     ngOnInit() {
-
+        this.getAllConfig();
     }
 
     openModalExcel(excel) {
@@ -235,6 +238,23 @@ export class ApplicantComponent implements OnInit {
             return false;
         }
         return true;
+    }
+
+    getAllConfig(){
+        this.configurationApiService.getConfigForApplicant(true,this.companyId).subscribe(
+            (result)=>{
+                this.listConfig = result;
+                console.log(result);
+            },(error)=>
+            {
+                if (error.status == 400) {
+                    this.toastr.error("Input is invalid");
+                }
+                if (error.status == 500) {
+                    this.toastr.error("System error");
+                }
+            }
+        )
     }
 
 }
