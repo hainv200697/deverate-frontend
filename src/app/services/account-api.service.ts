@@ -14,13 +14,14 @@ export class AccountApiService {
         return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API + id);
     }
 
-    updateManagerInfo(ManagerModel) {
-        const API = 'AccountAPI/UpdateAccount';
-        return new Promise(resolve => {
-            this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, ManagerModel).subscribe(data => {
-                resolve(data);
-            });
-        });
-    }
+    updateProfileInfo(Profile) {
+        const API = 'api/Employee/UpdateProfile';
+        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, Profile)
+    };
 
+
+    getProfile(accountId) {
+        const API = 'api/Employee/GetProfile?accountId=';
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API + accountId);
+    }
 }

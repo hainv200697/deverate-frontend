@@ -123,6 +123,8 @@ export class ManageConfigurationComponent implements OnInit {
   companyId = localStorage.getItem('CompanyId');
   employeeInCompany = [];
   isSampleConfig = false;
+  catalogueInRanks: number[][];
+  loadData = false;
 
   ngOnInit() {
     this.getAllRank(true);
@@ -137,10 +139,10 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   onSelectAll(item: any) {
-    for(var i = 0 ; i < item.length; i++){
+    for (var i = 0; i < item.length; i++) {
       this.inputConfiguration['totalQuestion'] += item[i].quescount;
     }
-   }
+  }
 
   onDeSelectAll(item: any) {
     this.selectedItems = []
@@ -365,19 +367,42 @@ export class ManageConfigurationComponent implements OnInit {
         this.updateConfig['configurationRanks'] = res['configurationRanks'];
         let tmp = res['catalogueInConfigs'];
         this.selectedItemsUpdate = [];
+        //khoi tao mang 2 chieu theo catalogue
+        var numberCatalogue = res['configurationRanks'][0].catalogueInRanks.length;
+        var numberRank = res['configurationRanks'].length - 1
+        this.catalogueInRanks = new Array(numberCatalogue).fill(0);
+
+        //khoi tao mang 2 chieu theo rank ung voi tung catalogue
+        for (let i = 0; i < this.catalogueInRanks.length; i++) {
+          this.catalogueInRanks[i] = new Array(numberRank).fill(0);
+        }
+        var h = 0;
+        var c = 0;
+        // doc data theo tung rank
+        for (var i = 0; i < numberRank; i++) {
+          // lay weight point cua catalogue theo rank
+          for (var j = 0; j < numberCatalogue; j++) {
+            this.catalogueInRanks[h][c] = res['configurationRanks'][i].catalogueInRanks[j].catalogue.weightPoint;
+            h++
+          }
+          c++
+          h = 0;
+        }
         tmp.forEach(x => {
           this.selectedItemsUpdate.push(new Object(
             {
               cicId: x.cicId,
               configId: x.configId,
               catalogueId: x.catalogueId,
-              catalogueName: x.catalogueName,
+              catalogueName: x.name,
               weightPoint: x.weightPoint,
               isActive: x.isActive,
             }
           ));
         });
         this.loading = false;
+        this.loadData = true;
+        console.log(this.selectedItemsUpdate)
       },
       (error) => {
         this.loading = false;
@@ -655,7 +680,6 @@ export class ManageConfigurationComponent implements OnInit {
           Swal.fire('Success', 'The mail has been send', 'success');
         }, (error) => {
           this.toast.error(error.name);
-          console.log(error)
           this.loading = false;
         });
       }
@@ -706,7 +730,7 @@ export class ManageConfigurationComponent implements OnInit {
           }
         ));
       });
-      for (var i = 0; i < this.selectedItems.length; i++) {
+      for (var i = 0; i < 3; i++) {
         this.selectedItems[i].weightPoint = option1.selectedItems[i].weightPoint;
       }
       this.point = Point;
@@ -733,7 +757,7 @@ export class ManageConfigurationComponent implements OnInit {
           }
         ));
       });
-      for (var i = 0; i < this.selectedItems.length; i++) {
+      for (var i = 0; i < 4; i++) {
         this.selectedItems[i].weightPoint = option2.selectedItems[i].weightPoint;
       }
       this.point = Point;
