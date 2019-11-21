@@ -195,8 +195,12 @@ export class AnswerComponent implements OnInit {
 
 
     validate() {
-        if (this.insAnswer['answer'].trim().length < 5) {
-            this.toastr.error("Answer must be than 5 characters");
+        if (this.insAnswer['answer'].trim().length < 3) {
+            this.toastr.error("Answer must be more than 3 characters");
+            return false;
+        }
+        if (this.insAnswer['answer'].trim().length > 200) {
+            this.toastr.error("Answer must be less than 200 characters");
             return false;
         }
         if (this.insAnswer['point'] < 0 || this.insAnswer['point'] > 6) {
@@ -212,6 +216,10 @@ export class AnswerComponent implements OnInit {
         if (this.updAnswer['answer'].trim().length < 5) {
             this.toastr.error("Answer must be more than 5 characters");
             this.checkUpd = false;
+            return false;
+        }
+        if (this.updAnswer['answer'].trim().length > 200) {
+            this.toastr.error("Answer must be less than 200 characters");
             return false;
         }
         if (this.updAnswer['point'] < 0 || this.updAnswer['point'] > 6) {
