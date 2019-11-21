@@ -12,6 +12,7 @@ export class ConfigurationApiService {
     getAllConfiguration(status: boolean, id) {
         const API = 'ConfigurationAPI/GetAllConfiguration?isActive=';
         return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API + status + '&companyId=' +id);
+        const API = 'ConfigurationAPI/GetAllConfiguration?type=';
     }
 
     GetConfigurationCatalogueByConfigId(id: number) {

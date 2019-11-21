@@ -194,7 +194,7 @@
                         </div>
                     </div>
                     <div class="row justify-content-end" style="margin-top: 20px;">
-                        <button [hidden]="iconIsActive==false" ngbTooltip="Disable" style="margin-right: 10px;"
+                        <button [hidden]="iconIsActive==false" ngbTooltip="DeActive" style="margin-right: 10px;"
                             [hidden]="updateStatus.length ==0" (click)="clickButtonChangeStatus(false);"
                             class="btn btn-lg btn-danger" data-toggle="button">
                             <i class="fa fa-trash-o delete-icon" placement="top"></i>
@@ -263,7 +263,7 @@
                         <td class="text-center" style="width: 15%;">0{{c.phone}}</td>
                         <td class="text-center" style="width: 15%;">{{c.create_At.split('T')[0]}}</td>
                         <td class="text-center" style="width: 10%;" [hidden]="c.isActive==true">
-                            <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
+                            <span class="shadow-item text-center badge badge-pill badge-danger">DeActive</span>
                         </td>
                         <td class="text-center" style="width: 10%;" [hidden]="c.isActive==false">
                             <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
