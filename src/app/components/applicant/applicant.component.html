@@ -19,21 +19,21 @@
                     <form class=" row col-sm-12 col-md-12 col-lg-12" (ngSubmit)="createApplicant()">
                         <div class="form-group col-sm-12 col-md-6 col-lg-6">
                             <label>Fullname:</label>
-                            <input (change)="validdate()" type="text" [(ngModel)]="insApplicant['fullname']"
+                            <input (change)="validate()" type="text" [(ngModel)]="insApplicant['fullname']"
                                 name="ins_Fullname" class="form-control input-underline input-lg" id=""
                                 placeholder="Fullname">
                         </div>
                         <div class="form-group col-sm-12 col-md-6 col-lg-6">
                             <label>Email:</label>
-                            <input (change)="validdateEmail()" type="text" [(ngModel)]="insApplicant['email']"
+                            <input (change)="validateEmail()" type="text" [(ngModel)]="insApplicant['email']"
                                 name="ins_email" class="form-control input-underline input-lg" id=""
                                 placeholder="Email">
                         </div>
                         <div class="form-inline col-sm-12 col-md-6 col-lg-6">
                             <label>Test Setting:&nbsp;&nbsp;</label>
-                            <select id="ins_setting" name="ins_setting" class="form-control col-md-5"
+                            <select id="ins_setting" name="ins_setting"  class="form-control col-md-5"
                             [(ngModel)]="insApplicant['config_id']">
-                                <option disabled [value]=-1>-- Choosing gender</option>
+                                <option disabled [value]=-1>-- Choosing setting</option>
                                 <option *ngFor="let item of listConfig" [value]=item.configId>{{item.title}}</option>
                             </select>
                         </div>

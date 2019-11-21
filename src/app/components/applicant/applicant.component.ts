@@ -36,7 +36,9 @@ export class ApplicantComponent implements OnInit {
     insApplicant = {};
     applicants = [];
     listConfig = [];
+    
     ngOnInit() {
+        this.insApplicant['config_id']= -1;
         this.getAllConfig();
     }
 
@@ -182,7 +184,17 @@ export class ApplicantComponent implements OnInit {
     }
 
     createApplicant() {
-        if(this.validdate()){
+        let check = true;
+        if(!this.validate()){
+            return check = false;
+        }
+        if(!this.validateConfig()){
+            return check = false;
+        }
+        if(!this.validateEmail()){
+            return check = false;
+        }
+        if(check){
             let checkExist= false;
             this.applicantList.forEach(element => {
                 if(element.email == this.insApplicant['email'] ){
@@ -218,7 +230,7 @@ export class ApplicantComponent implements OnInit {
     );
     }
 
-    validdate() {
+    validate() {
         if (this.insApplicant['fullname'] == '' || this.insApplicant['fullname'] == null) {
             this.toastr.error('Message', 'Please input applicant name');
             return false;
@@ -229,7 +241,7 @@ export class ApplicantComponent implements OnInit {
         return true;
     }
 
-    validdateEmail() {
+    validateEmail() {
         if (!this.globalservice.checkMail.test(String(this.insApplicant['email']).toUpperCase())) {
             this.toastr.error('Message', 'Email wrong format');
             return false;
@@ -239,7 +251,14 @@ export class ApplicantComponent implements OnInit {
         }
         return true;
     }
-
+    
+    validateConfig() {
+        if (this.insApplicant['config_id'] == -1) {
+            this.toastr.error('Message', 'Please choose setting!');
+            return false;
+        }
+        return true;
+    }
     getAllConfig(){
         this.configurationApiService.getConfigForApplicant(true,this.companyId).subscribe(
             (result)=>{
