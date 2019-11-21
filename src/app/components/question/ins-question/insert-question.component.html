@@ -168,9 +168,14 @@
                                     placeholder="Upload file" accept=".xlsx">
                             </div>
 
-                            <div class="col-sm-12 col-md-12 col-lg-12 question-ex" *ngFor="let mes of message">
+                            <div class="col-sm-12 col-md-12 col-lg-12 question-ex" *ngFor="let mes of allError">
                                 <div class="col-sm-12 col-md-12 col-lg-12" style="color: red;">
-                                    {{mes}}
+                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                        {{mes.row}} 
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12" *ngFor="let err of mes.error">
+                                       - {{err}} 
+                                    </div>
                                 </div>
                             </div>
                         </div>

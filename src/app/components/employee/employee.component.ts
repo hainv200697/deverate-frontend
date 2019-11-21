@@ -185,13 +185,13 @@ export class EmployeeComponent implements OnInit {
                 
 
                 this.insEmployee['companyId'] = this.companyId;
-                this.insEmployee['fullname'] = element.Fullname;
-                this.insEmployee['email'] = element.Email;
-                this.insEmployee['fullname'] = element.Fullname;
+                this.insEmployee['fullname'] = element.Fullname.trim();
+                this.insEmployee['email'] = element.Email.trim();
+                this.insEmployee['fullname'] = element.Fullname.trim();
                 this.insEmployee['role'] = element.Role;
                 this.insEmployee['gender'] = element.Gender;
-                this.insEmployee['phone'] = phone;
-                this.insEmployee['address'] = element.Address;
+                this.insEmployee['phone'] = phone.trim();
+                this.insEmployee['address'] = element.Address.trim();
                 this.employeeList.forEach(element => {
                     if (this.insEmployee['email'] === element.email) {
                         this.message.push("Email at #"+ index+" is existed");
@@ -237,7 +237,6 @@ export class EmployeeComponent implements OnInit {
         this.employeeService.getAllEmployee(this.companyId, this.iconIsActive).subscribe(
             (data) => {
                 this.loading = false;
-                this.selectedAll = false;
                 this.employeeList = data;
                 this.insEmployee = {};
                 this.insEmployee['role'] = 0;
@@ -593,12 +592,13 @@ export class EmployeeComponent implements OnInit {
     }
 
     validateEmail() {
-        if (this.insEmployee['email'] == '' || this.insEmployee['email'] == null || this.insEmployee['email'] == undefined) {
+        let email = this.insEmployee['email'].trim();
+        if (email == '' || email == null || email == undefined) {
             this.toastr.error('Email can not blank');
             document.getElementById('ins_manage_email').style.borderColor = 'red';
             document.getElementById('ins_manage_email').focus();
             return false;
-        } else if (!this.globalservice.checkMail.test(String(this.insEmployee['email']).toUpperCase())) {
+        } else if (!this.globalservice.checkMail.test(String(email).toUpperCase())) {
             this.toastr.error('Email wrong format');
             document.getElementById('ins_manage_email').style.borderColor = 'red';
             document.getElementById('ins_manage_email').focus();
@@ -606,7 +606,7 @@ export class EmployeeComponent implements OnInit {
         } else {
             let checkDup = false;
             this.employeeList.forEach(element => {
-                if (this.insEmployee['email'] === element.email) {
+                if (email === element.email) {
                     this.toastr.error('Email is existed');
                     document.getElementById('ins_manage_email').style.borderColor = 'red';
                     document.getElementById('ins_manage_email').focus();

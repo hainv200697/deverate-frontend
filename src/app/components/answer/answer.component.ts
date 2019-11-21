@@ -94,6 +94,14 @@ export class AnswerComponent implements OnInit {
                     this.loading = false;
                     this.getAnswerById(true);
                     this.toastr.success(results['message']);
+                },(error) => {
+                    this.loading = false;
+                    if (error.status == 400) {
+                        this.toastr.error('Input is invalid');
+                    }
+                    if (error.status == 500) {
+                        this.toastr.error('System error');
+                    }
                 }
             );
         }
@@ -109,6 +117,14 @@ export class AnswerComponent implements OnInit {
                 this.loading = false;
                 this.getAnswerById(this.iconIsActive);
                 this.toastr.success(results['message']);
+            },(error) => {
+                this.loading = false;
+                if (error.status == 400) {
+                    this.toastr.error('Input is invalid');
+                }
+                if (error.status == 500) {
+                    this.toastr.error('System error');
+                }
             }
         );
     }
@@ -132,7 +148,16 @@ export class AnswerComponent implements OnInit {
                     this.selectedAll =false;
                     this.closeModal();
                     Swal.fire('Success', 'The status has been changed', 'success');
-                });;
+                },(error) => {
+                    this.loading = false;
+                    if (error.status == 400) {
+                        this.toastr.error('Input is invalid');
+                    }
+                    if (error.status == 500) {
+                        this.toastr.error('System error');
+                    }
+                }
+                );;
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 this.updateStatus = [];
                 Swal.fire(
@@ -170,8 +195,12 @@ export class AnswerComponent implements OnInit {
 
 
     validate() {
-        if (this.insAnswer['answer'].length < 5) {
-            this.toastr.error("Answer has more than 5 letters");
+        if (this.insAnswer['answer'].trim().length < 3) {
+            this.toastr.error("Answer must be more than 3 characters");
+            return false;
+        }
+        if (this.insAnswer['answer'].trim().length > 200) {
+            this.toastr.error("Answer must be less than 200 characters");
             return false;
         }
         if (this.insAnswer['point'] < 0 || this.insAnswer['point'] > 6) {
@@ -184,9 +213,13 @@ export class AnswerComponent implements OnInit {
 
     validateUpdate() {
 
-        if (this.updAnswer['answer'].length < 5) {
-            this.toastr.error("Answer has more than 5 letters");
+        if (this.updAnswer['answer'].trim().length < 5) {
+            this.toastr.error("Answer must be more than 5 characters");
             this.checkUpd = false;
+            return false;
+        }
+        if (this.updAnswer['answer'].trim().length > 200) {
+            this.toastr.error("Answer must be less than 200 characters");
             return false;
         }
         if (this.updAnswer['point'] < 0 || this.updAnswer['point'] > 6) {
