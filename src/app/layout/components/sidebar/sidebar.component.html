@@ -36,7 +36,11 @@
         </a>
         <a [routerLink]="['/statistic']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
             <i class="fa fa-bar-chart"></i>&nbsp;
-            <span>Statistic</span>
+            <span>Statistic Employee</span>
+        </a>
+        <a [routerLink]="['/statistic-applicant']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
+            <i class="fa fa-bar-chart"></i>&nbsp;
+            <span>Statistic Applicant</span>
         </a>
         <a [routerLink]="['/applicant']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
             <i class="fa fa-user"></i>&nbsp;

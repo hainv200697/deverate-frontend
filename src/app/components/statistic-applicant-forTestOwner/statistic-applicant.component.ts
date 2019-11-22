@@ -6,13 +6,12 @@ import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
-
 @Component({
-  selector: 'app-result',
-  templateUrl: './statistic.component.html',
-  styleUrls: ['./statistic.component.scss']
+  selector: 'statistic-applicant',
+  templateUrl: './statistic-applicant.component.html',
+  styleUrls: ['./statistic-applicant.component.scss']
 })
-export class StatisticComponent implements OnInit {
+export class StatisticApplicantComponent implements OnInit {
   catalogConfig = [];
   view = [550, 450];
   showXAxis = true;
@@ -69,9 +68,9 @@ export class StatisticComponent implements OnInit {
   ngOnInit() {
     this.isLoaded = false;
     this.load = false;
-    this.GetGeneralStatistic(localStorage.getItem("AccountId"));
-    this.GetRankStatistic(localStorage.getItem("AccountId"));
-    this.GetOverallPointStatistic(this.companyId);
+    this.GetGeneralStatisticOfApplicant(localStorage.getItem("AccountId"));
+    this.GetRankStatisticOfApplicant(localStorage.getItem("AccountId"));
+    this.GetOverallPointStatistic(this.companyId, false);
     this.selectedItems = [];
     this.dropdownSettings = {
       singleSelection: false,
@@ -96,10 +95,10 @@ export class StatisticComponent implements OnInit {
   averageCatalogue = [];
   catalogues: [];
 
-  GetGeneralStatistic(id) {
+  GetGeneralStatisticOfApplicant(id) {
     this.loading = true
     this.series = [];
-    this.historyApi.GetGeneralStatistic(id).subscribe(
+    this.historyApi.GetGeneralStatisticOfApplicant(id).subscribe(
       (data) => {
         this.historyData = data['items'];
         this.multi = [];
@@ -151,9 +150,9 @@ export class StatisticComponent implements OnInit {
     );
   }
 
-  GetRankStatistic(id) {
+  GetRankStatisticOfApplicant(id) {
     this.loading = true
-    this.historyApi.GetRankStatistic(id).subscribe(
+    this.historyApi.GetRankStatisticOfApplicant(id).subscribe(
       (data) => {
         let tmp;
         tmp = data;
@@ -162,6 +161,7 @@ export class StatisticComponent implements OnInit {
           tmp[i].series.push(tmp[i].totalAccount);
         }
         this.dataGroupChart = tmp;
+        
         this.load = true;
         this.loading = false;
       },
@@ -172,12 +172,11 @@ export class StatisticComponent implements OnInit {
     );
   }
 
-  GetOverallPointStatistic(id){
+  GetOverallPointStatistic(id, isEmployee){
     this.loading = true
-    this.historyApi.GetOverallPointStatistic(id, true).subscribe(
+    this.historyApi.GetOverallPointStatistic(id, isEmployee).subscribe(
       (data) => {
         this.dataEmployeeOverPoint = data;
-        console.log(this.dataEmployeeOverPoint)
         this.loading = false;
       },
       (error) => {
