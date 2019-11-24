@@ -25,7 +25,6 @@
             </b>
         </div>
         <div class="d-flex justify-content-end col-md-6">
-            <button class="btn btn-success save shadow-card" (click)="get()" [hidden]="selectedItems.length ==0">Submit</button>
             <ng-multiselect-dropdown [placeholder]="'Select Period'" [data]="dropdownList"
                 (onDeSelect)="onItemDeSelect($event)" (onSelect)="getDataStatistic($event)"
                 (onSelectAll)="onSelectAll($event)" [(ngModel)]="selectedItems" [settings]="dropdownSettings"
@@ -67,8 +66,8 @@
                     Average Point Catalogue
                 </div>
                 <div class="card-body" *ngIf="isLoaded">
-                    <ngx-charts-line-chart  [legendPosition]="legendPosition" [view]="[630, 0]" [scheme]="colorScheme" [results]="averageCatalogue"
-                        [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="legend"
+                    <ngx-charts-line-chart [legendPosition]="legendPosition" [view]="[630, 0]" [scheme]="colorScheme" [results]="averageCatalogue"
+                        [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
                         [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
                         [yAxisLabel]="yAxisLabel" [legendTitle]="legendTitle" *ngIf="isLoaded">
                     </ngx-charts-line-chart>
@@ -90,7 +89,7 @@
                                     No.
                                 </th>
                                 <th class="text-center" style="width: 25%;">
-                                    Employee
+                                    Applicant
                                 </th>
                                 <th class="text-center" style="width: 12%;">
                                     Point

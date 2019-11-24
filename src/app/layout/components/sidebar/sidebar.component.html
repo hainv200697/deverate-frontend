@@ -28,15 +28,19 @@
         <!-- Test Owner -->
         <a [routerLink]="['/manage-configuration']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
             <i class="fa fa-cog"></i>&nbsp;
-            <span>Manage Test Employee</span>
+            <span>Employee Test </span>
         </a>
         <a [routerLink]="['/manage-configuration-applicant']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
             <i class="fa fa-cog"></i>&nbsp;
-            <span>Manage Test Applicant</span>
+            <span>Applicant Test </span>
         </a>
         <a [routerLink]="['/statistic']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
             <i class="fa fa-bar-chart"></i>&nbsp;
-            <span>Statistic</span>
+            <span>Employee Statistic</span>
+        </a>
+        <a [routerLink]="['/statistic-applicant']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
+            <i class="fa fa-bar-chart"></i>&nbsp;
+            <span>Applicant Statistic</span>
         </a>
         <a [routerLink]="['/applicant']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
             <i class="fa fa-user"></i>&nbsp;
@@ -47,6 +51,10 @@
         <a [routerLink]="['/reranking']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Employee'">
             <i class="fa fa-plus"></i>&nbsp;
             <span>Quiz</span>
+        </a>
+        <a [routerLink]="['/statistic-employee']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Employee'">
+            <i class="fa fa-bar-chart"></i>&nbsp;
+            <span>Statistic</span>
         </a>
 
         <div class="header-fields">

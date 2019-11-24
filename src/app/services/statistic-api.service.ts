@@ -28,14 +28,24 @@ export class StatisticApiService {
         // return this.httpClient.get(this.URL + API + id);
     }
 
+    GetGeneralStatisticOfApplicant(id){
+        const API = 'api/Test/GetGeneralStatisticOfApplicant?accountId=';
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id);
+    }
+
     GetRankStatistic(id){
         const API = 'api/Test/GetRankStatistic?accountId=';
         return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id);
     }
 
-    GetOverallPointStatistic(id){
+    GetRankStatisticOfApplicant(id){
+        const API = 'api/Test/GetRankStatisticOfApplicant?accountId=';
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id);
+    }
+
+    GetOverallPointStatistic(id, isEmployee){
         const API = 'api/Test/GetOverallPointStatistic?companyId=';
-        return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id + '&isEmployee=true');
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id + '&isEmployee=' + isEmployee);
     }
 
     GetAccountByTestId(testId){

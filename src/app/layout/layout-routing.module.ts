@@ -29,10 +29,11 @@ const routes: Routes = [
             { path: 'statistic', loadChildren: () => import('../components/statistic/statistic.module').then(m => m.StatisticModule), canActivate: [OwnerGuard]},
             { path: 'applicant', loadChildren: () => import('../components/applicant/applicant.module').then(m => m.ApplicantModule), canActivate: [OwnerGuard]},
             { path: 'sample-test', loadChildren: () => import('../components/sample-test/sample-test.module').then(m => m.SampleTestModule), canActivate: [OwnerGuard] },
+            { path: 'statistic-applicant', loadChildren: () => import('../components/statistic-applicant-forTestOwner/statistic-applicant.module').then(m => m.StatisticApplicantModule), canActivate: [OwnerGuard]},
 
             //Employee
             { path: 'reranking', component: RerankingComponent, canActivate: [EmployeeGuard]},
-
+            { path: 'statistic-employee', loadChildren: () => import('../components/statistic-employee/statistic-employee.module').then(m => m.StatisticEmployeeModule), canActivate: [EmployeeGuard]},
             
             { path: 'profile', component: ProfileComponent },
             { path: 'changepass', component: ChangepassComponent },

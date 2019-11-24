@@ -54,7 +54,7 @@ export class ProfileComponent implements OnInit {
   updateProfile() {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'The company will be update!',
+      text: 'The profile will be update!',
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, update it!',
