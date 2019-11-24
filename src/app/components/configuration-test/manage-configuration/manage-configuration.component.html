@@ -582,7 +582,7 @@
 <!-- Table question -->
 
 <div class="insert-form col-md-12">
-    <app-page-header [heading]="'Test Employee Management'"></app-page-header>
+    <app-page-header [heading]="'Employee Test Management'"></app-page-header>
     <div class="card mb-3 shadow-card">
         <div class="table-responsive col-md-12 datatable" style="overflow: unset;">
             <div class="row mb-1">
@@ -633,10 +633,6 @@
                     <tr class="col-md-12 row no-padding-no-margin">
                         <th class="text-center col-md-1" scope="col"><input class="btn" type="checkbox" value=""
                                 [(ngModel)]="selectedAll" (change)="selectAll();"></th>
-                        <th class="text-center col-md-1" scope="col">
-                            <sv-default-sorter>Progress
-                            </sv-default-sorter>
-                        </th>
                         <th class="text-center col-md-2" scope="col">
                                 <sv-default-sorter>Type
                                 </sv-default-sorter>
@@ -657,7 +653,7 @@
                             <sv-default-sorter by="isActive">Status
                             </sv-default-sorter>
                         </th>
-                        <th class="text-center col-md-2" scope="col">Action</th>
+                        <th class="text-center col-md-3" scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody *ngIf="sv.data.length != 0;  else searchNull">
@@ -667,7 +663,6 @@
                             <input type="checkbox" value="" [(ngModel)]="c.selected" class="btn"
                                 (change)="checkIfAllSelected();">
                         </td>
-                        <td class="text-center col-md-1">9/10</td>
                         <td class="text-center col-md-2" [hidden]="!c.type">Employee</td>
                         <td class="text-center col-md-2" [hidden]="c.type">Applicant</td>
                         <td class="text-center col-md-2">{{c.title}}</td>
@@ -679,8 +674,7 @@
                         <td class="text-center col-md-1" [hidden]="c.isActive==false">
                             <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
                         </td>
-                        <td
-                            class="nowrap text-center action-column col-md-2 row no-padding-no-margin d-flex justify-content-center">
+                        <td class="nowrap text-center action-column col-md-3 row no-padding-no-margin d-flex justify-content-center">
                             <button class="btn-warning btn btn-circle shadow-item"
                                 (click)="openDetail(update, c.configId)">
                                 <i class="fa fa-edit"></i>

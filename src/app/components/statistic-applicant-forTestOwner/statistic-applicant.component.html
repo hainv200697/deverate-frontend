@@ -66,7 +66,7 @@
                     Average Point Catalogue
                 </div>
                 <div class="card-body" *ngIf="isLoaded">
-                    <ngx-charts-line-chart [view]="[630, 0]" [scheme]="colorScheme" [results]="averageCatalogue"
+                    <ngx-charts-line-chart [legendPosition]="legendPosition" [view]="[630, 0]" [scheme]="colorScheme" [results]="averageCatalogue"
                         [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
                         [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
                         [yAxisLabel]="yAxisLabel" [legendTitle]="legendTitle" *ngIf="isLoaded">
@@ -80,7 +80,7 @@
                 <div class="card-header">
                     Statistic Rank
                 </div>
-                <div class="card-body" style="height: 445px; overflow: auto;">
+                <div class="card-body" style="height: 597px; overflow: auto;">
                     <table class="table table-hover table-bordered customtable" [svData]="dataEmployeeOverPoint" #sv="svDataTable">
                         <thead style="background-color: rgba(0, 0, 0, 0.03);">
                             <tr class="col-md-12 row no-padding-no-margin">

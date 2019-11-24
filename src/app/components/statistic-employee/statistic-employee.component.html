@@ -1,0 +1,97 @@
+<ng-template #customLoadingTemplate>
+    <div class="custom-class">
+
+    </div>
+</ng-template>
+<ng-template #searchNull>
+    <tr class="row no-padding-no-margin" style="width: 100%; margin: 0;">
+        <th class="text-center" style="width: 100%; margin: 0;" scope="col">No data</th>
+    </tr>
+</ng-template>
+
+<div class="col col-md-12 mt-3 row">
+    <div class="col col-md-12 mt-3">
+        <div class="card mb-5">
+            <div class="card-header row no-padding-no-margin" style="margin: 0;">
+                <div class="form-inline col-md-10 col-lg-6">
+                    <label>Average Point Catalogue:</label>
+                </div>
+                <div class="form-inline col-md-2 col-lg-6 d-flex justify-content-end">
+                    <label>Select:&nbsp;&nbsp;</label>
+                    <select (change)="getHistory($event.target.value)" id="ins_setting" name="ins_setting" class="form-control col-md-5">
+                        <option disabled [value]=-1>-- Choosing</option>
+                        <option [value]=1>-- Rank</option>
+                        <option [value]=2>-- Overpoint</option>
+                        <option [value]=3>-- Catalogue</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body">
+                <ngx-charts-line-chart *ngIf="isLoaded" [view]="view" [scheme]="colorScheme" [results]="averageCatalogue"
+                    [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+                    [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
+                    [yAxisLabel]="yAxisLabel">
+                </ngx-charts-line-chart>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col col-md-12 mt-3 row">
+    <div class="col col-md-12 mt-3">
+        <div class="card mb-5">
+            <div class="card-header row no-padding-no-margin" style="margin: 0;">
+                <div class="form-inline col-md-10 col-lg-6">
+                    <label>History Test:</label>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover table-bordered customtable" [svData]="dataHistory" #sv="svDataTable">
+                    <thead style="background-color: rgba(0, 0, 0, 0.03);">
+                        <tr class="row no-padding-no-margin" style="width: 100%; margin: 0;">
+
+                            <th class="text-center no-padding-no-margin" style="width: 8%;">
+                                No.
+                            </th>
+                            <th class="text-center" style="width: 25%;">
+                                Title
+                            </th>
+                            <th class="text-center" style="width: 12%;">
+                                Point
+                            </th>
+                            <th class="text-center" style="width: 15%;">
+                                Rank
+                            </th>
+                            <th class="text-center" style="width: 25%;">
+                                Date
+                            </th>
+                            <th class="text-center" style="width: 15%;">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody style="background-color: white;" *ngIf="sv.data.length != 0;  else searchNull">
+                        <tr class=" row" style="font-size: 18px; width: 100%; margin: 0;"
+                            *ngFor="let data of sv.data; let i = index">
+                            <td class="text-center" style="width: 8%;">{{i+1}}</td>
+                            <td class="text-center" style="width: 25%;">{{data.username}}</td>
+                            <td class="text-center" style="width: 12%;">{{data.overallPoint}}
+                            </td>
+                            <td class="text-center" style="width: 15%;">{{data.rank}}
+                            </td>
+                            <td class="text-center" style="width: 25%;">
+                                {{data?.startDate.split('T')[0]}}</td>
+                            <th class="text-center" style="width: 15%;">
+                                <a href='result/{{data.testId}}' target="_blank">
+                                    <button class="btn btn-primary btn-xs btn-circle">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                </a>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

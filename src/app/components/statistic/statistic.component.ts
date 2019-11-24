@@ -20,8 +20,12 @@ export class StatisticComponent implements OnInit {
   gradient = false;
   xAxes: [{ stacked: true }];
   showLegend = true;
+  legend = {
+    display : true,
+
+  }
   legendTitle = 'Title';
-  legendPosition = 'right';
+  legendPosition = 'bottom';
   showXAxisLabel = false;
   xAxisLabel = 'Test';
   showYAxisLabel = false;
@@ -77,8 +81,7 @@ export class StatisticComponent implements OnInit {
       singleSelection: false,
       idField: 'id',
       textField: 'text',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
+      enableCheckAll: false,
       itemsShowLimit: 3,
       allowSearchFilter: true,
     };
@@ -195,6 +198,8 @@ export class StatisticComponent implements OnInit {
 
   getDataStatistic(value) {
     this.chooseConfig.push(value);
+    console.log(this.selectedItems)
+    
   }
 
   onItemDeSelect(value){
@@ -207,6 +212,7 @@ export class StatisticComponent implements OnInit {
   }
 
   onSelectAll(value) {
+    console.log(this.selectedItems)
   }
 
   dropdownList = [];

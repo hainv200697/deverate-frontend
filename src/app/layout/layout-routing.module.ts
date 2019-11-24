@@ -33,7 +33,7 @@ const routes: Routes = [
 
             //Employee
             { path: 'reranking', component: RerankingComponent, canActivate: [EmployeeGuard]},
-
+            { path: 'statistic-employee', loadChildren: () => import('../components/statistic-employee/statistic-employee.module').then(m => m.StatisticEmployeeModule), canActivate: [EmployeeGuard]},
             
             { path: 'profile', component: ProfileComponent },
             { path: 'changepass', component: ChangepassComponent },
