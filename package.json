@@ -7,7 +7,6 @@
     "start": "ng serve",
     "build": "ng build --prod",
     "deploy": "ng build && aws s3 sync ./dist s3://deverate-system",
-    "gitbuild": "ng build --prod --base-href /start-angular/SB-Admin-BS4-Angular-7/master/dist/",
     "test": "ng test",
     "test-ci": "TEST_CI=true ng test",
     "lint": "ng lint",

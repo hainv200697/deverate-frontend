@@ -23,7 +23,23 @@ export class LoginComponent implements OnInit {
 
     ngOnInit() {
         if (localStorage.getItem('Authorization')) {
-            this.router.navigate(['/catalogue']);
+            const role = localStorage.getItem('Role');
+            switch (role) {
+                case 'System Manager':
+                    this.router.navigate(['/manage-company']);
+                    break;
+                case 'Company Manager':
+                    this.router.navigate(['/manage-employee']);
+                    break;
+                case 'Test Owner':
+                     this.router.navigate(['/manage-configuration']);
+                    break;
+                case 'Employee':
+                     this.router.navigate(['/reranking']);
+                    break;
+                default:
+                     this.router.navigate(['/forbidden']);
+            }
         }
     }
 
