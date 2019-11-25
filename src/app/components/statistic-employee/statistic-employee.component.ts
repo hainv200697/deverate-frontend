@@ -19,7 +19,7 @@ export class StatisticEmployeeComponent implements OnInit {
   dataHistory;
   averageCatalogue = [];
   ngOnInit() {
-    this.getHistory(3);
+    this.getHistory(2);
   }
 
   constructor(

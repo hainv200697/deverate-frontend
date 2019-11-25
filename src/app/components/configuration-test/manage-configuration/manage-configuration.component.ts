@@ -541,7 +541,7 @@ export class ManageConfigurationComponent implements OnInit {
     if (status === false) {
       Swal.fire({
         title: 'Are you sure?',
-        text: 'The company will be delete!',
+        text: 'The config will be delete!',
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes, delete it!',
