@@ -46,11 +46,6 @@ export class StatisticApiService {
     }
 
     GetAccountByTestId(testId) {
-        const API = 'api/Test/GetAccountByTestId?testId=';
-        return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + testId);
-    }
-
-    GetApplicantByTestId(testId) {
         const API = 'api/Test/GetInfoByTestId?testId=';
         return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + testId);
     }

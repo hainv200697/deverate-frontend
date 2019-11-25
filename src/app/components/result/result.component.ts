@@ -72,16 +72,6 @@ export class ResultComponent implements OnInit {
     )
   }
 
-  getApplicantInfo(testId) {
-    this.loading = true;
-    this.statisticApi.GetApplicantByTestId(testId).subscribe(
-      (data) => {
-        this.accountInfo = data;
-        this.loading = false;
-      }
-    )
-  }
-
   getStatistic(id: number, rankId: number) {
     this.showRank = 0;
     this.statisticApi.getStatistic(id).subscribe(
