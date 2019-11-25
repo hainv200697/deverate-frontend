@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import Stepper from 'bs-stepper';
 import { from } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import * as moment from 'moment';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 declare var $: any;
 @Component({
@@ -358,8 +359,8 @@ export class ManageConfigurationComponent implements OnInit {
         this.updateConfig['title'] = res['title'];
         this.updateConfig['totalQuestion'] = res['totalQuestion'];
         this.updateConfig['createDate'] = res['createDate'];
-        this.updateConfig['startDate'] = res['startDate'];
-        this.updateConfig['endDate'] = res['endDate'];
+        this.updateConfig['startDate'] = moment(res['startDate']).format('LLLL');
+        this.updateConfig['endDate'] = moment(res['endDate']).format('LLLL');
         this.updateConfig['duration'] = res['duration'];
         this.updateConfig['isActive'] = res['isActive'];
         this.updateConfig['catalogueInConfigs'] = res['catalogueInConfigs'];
@@ -503,7 +504,7 @@ export class ManageConfigurationComponent implements OnInit {
           this.index = 1;
           this.loading = false;
         });
-        console.log(this.inputConfiguration)
+        console.log(JSON.stringify(this.inputConfiguration))
       }
     });
   }
@@ -519,6 +520,7 @@ export class ManageConfigurationComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
+        console.log(this.updateConfig)
         this.loading = true;
         this.configAPi.updateConfiguration(this.updateConfig).subscribe(data => {
           this.getConfigurationIsActive(true);

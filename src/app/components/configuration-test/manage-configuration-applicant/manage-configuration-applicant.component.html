@@ -332,11 +332,8 @@
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 row no-padding-no-margin">
 
                             <div class="col-md-5 row" style="margin-left: 33px;">
-                                <label class="col-md-6" style="text-align: right;">Type:</label>
-                                <select disabled class="col-md-4" [(ngModel)]="updateConfig['type']">
-                                    <option [value]="true">Employee</option>
-                                    <option [value]="false">Applicant</option>
-                                </select>
+                                <label class="col-md-12" style="text-align: center;">Type: &nbsp; &nbsp; &nbsp;
+                                    Applicant</label>
                             </div>
 
                             <div class="col-md-7 row">
@@ -352,7 +349,7 @@
                                     [(ngModel)]="this.updateConfig['totalQuestion']">
                                 <label class="col-md-12"></label>
                                 <label class="col-md-8" style="text-align: right;">Duration:</label>
-                                <input disabled class="col-md-4" type="number" value="1" step="5" [min]="15"
+                                <input class="col-md-4" type="number" value="1" step="5" [min]="15"
                                     [(ngModel)]="this.updateConfig['duration']" style="height: 30px">
                             </div>
                             <div class="col-md-7 row ">
@@ -369,13 +366,7 @@
 
                         <div class="form-group col-md-12 row no-padding-no-margin">
                             <label class="col-md-12">Catalogue:</label>
-                            <div class="col-md-6">
-
-                                <angular2-multiselect class="form-control" [data]="catalogueList" style="width: 87%"
-                                    [(ngModel)]="selectedItemsUpdate" [settings]="dropdownSettingsDetail"
-                                    (onSelect)="onItemUpdateSelect($event)" (onDeSelect)="OnItemUpdateDeSelect($event)"
-                                    (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
-                                </angular2-multiselect>
+                            <div class="col-md-2">
                             </div>
                             <div class="col-md-6">
                                 <div class="form-row" *ngFor="let c of updateConfig['catalogueInConfigs']"
@@ -449,10 +440,15 @@
                                 <tbody>
                                     <tr class="col-md-12 row no-padding-no-margin">
                                         <td class="col-md-3" style="font-weight: bold">
-                                            Type
+                                            Title
                                         </td>
-                                        <td class="col-md-9" [hidden]="updateConfig['type']==false">
-                                            Employee
+                                        <td class="col-md-9">
+                                            {{updateConfig['title']}}
+                                        </td>
+                                    </tr>
+                                    <tr class="col-md-12 row no-padding-no-margin">
+                                        <td class="col-md-3" style="font-weight: bold">
+                                            Type
                                         </td>
                                         <td class="col-md-9" [hidden]="updateConfig['type']==true">
                                             Applicant
@@ -651,7 +647,7 @@
                         <td class="text-center col-md-2">{{c?.createDate.split('T')[0]}}</td>
                         <td class="text-center col-md-1">{{c.duration}}'</td>
                         <td class="text-center col-md-1" [hidden]="c.isActive==true">
-                            <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
+                            <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
                         </td>
                         <td class="text-center col-md-1" [hidden]="c.isActive==false">
                             <span class="shadow-item text-center badge badge-pill badge-success">Active</span>

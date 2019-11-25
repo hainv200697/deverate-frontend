@@ -46,7 +46,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-hover table-bordered customtable" [svData]="dataHistory" #sv="svDataTable">
+                <table class="table table-hover table-bordered customtable" [svData]="dataLineChart" #sv="svDataTable">
                     <thead style="background-color: rgba(0, 0, 0, 0.03);">
                         <tr class="row no-padding-no-margin" style="width: 100%; margin: 0;">
 
@@ -74,13 +74,13 @@
                         <tr class=" row" style="font-size: 18px; width: 100%; margin: 0;"
                             *ngFor="let data of sv.data; let i = index">
                             <td class="text-center" style="width: 8%;">{{i+1}}</td>
-                            <td class="text-center" style="width: 25%;">{{data.username}}</td>
-                            <td class="text-center" style="width: 12%;">{{data.overallPoint}}
+                            <td class="text-center" style="width: 25%;">{{data.name}}</td>
+                            <td class="text-center" style="width: 12%;">{{data.point}}
                             </td>
                             <td class="text-center" style="width: 15%;">{{data.rank}}
                             </td>
                             <td class="text-center" style="width: 25%;">
-                                {{data?.startDate.split('T')[0]}}</td>
+                                {{data?.startTime.split('T')[0]}}</td>
                             <th class="text-center" style="width: 15%;">
                                 <a href='result/{{data.testId}}' target="_blank">
                                     <button class="btn btn-primary btn-xs btn-circle">

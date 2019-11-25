@@ -36,8 +36,10 @@ export class StatisticEmployeeComponent implements OnInit {
           for (let i = 0; i < size; i++) {
             var series = [];
             this.dataLineChart.forEach(element => {
-              series.push({ name: element.name, value: element.series[i].value });
+              console.log(element)
+              series.push({ name: element.name, value: element.series[i].overallPoint });
             });
+            console.log(series)
             var element = {
               name: this.dataLineChart[0].series[i].name,
               series

@@ -37,6 +37,7 @@ export class ResultComponent implements OnInit {
   isLogin;
   isLoaded;
   roleName;
+  countApi = 0;
 
   constructor(private rankApi: RankApiService,
     private statisticApi: StatisticApiService,
@@ -45,6 +46,7 @@ export class ResultComponent implements OnInit {
 
   ngOnInit() {
     this.isLoaded = false;
+    this.loading = true;
     var testId = this.route.snapshot.paramMap.get('testId');
     this.getStatistic(Number(testId), 1);
     this.getAccountInfo(testId);
@@ -53,9 +55,26 @@ export class ResultComponent implements OnInit {
     console.log(localStorage.getItem('Role'))
   }
 
-  getAccountInfo(testId){
-    this.loading = true;
+  getAccountInfo(testId) {
     this.statisticApi.GetAccountByTestId(testId).subscribe(
+      (data) => {
+        this.accountInfo = data;
+        if (this.accountInfo.fullname == undefined) {
+          this.accountInfo.fullname = this.accountInfo.fullName;
+        }
+        this.countApi++;
+        if (this.countApi == 2) {
+          this.loading = false;
+          this.isLoaded = true;
+        }
+        
+      }
+    )
+  }
+
+  getApplicantInfo(testId) {
+    this.loading = true;
+    this.statisticApi.GetApplicantByTestId(testId).subscribe(
       (data) => {
         this.accountInfo = data;
         this.loading = false;
@@ -65,8 +84,6 @@ export class ResultComponent implements OnInit {
 
   getStatistic(id: number, rankId: number) {
     this.showRank = 0;
-    this.loading = true;
-
     this.statisticApi.getStatistic(id).subscribe(
       (data) => {
         this.statistic = data['data']['data'];
@@ -220,8 +237,12 @@ export class ResultComponent implements OnInit {
             }]
           }
         }
-        this.loading = false;
-        this.isLoaded = true;
+
+        this.countApi++;
+        if (this.countApi == 2) {
+          this.loading = false;
+          this.isLoaded = true;
+        }
       },
     );
 
@@ -235,16 +256,16 @@ export class ResultComponent implements OnInit {
   public radarChartData: any = [
     { data: [], label: 'Assement Result' },
   ];
-  
-  public radarChartOption : RadialChartOptions = {
+
+  public radarChartOption: RadialChartOptions = {
     scale: {
       ticks: {
         beginAtZero: true,
-        stepSize : 10,
+        stepSize: 10,
         max: 100
       }
     }
-}
+  }
 
   public radarChartColor = [
     {
