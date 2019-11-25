@@ -338,6 +338,13 @@ export class EmployeeComponent implements OnInit {
                 this.closeModal();
             },
             (error) => {
+                if (error.status == 0) {
+                    this.toastr.error("System is not available");
+                }
+                if (error.status == 400) {
+                    this.toastr.error("Input is invalid");
+                }
+                this.loading = false;
                 if (error.status == 500) {
                     this.toastr.error("System error");
                     this.closeModal();
@@ -379,8 +386,11 @@ export class EmployeeComponent implements OnInit {
                         if (error.status == 500) {
                             this.toastr.error('System error')
                         }
+                        if (error.status == 400) {
+                            this.toastr.error("Input is invalid");
+                        }
                         if (error.status == 0) {
-                            this.toastr.error('Connection error')
+                            this.toastr.error('System is not available')
                         }
                         this.loading = false;
                     }
@@ -519,6 +529,17 @@ export class EmployeeComponent implements OnInit {
             this.employeeService.getAllWithRole(this.companyId, this.iconIsActive, this.getRole).subscribe(
                 (data) => {
                     this.employeeList = data;
+                }, (error) => {
+                    if (error.status == 500) {
+                        this.toastr.error('System error')
+                    }
+                    if (error.status == 400) {
+                        this.toastr.error("Input is invalid");
+                    }
+                    if (error.status == 0) {
+                        this.toastr.error('System is not available')
+                    }
+                    this.loading = false;
                 }
             );
         }
