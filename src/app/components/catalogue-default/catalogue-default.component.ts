@@ -109,6 +109,18 @@ export class CatalogueDefaultComponent implements OnInit {
                 this.loading = false;
                 this.getAllCatalogue(this.iconIsActive);
                 this.toastr.success(results['message']);
+            },
+            (error)=>{
+                if (error.status == 0) {
+                    this.toastr.error("System is not available");
+                }
+                if (error.status == 400) {
+                    this.toastr.error("Input is invalid");
+                }
+                if (error.status == 500) {
+                    this.toastr.error("System error");
+                }
+                this.loading = false;
             }
         );
     }

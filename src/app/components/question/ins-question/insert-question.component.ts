@@ -545,6 +545,18 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                             this.getQuestionById(this.iconIsActive);
                             this.toastr.success("Changed success");
                         }
+                        ,(error)=>{
+                            if (error.status == 0) {
+                                this.toastr.error("System is not available");
+                            }
+                            if (error.status == 400) {
+                                this.toastr.error("Input is invalid");
+                            }
+                            if (error.status == 500) {
+                                this.toastr.error("System error");
+                            }
+                            this.loading = false;
+                        }
                     );
 
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -590,12 +602,16 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 this.closeModal();
             },
             (error) => {
+                if (error.status == 0) {
+                    this.toastr.error("System is not available");
+                }
                 if (error.status == 400) {
-                    this.toastr.error('Input is invalid');
+                    this.toastr.error("Input is invalid");
                 }
                 if (error.status == 500) {
-                    this.toastr.error('System error');
+                    this.toastr.error("System error");
                 }
+                this.loading = false;
             }
         );
     }
@@ -608,12 +624,16 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 this.closeModal();
             },
             (error) => {
+                if (error.status == 0) {
+                    this.toastr.error("System is not available");
+                }
                 if (error.status == 400) {
-                    this.toastr.error('Input is invalid');
+                    this.toastr.error("Input is invalid");
                 }
                 if (error.status == 500) {
-                    this.toastr.error('System error');
+                    this.toastr.error("System error");
                 }
+                this.loading = false;
             }
         );
     }
@@ -630,6 +650,18 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             (results) => {
                 this.getQuestionById(this.iconIsActive);
                 this.toastr.success(results['message']);
+            },
+            (error)=>{
+                if (error.status == 0) {
+                    this.toastr.error("System is not available");
+                }
+                if (error.status == 400) {
+                    this.toastr.error("Input is invalid");
+                }
+                if (error.status == 500) {
+                    this.toastr.error("System error");
+                }
+                this.loading = false;
             }
         );
     }
@@ -650,7 +682,16 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 this.selectedAll = false;
             },
             (error: any) => {
-                this.router.navigate(['**']);
+                if (error.status == 0) {
+                    this.toastr.error("System is not available");
+                }
+                if (error.status == 400) {
+                    this.toastr.error("Input is invalid");
+                }
+                if (error.status == 500) {
+                    this.toastr.error("System error");
+                }
+                this.loading = false;
             }
         );
     }

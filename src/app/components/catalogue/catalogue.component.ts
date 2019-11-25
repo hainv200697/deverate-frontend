@@ -74,11 +74,14 @@ export class CatalogueComponent implements OnInit {
                 this.selected = false;
                 this.selectedAll= false;
             }, error => {
-                if (error.status == 500) {
-                    this.toastr.error('System error')
-                }
                 if (error.status == 0) {
-                    this.toastr.error('Connection error')
+                    this.toastr.error("System is not available");
+                }
+                if (error.status == 400) {
+                    this.toastr.error("Input is invalid");
+                }
+                if (error.status == 500) {
+                    this.toastr.error("System error");
                 }
                 this.loading = false;
             }
@@ -115,11 +118,14 @@ export class CatalogueComponent implements OnInit {
                     this.getAllCatalogue(this.iconIsActive);
                     this.toastr.success(results['message']);
                 }, error => {
-                    if (error.status == 500) {
-                        this.toastr.error('System error')
-                    }
                     if (error.status == 0) {
-                        this.toastr.error('Connection error')
+                        this.toastr.error("System is not available");
+                    }
+                    if (error.status == 400) {
+                        this.toastr.error("Input is invalid");
+                    }
+                    if (error.status == 500) {
+                        this.toastr.error("System error");
                     }
                     this.loading = false;
                 }
@@ -174,11 +180,14 @@ export class CatalogueComponent implements OnInit {
                 this.getAllCatalogue(this.iconIsActive);
                 this.toastr.success(data['message']);
             }, error => {
-                if (error.status == 500) {
-                    this.toastr.error('System error')
-                }
                 if (error.status == 0) {
-                    this.toastr.error('Connection error')
+                    this.toastr.error("System is not available");
+                }
+                if (error.status == 400) {
+                    this.toastr.error("Input is invalid");
+                }
+                if (error.status == 500) {
+                    this.toastr.error("System error");
                 }
                 this.loading = false;
             }

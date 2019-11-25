@@ -36,9 +36,9 @@ export class ApplicantComponent implements OnInit {
     insApplicant = {};
     applicants = [];
     listConfig = [];
-    
+    config_id;
     ngOnInit() {
-        this.insApplicant['config_id']= -1;
+        this.config_id = -1;
         this.getAllConfig();
     }
 
@@ -188,9 +188,6 @@ export class ApplicantComponent implements OnInit {
         if(!this.validate()){
             return check = false;
         }
-        if(!this.validateConfig()){
-            return check = false;
-        }
         if(!this.validateEmail()){
             return check = false;
         }
@@ -210,25 +207,37 @@ export class ApplicantComponent implements OnInit {
     }
 
     createTest(){
-        this.loading = true;
-        console.log(this.insApplicant['config_id'])
-        this.applicantService.postCreateApplicant(this.applicantList,this.insApplicant['config_id']).subscribe(
-        results => {
-            this.loading = false;
-            this.toastr.success("Create success");
-            this.applicantList = [];
-            this.insApplicant = {};
-        },
-        (error) => {
-            this.loading = false;
-            if (error.status == 400) {
-                this.toastr.error("Input is invalid");
-            }
-            if (error.status == 500) {
-                this.toastr.error("System error");
-            }
+        let check = true;
+        if(!this.validateConfig()){
+            return check = false;
         }
-    );
+        if(this.applicantList.length == 0){
+            this.toastr.error('Message error', 'Please input applicant');
+            return check = false;
+        }
+        if(check){
+            this.loading = true;
+            this.applicantService.postCreateApplicant(this.applicantList,this.config_id).subscribe(
+            results => {
+                this.loading = false;
+                this.toastr.success("Create success");
+                this.applicantList = [];
+                this.insApplicant = {};
+            },
+            (error) => {
+                this.loading = false;
+                if (error.status == 0) {
+                    this.toastr.error("System is not available");
+                }
+                if (error.status == 400) {
+                    this.toastr.error("Input is invalid");
+                }
+                if (error.status == 500) {
+                    this.toastr.error("System error");
+                }
+            }
+            );
+        }
     }
 
     validate() {
@@ -254,7 +263,7 @@ export class ApplicantComponent implements OnInit {
     }
     
     validateConfig() {
-        if (this.insApplicant['config_id'] == -1) {
+        if (this.config_id == -1) {
             this.toastr.error('Message', 'Please choose setting!');
             return false;
         }
