@@ -48,8 +48,8 @@
                     <th class="col-md-4 text-center" scope="col">
                         <sv-default-sorter by='title'>Title</sv-default-sorter>
                     </th>
-                    <th class="col-md-3 text-center" scope="col">
-                        <sv-default-sorter by='accountName'>Employee</sv-default-sorter>
+                    <th class="col-md-3 text-center" scope="col" >
+                        <sv-default-sorter by='accountName'>Candidate</sv-default-sorter>
                     </th>
                     <th class="col-md-2 text-center" scope="col">Status
                     </th>
@@ -66,7 +66,8 @@
                     </td>
                     <td class="col-md-1 text-center">{{i+1}}</td>
                     <td class="col-md-4 text-center">{{ item.title }}</td>
-                    <td class="col-md-3 text-center">{{ item.accountName }}</td>
+                    <td class="col-md-3 text-center" [hidden]="item.accountName == null">{{ item.accountName }}</td>
+                    <td class="col-md-3 text-center" [hidden]="item.applicantName == null">{{ item.applicantName }}</td>
                     <td class="text-center col-md-2" [hidden]="item.status!='Submitted'">
                         <span class="shadow-item text-center badge badge-pill badge-warning">Submitted</span>
                     </td>

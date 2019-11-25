@@ -31,14 +31,17 @@
                         <input [hidden]="expired == true" type="password" placeholder="Key" [(ngModel)]="key">
                         <div class="input-icon"><i class="fa fa-key"></i></div>
                         <br />
+                        <p [hidden]="!status" style="color: green;">Test is submitted successfully</p>
                         <p [hidden]="!error" style="color: red;">{{message}}</p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button [hidden]="expired == true" type="button" class="btn btn-success save shadow-card"
+            <button [hidden]="expired == true || status== true" type="button" class="btn btn-success save shadow-card"
                 (click)="quiz()">Quiz Now</button>
+            <button [hidden]="status == false" type="button" class="btn btn-success save shadow-card"
+                (click)="viewResult()">View result</button>
         </div>
     </ng-template>
 

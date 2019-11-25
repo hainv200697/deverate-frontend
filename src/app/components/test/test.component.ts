@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { interval, Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { GobalService } from 'src/app/shared/services/gobal-service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-test',
@@ -19,6 +20,7 @@ export class TestComponent implements OnInit {
     private route: ActivatedRoute,
     private testService: TestService,
     private modalService: NgbModal,
+    private toastr: ToastrService,
     private router: Router,
     private gblserv: GobalService
   ) { }
@@ -31,14 +33,17 @@ export class TestComponent implements OnInit {
   questionInTest = [];
   alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   testId;
+  status = false;
   time = 0;
   accountId = localStorage.getItem('AccountId');
   sub: Subscription;
   ngOnInit() {
     this.testId = this.route.snapshot.paramMap.get('testId');
+    
     this.config = this.testService.getConfig(this.testId)
       .subscribe(res => {
         this.config = res;
+        console.log(this.key);
         if (this.config.accountId != null && this.accountId == undefined) {
           this.router.navigate(['login']);
           return;
@@ -48,9 +53,7 @@ export class TestComponent implements OnInit {
           return;
         }
         if (this.config.status == 'Submitted') {
-          this.closeModal();
-          this.router.navigate(['/result', this.testId]);
-          return;
+          this.status = true;
         }
         if (this.config.status == 'Expired') {
           this.expired = true;
@@ -63,6 +66,30 @@ export class TestComponent implements OnInit {
         $('#openModalButton').click();
       });
 
+  }
+
+  viewResult(){
+    if(this.key != undefined){
+      this.testService.checkCode(this.testId,this.key).subscribe(
+        (res)=>{
+            console.log(res);
+            this.closeModal();
+            this.router.navigate(['/result', this.testId]);
+        },
+        (error)=>{
+          if (error.status == 0) {
+            this.toastr.error("System is not available");
+          }
+          if (error.status == 400) {
+            this.toastr.error("Input is invalid");
+          }
+          if (error.status == 500) {
+            this.toastr.error("System error");
+          }
+          this.loading = false;
+        }
+      );
+    }
   }
 
 
@@ -174,6 +201,7 @@ export class TestComponent implements OnInit {
       questionInTest: this.questionInTest
     }
     this.loading = true;
+    console.log(JSON.stringify(userTest));
     this.testService.postSubmitTest(userTest)
       .subscribe((res) => {
         this.loading = false;
