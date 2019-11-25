@@ -65,10 +65,10 @@
                     <td class="col-md-2 text-center" style="font-weight: bold">#</td>
                     <td class="col-md-4 text-center" style="font-weight: bold">Fullname</td>
                     <td class="col-md-5 text-center" style="font-weight: bold">Email</td>
-                    <td class="col-md-1 text-center" style="font-weight: bold">Actiom</td>
+                    <td class="col-md-1 text-center" style="font-weight: bold">Action</td>
                 </tr>
             </thead>
-            <tbody>
+            <tbody *ngIf="sv.data.length != 0;  else searchNull">
                 <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data; let i=index">
                     <td class="col-md-2 text-center" style="font-weight: bold">{{i+1}}</td>
                     <td class="col-md-4 text-center" style="font-weight: bold">{{item.fullname}}</td>
@@ -164,4 +164,10 @@
             (click)="createApplicantExcel()">Add</button>
         <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
     </div>
+</ng-template>
+
+<ng-template #searchNull>
+    <tr class="col-md-12 row no-padding-no-margin">
+        <th class="text-center col-md-12" scope="col">No data</th>
+    </tr>
 </ng-template>

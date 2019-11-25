@@ -55,4 +55,10 @@ export class TestService {
     return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST + API, listId);
   }
 
+  checkCode(testId,code) {
+    const param = new HttpParams().set('testId', testId).set('code',code);
+    const API = 'api/Test/CheckCode/';
+    return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_TEST + API, { params: param });
+  }
+
 }
