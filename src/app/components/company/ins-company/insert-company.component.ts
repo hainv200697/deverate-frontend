@@ -140,8 +140,8 @@ export class InsertCompanyComponent implements OnInit {
         confirmButtonText: 'Yes, delete it!',
         cancelButtonText: 'No, keep it'
       }).then((result) => {
-        this.loading = true;
         if (result.value) {
+          this.loading = true;
           this.companyApi.disableCompany(this.updateStatus, status).subscribe(data => {
             this.loading = false;
             this.getCompanyIsActive();
@@ -162,9 +162,6 @@ export class InsertCompanyComponent implements OnInit {
             this.closeModal();
           });
         }
-        else if (result.dismiss === Swal.DismissReason.cancel) {
-          this.loading = false
-        }
       });
     }
     else {
@@ -176,8 +173,8 @@ export class InsertCompanyComponent implements OnInit {
         confirmButtonText: 'Yes, enable it!',
         cancelButtonText: 'No, keep it'
       }).then((result) => {
-        this.loading = true;
         if (result.value) {
+          this.loading = true;
           this.companyApi.disableCompany(this.updateStatus, status).subscribe(data => {
             this.loading = false;
             this.getCompanyIsActive();
