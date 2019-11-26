@@ -135,7 +135,6 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   onItemSelect(item: any) {
-    console.log(item)
     this.inputConfiguration['totalQuestion'] += item.quescount
   }
 
@@ -161,7 +160,7 @@ export class ManageConfigurationComponent implements OnInit {
 
     for (let i = 0; i < select.length; i++) {
       if (select[i]['catalogueId'] == item['catalogueId']) {
-        this.inputConfiguration['totalQuestion'] -= item.quescount
+        this.inputConfiguration['totalQuestion'] -= item.quescount;
         select.splice(i, 1);
         this.updateConfig['catalogueInConfigs'].splice(i, 1);
       }
@@ -169,8 +168,7 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   onItemUpdateSelect(item) {
-    this.updateConfig['catalogueInConfigs'].push(item)
-    console.log(item)
+    this.updateConfig['catalogueInConfigs'].push(item);
   }
 
   OnItemUpdateDeSelect(item) {
@@ -359,13 +357,13 @@ export class ManageConfigurationComponent implements OnInit {
         this.updateConfig['title'] = res['title'];
         this.updateConfig['totalQuestion'] = res['totalQuestion'];
         this.updateConfig['createDate'] = res['createDate'];
-        this.updateConfig['startDate'] = moment(res['startDate']).format('LLLL');
-        this.updateConfig['endDate'] = moment(res['endDate']).format('LLLL');
+        this.updateConfig['startDate'] = moment.utc(res['startDate']).local();
+        this.updateConfig['endDate'] = moment.utc(res['endDate']).local();
         this.updateConfig['duration'] = res['duration'];
         this.updateConfig['isActive'] = res['isActive'];
         this.updateConfig['catalogueInConfigs'] = res['catalogueInConfigs'];
-
         this.updateConfig['configurationRanks'] = res['configurationRanks'];
+
         let tmp = res['catalogueInConfigs'];
         this.selectedItemsUpdate = [];
         //khoi tao mang 2 chieu theo catalogue
@@ -403,7 +401,6 @@ export class ManageConfigurationComponent implements OnInit {
         });
         this.loading = false;
         this.loadData = true;
-        console.log(this.selectedItemsUpdate)
       },
       (error) => {
         this.loading = false;
@@ -498,13 +495,11 @@ export class ManageConfigurationComponent implements OnInit {
           this.index = 1;
           Swal.fire('Success', 'The configuration has been created', 'success');
         }, (error) => {
-          console.log(error)
           this.getConfigurationIsActive(true);
           this.closeModal();
           this.index = 1;
           this.loading = false;
         });
-        console.log(JSON.stringify(this.inputConfiguration))
       }
     });
   }
@@ -520,9 +515,15 @@ export class ManageConfigurationComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
-        console.log(this.updateConfig)
         this.loading = true;
-        this.configAPi.updateConfiguration(this.updateConfig).subscribe(data => {
+        let request = Object.assign({}, this.updateConfig);
+        if (typeof(request['startDate']) === 'string') {
+          request['startDate'] = moment(request['startDate']);
+        }
+        if (typeof(request['endDate']) === 'string') {
+          request['endDate'] = moment(request['endDate']);
+        }
+        this.configAPi.updateConfiguration(request).subscribe(data => {
           this.getConfigurationIsActive(true);
           this.closeModal();
           this.indexDetail = 1;
@@ -603,7 +604,6 @@ export class ManageConfigurationComponent implements OnInit {
     this.employeeApi.getAllWithRole(this.companyId, true, 3).subscribe(
       (data) => {
         this.employeeInCompany = data;
-        console.log(this.employeeInCompany)
       },
       (error) => {
         this.loading = false;
