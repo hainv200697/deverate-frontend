@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StatisticEmployeeComponent } from './statistic-employee.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { DataTableModule } from 'ng-angular8-datatable';
+import { NgxLoadingModule } from 'ngx-loading';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { DataTableModule } from 'ng-angular8-datatable';
     StatisticEmployeeRoutingModule,
     DataTableModule,
     NgxChartsModule,
+    NgxLoadingModule,
   ],
   
   declarations: [StatisticEmployeeComponent]

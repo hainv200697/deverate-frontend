@@ -63,6 +63,7 @@ export class StatisticApplicantComponent implements OnInit {
   rankStattistic = [];
   dataEmployeeOverPoint: any;
   chooseConfig = [];
+  countApi = 0;
 
   companyId = Number(localStorage.getItem('CompanyId'));
   ngOnInit() {
@@ -140,8 +141,11 @@ export class StatisticApplicantComponent implements OnInit {
           };
           this.dropdownList.push(itemDropdown);
         });
-        this.isLoaded = true;
-        this.loading = false;
+        this.countApi++;
+        if (this.countApi == 3) {
+          this.isLoaded = true;
+          this.loading = false;
+        }
       },
       (error) => {
         this.loading = false;
@@ -162,8 +166,11 @@ export class StatisticApplicantComponent implements OnInit {
         }
         this.dataGroupChart = tmp;
         
-        this.load = true;
-        this.loading = false;
+        this.countApi++;
+        if (this.countApi == 3) {
+          this.isLoaded = true;
+          this.loading = false;
+        }
       },
       (error) => {
         this.loading = false;
@@ -177,7 +184,11 @@ export class StatisticApplicantComponent implements OnInit {
     this.historyApi.GetOverallPointStatistic(id, isEmployee).subscribe(
       (data) => {
         this.dataEmployeeOverPoint = data;
-        this.loading = false;
+        this.countApi++;
+        if (this.countApi == 3) {
+          this.isLoaded = true;
+          this.loading = false;
+        }
       },
       (error) => {
         this.loading = false;

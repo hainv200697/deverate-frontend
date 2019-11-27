@@ -6,6 +6,7 @@ import { RankApiService } from 'src/app/services/rank-api.services';
 import { StatisticApiService } from 'src/app/services/statistic-api.service';
 import { ActivatedRoute } from '@angular/router';
 import { RadialChartOptions } from 'chart.js';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-result',
@@ -41,7 +42,8 @@ export class ResultComponent implements OnInit {
 
   constructor(private rankApi: RankApiService,
     private statisticApi: StatisticApiService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toast: ToastrService,
   ) { }
 
   ngOnInit() {
@@ -52,7 +54,6 @@ export class ResultComponent implements OnInit {
     this.getAccountInfo(testId);
     this.isLogin = localStorage.getItem('isLoggedin');
     this.roleName = localStorage.getItem('Role');
-    console.log(localStorage.getItem('Role'))
   }
 
   getAccountInfo(testId) {
@@ -68,6 +69,18 @@ export class ResultComponent implements OnInit {
           this.isLoaded = true;
         }
         
+      },
+      (error) => {
+        if (error.status == 0) {
+          this.toast.error('Connection time out');
+        }
+        if (error.status == 404) {
+          this.toast.error('Not found');
+        }
+        if (error.status == 500) {
+          this.toast.error('Server error');
+        }
+        this.loading = false;
       }
     )
   }
@@ -234,6 +247,18 @@ export class ResultComponent implements OnInit {
           this.isLoaded = true;
         }
       },
+      (error) => {
+        if (error.status == 0) {
+          this.toast.error('Connection time out');
+        }
+        if (error.status == 404) {
+          this.toast.error('Not found');
+        }
+        if (error.status == 500) {
+          this.toast.error('Server error');
+        }
+        this.loading = false;
+      }
     );
 
   }

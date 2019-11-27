@@ -16,17 +16,21 @@ export class StatisticEmployeeComponent implements OnInit {
   accountId = Number(localStorage.getItem('AccountId'));
   result = [];
   isLoaded = false;
+  loading = false;
   dataHistory;
   averageCatalogue = [];
+  lo
   ngOnInit() {
     this.getHistory(2);
   }
 
   constructor(
     private historyApi: StatisticApiService,
+    private toast: ToastrService,
   ) { }
 
   getHistory(itemSelect) {
+    this.loading = true;
     this.historyApi.getHistory(this.accountId).subscribe(
       (data) => {
         this.dataLineChart = data['data']['data'];
@@ -65,11 +69,20 @@ export class StatisticEmployeeComponent implements OnInit {
         if(itemSelect == 1){
 
         }
-
+        this.loading = false;
         this.isLoaded = true;
       },
       (error) => {
-
+        if (error.status == 0) {
+          this.toast.error('Connection time out');
+        }
+        if (error.status == 404) {
+          this.toast.error('Not found');
+        }
+        if (error.status == 500) {
+          this.toast.error('Server error');
+        }
+        this.loading = false;
       }
     );
 
