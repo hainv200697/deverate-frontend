@@ -4,18 +4,24 @@
     </div>
 </ng-template>
 <nav class="navbar navbar-expand-lg fixed-top">
-    <a [hidden]="isLogin==null" class="navbar-brand btn" [routerLink]="['/catalogue']"
+    <a *ngIf="roleName == 'Test Owner'" class="navbar-brand btn" [routerLink]="['/statistic-applicant']"
+        [routerLinkActive]="['router-link-active']">
+        <i class="fa fa-arrow-left"></i>
+    </a>
+    <a *ngIf="roleName == 'Employee'" class="navbar-brand btn" [routerLink]="['/statistic-employee']"
         [routerLinkActive]="['router-link-active']">
         <i class="fa fa-arrow-left"></i>
     </a>
     <a class="navbar-brand" href="#">STATISTIC</a>
 </nav>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true  }"
+    [template]="customLoadingTemplate">
+</ngx-loading>
 <div class="container row col-md-12 d-flex justify-content-center"
-    style="padding-top: 80px; margin-right: 0px; margin-left: 0px;">
+    style="padding-top: 80px; margin-right: 0px; margin-left: 0px;" *ngIf="isLoaded">
 
 
-    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate">
-    </ngx-loading>
+
 
     <div *ngIf="roleName==='Test Owner' && isLoaded" class="row col-md-3 d-flex justify-content-start">
         <table class="table table-striped table-bordered table-hover customtable">
@@ -115,8 +121,8 @@
                 </div>
                 <div class="card-body">
                     <canvas baseChart height="100px" [datasets]="radarChartData" [labels]="radarChartLabels"
-                        [chartType]="radarChartType"  [colors]="radarChartColor" [options]="radarChartOption"
-                        (chartClick)="chartClicked($event)" *ngIf="isLoaded" >
+                        [chartType]="radarChartType" [colors]="radarChartColor" [options]="radarChartOption"
+                        (chartClick)="chartClicked($event)" *ngIf="isLoaded">
                     </canvas>
                 </div>
             </div>

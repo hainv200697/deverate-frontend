@@ -21,7 +21,7 @@ export class StatisticComponent implements OnInit {
   xAxes: [{ stacked: true }];
   showLegend = true;
   legend = {
-    display : true,
+    display: true,
 
   }
   legendTitle = 'Title';
@@ -68,6 +68,7 @@ export class StatisticComponent implements OnInit {
   rankStattistic = [];
   dataEmployeeOverPoint: any;
   chooseConfig = [];
+  counApi = 0;
 
   companyId = Number(localStorage.getItem('CompanyId'));
   ngOnInit() {
@@ -111,7 +112,7 @@ export class StatisticComponent implements OnInit {
           var series = [];
           this.historyData.forEach(element => {
             if (series.length < 5) {
-              series.push({ name: element.name, value: element.series[i].value});
+              series.push({ name: element.name, value: element.series[i].value });
             }
           });
           var element = {
@@ -138,14 +139,18 @@ export class StatisticComponent implements OnInit {
           if (this.multi.length < 5) {
             this.multi.push(itemMulti);
           }
+          console.log(this.multi)
           let itemDropdown = {
             id: element.configId,
             text: element.name,
           };
           this.dropdownList.push(itemDropdown);
         });
-        this.isLoaded = true;
-        this.loading = false;
+        this.counApi++;
+        if (this.counApi == 3) {
+          this.isLoaded = true;
+          this.loading = false;
+        }
       },
       (error) => {
         this.loading = false;
@@ -160,13 +165,16 @@ export class StatisticComponent implements OnInit {
       (data) => {
         let tmp;
         tmp = data;
-        for(var i = 0; i < tmp.length; i++){
+        for (var i = 0; i < tmp.length; i++) {
           tmp[i].series.push(tmp[i].tested);
           tmp[i].series.push(tmp[i].totalAccount);
         }
         this.dataGroupChart = tmp;
-        this.load = true;
-        this.loading = false;
+        this.counApi++;
+        if (this.counApi == 3) {
+          this.isLoaded = true;
+          this.loading = false;
+        }
       },
       (error) => {
         this.loading = false;
@@ -175,13 +183,17 @@ export class StatisticComponent implements OnInit {
     );
   }
 
-  GetOverallPointStatistic(id){
+  GetOverallPointStatistic(id) {
     this.loading = true
     this.historyApi.GetOverallPointStatistic(id, true).subscribe(
       (data) => {
         this.dataEmployeeOverPoint = data;
         console.log(this.dataEmployeeOverPoint)
-        this.loading = false;
+        this.counApi++;
+        if (this.counApi == 3) {
+          this.isLoaded = true;
+          this.loading = false;
+        }
       },
       (error) => {
         this.loading = false;
@@ -199,10 +211,10 @@ export class StatisticComponent implements OnInit {
   getDataStatistic(value) {
     this.chooseConfig.push(value);
     console.log(this.selectedItems)
-    
+
   }
 
-  onItemDeSelect(value){
+  onItemDeSelect(value) {
     for (let i = 0; i < this.chooseConfig.length; i++) {
       if (this.chooseConfig[i].id == value.id) {
         this.chooseConfig.splice(i, 1);

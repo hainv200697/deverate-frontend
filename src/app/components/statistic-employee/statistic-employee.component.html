@@ -8,8 +8,11 @@
         <th class="text-center" style="width: 100%; margin: 0;" scope="col">No data</th>
     </tr>
 </ng-template>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true  }"
+    [template]="customLoadingTemplate">
+</ngx-loading>
 
-<div class="col col-md-12 mt-3 row">
+<div class="col col-md-12 mt-3 row" *ngIf="isLoaded">
     <div class="col col-md-12 mt-3">
         <div class="card mb-5">
             <div class="card-header row no-padding-no-margin" style="margin: 0;">
@@ -26,7 +29,7 @@
                     </select>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="card-body" >
                 <ngx-charts-line-chart *ngIf="isLoaded" [view]="view" [scheme]="colorScheme" [results]="averageCatalogue"
                     [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
                     [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
@@ -37,7 +40,7 @@
     </div>
 </div>
 
-<div class="col col-md-12 mt-3 row">
+<div class="col col-md-12 mt-3 row" *ngIf="isLoaded">
     <div class="col col-md-12 mt-3">
         <div class="card mb-5">
             <div class="card-header row no-padding-no-margin" style="margin: 0;">
@@ -83,7 +86,7 @@
                                 {{data?.startTime.split('T')[0]}}</td>
                             <th class="text-center" style="width: 15%;">
                                 <a href='result/{{data.testId}}' target="_blank">
-                                    <button class="btn btn-primary btn-xs btn-circle">
+                                    <button class="btn-warning btn btn-circle shadow-item">
                                         <i class="fa fa-edit"></i>
                                     </button>
                                 </a>
