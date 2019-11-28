@@ -220,11 +220,14 @@ export class InsertCompanyComponent implements OnInit {
     }
   }
 
+  isLoadDetail = false;
   getCompanyById(companyId) {
     this.loading = true;
+    this.isLoadDetail = false;
     this.companyApi.getCompanyById(companyId).subscribe(
       (data) => {
         this.loading = false;
+        this.isLoadDetail = true;
         this.account = data['data']['data'].accountDTO;
         this.updateCompany = data['data']['data'].companyDTO;
       },
@@ -317,16 +320,16 @@ export class InsertCompanyComponent implements OnInit {
           console.log(inputCompanyData)
           this.loading = true;
           this.companyApi.insertCompany(inputCompanyData).subscribe(data => {
-            this.loading = false;
             this.getCompanyIsActive();
             this.closeModal();
             this.toast.success('Create company successful');
+            this.loading = false;
           }, (error) => {
             if (error.status == 0) {
               this.toast.error('Server is not availiable');
             }
-            if (error.status == 404) {
-              this.toast.error('Not found');
+            if (error.status == 400) {
+              this.toast.error('Company name is exist');
             }
             if (error.status == 500) {
               this.toast.error('Server error');
@@ -359,12 +362,13 @@ export class InsertCompanyComponent implements OnInit {
           this.getCompanyIsActive();
           this.closeModal();
           this.toast.success('Update company successful');
+          this.loading = false;
         }, (error) => {
           if (error.status == 0) {
             this.toast.error('Server is not availiable');
           }
-          if (error.status == 404) {
-            this.toast.error('Not found');
+          if (error.status == 400) {
+            this.toast.error('Company name is exist');
           }
           if (error.status == 500) {
             this.toast.error('Server error');
@@ -416,13 +420,14 @@ export class InsertCompanyComponent implements OnInit {
   }
 
   validateCompanyName() {
+    this.inputCompany['name'] = $.trim(this.inputCompany['name'].replace(/\s\s+/g, ' ')).toUpperCase();
     $("#companyName").css("border-color", "");
-    if (this.inputCompany['name'].trim() == "" || this.inputCompany['name'].trim() == undefined) {
+    if (this.inputCompany['name'] == "" || this.inputCompany['name'] == undefined) {
       this.toast.error('Please input company\'s name');
       $("#companyName").css("border-color", "red");
       return false;
     }
-    else if (this.inputCompany['name'].trim().length < 3) {
+    else if (this.inputCompany['name'].length < 3) {
       this.toast.error('Please input comapany name min 3 characters');
       $("#companyName").css("border-color", "red");
       return false;
@@ -434,20 +439,22 @@ export class InsertCompanyComponent implements OnInit {
         return false;
       }
     }
+
   }
 
   validateCompanyAddress() {
+    this.inputCompany['address'] = $.trim(this.inputCompany['address'].replace(/\s\s+/g, ' '));
     $("#companyAddress").css("border-color", "");
-    if (this.inputCompany['address'].trim() == null || this.inputCompany['address'].trim() == '') {
+    if (this.inputCompany['address'] == null || this.inputCompany['address'] == '') {
       this.toast.error('Please input address of company');
       $("#companyAddress").css("border-color", "red");
       return false
-    } else if (this.inputCompany['address'].trim().length < 3) {
+    } else if (this.inputCompany['address'].length < 3) {
       this.toast.error('Please input company address min 3 characters');
       $("#companyAddress").css("border-color", "red");
       return false
     }
-    else if (this.inputCompany['address'].trim().length > 200) {
+    else if (this.inputCompany['address'].length > 200) {
       this.toast.error('Please input company address max 200 characters');
       $("#companyAddress").css("border-color", "red");
       return false;
@@ -455,9 +462,10 @@ export class InsertCompanyComponent implements OnInit {
   }
 
   validateCompanyPhone() {
+    this.inputCompany['phone'] = $.trim(this.inputCompany['phone'].replace(/\s\s+/g, ' '))
     $("#companyPhone").css("border-color", "");
     const checkphone = /((09|03|07|08|05)+([0-9]{8})\b)/g.test(this.inputCompany['phone']);
-    if (this.inputCompany['phone'].trim() == null || this.inputCompany['phone'].trim() == '') {
+    if (this.inputCompany['phone'] == null || this.inputCompany['phone'] == '') {
       this.toast.error('Message', 'Please input phone of company');
       $("#companyPhone").css("border-color", "red");
       return false
@@ -469,16 +477,17 @@ export class InsertCompanyComponent implements OnInit {
   }
 
   validateManagerFullName() {
+    this.inputManager['fullname'] = $.trim(this.inputManager['fullname'].replace(/\s\s+/g, ' ')).toUpperCase();
     $("#managerFullname").css("border-color", "");
     var str = this.inputManager['fullname'].split(" ");
-    console.log(str)
-    if (this.inputManager['fullname'].trim() == "" || this.inputManager['fullname'].trim() == null) {
+
+    if (this.inputManager['fullname'] == "" || this.inputManager['fullname'] == null) {
       this.toast.error('Please input manager\'s name');
       $("#managerFullname").css("border-color", "red");
       return false
     }
     else if (str.length < 2) {
-      this.toast.error('Manager\'s name min 2 leter');
+      this.toast.error('Manager\'s name min 2 letter');
       $("#managerFullname").css("border-color", "red");
       return false
     }
@@ -486,7 +495,8 @@ export class InsertCompanyComponent implements OnInit {
 
   validateManagerMail() {
     $("#managerEmail").css("border-color", "");
-    if (this.inputManager['email'].trim() == "" || this.inputManager['email'].trim() == null) {
+    this.inputManager['email'] = $.trim(this.inputManager['email'].replace(/\s\s+/g, ' '));
+    if (this.inputManager['email'] == "" || this.inputManager['email'] == null) {
       this.toast.error('Please input manager\'s email');
       $("#managerEmail").css("border-color", "red");
       return false
@@ -507,8 +517,9 @@ export class InsertCompanyComponent implements OnInit {
 
   validateManagerPhone() {
     $("#managerPhone").css("border-color", "");
+    this.inputManager['phone'] = $.trim(this.inputManager['phone'].replace(/\s\s+/g, ' '));
     const checkphoneManager = /((09|03|07|08|05)+([0-9]{8})\b)/g.test(this.inputManager['phone']);
-    if (this.inputManager['phone'].trim() == null || this.inputManager['phone'].trim() == '') {
+    if (this.inputManager['phone'] == null || this.inputManager['phone'] == '') {
       this.toast.error('Please input phone of manager');
       $("#managerPhone").css("border-color", "red");
       return false
@@ -602,6 +613,7 @@ export class InsertCompanyComponent implements OnInit {
   }
 
   validateUpdateCompanyName() {
+    this.updateCompany['name'] = $.trim(this.updateCompany['name'].replace(/\s\s+/g, ' ')).toUpperCase();
     $("#updateCompanyName").css("border-color", "");
     if (this.updateCompany['name'] == "" || this.updateCompany['name'] == undefined) {
       this.toast.error('Please input company\'s name');
@@ -623,6 +635,7 @@ export class InsertCompanyComponent implements OnInit {
   }
 
   validateUpdateCompanyAddress() {
+    this.updateCompany['address'] = $.trim(this.updateCompany['address'].replace(/\s\s+/g, ' '));
     $("#updateCompanyAddress").css("border-color", "");
     if (this.updateCompany['address'] == null || this.updateCompany['address'] == '') {
       this.toast.error('Please input address of company');
@@ -641,6 +654,7 @@ export class InsertCompanyComponent implements OnInit {
   }
 
   validateUpdateCompanyPhone() {
+    this.updateCompany['phone'] = $.trim(this.updateCompany['phone'].replace(/\s\s+/g, ' '));
     $("#updateCompanyPhone").css("border-color", "");
     const checkphone = /((09|03|07|08|05)+([0-9]{8})\b)/g.test(this.updateCompany['phone']);
     if (this.updateCompany['phone'] == null || this.updateCompany['phone'] == '') {

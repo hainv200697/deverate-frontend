@@ -58,8 +58,8 @@
                     </div>
                     <div class="input-group input-group-icon">
                         <label style="padding-top: 5%;">Gender</label>
-                        <select  style="height: auto; margin-left: 10px;" name="ins_manage_gender" class="form-control col-md-5"
-                            [(ngModel)]="inputManager['gender']">
+                        <select style="height: auto; margin-left: 10px;" name="ins_manage_gender"
+                            class="form-control col-md-5" [(ngModel)]="inputManager['gender']">
                             <option style="color: grey" disabled>-- Choosing gender</option>
                             <option style="color: black;" [value]=true>Male</option>
                             <option style="color: black;" [value]=false>Female</option>
@@ -75,75 +75,77 @@
 </ng-template>
 
 <ng-template #update let-modal>
-    <div class="modal-header">
-        <h4 class="modal-title modal-header" id="modal-basic-title">Company Information</h4>
-    </div>
-    <div class="modal-body modal-basic-title col-md-12 row no-padding-no-margin">
-        <form class="col-md-12 no-padding-no-margin row">
-            <div class="form-group col-md-6">
-                <label>Company Information: </label>
+    <div *ngIf="isLoadDetail">
+        <div class="modal-header">
+            <h4 class="modal-title modal-header" id="modal-basic-title">Company Information</h4>
+        </div>
+        <div class="modal-body modal-basic-title col-md-12 row no-padding-no-margin">
+            <form class="col-md-12 no-padding-no-margin row">
+                <div class="form-group col-md-6">
+                    <label>Company Information: </label>
 
-                <div class="">
-                    <div class="input-group input-group-icon">
-                        <input type="text" [(ngModel)]="updateCompany['name']" name="update_company_name"
-                            [disabled]="this.updateCompany['isActive']==false" id="updateCompanyName"
-                            (change)="validateUpdateCompanyName()">
-                        <div class="input-icon"><i class="fa fa-institution"></i></div>
-                    </div>
-                    <div class="input-group input-group-icon">
-                        <input type="text" [(ngModel)]="updateCompany['address']"
-                            [disabled]="this.updateCompany['isActive']==false" id="updateCompanyAddress"
-                            name="update_company_address" id="" (change)="validateUpdateCompanyAddress()">
-                        <div class="input-icon"><i class="fa fa-map-marker"></i></div>
-                    </div>
-                    <div class="input-group input-group-icon">
-                        <input type="text" [(ngModel)]="updateCompany['phone']"
-                            [disabled]="this.updateCompany['isActive']==false" id="updateCompanyPhone"
-                            name="update_company_phone" (change)="validateUpdateCompanyPhone()">
-                        <div class="input-icon"><i class="fa fa-phone"></i></div>
-                    </div>
-                    <div class="input-group input-group-icon">
-                        <input type="text" [(ngModel)]="updateCompany['fax']" id="updateCompanyFax"
-                            [disabled]="this.updateCompany['isActive']==false" name="update_company_fax" id="">
-                        <div class="input-icon"><i class="fa fa-fax"></i></div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group col-md-6">
-                <label>Manager Information: </label>
-                <div class="">
-                    <div class="input-group input-group-icon">
-                        <input type="text" minlength="3" [ngModel]="account?.fullname" disabled
-                            (change)="validateManagerFullName()" name="ins_manager_fullname" id="managerFullname">
-                        <div class="input-icon"><i class="fa fa-user"></i></div>
-                    </div>
-                    <div class="input-group input-group-icon">
-                        <input type="email" [ngModel]="account?.email" disabled (change)="validateManagerMail()"
-                            name="ins_manager_email" id="managerEmail">
-                        <div class="input-icon"><i class="fa fa-envelope"></i></div>
-                    </div>
-                    <div class="input-group input-group-icon">
-                        <input type="text" [ngModel]="account?.phone" disabled (change)="validateManagerPhone()"
-                            name="ins_manager_phone" id="managerPhone">
-                        <div class="input-icon"><i class="fa fa-mobile"></i></div>
-                    </div>
-                    <div class="input-group input-group-icon">
-                        <input type="text" minlength="2" [ngModel]="account?.address" disabled
-                            name="ins_manager_address" id="managerAddress">
-                        <div class="input-icon"><i class="fa fa-home"></i></div>
-                    </div>
-                    <div class="input-group input-group-icon">
-                        <label> Gender:</label>
-                        <label style="padding-left: 10px;" [hidden]="account?.gender == false">Male</label>
-                        <label style="padding-left: 10px;" [hidden]="account?.gender == true">FeMale</label>
+                    <div class="">
+                        <div class="input-group input-group-icon">
+                            <input type="text" [(ngModel)]="updateCompany['name']" name="update_company_name"
+                                [disabled]="this.updateCompany['isActive']==false" id="updateCompanyName"
+                                (change)="validateUpdateCompanyName()">
+                            <div class="input-icon"><i class="fa fa-institution"></i></div>
+                        </div>
+                        <div class="input-group input-group-icon">
+                            <input type="text" [(ngModel)]="updateCompany['address']"
+                                [disabled]="this.updateCompany['isActive']==false" id="updateCompanyAddress"
+                                name="update_company_address" id="" (change)="validateUpdateCompanyAddress()">
+                            <div class="input-icon"><i class="fa fa-map-marker"></i></div>
+                        </div>
+                        <div class="input-group input-group-icon">
+                            <input type="text" [(ngModel)]="updateCompany['phone']"
+                                [disabled]="this.updateCompany['isActive']==false" id="updateCompanyPhone"
+                                name="update_company_phone" (change)="validateUpdateCompanyPhone()">
+                            <div class="input-icon"><i class="fa fa-phone"></i></div>
+                        </div>
+                        <div class="input-group input-group-icon">
+                            <input type="text" [(ngModel)]="updateCompany['fax']" id="updateCompanyFax"
+                                [disabled]="this.updateCompany['isActive']==false" name="update_company_fax" id="">
+                            <div class="input-icon"><i class="fa fa-fax"></i></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-success save shadow-card" [hidden]="this.updateCompany['isActive']==false"
-            (click)="Update()">Update</button>
+                <div class="form-group col-md-6">
+                    <label>Manager Information: </label>
+                    <div class="">
+                        <div class="input-group input-group-icon">
+                            <input type="text" minlength="3" [ngModel]="account?.fullname" disabled
+                                (change)="validateManagerFullName()" name="ins_manager_fullname" id="managerFullname">
+                            <div class="input-icon"><i class="fa fa-user"></i></div>
+                        </div>
+                        <div class="input-group input-group-icon">
+                            <input type="email" [ngModel]="account?.email" disabled (change)="validateManagerMail()"
+                                name="ins_manager_email" id="managerEmail">
+                            <div class="input-icon"><i class="fa fa-envelope"></i></div>
+                        </div>
+                        <div class="input-group input-group-icon">
+                            <input type="text" [ngModel]="account?.phone" disabled (change)="validateManagerPhone()"
+                                name="ins_manager_phone" id="managerPhone">
+                            <div class="input-icon"><i class="fa fa-mobile"></i></div>
+                        </div>
+                        <div class="input-group input-group-icon">
+                            <input type="text" minlength="2" [ngModel]="account?.address" disabled
+                                name="ins_manager_address" id="managerAddress">
+                            <div class="input-icon"><i class="fa fa-home"></i></div>
+                        </div>
+                        <div class="input-group input-group-icon">
+                            <label> Gender:</label>
+                            <label style="padding-left: 10px;" [hidden]="account?.gender == false">Male</label>
+                            <label style="padding-left: 10px;" [hidden]="account?.gender == true">FeMale</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success save shadow-card"
+                [hidden]="this.updateCompany['isActive']==false" (click)="Update()">Update</button>
+        </div>
     </div>
 </ng-template>
 
@@ -179,8 +181,8 @@
                 <div class="col">
                     <div class="row" style="margin-top: 20px;">
                         <div class="form-group input-group col-md-6 row" style="margin-left: 21px;">
-                            <input class="col-md-10" type="search" placeholder="Enter data"
-                                [(ngModel)]="searchText" style="height: 38px;">
+                            <input class="col-md-10" type="search" placeholder="Enter data" [(ngModel)]="searchText"
+                                style="height: 38px;">
                             <div class="input-group-append col-md-2 no-padding-no-margin d-flex align-items-start">
                                 <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
                             </div>
@@ -225,8 +227,8 @@
                 #sv="svDataTable">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin pt-3">
-                        <th class="text-center" style="width: 5%;" scope="col"><input class="btn" type="checkbox" value=""
-                                [(ngModel)]="selectedAll" (change)="selectAll();"></th>
+                        <th class="text-center" style="width: 5%;" scope="col"><input class="btn" type="checkbox"
+                                value="" [(ngModel)]="selectedAll" (change)="selectAll();"></th>
                         <th class="text-center" style="width: 5%;" scope="col">
                             No.
                         </th>
@@ -240,7 +242,7 @@
                         </th>
                         <th class="text-center" style="width: 15%;" scope="col">Phone</th>
                         <th class="text-center" scope="col" style="width: 15%;">
-                            <sv-default-sorter  by="Create_At">Creat At
+                            <sv-default-sorter by="Create_At">Creat At
                             </sv-default-sorter>
                         </th>
                         <th class="text-center" style="width: 10%;" scope="col">
@@ -258,8 +260,8 @@
                                 (change)="checkIfAllSelected();">
                         </td>
                         <td class="text-center" style="width: 5%;">{{i+1}}</td>
-                        <td class="text-center" style="width: 20%;" >{{c.name}}</td>
-                        <td class="text-center" style="width: 20%;" >{{c?.managerName}}</td>
+                        <td class="text-center" style="width: 20%;">{{c.name}}</td>
+                        <td class="text-center" style="width: 20%;">{{c?.managerName}}</td>
                         <td class="text-center" style="width: 15%;">0{{c.phone}}</td>
                         <td class="text-center" style="width: 15%;">{{c.create_At.split('T')[0]}}</td>
                         <td class="text-center" style="width: 10%;" [hidden]="c.isActive==true">

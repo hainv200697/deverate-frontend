@@ -19,7 +19,7 @@ export class ProfileComponent implements OnInit {
     gender : true,
   };
   accountId;
-  loading = false;
+  public loading = false;
   constructor(
     private accountApi: AccountApiService,
     private toast: ToastrService,
