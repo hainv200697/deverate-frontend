@@ -36,12 +36,12 @@ export class CatalogueComponent implements OnInit {
 
     // Open modal
     open(create) {
-        this.modalService.open(create, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
+        this.modalService.open(create, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
     }
 
     openUpdateModal(item, update) {
         this.updateModal(item);
-        this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
+        this.modalService.open(update, { size: 'lg', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
 
     }
 
@@ -135,9 +135,7 @@ export class CatalogueComponent implements OnInit {
     selectAll() {
         this.updateStatus = [];
         for (let i = 0; i < this.catalogueList.length; i++) {
-            if (this.catalogueList[i].type) {
-                this.catalogueList[i].selected = this.selectedAll;
-            }
+            this.catalogueList[i].selected = this.selectedAll;
             this.updateStatus.push(this.catalogueList[i]);
         }
     }
@@ -147,7 +145,6 @@ export class CatalogueComponent implements OnInit {
         this.selected =false;
         this.selectedAll = this.catalogueList.every(function (item: any) {
             return item.selected === true;
-
         });
         for (let i = 0; i < this.catalogueList.length; i++) {
             if (this.catalogueList[i].selected === true) {

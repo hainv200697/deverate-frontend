@@ -256,7 +256,7 @@ export class EmployeeComponent implements OnInit {
     // modal
     // insert
     open(create) {
-        this.modalService.open(create, { ariaLabelledBy: 'modal-basic-title' });
+        this.modalService.open(create, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
     }
 
     openModalExcel(excel) {
@@ -264,7 +264,7 @@ export class EmployeeComponent implements OnInit {
         this.employees = [];
         this.checkFile = false;
         this.message = [];
-        this.modalService.open(excel, { size: 'lg', windowClass: 'myCustomModalClass' });
+        this.modalService.open(excel, { size: 'lg', backdrop: 'static', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
             linear: false,
