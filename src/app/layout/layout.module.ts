@@ -10,6 +10,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { ChangepassComponent } from '../components/changepass/changepass.component';
 import {BreadcrumbModule} from 'angular-crumbs';
 import { RerankingModule } from '../components/ranking/reranking/reranking.module';
+import { NgxLoadingModule } from 'ngx-loading';
 @NgModule({
     imports: [
         CommonModule,
@@ -18,7 +19,8 @@ import { RerankingModule } from '../components/ranking/reranking/reranking.modul
         FormsModule,
         ReactiveFormsModule,
         BreadcrumbModule,
-        RerankingModule
+        RerankingModule,
+        NgxLoadingModule,
     ],
     declarations: [
         LayoutComponent,
