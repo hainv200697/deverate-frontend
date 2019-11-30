@@ -612,6 +612,9 @@ export class ManageConfigurationApplicantComponent implements OnInit {
     } else if (this.selectedItems.length === 0) {
       this.toast.error('Message', 'Please select the catalogue');
       return false;
+    }else if (this.selectedItems.length < 3) {
+      this.toast.error('Message', 'please select minimum 3 catalogues');
+      return false;
     } else if ($('#mark').val() === '') {
       this.toast.error('Message', 'Please input rate of catalogue');
       return false;
@@ -632,13 +635,24 @@ export class ManageConfigurationApplicantComponent implements OnInit {
         this.toast.error('Dev1\'s mark must be large 100');
         return false;
       }
-      else if (this.ListRank[0].weightPoint < this.ListRank[1].weightPoint || this.ListRank[0].weightPoint < this.ListRank[2].weightPoint) {
+      else if (this.ListRank[0].weightPoint <= this.ListRank[1].weightPoint || this.ListRank[0].weightPoint <= this.ListRank[2].weightPoint) {
         this.toast.error('Dev3\'s mark must be highest');
         return false;
       }
-      else if (this.ListRank[1].weightPoint < this.ListRank[2].weightPoint) {
+      else if (this.ListRank[1].weightPoint <= this.ListRank[2].weightPoint) {
         this.toast.error('Dev1\'s mark must be smallest');
         return false;
+      }
+      for (var i = 0; i < this.selectedItems.length; i++) {
+        for (var z = 0; z < this.ListRank.length; z++) {
+          $('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[z].rankId).css("border-color", "");
+          if ($('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[z].rankId).val() > 100) {
+            this.toast.error('Please input value smaller 100');
+            $('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[z].rankId).focus();
+            $('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[z].rankId).css("border-color", "red");
+            return false;
+          }
+        }
       }
     }
   }

@@ -12,17 +12,13 @@
         [routerLinkActive]="['router-link-active']">
         <i class="fa fa-arrow-left"></i>
     </a>
-    <a class="navbar-brand" href="#">STATISTIC</a>
+    <a class="navbar-brand">STATISTIC</a>
 </nav>
 <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true  }"
     [template]="customLoadingTemplate">
 </ngx-loading>
 <div class="container row col-md-12 d-flex justify-content-center"
     style="padding-top: 80px; margin-right: 0px; margin-left: 0px;" *ngIf="isLoaded">
-
-
-
-
     <div *ngIf="roleName==='Test Owner' && isLoaded" class="row col-md-3 d-flex justify-content-start">
         <table class="table table-striped table-bordered table-hover customtable">
             <tbody>

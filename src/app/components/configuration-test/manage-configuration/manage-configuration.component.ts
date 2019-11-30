@@ -517,10 +517,10 @@ export class ManageConfigurationComponent implements OnInit {
       if (result.value) {
         this.loading = true;
         let request = Object.assign({}, this.updateConfig);
-        if (typeof(request['startDate']) === 'string') {
+        if (typeof (request['startDate']) === 'string') {
           request['startDate'] = moment(request['startDate']);
         }
-        if (typeof(request['endDate']) === 'string') {
+        if (typeof (request['endDate']) === 'string') {
           request['endDate'] = moment(request['endDate']);
         }
         this.configAPi.updateConfiguration(request).subscribe(data => {
@@ -612,6 +612,7 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   validateConfiguration() {
+    
     if (this.inputConfiguration['type'] == true && this.employeeInCompany.length == 0) {
       this.toast.error('Message', 'No employee in company');
       return false;
@@ -635,7 +636,11 @@ export class ManageConfigurationComponent implements OnInit {
     } else if (this.selectedItems.length === 0) {
       this.toast.error('Message', 'Please select the catalogue');
       return false;
-    } else if ($('#mark').val() === '') {
+    }else if (this.selectedItems.length < 3) {
+      this.toast.error('Message', 'please select minimum 3 catalogues');
+      return false;
+    }
+     else if ($('#mark').val() === '') {
       this.toast.error('Message', 'Please input rate of catalogue');
       return false;
     }
@@ -655,13 +660,24 @@ export class ManageConfigurationComponent implements OnInit {
         this.toast.error('Dev1\'s mark is large 100');
         return false;
       }
-      else if (this.ListRank[0].weightPoint < this.ListRank[1].weightPoint || this.ListRank[0].weightPoint < this.ListRank[2].weightPoint) {
+      else if (this.ListRank[0].weightPoint <= this.ListRank[1].weightPoint || this.ListRank[0].weightPoint <= this.ListRank[2].weightPoint) {
         this.toast.error('Dev3\'s mark is highest');
         return false;
       }
-      else if (this.ListRank[1].weightPoint < this.ListRank[2].weightPoint) {
+      else if (this.ListRank[1].weightPoint <= this.ListRank[2].weightPoint) {
         this.toast.error('Dev1\'s mark is smallest');
         return false;
+      }
+      for (var i = 0; i < this.selectedItems.length; i++) {
+        for (var z = 0; z < this.ListRank.length; z++) {
+          $('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[z].rankId).css("border-color", "");
+          if ($('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[z].rankId).val() > 100) {
+            this.toast.error('Please input value smaller 100');
+            $('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[z].rankId).focus();
+            $('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[z].rankId).css("border-color", "red");
+            return false;
+          }
+        }
       }
     }
   }

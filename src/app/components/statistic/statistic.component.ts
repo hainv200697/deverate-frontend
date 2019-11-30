@@ -25,7 +25,7 @@ export class StatisticComponent implements OnInit {
 
   }
   legendTitle = 'Title';
-  legendPosition = 'bottom';
+  legendPosition = 'right';
   showXAxisLabel = false;
   xAxisLabel = 'Test';
   showYAxisLabel = false;
