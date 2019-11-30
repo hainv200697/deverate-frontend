@@ -1,6 +1,18 @@
 @import '~bs-stepper/dist/css/bs-stepper.min.css';
 @import '../../../styles/custom.scss';
 @import '../../../styles/custom-table.scss';
+.icon-btn{
+    border: none;
+    background-color: transparent;
+    outline: 0;
+    
+    i{
+        color: #007bff;
+        font-size: 2em;
+        cursor: pointer;
+    }
+    
+}
 .no-padding-no-margin{
     margin-left: 0px;
     margin-right: 0px;

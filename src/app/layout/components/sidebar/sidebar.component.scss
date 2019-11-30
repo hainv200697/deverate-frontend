@@ -11,7 +11,7 @@ $topnav-background-color: #222;
     border: none;
     border-radius: 0;
     overflow-y: auto;
-    background-color: $topnav-background-color;
+    background: linear-gradient(0deg, rgba(69,54,173,1) 7%, rgba(82,103,207,1) 50%, rgba(100,171,255,1) 90%);
     bottom: 0;
     overflow-x: hidden;
     padding-bottom: 40px;
@@ -24,22 +24,22 @@ $topnav-background-color: #222;
     // border-top: 1px solid rgba(255,255,255,0.3);
     .list-group {
         a.list-group-item {
-            background: $topnav-background-color;
+            background: none;
             border: 0;
             border-radius: 0;
-            color: #999;
+            color: white;
             text-decoration: none;
             .fa {
                 margin-right: 10px;
             }
         }
         a:hover {
-            background: darken($topnav-background-color, 5%);
-            color: #fff;
+            background: none;
+            color: black;
         }
         a.router-link-active {
-            background: darken($topnav-background-color, 5%);
-            color: #fff;
+            background: none;
+            color: black;
         }
         .header-fields {
             padding-top: 10px;
@@ -166,13 +166,13 @@ $topnav-background-color: #222;
     cursor: pointer;
     padding: 12px;
     bottom: 0;
-    color: #999;
-    background: #212529;
+    color: white;
+    background:  #4536ad;
     i {
         font-size: 23px;
     }
     &:hover {
-        background: darken($topnav-background-color, 5%);
+        background: #4536ad;
         color: #fff;
     }
     border-top: 1px solid #999;

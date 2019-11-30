@@ -61,18 +61,18 @@
                         <sv-default-sorter by='Point'>Point</sv-default-sorter>
                     </th>
                     <th class="col-md-1 text-center" scope="col">Status
-                        <div ngbDropdown class="d-inline-block dropdown">
-                            <button class=" icon-btn" ngbDropdownToggle style="color: black"></button>
-                            <div ngbDropdownMenu>
-                                <button class="dropdown-item" (click)="getAnswerById(true)">Active</button>
-                                <button class="dropdown-item" (click)="getAnswerById(false)">Disable</button>
+                            <div ngbDropdown class="d-inline-block dropdown">
+                                <button class=" icon-btn" ngbDropdownToggle style="color: black"></button>
+                                <div ngbDropdownMenu>
+                                    <button class="dropdown-item" (click)="getAnswerById(true)">Active</button>
+                                    <button class="dropdown-item" (click)="getAnswerById(false)">Disable</button>
+                                </div>
                             </div>
-                        </div>
-                    </th>
+                        </th>
                     <th class="col-md-2 text-center" scope="col">Action</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody *ngIf="sv.data.length != 0;  else searchNull">
                 <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data">
                     <td class="text-center col-md-1">
                         <label>
@@ -175,4 +175,10 @@
         <button [disabled]="checkUpd == false" class="btn btn-success save" (click)="updateAnswerSubmit()">Update</button>
         <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
     </div>
+</ng-template>
+
+<ng-template #searchNull>
+        <tr class="col-md-12 row no-padding-no-margin">
+            <th class="text-center col-md-12" scope="col">No data</th>
+        </tr>
 </ng-template>

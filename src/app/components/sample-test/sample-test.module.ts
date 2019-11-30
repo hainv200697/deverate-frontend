@@ -4,6 +4,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SampleTestRoutingModule } from './sample-test-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SampleTestComponent } from './sample-test.component';
+import { NgxLoadingModule } from 'ngx-loading';
 @NgModule({
   imports: [
     CommonModule,
@@ -11,6 +12,7 @@ import { SampleTestComponent } from './sample-test.component';
     SampleTestRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    NgxLoadingModule
   ],
   declarations: [SampleTestComponent]
 })

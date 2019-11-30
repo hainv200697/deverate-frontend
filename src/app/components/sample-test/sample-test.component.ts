@@ -19,6 +19,7 @@ export class SampleTestComponent implements OnInit {
   key;
   error = false;
   test = false;
+  public loading = false;
   questionInTest = [];
   alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   testId;
@@ -30,6 +31,7 @@ export class SampleTestComponent implements OnInit {
 
 
   getTest() {
+    this.loading = true;
     const sampleTest = JSON.parse(localStorage.getItem('SampleTest'));
     if (sampleTest == null || sampleTest == undefined || sampleTest == '') {
       this.router.navigate(['/not-fount']);
@@ -45,6 +47,7 @@ export class SampleTestComponent implements OnInit {
           var index = this.catalogues.findIndex(c => c.catalogueId == this.questionInTest[i].catalogueId);
           this.questionInTest[i].color = this.color[index];
         }
+        this.loading = false;
       },
         (error) => {
           this.error = true;
