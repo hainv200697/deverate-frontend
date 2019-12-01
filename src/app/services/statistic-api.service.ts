@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AppSettings } from '../appsetting';
 @Injectable({
     providedIn: 'root'
@@ -40,9 +40,10 @@ export class StatisticApiService {
         return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id);
     }
 
-    GetOverallPointStatistic(id, isEmployee) {
-        const API = 'api/Test/GetOverallPointStatistic?companyId=';
-        return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id + '&isEmployee=' + isEmployee);
+    GetOverallPointStatistic(companyid, configId, isEmployee) {
+        const API = 'api/Test/GetOverallPointStatistic';
+        const params = new HttpParams().set('companyId', companyid).set('configId', configId).set('isEmployee', isEmployee);
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API, {params});
     }
 
     GetAccountByTestId(testId) {

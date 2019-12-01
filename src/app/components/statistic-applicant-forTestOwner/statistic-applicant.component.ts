@@ -1,9 +1,9 @@
+import { ConfigurationApiService } from './../../services/configuration-api.service';
 import { StatisticApiService } from './../../services/statistic-api.service';
-import { element } from 'protractor';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -11,7 +11,11 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './statistic-applicant.component.html',
   styleUrls: ['./statistic-applicant.component.scss']
 })
+
 export class StatisticApplicantComponent implements OnInit {
+  dropdownList = [];
+  selectedItems = [];
+  dropdownSettings = {};
   catalogConfig = [];
   view = [550, 450];
   showXAxis = true;
@@ -19,6 +23,10 @@ export class StatisticApplicantComponent implements OnInit {
   gradient = false;
   xAxes: [{ stacked: true }];
   showLegend = true;
+  legend = {
+    display: true,
+
+  }
   legendTitle = 'Title';
   legendPosition = 'right';
   showXAxisLabel = false;
@@ -36,8 +44,6 @@ export class StatisticApplicantComponent implements OnInit {
   colorScheme = {
     domain: ['#9370DB', '#87CEFA', '#FA8072', '#FF7F50', '#90EE90', '#C7B42C']
   };
-
-  multi = [];
 
   dataGroupChart: any;
   data = [];
@@ -63,22 +69,19 @@ export class StatisticApplicantComponent implements OnInit {
   rankStattistic = [];
   dataEmployeeOverPoint: any;
   chooseConfig = [];
-  countApi = 0;
+  counApi = 0;
+  dataRankStatistic;
 
   companyId = Number(localStorage.getItem('CompanyId'));
   ngOnInit() {
     this.isLoaded = false;
     this.load = false;
-    this.GetGeneralStatisticOfApplicant(localStorage.getItem("AccountId"));
-    this.GetRankStatisticOfApplicant(localStorage.getItem("AccountId"));
-    this.GetOverallPointStatistic(this.companyId, false);
-    this.selectedItems = [];
+    this.getConfig();
     this.dropdownSettings = {
       singleSelection: false,
       idField: 'id',
       textField: 'text',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
+      enableCheckAll: false,
       itemsShowLimit: 3,
       allowSearchFilter: true,
     };
@@ -86,6 +89,7 @@ export class StatisticApplicantComponent implements OnInit {
 
   constructor(
     private historyApi: StatisticApiService,
+    private configApi: ConfigurationApiService,
     private modalService: NgbModal,
     private toast: ToastrService,
     private router: Router,
@@ -95,54 +99,18 @@ export class StatisticApplicantComponent implements OnInit {
   historyData: any;
   averageCatalogue = [];
   catalogues: [];
+  selectData;
 
-  GetGeneralStatisticOfApplicant(id) {
+  GetGeneralStatistic(id) {
     this.loading = true
     this.series = [];
     this.historyApi.GetGeneralStatisticOfApplicant(id).subscribe(
       (data) => {
         this.historyData = data['items'];
-        this.multi = [];
-        var size = this.historyData[0].series.length;
-        for (let i = 0; i < size; i++) {
-          var series = [];
-          this.historyData.forEach(element => {
-            if (series.length < 5) {
-              series.push({ name: element.name, value: element.series[i].value});
-            }
-          });
-          var element = {
-            name: this.historyData[0].series[i].name,
-            series
-          }
-          this.averageCatalogue.push(element);
-        }
+        this.setAveragePointCatalogue();
         this.isLoaded = true;
-        this.historyData.forEach(element => {
-          let itemMulti = {
-            name: element.name,
-            series: [
-              {
-                name: "employees did the test ",
-                value: element.numberOfFinishedTest,
-              },
-              {
-                name: "employees didn't the test.",
-                value: element.totalTest - element.numberOfFinishedTest
-              }
-            ]
-          };
-          if (this.multi.length < 5) {
-            this.multi.push(itemMulti);
-          }
-          let itemDropdown = {
-            id: element.configId,
-            text: element.name,
-          };
-          this.dropdownList.push(itemDropdown);
-        });
-        this.countApi++;
-        if (this.countApi == 3) {
+        this.counApi++;
+        if (this.counApi == 3) {
           this.isLoaded = true;
           this.loading = false;
         }
@@ -154,20 +122,14 @@ export class StatisticApplicantComponent implements OnInit {
     );
   }
 
-  GetRankStatisticOfApplicant(id) {
+  GetRankStatistic(id) {
     this.loading = true
     this.historyApi.GetRankStatisticOfApplicant(id).subscribe(
       (data) => {
-        let tmp;
-        tmp = data;
-        for(var i = 0; i < tmp.length; i++){
-          tmp[i].series.push(tmp[i].tested);
-          tmp[i].series.push(tmp[i].totalAccount);
-        }
-        this.dataGroupChart = tmp;
-        
-        this.countApi++;
-        if (this.countApi == 3) {
+        this.dataRankStatistic = data;
+        this.setStatisticRank();
+        this.counApi++;
+        if (this.counApi == 3) {
           this.isLoaded = true;
           this.loading = false;
         }
@@ -179,14 +141,42 @@ export class StatisticApplicantComponent implements OnInit {
     );
   }
 
-  GetOverallPointStatistic(id, isEmployee){
+  getConfig() {
     this.loading = true
-    this.historyApi.GetOverallPointStatistic(id, isEmployee).subscribe(
+    this.configApi.getConfigForApplicant(false, this.companyId).subscribe(
+      (data) => {
+        let count = 1;
+        data.forEach(element => {
+          const item = { id: element.configId, text: element.title }
+          this.dropdownList.push(item)
+          if (count <= 5) {
+            this.selectedItems.push(item);
+            count++;
+          }
+        });
+        this.selectData = this.selectedItems[0].id;
+        this.GetGeneralStatistic(localStorage.getItem("AccountId"));
+        this.GetRankStatistic(localStorage.getItem("AccountId"));
+        this.GetOverallPointStatistic(true);
+      }
+      , (error) => {
+        this.loading = false;
+        this.router.navigate(['/not-found']);
+      }
+    );
+  }
+
+  GetOverallPointStatistic(checkCount) {
+    this.loading = true
+    this.historyApi.GetOverallPointStatistic(this.companyId, this.selectData, false).subscribe(
       (data) => {
         this.dataEmployeeOverPoint = data;
-        this.countApi++;
-        if (this.countApi == 3) {
+        this.counApi++;
+        if (this.counApi == 3 && checkCount == true) {
           this.isLoaded = true;
+          this.loading = false;
+        }
+        else if (checkCount == false) {
           this.loading = false;
         }
       },
@@ -205,9 +195,10 @@ export class StatisticApplicantComponent implements OnInit {
 
   getDataStatistic(value) {
     this.chooseConfig.push(value);
+
   }
 
-  onItemDeSelect(value){
+  onItemDeSelect(value) {
     for (let i = 0; i < this.chooseConfig.length; i++) {
       if (this.chooseConfig[i].id == value.id) {
         this.chooseConfig.splice(i, 1);
@@ -219,7 +210,36 @@ export class StatisticApplicantComponent implements OnInit {
   onSelectAll(value) {
   }
 
-  dropdownList = [];
-  selectedItems = [];
-  dropdownSettings = {};
+  Apply() {
+    this.selectData = this.selectedItems[0].id;
+    this.GetOverallPointStatistic(false);
+    this.setAveragePointCatalogue();
+    this.setStatisticRank();
+  }
+
+  setStatisticRank(){
+    this.dataGroupChart = [];
+    this.selectedItems.forEach(select => {
+      const element = this.dataRankStatistic.find(x=> x.configId == select.id);
+      this.dataGroupChart.push(element);
+    });
+  }
+
+  setAveragePointCatalogue() {
+    var size = this.historyData[0].series.length;
+    this.averageCatalogue = []
+    for (let i = 0; i < size; i++) {
+      var series = [];
+      this.selectedItems.forEach(select => {
+        const element = this.historyData.find(x => x.configId === select.id);
+        series.push({ name: element.name, value: element.series[i].value });
+      });
+      var element = {
+        name: this.historyData[0].series[i].name,
+        series
+      }
+      this.averageCatalogue.push(element);
+    }
+
+  }
 }
