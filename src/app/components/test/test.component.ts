@@ -43,7 +43,6 @@ export class TestComponent implements OnInit {
     this.config = this.testService.getConfig(this.testId)
       .subscribe(res => {
         this.config = res;
-        console.log(this.key);
         if (this.config.accountId != null && this.accountId == undefined) {
           this.router.navigate(['login']);
           return;
@@ -208,9 +207,11 @@ export class TestComponent implements OnInit {
       questionInTest: this.questionInTest
     }
     this.loading = true;
-    console.log(JSON.stringify(userTest));
     this.testService.postSubmitTest(userTest)
       .subscribe((res) => {
+        if(res != 0){
+          localStorage.setItem('applicantId',res);
+        }
         this.loading = false;
         this.closeModal();
         Swal.fire('Success', 'The test has been submited', 'success');
