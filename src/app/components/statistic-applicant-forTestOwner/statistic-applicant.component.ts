@@ -20,7 +20,7 @@ export class StatisticApplicantComponent implements OnInit {
   xAxes: [{ stacked: true }];
   showLegend = true;
   legendTitle = 'Title';
-  legendPosition = 'bottom';
+  legendPosition = 'right';
   showXAxisLabel = false;
   xAxisLabel = 'Test';
   showYAxisLabel = false;

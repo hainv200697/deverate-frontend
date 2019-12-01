@@ -293,12 +293,6 @@
         </div>
     </div>
     <div class="modal-footer">
-        <label [hidden]="index != 1">Sample Config</label>
-        <select [hidden]="index != 1" (change)="onChangeSampleConfig($event.target.value)">
-            <option>none</option>
-            <option [ngValue]="1">1</option>
-            <option [ngValue]="2">2</option>
-        </select>
         <button class="btn btn-secondary back" (click)="back()" [hidden]="index == 1">Back</button>
         <button (click)="next()" class="btn btn-primary" [hidden]="index == 3">Next</button>
         <button class="btn btn-info save" (click)="Sample()" [hidden]="index != 3">Sample Test</button>
@@ -585,6 +579,9 @@
 
 <div class="insert-form col-md-12">
     <app-page-header [heading]="'Employee Test Management'"></app-page-header>
+    <div class="card-header">
+        <h5>Employee Test Management</h5>
+    </div>
     <div class="card mb-3 shadow-card">
         <div class="table-responsive col-md-12 datatable" style="overflow: unset;">
             <div class="row mb-1">
