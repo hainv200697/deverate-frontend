@@ -678,9 +678,11 @@
                                 (click)="openDetail(update, c.configId)">
                                 <i class="fa fa-edit"></i>
                             </button>
+                            &nbsp;
                             <button class="btn-primary btn btn-circle shadow-item" (click)="viewTest(c.configId)">
                                 <i class="fa fa fa-eye"></i>
                             </button>
+                            &nbsp;
                             <button [hidden]="c.isActive==false" class=" btn btn-circle shadow-item" (click)="sendMail(c.configId)">
                                 <i class="fa fa-envelope"></i>
                             </button>

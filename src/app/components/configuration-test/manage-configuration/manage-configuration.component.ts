@@ -33,7 +33,7 @@ export class ManageConfigurationComponent implements OnInit {
     private employeeApi: EmployeeApiService,
   ) {
     this.page = 1;
-    this.pageSize = 5;
+    this.pageSize = 25;
   }
   public loading = false;
   startDate: Date = new Date();
@@ -183,6 +183,10 @@ export class ManageConfigurationComponent implements OnInit {
       this.toast.error('No catalogue to config');
       return;
     }
+    if (this.catalogueList.length < 3) {
+      this.toast.error('Please insert question to at least three catalogues');
+      return;
+    } 
     this.index = 1;
     this.startDate = new Date();
 
@@ -649,30 +653,41 @@ export class ManageConfigurationComponent implements OnInit {
       total = this.selectedItems[i]['weightPoint'] + total;
     }
     if (total !== 100) {
-      this.toast.error('Message', 'Total mark of catalogue must be 100');
+      this.toast.error('Message', 'please input total point of catalogue must be 100');
       return false;
     } else if (this.index === 2) {
       if (this.ListRank[0].weightPoint > 100) {
-        this.toast.error('Dev3\'s mark is smaller 100');
+        this.toast.error('please input Dev3\'s point is smaller 100');
         return false;
       }
       else if (this.ListRank[2].weightPoint < 0) {
-        this.toast.error('Dev1\'s mark is large 100');
+        this.toast.error('please input Dev1\'s point is large 100');
         return false;
       }
       else if (this.ListRank[0].weightPoint <= this.ListRank[1].weightPoint || this.ListRank[0].weightPoint <= this.ListRank[2].weightPoint) {
-        this.toast.error('Dev3\'s mark is highest');
+        this.toast.error('please input Dev3\'s point is highest');
         return false;
       }
       else if (this.ListRank[1].weightPoint <= this.ListRank[2].weightPoint) {
-        this.toast.error('Dev1\'s mark is smallest');
+        this.toast.error('please input Dev1\'s point is smallest');
         return false;
       }
+      else if (this.ListRank[2].weightPoint <= 0) {
+        this.toast.error('please input Dev1\'s point is large than 0');
+        return false;
+      }
+      
       for (var i = 0; i < this.selectedItems.length; i++) {
         for (var z = 0; z < this.ListRank.length; z++) {
           $('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[z].rankId).css("border-color", "");
+          // if ($('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[z].rankId).val() == 0) {
+          //   this.toast.error('Please input value bigger than 0');
+          //   $('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[z].rankId).focus();
+          //   $('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[z].rankId).css("border-color", "red");
+          //   return false;
+          // }
           if ($('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[z].rankId).val() > 100) {
-            this.toast.error('Please input value smaller 100');
+            this.toast.error('Please input value smaller than 100');
             $('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[z].rankId).focus();
             $('#' + this.selectedItems[i].catalogueId + "_" + this.ListRank[z].rankId).css("border-color", "red");
             return false;

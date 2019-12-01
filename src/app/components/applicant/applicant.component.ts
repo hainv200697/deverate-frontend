@@ -220,7 +220,7 @@ export class ApplicantComponent implements OnInit {
             this.applicantService.postCreateApplicant(this.applicantList,this.config_id).subscribe(
             results => {
                 this.loading = false;
-                this.toastr.success("Create success");
+                this.toastr.success("Send mail success");
                 this.applicantList = [];
                 this.insApplicant = {};
             },
