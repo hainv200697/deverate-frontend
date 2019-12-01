@@ -52,7 +52,12 @@ export class TestComponent implements OnInit {
           this.router.navigate(['**']);
           return;
         }
-        if (this.config.status == 'Submitted') {
+        if (this.config.accountId != null && this.config.status == 'Submitted' && this.config.accountId == this.accountId) {
+          this.router.navigate(['/result', this.testId]);
+          return;
+        }
+        if(this.config.status == 'Submitted' && this.config.applicantId != null)
+        {
           this.status = true;
         }
         if (this.config.status == 'Expired') {
@@ -72,8 +77,8 @@ export class TestComponent implements OnInit {
     if(this.key != undefined){
       this.testService.checkCode(this.testId,this.key).subscribe(
         (res)=>{
-            console.log(res);
             this.closeModal();
+            localStorage.setItem('applicantId',res);
             this.router.navigate(['/result', this.testId]);
         },
         (error)=>{
@@ -81,7 +86,7 @@ export class TestComponent implements OnInit {
             this.toastr.error("System is not available");
           }
           if (error.status == 400) {
-            this.toastr.error("Input is invalid");
+            this.toastr.error("Key is invalid");
           }
           if (error.status == 500) {
             this.toastr.error("System error");
@@ -89,6 +94,8 @@ export class TestComponent implements OnInit {
           this.loading = false;
         }
       );
+    }else{
+      this.toastr.error("Please enter key!");
     }
   }
 

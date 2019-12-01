@@ -2,11 +2,23 @@
     <div class="insert-form col-md-12">
         <div class="card mb-3 shadow-card">
             <div class="card-header" style="color: white">
-                RERANKING TODAY
+                QUIZ
             </div>
         </div>
         </div>
-        <div *ngFor="let config of configs, let i=index">
-            <a [routerLink]="['/test/',config.testId]"><h3>{{config.title}}</h3></a>
+        <div style=" width: 70%; margin-top: 5%; margin-left: 7%; border-bottom: 1px solid #d5d5d5;" *ngFor="let config of configs, let i=index">
+                <h3 style="color: #20897b;">{{config.startDate}} - {{config.endDate}}</h3>
+                <a style="margin-left: 5%; font-size: 24px; color: black;" target="_blank" [routerLink]="['/test/',config.testId]" *ngIf="config.status != 'Expired'">
+
+                        <i *ngIf="config.status == 'Submitted'" style="color: green;" class="fa fa-check" aria-hidden="true"></i>
+                    
+                        <i *ngIf="config.status == 'Pending' || config.status == 'Doing'" style="color: orangered;" class="fa fa-pencil"></i>
+
+                    {{config.title}}
+                </a>
+                <a style="margin-left: 5%; font-size: 24px; color: grey;"  *ngIf="config.status == 'Expired'">
+                    <i class="fa fa-ban" aria-hidden="true"></i>
+                    {{config.title}}
+                </a>
         </div>
 </div>
