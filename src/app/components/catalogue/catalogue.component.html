@@ -51,7 +51,7 @@
             </div>
 
             <table class="table  table-hover customtable" [svData]="catalogueList | CatalogueFilterPipe:searchText"
-                #sv="svDataTable" [svRowsOnPage]="5" svSortBy="name" svSortOrder="asc">
+                #sv="svDataTable" [svRowsOnPage]="25" svSortBy="name" svSortOrder="asc">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin">
                         <th class="text-center " scope="col" style="width: 5%;">
@@ -97,8 +97,8 @@
                         <td class="text-center" style="width: 5%;">{{ item.quescount }}</td>
                         <td [hidden]="!item.type" style="width: 10%;" class="text-center">Company</td>
                         <td [hidden]="item.type" style="width: 10%;" class="text-center">Default</td>
-                        <td class="text-center" [hidden]="item.isActive==true" style="width: 5%;">
-                            <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
+                        <td class="text-center" [hidden]="item.isActive==true" style="width: 15%;">
+                            <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
                         </td>
                         <td class="text-center" style="width: 15%;" [hidden]="item.isActive==false">
                             <span class="shadow-item text-center badge badge-pill badge-success">Active</span>

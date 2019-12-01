@@ -285,7 +285,7 @@
                             <button class=" icon-btn" ngbDropdownToggle style="color: black"></button>
                             <div ngbDropdownMenu>
                                 <button class="dropdown-item" (click)="getEmployee(true)">Active</button>
-                                <button class="dropdown-item" (click)="getEmployee(false)">Disable</button>
+                                <button class="dropdown-item" (click)="getEmployee(false)">Deactive</button>
                             </div>
                         </div>
                     </th>
@@ -320,7 +320,7 @@
                     </td>
                     <td class="two text-center">{{ item.joinDate.split('T')[0] }}</td>
                     <td class="text-center col-md-1" [hidden]="item.isActive==true">
-                        <span class="shadow-item text-center badge badge-pill badge-danger">Disable</span>
+                        <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
                     </td>
                     <td class="text-center two" [hidden]="item.isActive==false">
                         <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
@@ -330,7 +330,7 @@
             <tfoot>
                 <tr>
                     <td colspan="4">
-                        <sv-bootstrap-paginator [rowsOnPageSet]="[4, 25, 50]"></sv-bootstrap-paginator>
+                        <sv-bootstrap-paginator [rowsOnPageSet]="[5, 25, 50]"></sv-bootstrap-paginator>
                     </td>
                 </tr>
             </tfoot>

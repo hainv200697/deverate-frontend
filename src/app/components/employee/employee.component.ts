@@ -97,7 +97,7 @@ export class EmployeeComponent implements OnInit {
                 for (let i = 0; i != data.length; ++i) { arr[i] = String.fromCharCode(data[i]); }
                 const bstr = arr.join('');
                 const workbook = XLSX.read(bstr, { type: 'binary' });
-                const first_sheet_name = workbook.SheetNames[0];
+                const first_sheet_name = workbook.SheetNames[1];
                 const worksheet = workbook.Sheets[first_sheet_name];
                 this.listDataExcel = XLSX.utils.sheet_to_json(worksheet, { raw: true });
                 resolve(this.listDataExcel);
@@ -122,7 +122,7 @@ export class EmployeeComponent implements OnInit {
                 let checkPhone = /((09|03|07|08|05)+([0-9]{8})\b)/g.test(phone);
                 if (element.Fullname == null ||
                     element.Fullname == undefined) {
-                    this.message.push("Full name at # " + index + " is invalid");
+                    this.message.push("Full name at # " + index + " is blank");
                     this.checkExcel = false;
                 } else if (element.Fullname.length < 5 ||
                     element.Fullname.length > 200) {
@@ -347,13 +347,11 @@ export class EmployeeComponent implements OnInit {
                 this.loading = false;
                 if (error.status == 500) {
                     this.toastr.error("System error");
-                    this.closeModal();
                 } else {
                     this.loading = false;
                     const email = error.error.slice(0, 3);
                     const message = `Email ${email.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
                     this.toastr.error(message);
-                    this.closeModal();
                 }
             }
         );

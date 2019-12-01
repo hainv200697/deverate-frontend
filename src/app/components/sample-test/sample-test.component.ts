@@ -20,6 +20,7 @@ export class SampleTestComponent implements OnInit {
   error = false;
   test = false;
   public loading = false;
+  isLoaded = false;
   questionInTest = [];
   alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   testId;
@@ -48,6 +49,7 @@ export class SampleTestComponent implements OnInit {
           this.questionInTest[i].color = this.color[index];
         }
         this.loading = false;
+        this.isLoaded = true;
       },
         (error) => {
           this.error = true;

@@ -368,7 +368,7 @@
                 </div>
             </div>
             <table style="margin-top: 20px;" class="table  table-hover customtable"
-                [svData]="allQuestions | InsertQuestionFilterPipe:searchText" #sv="svDataTable" [svRowsOnPage]="5"
+                [svData]="allQuestions | InsertQuestionFilterPipe:searchText" #sv="svDataTable" [svRowsOnPage]="25"
                 svSortBy="name" svSortOrder="asc">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin">
@@ -393,7 +393,7 @@
                                 <button class=" icon-btn" ngbDropdownToggle></button>
                                 <div ngbDropdownMenu>
                                     <button class="dropdown-item" (click)="getQuestionById(true)">Active</button>
-                                    <button class="dropdown-item" (click)="getQuestionById(false)">Disable</button>
+                                    <button class="dropdown-item" (click)="getQuestionById(false)">Deactive</button>
                                 </div>
                             </div>
                         </th>
