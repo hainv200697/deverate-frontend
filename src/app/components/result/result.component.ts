@@ -4,7 +4,7 @@ declare var d3: any;
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { RankApiService } from 'src/app/services/rank-api.services';
 import { StatisticApiService } from 'src/app/services/statistic-api.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RadialChartOptions } from 'chart.js';
 import { ToastrService } from 'ngx-toastr';
 
@@ -43,6 +43,7 @@ export class ResultComponent implements OnInit {
   constructor(private rankApi: RankApiService,
     private statisticApi: StatisticApiService,
     private route: ActivatedRoute,
+    private router: Router,
     private toast: ToastrService,
   ) { }
 
@@ -50,8 +51,9 @@ export class ResultComponent implements OnInit {
     this.isLoaded = false;
     this.loading = true;
     var testId = this.route.snapshot.paramMap.get('testId');
-    this.getStatistic(Number(testId), 1);
     this.getAccountInfo(testId);
+
+    this.getStatistic(Number(testId), 1);
     this.isLogin = localStorage.getItem('isLoggedin');
     this.roleName = localStorage.getItem('Role');
   }
@@ -60,6 +62,21 @@ export class ResultComponent implements OnInit {
     this.statisticApi.GetAccountByTestId(testId).subscribe(
       (data) => {
         this.accountInfo = data;
+        console.log(data);
+        if (this.accountInfo.applicantId != undefined &&
+           this.accountInfo.applicantId != localStorage.getItem('applicantId') &&
+           localStorage.getItem('Role') != 'Test Owner'
+           ) {
+          this.router.navigate(['**']);
+          return;
+        }
+        if (this.accountInfo.AccountId != undefined && 
+          this.accountInfo.AccountId != localStorage.getItem('AccountId') &&
+          localStorage.getItem('Role') != 'Test Owner'
+          ) {
+          this.router.navigate(['**']);
+          return;
+        }
         if (this.accountInfo.fullname == undefined) {
           this.accountInfo.fullname = this.accountInfo.fullName;
         }
@@ -68,7 +85,7 @@ export class ResultComponent implements OnInit {
           this.loading = false;
           this.isLoaded = true;
         }
-        
+
       },
       (error) => {
         if (error.status == 0) {

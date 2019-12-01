@@ -26,6 +26,10 @@ export class RerankingComponent implements OnInit {
     const accountId = localStorage.getItem('AccountId');
     this.testService.getAllTestInfo(accountId)
       .subscribe(res => {
+        res.forEach(element => {
+          element.startDate = moment.utc(element.startDate).local().format('MM/DD/YYYY');
+          element.endDate = moment.utc(element.endDate).local().format('MM/DD/YYYY');
+        });
         console.log(res);
         this.configs = res;
       });
