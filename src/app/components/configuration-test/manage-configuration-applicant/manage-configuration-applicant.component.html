@@ -43,7 +43,7 @@
                             <div class="col-md-7 row">
                                 <label class="col-md-3" style="text-align: center">Title:</label>
                                 <input class="col-md-6" type="text" [(ngModel)]="inputConfiguration['title']"
-                                    name="ins_config_title" (change)="validateConfiguration()">
+                                    name="ins_config_title" >
                             </div>
 
 
@@ -53,7 +53,7 @@
                                 <label class="col-md-8" style="text-align: right">Total
                                     Question:</label>
                                 <input class="col-md-4" type="number" [(ngModel)]="inputConfiguration['totalQuestion']"
-                                    name="ins_config_totalquestion" (change)="validateConfiguration()"
+                                    name="ins_config_totalquestion" 
                                     [min]="selectedItems.length * 2" style="height: 30px">
                                 <label class="col-md-12"></label>
                                 <label class="col-md-8" style="text-align: right;">Duration:</label>
@@ -551,117 +551,116 @@
 <!-- Table question -->
 
 <div class="insert-form col-md-12">
-    <app-page-header [heading]="'Test Applicant Management'"></app-page-header>
-    <div class="card-header">
-        <h5>Applicant Test Management</h5>
-    </div>
-    <div class="card mb-3 shadow-card">
-        <div class="table-responsive col-md-12 datatable" style="overflow: unset;">
-            <div class="row mb-1">
-                <div class="col">
-                    <div class=" row justify-content-between" style="margin-top: 20px;">
-                        <div class="form-group input-group col-md-6">
-                            <input type="search" class="form-control" placeholder="Enter your key word"
-                                name="searchText" [(ngModel)]="searchText">
-                            <div class="input-group-append">
-                                <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
+        <app-page-header [heading]="'Applicant Test Management'"></app-page-header>
+        <div class="card-header">
+            <h5>Applicant Test Management</h5>
+        </div>
+        <div class="card mb-3 shadow-card">
+            <div class="table-responsive col-md-12 datatable" style="overflow: unset;">
+                <div class="row mb-1">
+                    <div class="col">
+                        <div class=" row justify-content-between" style="margin-top: 20px;">
+                            <div class="form-group input-group col-md-6">
+                                <input type="search" class="form-control" placeholder="Enter your key word"
+                                    name="searchText" [(ngModel)]="searchText">
+                                <div class="input-group-append">
+                                    <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
+                                </div>
                             </div>
+                            <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
+                                <i class="fa fa-fw fa-plus"></i>
+                                Create Test
+                            </button>
                         </div>
-                        <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
-                            <i class="fa fa-fw fa-plus"></i>
-                            Create Test
-                        </button>
-                    </div>
-                    <div class="row justify-content-end" style="margin-top: 20px;">
-                        <button style="margin-right: 10px;" (click)="DisableConfiguration(false);"
-                            class="btn btn-lg btn-danger" data-toggle="button">
-                            <i class="fa fa-trash-o delete-icon" placement="top"></i>
-                        </button>
-                        <button (click)="DisableConfiguration(true);" class="btn btn-lg btn-success"
-                            style="margin-right: 10px;">
-                            <i class="fa fa-check" placement="top"></i>
-                        </button>
-                        <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
-                            class="btn btn-lg btn-primary" data-toggle="button">
-                            <i #refesh class="fa fa-refresh" placement="top" aria-hidden="true"
-                                [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
-                        </button>
-                        <div class="col-md-12"></div>
-                        <div ngbDropdown class="col-md-12 d-flex justify-content-start d-inline-block dropdown">
-                            <button class="btn icon-btn border" ngbDropdownToggle>Item</button>
-                            <div ngbDropdownMenu>
-                                <button class="dropdown-item" (click)="PageSize(5)">5</button>
-                                <button class="dropdown-item" (click)="PageSize(25)">25</button>
-                                <button class="dropdown-item" (click)="PageSize(50)">50</button>
+                        <div class="row justify-content-end" style="margin-top: 20px;">
+                            <button style="margin-right: 10px;"
+                                (click)="DisableConfiguration(false);" class="btn btn-lg btn-danger" data-toggle="button">
+                                <i class="fa fa-trash-o delete-icon" placement="top"></i>
+                            </button>
+                            <button (click)="DisableConfiguration(true);"
+                                class="btn btn-lg btn-success" style="margin-right: 10px;">
+                                <i class="fa fa-check" placement="top"></i>
+                            </button>
+                            <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
+                                class="btn btn-lg btn-primary" data-toggle="button">
+                                <i #refesh class="fa fa-refresh" placement="top" aria-hidden="true"
+                                    [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                            </button>
+                            <div class="col-md-12"></div>
+                            <div ngbDropdown class="col-md-12 d-flex justify-content-start d-inline-block dropdown">
+                                <button class="btn icon-btn border" ngbDropdownToggle>Item</button>
+                                <div ngbDropdownMenu>
+                                    <button class="dropdown-item" (click)="PageSize(5)">5</button>
+                                    <button class="dropdown-item" (click)="PageSize(25)">25</button>
+                                    <button class="dropdown-item" (click)="PageSize(50)">50</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+    
+                <table [svData]="Configurations|ConfigurationFilterPipe:searchText" #sv="svDataTable" svSortBy="Name"
+                    svSortOrder="asc" class="table  table-hover customtable">
+                    <thead>
+                        <tr class="col-md-12 row no-padding-no-margin">
+                            <th class="text-center" style="width: 5%;" scope="col"><input class="btn" type="checkbox" value=""
+                                    [(ngModel)]="selectedAll" (change)="selectAll();"></th>
+                            <th class="text-center" style="width: 15%;" scope="col">
+                                <sv-default-sorter>Type
+                                </sv-default-sorter>
+                            </th>
+                            <th class="text-center" style="width: 20%;" scope="col">
+                                <sv-default-sorter by="totalQuestion">Title
+                                </sv-default-sorter>
+                            </th>
+                            <th class="text-center" style="width: 25%;" scope="col">
+                                <sv-default-sorter by="createDate">Create At
+                                </sv-default-sorter>
+                            </th>
+                            <th class="text-center" style="width: 10%;" scope="col">
+                                <sv-default-sorter by="duration">Time Test
+                                </sv-default-sorter>
+                            </th>
+                            <th class="text-center" style="width: 10%;" scope="col">
+                                <sv-default-sorter by="isActive">Status
+                                </sv-default-sorter>
+                            </th>
+                            <th class="text-center" style="width: 15%;" scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="sv.data.length != 0;  else searchNull">
+                        <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px"
+                            *ngFor="let c of sv.data | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index">
+                            <td class="text-center" style="width: 5%;">
+                                <input type="checkbox" value="" [(ngModel)]="c.selected" class="btn"
+                                    (change)="checkIfAllSelected();">
+                            </td>
+                            <td class="text-center" [hidden]="c.type" style="width: 15%;">Applicant</td>
+                            <td class="text-center" style="width: 20%;">{{c.title}}</td>
+                            <td class="text-center" style="width: 25%;">{{c?.createDate.split('T')[0]}}</td>
+                            <td class="text-center" style="width: 10%;">{{c.duration}}'</td>
+                            <td class="text-center" [hidden]="c.isActive==true" style="width: 10%;">
+                                <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
+                            </td>
+                            <td class="text-center" [hidden]="c.isActive==false" style="width: 10%;">
+                                <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
+                            </td>
+                            <td style="width: 15%;" class="nowrap text-center action-column row no-padding-no-margin d-flex justify-content-center">
+                                <button class="btn-warning btn btn-circle shadow-item"
+                                    (click)="openDetail(update, c.configId)">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                &nbsp;
+                                <button class="btn-primary btn btn-circle shadow-item" (click)="viewTest(c.configId)">
+                                    <i class="fa fa fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-
-            <table [svData]="Configurations|ConfigurationFilterPipe:searchText" #sv="svDataTable" svSortBy="Name"
-                svSortOrder="asc" class="table  table-hover customtable">
-                <thead>
-                    <tr class="col-md-12 row no-padding-no-margin">
-                        <th class="text-center col-md-1" scope="col"><input class="btn" type="checkbox" value=""
-                                [(ngModel)]="selectedAll" (change)="selectAll();"></th>
-                        
-                        <th class="text-center col-md-2" scope="col">
-                            Type
-                        </th>
-                        <th class="text-center col-md-2" scope="col">
-                            <sv-default-sorter by="totalQuestion">Title
-                            </sv-default-sorter>
-                        </th>
-                        <th class="text-center col-md-3" scope="col">
-                            <sv-default-sorter by="createDate">Create At
-                            </sv-default-sorter>
-                        </th>
-                        <th class="text-center col-md-1" scope="col">
-                            <sv-default-sorter by="duration">Time Test
-                            </sv-default-sorter>
-                        </th>
-                        <th class="text-center col-md-1" scope="col">
-                            <sv-default-sorter by="isActive">Status
-                            </sv-default-sorter>
-                        </th>
-                        <th class="text-center col-md-2" scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody *ngIf="sv.data.length != 0;  else searchNull">
-                    <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px"
-                        *ngFor="let c of sv.data | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index">
-                        <td class="text-center col-md-1">
-                            <input type="checkbox" value="" [(ngModel)]="c.selected" class="btn"
-                                (change)="checkIfAllSelected();">
-                        </td>
-                        <td class="text-center col-md-2" [hidden]="!c.type">Employee</td>
-                        <td class="text-center col-md-2" [hidden]="c.type">Applicant</td>
-                        <td class="text-center col-md-2">{{c.title}}</td>
-                        <td class="text-center col-md-3">{{c?.createDate.split('T')[0]}}</td>
-                        <td class="text-center col-md-1">{{c.duration}}'</td>
-                        <td class="text-center col-md-1" [hidden]="c.isActive==true">
-                            <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
-                        </td>
-                        <td class="text-center col-md-1" [hidden]="c.isActive==false">
-                            <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
-                        </td>
-                        <td
-                            class="nowrap text-center action-column col-md-2 row no-padding-no-margin d-flex justify-content-center">
-                            <button class="btn-warning btn btn-circle shadow-item"
-                                (click)="openDetail(update, c.configId)">
-                                <i class="fa fa-edit"></i>
-                            </button>
-                            <button class="btn-primary btn btn-circle shadow-item" (click)="viewTest(c.configId)">
-                                <i class="fa fa fa-eye"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
     </div>
-</div>
 
 <div class=" d-flex justify-content-center col-md-12">
     <ngb-pagination [collectionSize]="Configurations.length" [(page)]="page" [pageSize]="pageSize"
