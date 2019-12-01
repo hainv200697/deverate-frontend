@@ -21,8 +21,8 @@
             </b>
         </div>
         <div class="d-flex justify-content-end col-md-6">
-            <button class="btn btn-success save shadow-card" (click)="get()"
-                [hidden]="selectedItems.length ==0">Submit</button>
+            <button class="btn btn-success save shadow-card" (click)="Apply()"
+                [hidden]="selectedItems.length ==0">Apply</button>
             <ng-multiselect-dropdown [placeholder]="'Select Period'" [data]="dropdownList"
                 (onDeSelect)="onItemDeSelect($event)" (onSelect)="getDataStatistic($event)"
                 (onSelectAll)="onSelectAll($event)" [(ngModel)]="selectedItems" [settings]="dropdownSettings"
@@ -76,8 +76,12 @@
 
         <div class="col col-md-6 mt-3">
             <div class="card mb-5">
-                <div class="card-header">
-                    Statistic Rank
+                <div class="card-header row">
+                    <div class="col-md-7"> Rank</div>
+                    <select (change)="GetOverallPointStatistic(false)" [(ngModel)]="selectData"
+                        class="form-control col-md-5">
+                        <option *ngFor="let data of selectedItems" [value]="data.id" selected="">{{data.text}}</option>
+                    </select>
                 </div>
                 <div class="card-body" style="height: 440px; overflow: auto;" *ngIf="isLoaded">
                     <table class="table table-hover table-bordered customtable" [svData]="dataEmployeeOverPoint"

@@ -21,7 +21,8 @@
                 </div>
                 <div class="form-inline col-md-2 col-lg-6 d-flex justify-content-end">
                     <label>Select:&nbsp;&nbsp;</label>
-                    <select (change)="getHistory($event.target.value)" id="ins_setting" name="ins_setting" class="form-control col-md-5">
+                    <select (change)="getHistory($event.target.value)" id="ins_setting" name="ins_setting"
+                        class="form-control col-md-5">
                         <option disabled [value]=-1>-- Choosing</option>
                         <option [value]=1>-- Rank</option>
                         <option [value]=2>-- Overpoint</option>
@@ -29,11 +30,11 @@
                     </select>
                 </div>
             </div>
-            <div class="card-body" >
-                <ngx-charts-line-chart *ngIf="isLoaded" [view]="view" [scheme]="colorScheme" [results]="averageCatalogue"
-                    [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
-                    [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
-                    [yAxisLabel]="yAxisLabel">
+            <div class="card-body">
+                <ngx-charts-line-chart *ngIf="isLoaded" [view]="view" [scheme]="colorScheme"
+                    [results]="averageCatalogue" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis"
+                    [legend]="showLegend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+                    [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel">
                 </ngx-charts-line-chart>
             </div>
         </div>
@@ -49,7 +50,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-hover table-bordered customtable" [svData]="dataLineChart" #sv="svDataTable">
+                <table class="table table-hover table-bordered customtable" svSortBy="startTime" [svData]="dataLineChart" #sv="svDataTable">
                     <thead style="background-color: rgba(0, 0, 0, 0.03);">
                         <tr class="row no-padding-no-margin" style="width: 100%; margin: 0;">
 
@@ -57,16 +58,20 @@
                                 No.
                             </th>
                             <th class="text-center" style="width: 25%;">
-                                Title
+                                <sv-default-sorter by="name">Title
+                                </sv-default-sorter>
                             </th>
                             <th class="text-center" style="width: 12%;">
-                                Point
+                                <sv-default-sorter by="point">Point
+                                </sv-default-sorter>
                             </th>
                             <th class="text-center" style="width: 15%;">
-                                Rank
+                                <sv-default-sorter by="rank">Rank
+                                </sv-default-sorter>
                             </th>
                             <th class="text-center" style="width: 25%;">
-                                Date
+                                <sv-default-sorter by="startTime">Date
+                                </sv-default-sorter>
                             </th>
                             <th class="text-center" style="width: 15%;">
                                 Action
