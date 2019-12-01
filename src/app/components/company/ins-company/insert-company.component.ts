@@ -27,7 +27,7 @@ export class InsertCompanyComponent implements OnInit {
     private employeeService: EmployeeApiService,
   ) {
     this.page = 1;
-    this.pageSize = 5;
+    this.pageSize = 25;
   }
   public loading = false;
   iconIsActive: boolean;
