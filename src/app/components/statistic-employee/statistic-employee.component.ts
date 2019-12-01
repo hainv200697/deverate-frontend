@@ -98,7 +98,7 @@ export class StatisticEmployeeComponent implements OnInit {
   public yAxisLabel: "Salary";
   public graphDataChart: any[];
   public colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    domain: ['Red', 'Blue', '#990000', 'Purple', 'Teal', 'Fuchsia', 'Maroon', 'Olive', 'Yellow', 'Lime', 'Green', 'Navy', 'White', 'Black']
   };
 
 }

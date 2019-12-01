@@ -23,10 +23,10 @@
                     <label>Select:&nbsp;&nbsp;</label>
                     <select (change)="getHistory($event.target.value)" id="ins_setting" name="ins_setting"
                         class="form-control col-md-5">
-                        <option disabled [value]=-1>-- Choosing</option>
-                        <option [value]=1>-- Rank</option>
-                        <option [value]=2>-- Overpoint</option>
-                        <option [value]=3>-- Catalogue</option>
+                        <option disabled [value]=-1>-- Choosing --</option>
+                        <!-- <option [value]=1> Rank</option> -->
+                        <option [value]=2 selected> Overpoint</option>
+                        <option [value]=3> Catalogue</option>
                     </select>
                 </div>
             </div>
