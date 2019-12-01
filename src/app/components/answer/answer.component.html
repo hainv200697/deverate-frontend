@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <table class="table  table-hover customtable" [svData]="answerList | AnswerFilterPipe:searchText" #sv="svDataTable" [svRowsOnPage]="5"
+        <table class="table  table-hover customtable" [svData]="answerList | AnswerFilterPipe:searchText" #sv="svDataTable" [svRowsOnPage]="25"
             svSortBy="name" svSortOrder="asc">
             <thead>
                 <tr class="col-md-12 row no-padding-no-margin">
@@ -65,7 +65,7 @@
                                 <button class=" icon-btn" ngbDropdownToggle style="color: black"></button>
                                 <div ngbDropdownMenu>
                                     <button class="dropdown-item" (click)="getAnswerById(true)">Active</button>
-                                    <button class="dropdown-item" (click)="getAnswerById(false)">Disable</button>
+                                    <button class="dropdown-item" (click)="getAnswerById(false)">Deactive</button>
                                 </div>
                             </div>
                         </th>

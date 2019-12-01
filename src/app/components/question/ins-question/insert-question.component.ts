@@ -125,7 +125,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             let listQues = [];
             this.allError =[];
             let existedQues: string[] = [];
-            
             list = await this.readExcel();
             var valueArr = list.map(function (item) {
                 var existItem = listQues.some(Question => Question == item.Question);
@@ -458,6 +457,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     openModalExcel(excel) {
         this.index = 1;
         this.message = [];
+        this.allError = [];
         this.listInsert = [];
         this.modalService.open(excel, { size: 'lg', backdrop: 'static', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
@@ -480,7 +480,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.updQuestion['isActive'] = true;
         this.updQuestion['accountId'] = this.accountId;
         this.updQuestion['cicid'] = this.cicid;
-        console.log(this.updQuestion);
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
@@ -651,7 +650,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     updateQuestion() {
-        console.log(this.updQuestion);
         this.questionService.updateQuestion(this.updQuestion).subscribe(
             (results) => {
                 this.getQuestionById(this.iconIsActive);
