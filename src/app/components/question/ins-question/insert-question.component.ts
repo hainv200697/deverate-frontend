@@ -447,7 +447,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     open(content) {
         this.index = 1;
         this.listInsert = [];
-        this.modalService.open(content, { size: 'lg', windowClass: 'myCustomModalClass' });
+        this.modalService.open(content, { size: 'lg', backdrop: 'static', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
             linear: false,
@@ -459,7 +459,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.index = 1;
         this.message = [];
         this.listInsert = [];
-        this.modalService.open(excel, { size: 'lg', windowClass: 'myCustomModalClass' });
+        this.modalService.open(excel, { size: 'lg', backdrop: 'static', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
             linear: false,
@@ -590,6 +590,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     addQuestion() {
+        this.loading = true;
         this.insQuestion['isActive'] = true;
         this.insQuestion['accountId'] = this.accountId;
         this.insQuestion['cicid'] = this.cicid;
@@ -606,7 +607,12 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                     this.toastr.error("System is not available");
                 }
                 if (error.status == 400) {
-                    this.toastr.error("Input is invalid");
+                    if(error.error != null){
+                        this.toastr.error("Questions : "+ error.error + " is existed!");
+                    }
+                    else{
+                        this.toastr.error("Input is invalid");
+                    }
                 }
                 if (error.status == 500) {
                     this.toastr.error("System error");

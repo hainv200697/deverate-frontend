@@ -1,12 +1,12 @@
 $topnav-background-color: #222;
 :host {
     .navbar {
-        background-color: $topnav-background-color;
+        background: linear-gradient(90deg, rgba(206,229,247,1) 1%, rgba(213,232,247,1) 45%, rgba(218,231,247,1) 86%);
         .navbar-brand {
-            color: #fff;
+            color: black;
         }
         .nav-item > a {
-            color: #999;
+            color: black;
             &:hover {
                 color: #fff;
             }

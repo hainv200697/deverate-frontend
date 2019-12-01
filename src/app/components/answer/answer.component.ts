@@ -47,7 +47,7 @@ export class AnswerComponent implements OnInit {
     // modal
     // insert
     open(create) {
-        this.modalService.open(create, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
+        this.modalService.open(create, { size: 'lg',backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
     }
 
 

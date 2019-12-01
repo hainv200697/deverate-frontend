@@ -53,8 +53,8 @@
             <table class="table  table-hover customtable" [svData]="catalogueList | CatalogueFilterPipe:searchText"
                 #sv="svDataTable" [svRowsOnPage]="5" svSortBy="name" svSortOrder="asc">
                 <thead>
-                    <tr class=" no-padding-no-margin">
-                        <th class="text-center col-md-1" scope="col" style="width: 5%;">
+                    <tr class="col-md-12 row no-padding-no-margin">
+                        <th class="text-center " scope="col" style="width: 5%;">
                             <input class="btn" type="checkbox" value="" [(ngModel)]="selectedAll"
                                 (change)="selectAll();">
                         </th>
@@ -84,8 +84,8 @@
                     </tr>
                 </thead>
                 <tbody *ngIf="sv.data.length != 0;  else searchNull">
-                    <tr class="no-padding-no-margin" *ngFor="let item of sv.data; let i=index">
-                        <td class="text-center col-md-1" style="width: 5%;">
+                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data; let i=index">
+                        <td class="text-center " style="width: 5%;">
                             <label>
                                 <input type="checkbox" value="" [(ngModel)]="item.selected"
                                     class="btn" (change)="checkIfAllSelected();">
