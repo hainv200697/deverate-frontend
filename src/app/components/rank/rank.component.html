@@ -1,0 +1,180 @@
+<ng-template #create let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title modal-header" id="modal-basic-title">Insert Rank</h4>
+    </div>
+    <div class="modal-body modal-basic-title col-md-12 row no-padding-no-margin">
+        <form class="col-md-12 no-padding-no-margin row">
+            <div class="form-group col-md-12">
+                <div class="">
+                    <div class="input-group input-group-icon">
+                        <input type="text" [(ngModel)]="inputRank['name']" name="ins_rank_name" id="rankName"
+                            (change)="validateRankName()" placeholder="Name">
+                        <div class="input-icon">Rank
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
+        <button type="button" class="btn btn-success save shadow-card" (click)="Save()">Create</button>
+    </div>
+</ng-template>
+
+<ng-template #update let-modal>
+    <div>
+        <div class="modal-header">
+            <h4 class="modal-title modal-header" id="modal-basic-title">Rank Information</h4>
+        </div>
+        <div class="modal-body modal-basic-title col-md-12 row no-padding-no-margin">
+            <form class="col-md-12 no-padding-no-margin row">
+                <div class="form-group col-md-12">
+                    <div class="">
+                        <div class="input-group input-group-icon">
+                            <input type="text" [(ngModel)]="updateRank['name']" name="update_rank_name"
+                                [disabled]="this.updateRank['isActive']==false" id="updateRankName">
+                            <div class="input-icon">Rank</div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
+            <button type="button" class="btn btn-success save shadow-card" [hidden]="this.updateRank['isActive']==false"
+                (click)="Update()">Update</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #searchNull>
+    <tr class="col-md-12 row no-padding-no-margin">
+        <th class="text-center col-md-12" scope="col">No data</th>
+    </tr>
+</ng-template>
+
+<ng-template #customLoadingTemplate>
+    <div class="custom-class">
+
+    </div>
+</ng-template>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true  }"
+    [template]="customLoadingTemplate">
+</ngx-loading>
+
+<!-- Search -->
+
+<!-- Table question -->
+<div class="insert-form col-md-12">
+    <app-page-header [heading]="'Rank Management'"></app-page-header>
+
+    <div class="card mb-3 shadow-card">
+        <div class="card-header">
+            Rank Management
+        </div>
+        <div class="table-responsive col-md-12 datatable">
+
+            <div class="row mb-1">
+                <div class="col">
+                    <div class="row" style="margin-top: 20px;">
+                        <div class="form-group input-group col-md-6 row" style="margin-left: 21px;">
+                            <input class="col-md-10" type="search" placeholder="Enter data" [(ngModel)]="searchText"
+                                style="height: 38px;">
+                            <div class="input-group-append col-md-2 no-padding-no-margin d-flex align-items-start">
+                                <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <div class="form-group input-group col-md-6 row d-flex justify-content-end"
+                            style="padding-right: 0px;">
+                            <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
+                                <i class="fa fa-fw fa-plus"></i>
+                                Create Rank
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row justify-content-end" style="margin-top: 20px;">
+                        <button [hidden]="updateStatus.length == 0" ngbTooltip="DeActive" style="margin-right: 10px;"
+                            (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger"
+                            data-toggle="button">
+                            <i class="fa fa-trash-o delete-icon" placement="top"></i>
+                        </button>
+                        <button [hidden]="updateStatus.length == 0" ngbTooltip="Active" style="margin-right: 10px;"
+                            (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success">
+                            <i class="fa fa-check" placement="top"></i>
+                        </button>
+                        <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)" ngbTooltip="Refesh"
+                            class="btn btn-lg btn-primary" data-toggle="button">
+                            <i #refesh class="fa fa-refresh" placement="top" aria-hidden="true"
+                                [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12"></div>
+            <div ngbDropdown class="col-md-11 d-flex justify-content-start d-inline-block dropdown">
+                <button class="btn icon-btn border" ngbDropdownToggle>Item</button>
+                <div ngbDropdownMenu>
+                    <button class="dropdown-item" (click)="PageSize(5)">5</button>
+                    <button class="dropdown-item" (click)="PageSize(25)">25</button>
+                    <button class="dropdown-item" (click)="PageSize(50)">50</button>
+                </div>
+            </div>
+            <table class="table  table-hover customtable" [svData]="listRank|RankFilterPipe:searchText"
+                #sv="svDataTable" svSortBy="name">
+                <thead>
+                    <tr class="col-md-12 row no-padding-no-margin pt-3">
+                        <th class="text-center" style="width: 5%;" scope="col"><input class="btn" type="checkbox"
+                                value="" [(ngModel)]="selectedAll" (change)="selectAll();"></th>
+                        <th class="text-center" style="width: 5%;" scope="col">
+                            No.
+                        </th>
+                        <th class="text-center" style="width: 30%;" scope="col">
+                            <sv-default-sorter by="name">Name
+                            </sv-default-sorter>
+                        </th>
+                        <th class="text-center" scope="col" style="width: 30%;">
+                            <sv-default-sorter by="Create_At">Creat At
+                            </sv-default-sorter>
+                        </th>
+                        <th class="text-center" style="width: 10%;" scope="col">
+                            <sv-default-sorter by="isActive">Status
+                            </sv-default-sorter>
+                        </th>
+                        <th class="text-center" style="width: 20%;" scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="sv.data.length != 0;  else searchNull">
+                    <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px"
+                        *ngFor="let c of sv.data | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index">
+                        <td class="text-center" style="width: 5%;">
+                            <input type="checkbox" value="" [(ngModel)]="c.selected" class="btn"
+                                (change)="checkIfAllSelected();">
+                        </td>
+                        <td class="text-center" style="width: 5%;">{{i+1}}</td>
+                        <td class="text-center" style="width: 30%;">{{c.name}}</td>
+                        <td class="text-center" style="width: 30%;">{{c.creatAt?.split('T')[0]}}</td>
+                        <td class="text-center" style="width: 10%;" [hidden]="c.isActive==true">
+                            <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
+                        </td>
+                        <td class="text-center" style="width: 10%;" [hidden]="c.isActive==false">
+                            <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
+                        </td>
+                        <td class=" text-center" style="width: 20%;">
+                            <button class="btn-warning btn btn-circle shadow-item col-md-6" ngbTooltip="Edit"
+                                (click)="openDetail(update, c)">
+                                <i class="fa fa-edit edit-icon"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class=" d-flex justify-content-center col-md-12">
+    <ngb-pagination [collectionSize]="listRank.length" [(page)]="page" [pageSize]="pageSize" [boundaryLinks]="true">
+    </ngb-pagination>
+</div>

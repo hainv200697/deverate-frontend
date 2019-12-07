@@ -21,6 +21,10 @@
             <span>Catalogue</span>
         </a>
 
+        <a [routerLink]="['/rank']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Company Manager'">
+            <i class="fa fa-level-up"></i>&nbsp;
+            <span>Rank</span>
+        </a>
         <!-- <a [routerLink]="['/stastistic-manager']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Company Manager'">
             <i class="fa fa-bar-chart"></i>&nbsp;
             <span>Statistic</span>
