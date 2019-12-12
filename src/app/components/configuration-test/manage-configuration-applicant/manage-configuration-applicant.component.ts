@@ -283,9 +283,9 @@ export class ManageConfigurationApplicantComponent implements OnInit {
 
   getAllRank(status: boolean) {
     this.rankApi.getAllRank(status).subscribe(
-      (data) => {
+      (data : any[]) => {
         let tmp = []
-        tmp = data['data']['data'];
+        tmp = data;
         for (var i = 0; i < tmp.length; i++) {
           if (tmp[i].name == "DEV0") {
             tmp.splice(i, 1);

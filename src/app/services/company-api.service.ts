@@ -5,8 +5,8 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class CompanyApiService {
-    // URL = 'http://localhost:54318/';
-    URL = AppSettings.BASEURL;
+    URL = 'http://localhost:9000/';
+    // URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
 
     getAllCompany() {
@@ -26,7 +26,7 @@ export class CompanyApiService {
 
     insertCompany(CompanyModel) {
         const API = 'CompanyAPI/CreateCompany';
-        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE+ API, CompanyModel);
+        return this.httpClient.post(AppSettings.BASEURL + AppSettings.ROUTE_AUTH+ API, CompanyModel);
     }
 
     updateCompany(CompanyModel) {
