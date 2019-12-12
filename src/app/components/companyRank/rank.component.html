@@ -139,8 +139,14 @@
                             </sv-default-sorter>
                         </th>
                         <th class="text-center" style="width: 10%;" scope="col">
-                            <sv-default-sorter by="isActive">Status
-                            </sv-default-sorter>
+                            Status
+                            <div ngbDropdown class="d-inline-block dropdown">
+                                <button class=" icon-btn" ngbDropdownToggle style="color: black"></button>
+                                <div ngbDropdownMenu>
+                                    <button class="dropdown-item" (click)="getRank(true)">Active</button>
+                                    <button class="dropdown-item" (click)="getRank(false)">Deactive</button>
+                                </div>
+                            </div>
                         </th>
                         <th class="text-center" style="width: 20%;" scope="col">Action</th>
                     </tr>

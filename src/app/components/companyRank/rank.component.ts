@@ -36,10 +36,11 @@ export class RankComponent implements OnInit {
   listRank = [];
   searchText;
   check;
+  companyId = localStorage.getItem("CompanyId");
 
   ngOnInit() {
     this.restartData();
-    this.getRank();
+    this.getRank(true);
   }
 
   PageSize(test: number) {
@@ -48,6 +49,7 @@ export class RankComponent implements OnInit {
 
   restartData(){
     this.inputRank = {
+      companyId: this.companyId,
       name: '',
       isActive: true,
     };
@@ -58,7 +60,7 @@ export class RankComponent implements OnInit {
     setTimeout(function () {
       refesh.classList.remove('spin-animation');
     }, 500);
-    this.getRank();
+    this.getRank(true);
     this.selectedAll = false;
   }
 
@@ -69,7 +71,7 @@ export class RankComponent implements OnInit {
     })
     for (var i = 0; i < this.listRank.length; i++) {
       if (this.listRank[i].selected == true) {
-        this.updateStatus.push(this.listRank[i].rankId)
+        this.updateStatus.push(this.listRank[i].companyRankId)
       }
     }
   }
@@ -84,16 +86,16 @@ export class RankComponent implements OnInit {
     }
     for (var i = 0; i < this.listRank.length; i++) {
       this.listRank[i].selected = this.selectedAll;
-      this.updateStatus.push(this.listRank[i].rankId)
+      this.updateStatus.push(this.listRank[i].companyRankId)
     }
   }
 
-  getRank() {
+  getRank(isActive) {
     this.loading = true;
-    this.rankApi.getAllRank(true).subscribe(
-      (data) => {
+    this.rankApi.getAllRank(isActive,this.companyId).subscribe(
+      (data : any[]) => {
         this.loading = false;
-        this.listRank = data['data']['data'];
+        this.listRank = data;
         this.selectedAll = false;
       },
       (error) => {
@@ -118,7 +120,7 @@ export class RankComponent implements OnInit {
   }
 
   openDetail(content, item){
-    this.updateRank['rankId'] = item.rankId;
+    this.updateRank['companyRankId'] = item.companyRankId;
     this.updateRank['name'] = item.name;
     this.updateRank['isActive'] = item.isActive;
     this.modalService.open(content, {backdrop: 'static',ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -146,11 +148,12 @@ export class RankComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.loading = true;
+        console.log(this.inputRank)
         this.rankApi.insertRank(this.inputRank).subscribe(data => {
           this.closeModal();
           this.restartData();
           this.toast.success(data['message']);
-          this.getRank();
+          this.getRank(true);
           this.loading = false;
         }, (error) => {
           if (error.status == 0) {
@@ -184,7 +187,7 @@ export class RankComponent implements OnInit {
           this.closeModal();
           this.restartData();
           this.toast.success(data['message']);
-          this.getRank();
+          this.getRank(true);
           this.loading = false;
         }, (error) => {
           if (error.status == 0) {
@@ -213,7 +216,7 @@ export class RankComponent implements OnInit {
           this.loading = true;
           console.log(this.updateStatus)
           this.rankApi.changeStatus(this.updateStatus, status).subscribe(data => {
-            this.getRank();
+            this.getRank(status);
             this.closeModal();
             this.loading = false;
             this.toast.success(data['message'])
@@ -243,7 +246,7 @@ export class RankComponent implements OnInit {
         if (result.value) {
           this.loading = true;
           this.rankApi.changeStatus(this.updateStatus, status).subscribe(data => {
-            this.getRank();
+            this.getRank(status);
             this.closeModal();
             this.loading = false;
             this.toast.success(data['message'])

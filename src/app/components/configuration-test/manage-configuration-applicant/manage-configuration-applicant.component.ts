@@ -282,7 +282,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
   }
 
   getAllRank(status: boolean) {
-    this.rankApi.getAllRank(status).subscribe(
+    this.rankApi.getAllRank(status,this.companyId).subscribe(
       (data) => {
         let tmp = []
         tmp = data['data']['data'];

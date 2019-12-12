@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AppSettings } from '../appsetting';
 @Injectable({
     providedIn: 'root'
@@ -9,23 +9,24 @@ export class RankApiService {
     URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
 
-    getAllRank(isActive: boolean) {
-        const API = 'RankApi/GetAllRank?isActive=';
-        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API + isActive);
+    getAllRank(isActive,companyId) {
+        const param = new HttpParams().set('isActive', isActive).set('companyId',companyId);
+        const API = 'RankApi/GetAllCompanyRank';
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
 
     insertRank(rankModel){
-        const API = 'RankApi/CreateRank';
+        const API = 'RankApi/CreateCompanyRank';
         return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API, rankModel);
     }
 
     updateRank(rankModel){
-        const API = 'RankApi/UpdateRank';
+        const API = 'RankApi/UpdateCompanyRank';
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, rankModel);
     }
 
     changeStatus(rankId, isActive){
-        const API = 'RankApi/ChangeStatusRank?status=';
+        const API = 'RankApi/ChangeStatusCompanyRank?status=';
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API + isActive , rankId);
     }
 }
