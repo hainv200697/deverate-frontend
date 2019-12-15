@@ -2,9 +2,9 @@ import { AnswerModel } from './answer-model';
 
 export class QuestionModel{
     QuestionId : number
-    cicid : number
+    CompanyCatalogueId : number
     question1 : string
-    maxPoint: number
+    point: number
     isActive : boolean
     accountId: number
     answer :Array<AnswerModel> = []

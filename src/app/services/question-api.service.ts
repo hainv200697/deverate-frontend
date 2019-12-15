@@ -7,8 +7,8 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class QuestionApiService {
-    URL = AppSettings.BASEURL;
-    // URL ='http://localhost:9000/';
+    // URL = AppSettings.BASEURL;
+    URL ='http://localhost:9000/';
     httpOptions = {
         headers: new HttpHeaders({
             'Content-Type': 'application/json'
@@ -36,5 +36,23 @@ export class QuestionApiService {
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, question);
     }
 
+    getQuestionDefault(id:any,status) {
+        let param= new HttpParams().set('catalogueId',id).set('status',status);
+        const API = 'api/Question/GetQuestionByCatalogueDefault';
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API,{params :param} );
+    }
 
+    insertQuestionDefault(question: any) {
+        const API = 'api/Question/CreateDefaultQuestion';
+        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE+ API, question);
+    }
+
+    updateQuestionDefault(question: any) {
+        const API = 'api/Question/UpdateQuestionDefault';
+        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE+ API, question);
+    }
+    removeQuestionDefault(question: any) {
+        const API = 'api/Question/RemoveQuestionDefault';
+        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, question);
+    }
 }

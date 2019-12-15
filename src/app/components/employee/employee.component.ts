@@ -245,10 +245,10 @@ export class EmployeeComponent implements OnInit {
                 this.selectedAll = false;
             }, (error) => {
                 if (error.status == 500) {
-                    this.loading = false;
                     this.toastr.error("System error");
                     this.closeModal();
                 }
+                this.loading = false;
             }
         );
     }

@@ -33,7 +33,7 @@
                                     <div class="row col-sm-12 col-md-12 col-lg-12">
                                         <div class="form-group col-sm-8 col-md-8 col-lg-8">
                                             <label>Question:</label>
-                                            <input type="text" [(ngModel)]="insQuestion['question1']"
+                                            <input type="text" [(ngModel)]="insQuestion['question']"
                                                 name="ins_question_question" class="form-control input-underline input-lg"
                                                 id="ins_question_question" placeholder="Question">
                                         </div>
@@ -65,14 +65,14 @@
                                             *ngFor="let answer of answerForm.controls.answers.controls; let i=index">
                                             <h5 class="card-title">Answer {{i + 1}}</h5>
                                             <div [formGroup]="answer" class="form-row">
-                                                <div class="form-group col-10">
+                                                <div class="form-group col-9">
                                                     <label>Answer</label>
-                                                    <input type="text" formControlName="answer1"
+                                                    <input type="text" formControlName="answer"
                                                         placeholder="Input answer {{i+1}}"
                                                         class="answer-input form-control ans-{{i}}" />
                                                 </div>
-                                                <div class="form-group col-1">
-                                                    <label>Mark</label>
+                                                <div class="form-group col-2">
+                                                    <label>Percent</label>
                                                     <input type="number" formControlName="Percent"
                                                         class="form-control answer-input mark-{{i}}" />
                                                 </div>
@@ -101,7 +101,7 @@
                                                     Question
                                                 </td>
                                                 <td class="col-md-9">
-                                                    {{insQuestion['question1']}}
+                                                    {{insQuestion['question']}}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -118,10 +118,10 @@
                                         <tbody>
                                             <tr class="col-md-12 row no-padding-no-margin" *ngFor="let q of insAnswer">
                                                 <td class="col-md-9">
-                                                    {{q.answer1}}
+                                                    {{q.answer}}
                                                 </td>
                                                 <td class="col-md-3">
-                                                    {{q.point}}
+                                                    {{q.Percent}}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -192,7 +192,7 @@
                             </div>
                             <div class="col-md-5 question-ex">
                                 <div class="col-md-12 question-ex">
-                                    {{q.question1}}
+                                    {{q.question}}
                                 </div>
                             </div>
                             <div class="col-md-6 question-ex">
@@ -211,10 +211,10 @@
                                                 {{i+1}}
                                             </td>
                                             <td class="col-md-8">
-                                                {{item.answer1}}
+                                                {{item.answer}}
                                             </td>
                                             <td class="col-md-3">
-                                                {{item.point}}
+                                                {{item.Percent}}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -276,7 +276,7 @@
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                     <label>Question:</label>
-                                    <input type="text" [(ngModel)]="updQuestion['question1']"
+                                    <input type="text" [(ngModel)]="updQuestion['question']"
                                         name="upd_question_question" class="form-control input-underline input-lg"
                                         id="upd_question_question" placeholder="Question">
                                 </div>
@@ -300,7 +300,7 @@
                                                     Question
                                                 </td>
                                                 <td class="col-md-9">
-                                                    {{updQuestion['question1']}}
+                                                    {{updQuestion['question']}}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -373,8 +373,8 @@
                 </div>
             </div>
             <table style="margin-top: 20px;" class="table  table-hover customtable"
-                [svData]="allQuestions | InsertQuestionFilterPipe:searchText" #sv="svDataTable" [svRowsOnPage]="25"
-                svSortBy="name" svSortOrder="asc">
+                [svData]="allQuestions | QuestionDefaultFilterPipe:searchText" #sv="svDataTable" [svRowsOnPage]="25"
+                svSortBy="point" svSortOrder="asc">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin">
                         <th class="text-center col-md-1" scope="col">
@@ -385,13 +385,13 @@
                             <sv-default-sorter by='catalogueName'>Catalog</sv-default-sorter>
                         </th>
                         <th class="col-md-4 text-center" scope="col">
-                            <sv-default-sorter by='question1'>Question</sv-default-sorter>
+                            <sv-default-sorter by='question'>Question</sv-default-sorter>
                         </th>
                         <!-- <th class="col-md-1 text-center" scope="col"> -->
                         <!-- <sv-default-sorter by='createBy'>Create By</sv-default-sorter>
                         </th> -->
                         <th class="col-md-1 text-center" scope="col">
-                            <sv-default-sorter by='maxPoint'>Max Point</sv-default-sorter>
+                            <sv-default-sorter by='point'>Point</sv-default-sorter>
                         </th>
                         <th class="text-center col-md-1" scope="col">Status
                             <div ngbDropdown class="d-inline-block dropdown">
@@ -413,10 +413,10 @@
                                     (change)="checkIfAllSelected();">
                             </label>
                         </td>
-                        <td class="text-center col-md-3">{{catalogueName}}</td>
-                        <td class="text-center col-md-4">{{q.question1}}</td>
+                        <td class="text-center col-md-3">{{q.catalogueName}}</td>
+                        <td class="text-center col-md-4">{{q.question}}</td>
                         <!-- <td class="text-center col-md-1">{{q.fullname}}</td> -->
-                        <td class="text-center col-md-1">{{q.maxPoint}}</td>
+                        <td class="text-center col-md-1">{{q.point}}</td>
                         <td class="text-center col-md-1" [hidden]="q.isActive==true">
                             <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
                         </td>

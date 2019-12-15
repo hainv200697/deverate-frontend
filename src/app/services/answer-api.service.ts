@@ -6,8 +6,8 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class AnswerApiService {
-    // URL = 'http://localhost:54318/';
-    URL = AppSettings.BASEURL;
+    URL = 'http://localhost:9000/';
+    // URL = AppSettings.BASEURL;
     constructor(
         private httpClient: HttpClient,
     ) { }
@@ -30,6 +30,26 @@ export class AnswerApiService {
 
     disableAnswer(AnswerId: any) {
         const API = 'api/Answer/RemoveAnswer';
+        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, AnswerId);
+    }
+    getAllDefaultAnswerByQuestioId(questionId, status) {
+        const API = 'api/Answer/GetDefaultAnswerByQuestion';
+        const param = new HttpParams().set('id', questionId).set('status', status);
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
+    }
+
+    insertDefaultAnswer(answer: any) {
+        const API = 'api/Answer/CreateAnswerDefault';
+        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API, answer);
+    }
+
+    updateDefaultAnswer(answer: any) {
+        const API = 'api/Answer/UpdateAnswerDefault';
+        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, answer);
+    }
+
+    disableDefaultAnswer(AnswerId: any) {
+        const API = 'api/Answer/RemoveAnswerDefault';
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, AnswerId);
     }
 

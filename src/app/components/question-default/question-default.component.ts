@@ -1,26 +1,26 @@
 import { Component, Output, EventEmitter, OnInit, AfterViewInit } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { QuestionApiService } from '../../../services/question-api.service';
-import { CatalogueApiService } from '../../../services/catalogue-api.service';
+import { QuestionApiService } from '../../services/question-api.service';
+import { CatalogueApiService } from '../../services/catalogue-api.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { element } from 'protractor';
 import Stepper from 'bs-stepper';
-import { AnswerApiService } from '../../../services/answer-api.service';
+import { AnswerApiService } from '../../services/answer-api.service';
 import { ViewEncapsulation } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'ts-xlsx';
-import { AnswerModel } from '../../../models/answer-model';
-import { QuestionModel } from '../../../models/question-model';
+import { AnswerModel } from '../../models/answer-model';
+import { QuestionModel } from '../../models/question-model';
 @Component({
-    selector: 'app-insert-question',
-    templateUrl: './insert-question.component.html',
-    styleUrls: ['./insert-question.component.scss'],
+    selector: 'app-question-default',
+    templateUrl: './question-default.component.html',
+    styleUrls: ['./question-default.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class InsertQuestionComponent implements OnInit, AfterViewInit {
+export class QuestionDefaultComponent implements OnInit, AfterViewInit {
     constructor(
         public router: Router,
         private questionService: QuestionApiService,
@@ -37,7 +37,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     id: number = this.activeRoute.snapshot.params.id;
     catalogueName = '';
     accountId = Number(localStorage.getItem('AccountId'))
-    companyId = Number(localStorage.getItem('CompanyId'));
     // excel param
     checkFile = true;
     searchText = '';
@@ -56,7 +55,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     ansForm: FormGroup;
     answersForm: FormGroup;
     form: any;
-    count = 1;
+    count = 3;
     answerForm: FormGroup;
     submitted = false;
     index = 1;
@@ -154,11 +153,9 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 ind = ind + 1;
                 const questionObj = new QuestionModel();
                 this.listAnswer = [];
-                questionObj.point = element['Point']
+                questionObj.point = element['Point'];
                 questionObj.question1 = element['Question'].trim();
                 questionObj.isActive = true;
-                questionObj.accountId = this.accountId;
-                questionObj.CompanyCatalogueId = this.id;
                 if (element['Question'] == null) {
                     this.message.push("Question at # " + ind + " is blank");
                 }
@@ -180,7 +177,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 let ans = [];
                 let dupAns : string[] = []
                 this.listAnswer.map(function (item) {
-                    var existItem = ans.find(x => x.answer1 == item.answer);
+                    var existItem = ans.find(x => x.answer == item.answer);
                     if (existItem){
                         dupAns.push("Question #" + ind + " has duplicated answer");
                     }else{
@@ -204,14 +201,14 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                         this.checkFile = false;
                     }
                     if (element.point === null || element.point === undefined) {
-                        this.message.push("Point of answer #" + index +  " is blank!");
+                        this.message.push("Percent of answer #" + index +  " is blank!");
                         this.checkFile = false;
                     } else if (isNaN(element.point)) {
-                        this.message.push("Point of answer #" + index + " is not a number!");
+                        this.message.push("Percent of answer #" + index + " is not a number!");
                         this.checkFile = false;
                     }
                     else if (element.point < 0 || element.point > 100) {
-                        this.message.push("Point of answer #" + index + " must be in range from 1 to 6! ");
+                        this.message.push("Percent of answer #" + index + " must be in range from 0 to 100! ");
                         this.checkFile = false;
                     }
                 });
@@ -233,11 +230,11 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         if (key === 'ins') {
 
             this.insAnswer = this.answerForm.controls['answers'].value;
+            console.log(this.insAnswer);
             let check = true;
             this.insAnswer.forEach(element => {
                 element['isActive'] = true;
             });
-            this.insQuestion['MaxPoint'] = Math.max.apply(Math, this.insAnswer.map(function (o) { return o.point; }));
             this.insQuestion['Answer'] = this.insAnswer;
             const catalog = this.id;
             if (catalog === undefined || catalog === null) {
@@ -246,7 +243,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 $('#ins_question_cate_id').focus();
                 return;
             }
-            const question = this.insQuestion['question1'];
+            const question = this.insQuestion['question'].trim();
             if (question === '' || question === undefined || question === null) {
                 this.toastr.error('Message', 'Question can not be blank!');
                 $('#ins_question_question').css('border-color', 'red');
@@ -268,9 +265,10 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             let i = -1;
             let checkDup=[];
             this.insAnswer.forEach(element => {
+                console.log(element);
                 i++;
                 if (check === true) {
-                    const ans = element['answer1'];
+                    const ans = element['answer'];
                     if (ans === '' || ans.length < 3 || ans.length > 200) {
                         this.toastr.error('Message', 'Answer must be more than 3 characters!');
                         check = false;
@@ -328,7 +326,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 $('#upd_question_cate_id').focus();
                 return;
             }
-            const question = this.updQuestion['question1'];
+            const question = this.updQuestion['question'];
             if (question === '' || question === undefined || question === null) {
                 this.toastr.error('Message', 'Question can not be blank!');
                 $('#upd_question_question').css('border-color', 'red');
@@ -385,20 +383,16 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         return false;
     }
     ngOnInit() {
+        this.iconIsActive = true;
         if (this.accountId == null) {
             this.router.navigate(['login']);
         }
         this.insQuestion['Answer'] = [];
-        this.mainForm();
-        for (let i = 0; i <= 1; i++) {
-            this.count++;
-            (<FormArray>this.answerForm.controls['answers']).push(this.addAnswerForm());
-        }
         this.question['question'] = '';
         this.question['cate_id'] = '';
         this.getQuestionById(true);
-        this.insQuestion['companyCatalogueId'] = this.id;
-        this.updQuestion['companyCatalogueId'] = this.id;
+        this.insQuestion['catalogueDefaultId'] = this.id;
+        this.updQuestion['catalogueDefaultId'] = this.id;
     }
 
     // dynamic form
@@ -413,19 +407,18 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     onAddAnswers() {
-
-        this.count++;
         if (this.count < 6) {
+            this.count++;
             (<FormArray>this.answerForm.controls['answers']).push(this.addAnswerForm());
         } else {
-            this.toastr.error('Message', 'Can not create more than 5 answers!');
+            this.toastr.error('Message', 'Can not create more than 6 answers!');
         }
 
     }
 
     addAnswerForm(): FormGroup {
         this.answersForm = this.formBuilder.group({
-            answer1: ['', Validators.required],
+            answer: ['', Validators.required],
             Percent: ['', Validators.required]
         });
         return this.answersForm;
@@ -444,6 +437,10 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     open(content) {
         this.index = 1;
         this.listInsert = [];
+        this.mainForm();
+        for (let i = 0; i < this.count-1; i++) {
+            (<FormArray>this.answerForm.controls['answers']).push(this.addAnswerForm());
+        }
         this.modalService.open(content, { size: 'lg', backdrop: 'static', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
@@ -471,12 +468,12 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     openUpdate(item, update) {
-        this.count = 0;
         this.index = 1;
-        this.updQuestion['QuestionId'] = item['questionId'];
-        this.updQuestion['question1'] = item['question1'];
+        this.updQuestion['QuestionDefaultId'] = item['QuestionDefaultId'];
+        this.updQuestion['catalogueDefaultId'] = item['catalogueDefaultId'];
+        this.updQuestion['question'] = item['question'];
+        this.updQuestion['catalogueName'] = item['catalogueName'];
         this.updQuestion['isActive'] = true;
-        this.updQuestion['accountId'] = this.accountId;
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
@@ -535,9 +532,10 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                         this.updateStatus[i].IsActive = status;
                     }
                     this.loading =true;
-                    this.questionService.removeQuestion(this.updateStatus).subscribe(
+                    this.questionService.removeQuestionDefault(this.updateStatus).subscribe(
                         (results) => {
                             this.selectedAll =false;
+                            console.log(this.iconIsActive);
                             this.getQuestionById(this.iconIsActive);
                             this.toastr.success("Changed success");
                         }
@@ -588,13 +586,11 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     addQuestion() {
         this.loading = true;
         this.insQuestion['isActive'] = true;
-        this.insQuestion['accountId'] = this.accountId;
-        this.insQuestion['companyCatalogueId'] = this.id;
-        this.insQuestion['catalogueName'] = this.catalogueName;
-        this.insertQuestion = [];
+        this.insQuestion['catalogueDefaultId'] = this.id;
+        this.insertQuestion=[];
         console.log(this.insQuestion);
         this.insertQuestion.push(this.insQuestion);
-        this.questionService.insertQuestion(this.insertQuestion).subscribe(
+        this.questionService.insertQuestionDefault(this.insertQuestion).subscribe(
             (results) => {
                 this.getQuestionById(this.iconIsActive);
                 this.toastr.success(results['message']);
@@ -621,7 +617,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     async addQuestionByExcel() {
-        this.questionService.insertQuestion(this.insertQuestion).subscribe(
+        this.questionService.insertQuestionDefault(this.insertQuestion).subscribe(
             (results) => {
                 this.getQuestionById(this.iconIsActive);
                 this.toastr.success(results['message']);
@@ -649,7 +645,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     updateQuestion() {
-        this.questionService.updateQuestion(this.updQuestion).subscribe(
+        this.questionService.updateQuestionDefault(this.updQuestion).subscribe(
             (results) => {
                 this.getQuestionById(this.iconIsActive);
                 this.toastr.success(results['message']);
@@ -675,11 +671,11 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     getQuestionById(status) {
         this.loading = true;
         this.iconIsActive = status;
-        this.questionService.getQuestion(this.id, this.companyId, this.iconIsActive).subscribe(
+        this.questionService.getQuestionDefault(this.id, this.iconIsActive).subscribe(
             (data: any) => {
+                console.log(data);
                 this.loading = false;
-                this.catalogueName = data.catalogueName;
-                this.allQuestions = data.questions;
+                this.allQuestions = data;
                 this.selected = false;
                 this.selectedAll = false;
             },
@@ -700,7 +696,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
     // reset
     reset() {
-        this.count = 1;
+        this.count = 3;
         this.insQuestion = {};
         this.insAnswer = [];
     }
@@ -714,7 +710,8 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     viewAnswer(item) {
-        this.router.navigate(['/manage-answer/', item['questionId']]);
+        console.log(item);
+        this.router.navigate(['/manage-answer-default/', item['QuestionDefaultId']]);
     }
 
     downloadTemplate() {

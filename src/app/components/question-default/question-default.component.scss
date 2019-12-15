@@ -1,0 +1,85 @@
+
+@import '~bs-stepper/dist/css/bs-stepper.min.css';
+@import './../../../styles/custom.scss';
+// @import '~ngx-toastr/toastr';
+// @import '~ngx-toastr/toastr-bs4-alert';
+// @import '~bootstrap/scss/functions';
+// @import '~bootstrap/scss/variables';
+// @import '~bootstrap/scss/mixins';
+// @import '~ngx-toastr/toastr-bs4-alert';
+.datatable{
+    padding: 20px;
+}
+.card-footer {
+    padding: 0.3rem 1.25rem;
+}
+.card-header {
+    padding: 0.5rem 1.25rem;
+    background-color: rgba(0, 0, 0, 0.36);
+}
+.modal-lg { max-width: 1000px !important; }
+.header-custom{
+    width: 100%;
+}
+@media only screen and (min-width: 794px) {
+    .step {
+        padding-right: 50px;
+        padding-left: 50px;
+    }
+    
+}
+.form-content{
+    padding-top: 10px;
+}
+.no-padding-no-margin{
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+@mixin animation-name($name){
+    animation-name: $name;
+    -webkit-animation-name: $name;
+    -moz-animation-name: $name;
+    -ms-animation-name: $name;
+}
+
+@mixin animation-duration($duration){
+    animation-duration: $duration;
+    -webkit-animation-duration: $duration;
+    -moz-animation-duration: $duration;
+    -ms-animation-duration: $duration;
+}
+
+@mixin animation-timing-function($func){
+    animation-timing-function: $func;
+    -webkit-animation-timing-function: $func;
+    -moz-animation-timing-function: $func;
+    -ms-animation-timing-function: $func;
+}
+
+@mixin animation($name, $duration, $timing-func){
+    @include animation-name($name);
+    @include animation-duration($duration);
+    @include animation-timing-function($timing-func);
+}
+
+@keyframes spin{
+    to { transform: rotate(360deg) }
+}
+.icon-btn{
+    border: none;
+    background-color: transparent;
+    outline: 0;
+    
+    i{
+        color: #007bff;
+        font-size: 2em;
+        cursor: pointer;
+    }
+    
+    
+    i.spin-animation{
+        @include animation(spin, 0.5s, ease-in);
+    }
+}
