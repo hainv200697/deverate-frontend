@@ -1,3 +1,4 @@
+import { SemesterModule } from './../components/semester/semester.module';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LayoutComponent } from './layout.component';
@@ -32,7 +33,7 @@ const routes: Routes = [
             { path: 'applicant', loadChildren: () => import('../components/applicant/applicant.module').then(m => m.ApplicantModule), canActivate: [OwnerGuard]},
             { path: 'sample-test', loadChildren: () => import('../components/sample-test/sample-test.module').then(m => m.SampleTestModule), canActivate: [OwnerGuard] },
             { path: 'statistic-applicant', loadChildren: () => import('../components/statistic-applicant-forTestOwner/statistic-applicant.module').then(m => m.StatisticApplicantModule), canActivate: [OwnerGuard]},
-
+            { path: 'semester', loadChildren: () => import('../components/semester/semester.module').then(m => m.SemesterModule), canActivate: [OwnerGuard]},
             //Employee
             { path: 'reranking', component: RerankingComponent, canActivate: [EmployeeGuard]},
             { path: 'statistic-employee', loadChildren: () => import('../components/statistic-employee/statistic-employee.module').then(m => m.StatisticEmployeeModule), canActivate: [EmployeeGuard]},

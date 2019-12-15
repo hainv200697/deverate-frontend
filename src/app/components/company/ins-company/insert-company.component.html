@@ -25,11 +25,6 @@
                             (change)="validateCompanyPhone()" name="ins_company_phone" id="companyPhone">
                         <div class="input-icon"><i class="fa fa-phone"></i><label style="color: red;">*</label></div>
                     </div>
-                    <div class="input-group input-group-icon">
-                        <input type="text" placeholder="Fax" [(ngModel)]="inputCompany['fax']" name="ins_company_fax"
-                            id="companyFax">
-                        <div class="input-icon"><i class="fa fa-fax"></i></div>
-                    </div>
                 </div>
             </div>
 
@@ -103,11 +98,6 @@
                                 name="update_company_phone" (change)="validateUpdateCompanyPhone()">
                             <div class="input-icon"><i class="fa fa-phone"></i></div>
                         </div>
-                        <div class="input-group input-group-icon">
-                            <input type="text" [(ngModel)]="updateCompany['fax']" id="updateCompanyFax"
-                                [disabled]="this.updateCompany['isActive']==false" name="update_company_fax" id="">
-                            <div class="input-icon"><i class="fa fa-fax"></i></div>
-                        </div>
                     </div>
                 </div>
                 <div class="form-group col-md-6">
@@ -168,7 +158,7 @@
 <!-- Search -->
 
 <!-- Table question -->
-<div class="insert-form col-md-12">
+<div class="insert-form col-md-12" *ngIf="isLoaded">
     <app-page-header [heading]="'Company Management'"></app-page-header>
 
     <div class="card mb-3 shadow-card">
@@ -262,7 +252,7 @@
                         <td class="text-center" style="width: 5%;">{{i+1}}</td>
                         <td class="text-center" style="width: 20%;">{{c.name}}</td>
                         <td class="text-center" style="width: 20%;">{{c?.managerName}}</td>
-                        <td class="text-center" style="width: 15%;">0{{c.phone}}</td>
+                        <td class="text-center" style="width: 15%;">{{c.phone}}</td>
                         <td class="text-center" style="width: 15%;">{{c.create_At.split('T')[0]}}</td>
                         <td class="text-center" style="width: 10%;" [hidden]="c.isActive==true">
                             <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
@@ -292,9 +282,9 @@
             </table>
         </div>
     </div>
-</div>
-
-<div class=" d-flex justify-content-center col-md-12">
-    <ngb-pagination [collectionSize]="Companies.length" [(page)]="page" [pageSize]="pageSize" [boundaryLinks]="true">
-    </ngb-pagination>
+    <div class=" d-flex justify-content-center col-md-12">
+        <ngb-pagination [collectionSize]="Companies.length" [(page)]="page" [pageSize]="pageSize"
+            [boundaryLinks]="true">
+        </ngb-pagination>
+    </div>
 </div>

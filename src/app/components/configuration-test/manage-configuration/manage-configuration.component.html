@@ -50,12 +50,6 @@
 
                             <label class="col-md-12"></label>
                             <div class="col-md-5 row">
-                                <label class="col-md-8" style="text-align: right">Total
-                                    Question:</label>
-                                <input class="col-md-4" type="number" [(ngModel)]="inputConfiguration['totalQuestion']"
-                                    name="ins_config_totalquestion" 
-                                    [min]="selectedItems.length * 2" style="height: 30px">
-                                <label class="col-md-12"></label>
                                 <label class="col-md-8" style="text-align: right;">Duration:</label>
                                 <input class="col-md-4" type="number" [(ngModel)]="inputConfiguration['duration']"
                                     name="ins_config_durartion" step="5" [min]="selectedItems.length * 5"
@@ -65,7 +59,7 @@
                                 <label class="col-md-4" style="text-align: right">Start Date:</label>
                                 <div class="col-md-7">
                                     <angular2-date-picker [(ngModel)]="startDate" name="mydate"
-                                        (dateChanged)="onDateChanged($event)" [settings]="settings1">
+                                     [settings]="settings1">
                                     </angular2-date-picker>
                                 </div>
                                 <label class="col-md-12"></label>
@@ -90,9 +84,13 @@
                             </div>
                             <div class="col-md-6" [hidden]="selectedItems.length == 0">
                                 <div class="form-row" *ngFor="let c of selectedItems" style="margin-left: -55px;">
-                                    <div class="form-group col-md-8">
+                                    <div class="form-group col-md-5">
                                         <input type="text" disabled="disabled" class="form-control"
                                             style="font-size: 15px" [value]="c['name']" />
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <input type="text" class="form-control"
+                                            style="font-size: 15px" [(ngModel)]="c.numberQuestion"/>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <input type="number" min="10" max="100" step="10" class="form-control"
