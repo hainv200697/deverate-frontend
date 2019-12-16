@@ -55,12 +55,12 @@ export class InsertCompanyComponent implements OnInit {
     companyId: 0,
     name: '',
     address: '',
-    fax: '',
     phone: '',
   };
   updateManager = {};
   updateStatus = [];
   check = true;
+  isLoaded = false
 
   PageSize(test: number) {
     this.pageSize = test;
@@ -82,7 +82,6 @@ export class InsertCompanyComponent implements OnInit {
       name: '',
       address: '',
       phone: '',
-      fax: '',
       isActive: true,
     };
     this.inputManager = {
@@ -118,7 +117,6 @@ export class InsertCompanyComponent implements OnInit {
       this.Companies[i].selected = this.selectedAll;
       this.updateStatus.push(this.Companies[i].companyId)
     }
-    console.log(this.updateStatus)
   }
 
   clickButtonRefresh(refesh) {
@@ -228,8 +226,8 @@ export class InsertCompanyComponent implements OnInit {
       (data) => {
         this.loading = false;
         this.isLoadDetail = true;
-        this.account = data['data']['data'].accountDTO;
-        this.updateCompany = data['data']['data'].companyDTO;
+        this.account = data['accountDTO'];
+        this.updateCompany = data['companyDTO'];
       },
       (error) => {
         if (error.status == 0) {
@@ -250,12 +248,11 @@ export class InsertCompanyComponent implements OnInit {
   getCompanyIsActive() {
     this.loading = true;
     this.companyApi.getAllCompany().subscribe(
-      (data) => {
+      (data: any[]) => {
         this.loading = false;
-        console.log(data)
-        this.Companies = data['data']['data'];
-        console.log(this.Companies);
+        this.Companies = data;
         this.selectedAll = false;
+        this.isLoaded = true
       },
       (error) => {
         if (error.status == 0) {
@@ -276,7 +273,7 @@ export class InsertCompanyComponent implements OnInit {
   getAccountManager(id: number) {
     this.accountApi.getManagerByCompanyId(id).subscribe(
       (data) => {
-        this.Account = data['data']['data'];
+        this.Account = data;
       }
     ), (error) => {
       this.toast.error(error.name);
@@ -291,8 +288,8 @@ export class InsertCompanyComponent implements OnInit {
     }
     else {
       this.companyApi.getCompanyByName(this.searchText).subscribe(
-        (data) => {
-          this.Companies = data['data']['data'];
+        (data : any[]) => {
+          this.Companies = data;
         }
       );
     }
@@ -317,7 +314,6 @@ export class InsertCompanyComponent implements OnInit {
         cancelButtonText: 'No, don not create '
       }).then((result) => {
         if (result.value) {
-          console.log(inputCompanyData)
           this.loading = true;
           this.companyApi.insertCompany(inputCompanyData).subscribe(data => {
             this.getCompanyIsActive();

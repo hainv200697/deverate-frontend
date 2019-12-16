@@ -287,10 +287,10 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   getAllRank(status: boolean) {
-    this.rankApi.getAllRank(status).subscribe(
-      (data) => {
+    this.rankApi.getAllRank(status,this.companyId).subscribe(
+      (data : any[]) => {
         let tmp = []
-        tmp = data['data']['data'];
+        tmp = data;
         for (var i = 0; i < tmp.length; i++) {
           if (tmp[i].name == "DEV0") {
             tmp.splice(i, 1);
@@ -734,68 +734,9 @@ export class ManageConfigurationComponent implements OnInit {
     }
   }
 
-  onChangeSampleConfig(value) {
-    this.inputConfiguration = {};
-    this.selectedItems = [];
-    if (value == "none") {
-      this.inputConfiguration = option0;
-      this.selectedItems = option0.selectedItems;
-      this.isSampleConfig = false;
-    }
-    else if (value == 1) {
-      this.inputConfiguration = (new Object(
-        {
-          duration: option1.duration,
-          title: option1.title,
-          totalQuestion: option1.totalQuestion,
-          testOwnerId: option1.testOwnerId,
-          type: option1.type,
-        }
-      ));
-      this.catalogueList.forEach(x => {
-        this.selectedItems.push(new Object(
-          {
-            catalogueId: x.catalogueId,
-            description: x.description,
-            isActive: x.isActive,
-            name: x.name,
-            weightPoint: x.weightPoint,
-          }
-        ));
-      });
-      for (var i = 0; i < 3; i++) {
-        this.selectedItems[i].weightPoint = option1.selectedItems[i].weightPoint;
-      }
-      this.point = Point;
-      this.isSampleConfig = true;
-    }
-    else if (value == 2) {
-      this.inputConfiguration = (new Object(
-        {
-          duration: option2.duration,
-          title: option2.title,
-          totalQuestion: option2.totalQuestion,
-          testOwnerId: option2.testOwnerId,
-          type: option2.type,
-        }
-      ));
-      this.catalogueList.forEach(x => {
-        this.selectedItems.push(new Object(
-          {
-            catalogueId: x.catalogueId,
-            description: x.description,
-            isActive: x.isActive,
-            name: x.name,
-            weightPoint: x.weightPoint,
-          }
-        ));
-      });
-      for (var i = 0; i < 4; i++) {
-        this.selectedItems[i].weightPoint = option2.selectedItems[i].weightPoint;
-      }
-      this.point = Point;
-      this.isSampleConfig = true;
-    }
+  cloneConfig(configId){
+    console.log(configId)
+    
   }
 
   viewTest(id) {

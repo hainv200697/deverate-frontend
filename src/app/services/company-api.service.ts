@@ -26,7 +26,7 @@ export class CompanyApiService {
 
     insertCompany(CompanyModel) {
         const API = 'CompanyAPI/CreateCompany';
-        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE+ API, CompanyModel);
+        return this.httpClient.post(this.URL + AppSettings.ROUTE_AUTH + API, CompanyModel);
     }
 
     updateCompany(CompanyModel) {
