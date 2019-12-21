@@ -65,13 +65,13 @@
                                             *ngFor="let answer of answerForm.controls.answers.controls; let i=index">
                                             <h5 class="card-title">Answer {{i + 1}}</h5>
                                             <div [formGroup]="answer" class="form-row">
-                                                <div class="form-group col-10">
+                                                <div class="form-group col-9">
                                                     <label>Answer</label>
                                                     <input type="text" formControlName="answer1"
                                                         placeholder="Input answer {{i+1}}"
                                                         class="answer-input form-control ans-{{i}}" />
                                                 </div>
-                                                <div class="form-group col-1">
+                                                <div class="form-group col-2">
                                                     <label>Mark</label>
                                                     <input type="number" formControlName="Percent"
                                                         class="form-control answer-input mark-{{i}}" />
@@ -121,7 +121,7 @@
                                                     {{q.answer1}}
                                                 </td>
                                                 <td class="col-md-3">
-                                                    {{q.point}}
+                                                    {{q.Percent}}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -214,7 +214,7 @@
                                                 {{item.answer1}}
                                             </td>
                                             <td class="col-md-3">
-                                                {{item.point}}
+                                                {{item.Percent}}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -391,7 +391,7 @@
                         <!-- <sv-default-sorter by='createBy'>Create By</sv-default-sorter>
                         </th> -->
                         <th class="col-md-1 text-center" scope="col">
-                            <sv-default-sorter by='maxPoint'>Max Point</sv-default-sorter>
+                            <sv-default-sorter by='point'>Point</sv-default-sorter>
                         </th>
                         <th class="text-center col-md-1" scope="col">Status
                             <div ngbDropdown class="d-inline-block dropdown">
@@ -416,7 +416,7 @@
                         <td class="text-center col-md-3">{{catalogueName}}</td>
                         <td class="text-center col-md-4">{{q.question1}}</td>
                         <!-- <td class="text-center col-md-1">{{q.fullname}}</td> -->
-                        <td class="text-center col-md-1">{{q.maxPoint}}</td>
+                        <td class="text-center col-md-1">{{q.point}}</td>
                         <td class="text-center col-md-1" [hidden]="q.isActive==true">
                             <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
                         </td>

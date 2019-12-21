@@ -58,7 +58,7 @@
                         <sv-default-sorter by='Name'>Answer</sv-default-sorter>
                     </th>
                     <th class="col-md-4 text-center" scope="col">
-                        <sv-default-sorter by='Point'>Point</sv-default-sorter>
+                        <sv-default-sorter by='Point'>Percent</sv-default-sorter>
                     </th>
                     <th class="col-md-1 text-center" scope="col">Status
                             <div ngbDropdown class="d-inline-block dropdown">
@@ -81,7 +81,7 @@
                         </label>
                     </td>
                     <td class="col-md-4 text-center">{{ item.answer }}</td>
-                    <td class="col-md-4 text-center">{{ item.point }}</td>
+                    <td class="col-md-4 text-center">{{ item.percent }}</td>
                     <td class="text-center col-md-1" [hidden]="item.isActive==true">
                         <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
                     </td>

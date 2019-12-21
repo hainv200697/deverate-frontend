@@ -14,6 +14,7 @@ declare var $: any;
 import * as XLSX from 'ts-xlsx';
 import { AnswerModel } from '../../models/answer-model';
 import { QuestionModel } from '../../models/question-model';
+import { QuestionDefaultModel } from 'src/app/models/question-default-model';
 @Component({
     selector: 'app-question-default',
     templateUrl: './question-default.component.html',
@@ -65,7 +66,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
     // inscrease Question
     insQuestion = {};
     insAnswer = [];
-    listInsert: Array<QuestionModel> = [];
+    listInsert: Array<QuestionDefaultModel> = [];
     // update Question
     updQuestion = {};
     updAnswer = [];
@@ -124,6 +125,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
             this.allError =[];
             let existedQues: string[] = [];
             list = await this.readExcel();
+            console.log(list);
             var valueArr = list.map(function (item) {
                 var existItem = listQues.some(Question => Question == item.Question);
                 if (existItem) {
@@ -151,10 +153,11 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 this.message = [];
                 let errorRow = {};
                 ind = ind + 1;
-                const questionObj = new QuestionModel();
+                const questionObj = new QuestionDefaultModel();
                 this.listAnswer = [];
                 questionObj.point = element['Point'];
-                questionObj.question1 = element['Question'].trim();
+                questionObj.question = element['Question'].trim();
+                questionObj.catalogueDefaultId = this.id;
                 questionObj.isActive = true;
                 if (element['Question'] == null) {
                     this.message.push("Question at # " + ind + " is blank");
@@ -218,6 +221,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 if(this.message.length > 0){
                    this.allError.push(errorRow);
                 }
+                console.log(questionObj);
                 this.listInsert.push(questionObj);
             });
         } catch (err) {
@@ -260,7 +264,18 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 $('#ins_question_question').focus();
                 return;
             }
-
+            const point = this.insQuestion['point'];
+            if(point == null || point == undefined){
+                this.toastr.error('Message', 'Point of question can not be blank!');
+                $('#ins_question_point').css('border-color', 'red');
+                $('#ins_question_point').focus();
+                return;
+            }else if(point <1 || point >20){
+                this.toastr.error('Message', 'Point of question must be in range from 1 to 20!');
+                $('#ins_question_point').css('border-color', 'red');
+                $('#ins_question_point').focus();
+                return;
+            }
 
             let i = -1;
             let checkDup=[];
@@ -371,6 +386,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 this.stepper.next();
                 const data = JSON.stringify(this.listInsert);
                 this.insertQuestion = JSON.parse(data);
+                console.log(this.insertQuestion);
             }
         }
         else{
