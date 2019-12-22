@@ -15,6 +15,7 @@ import * as XLSX from 'ts-xlsx';
 import { AnswerModel } from '../../models/answer-model';
 import { QuestionModel } from '../../models/question-model';
 import { QuestionDefaultModel } from 'src/app/models/question-default-model';
+import { AnswerDefaultModel } from 'src/app/models/answer-default-model';
 @Component({
     selector: 'app-question-default',
     templateUrl: './question-default.component.html',
@@ -46,7 +47,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
     create = 0;
     listDataExcel = [];
     eachAnswer = {};
-    listAnswer: Array<AnswerModel> = [];
+    listAnswer: Array<AnswerDefaultModel> = [];
     // stepper
     private stepper: Stepper;
     selectedAll: any;
@@ -125,7 +126,6 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
             this.allError =[];
             let existedQues: string[] = [];
             list = await this.readExcel();
-            console.log(list);
             var valueArr = list.map(function (item) {
                 var existItem = listQues.some(Question => Question == item.Question);
                 if (existItem) {
@@ -163,7 +163,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                     this.message.push("Question at # " + ind + " is blank");
                 }
                 for (let i = 1; i <= 6; i++) {
-                    const answerObj = new AnswerModel();
+                    const answerObj = new AnswerDefaultModel();
                     answerObj.answer = element['Answer_' + i];
                     answerObj.point = element['Point_' + i];
                     answerObj.isActive = true;
@@ -221,7 +221,6 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 if(this.message.length > 0){
                    this.allError.push(errorRow);
                 }
-                console.log(questionObj);
                 this.listInsert.push(questionObj);
             });
         } catch (err) {
@@ -234,7 +233,6 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
         if (key === 'ins') {
 
             this.insAnswer = this.answerForm.controls['answers'].value;
-            console.log(this.insAnswer);
             let check = true;
             this.insAnswer.forEach(element => {
                 element['isActive'] = true;
@@ -280,7 +278,6 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
             let i = -1;
             let checkDup=[];
             this.insAnswer.forEach(element => {
-                console.log(element);
                 i++;
                 if (check === true) {
                     const ans = element['answer'];
@@ -385,8 +382,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 this.index = 2;
                 this.stepper.next();
                 const data = JSON.stringify(this.listInsert);
-                this.insertQuestion = JSON.parse(data);
-                console.log(this.insertQuestion);
+                this.insertQuestion = JSON.parse(data); 
             }
         }
         else{
@@ -551,7 +547,6 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                     this.questionService.removeQuestionDefault(this.updateStatus).subscribe(
                         (results) => {
                             this.selectedAll =false;
-                            console.log(this.iconIsActive);
                             this.getQuestionById(this.iconIsActive);
                             this.toastr.success("Changed success");
                         }
@@ -604,7 +599,6 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
         this.insQuestion['isActive'] = true;
         this.insQuestion['catalogueDefaultId'] = this.id;
         this.insertQuestion=[];
-        console.log(this.insQuestion);
         this.insertQuestion.push(this.insQuestion);
         this.questionService.insertQuestionDefault(this.insertQuestion).subscribe(
             (results) => {
@@ -633,25 +627,26 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
     }
 
     async addQuestionByExcel() {
-        this.questionService.insertQuestionDefault(this.insertQuestion).subscribe(
-            (results) => {
-                this.getQuestionById(this.iconIsActive);
-                this.toastr.success(results['message']);
-                this.closeModal();
-            },
-            (error) => {
-                if (error.status == 0) {
-                    this.toastr.error("System is not available");
-                }
-                if (error.status == 400) {
-                    this.toastr.error("Input is invalid");
-                }
-                if (error.status == 500) {
-                    this.toastr.error("System error");
-                }
-                this.loading = false;
-            }
-        );
+        console.log(this.insertQuestion);
+        // this.questionService.insertQuestionDefault(this.insertQuestion).subscribe(
+        //     (results) => {
+        //         this.getQuestionById(this.iconIsActive);
+        //         this.toastr.success(results['message']);
+        //         this.closeModal();
+        //     },
+        //     (error) => {
+        //         if (error.status == 0) {
+        //             this.toastr.error("System is not available");
+        //         }
+        //         if (error.status == 400) {
+        //             this.toastr.error("Input is invalid");
+        //         }
+        //         if (error.status == 500) {
+        //             this.toastr.error("System error");
+        //         }
+        //         this.loading = false;
+        //     }
+        // );
     }
 
     updateQuestionSubmit() {
@@ -689,7 +684,6 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
         this.iconIsActive = status;
         this.questionService.getQuestionDefault(this.id, this.iconIsActive).subscribe(
             (data: any) => {
-                console.log(data);
                 this.loading = false;
                 this.allQuestions = data;
                 this.selected = false;
@@ -726,7 +720,6 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
     }
 
     viewAnswer(item) {
-        console.log(item);
         this.router.navigate(['/manage-answer-default/', item['QuestionDefaultId']]);
     }
 

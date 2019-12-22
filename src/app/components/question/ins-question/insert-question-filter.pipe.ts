@@ -8,7 +8,7 @@ export class InsertQuestionFilterPipe implements PipeTransform {
       return value.filter(item => {
           return (
             (item.question1.search(searchText) !== -1) ||
-            (item.maxPoint.toString().search(searchText) !== -1)
+            (item.point.toString().search(searchText) !== -1)
           );
       });
     }

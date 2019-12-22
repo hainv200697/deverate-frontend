@@ -1,4 +1,5 @@
 import { AnswerModel } from './answer-model';
+import { AnswerDefaultModel } from './answer-default-model';
 
 export class QuestionDefaultModel{
     DefaultQuestionId : number
@@ -6,5 +7,5 @@ export class QuestionDefaultModel{
     question : string
     point: number
     isActive : boolean
-    answer :Array<AnswerModel> = []
+    answer :Array<AnswerDefaultModel> = []
 }

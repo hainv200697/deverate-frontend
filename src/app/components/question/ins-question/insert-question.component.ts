@@ -164,13 +164,13 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 }
                 for (let i = 1; i <= 6; i++) {
                     const answerObj = new AnswerModel();
-                    answerObj.answer = element['Answer_' + i];
-                    answerObj.point = element['Point_' + i];
+                    answerObj.answer1 = element['Answer_' + i];
+                    answerObj.percent = element['Point_' + i];
                     answerObj.isActive = true;
                     this.listAnswer.push(answerObj);
                 }
                 for (let i = this.listAnswer.length - 1; i >= 0; i--) {
-                    if (this.listAnswer[i].answer == null && this.listAnswer[i].point == null) {
+                    if (this.listAnswer[i].answer1 == null && this.listAnswer[i].percent == null) {
                         this.listAnswer.splice(i, 1);
                     }
                     else {
@@ -180,7 +180,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 let ans = [];
                 let dupAns : string[] = []
                 this.listAnswer.map(function (item) {
-                    var existItem = ans.find(x => x.answer1 == item.answer);
+                    var existItem = ans.find(x => x.answer1 == item.answer1);
                     if (existItem){
                         dupAns.push("Question #" + ind + " has duplicated answer");
                     }else{
@@ -196,22 +196,22 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 }
                 this.listAnswer.forEach((element, index) => {
                     index++;
-                    if (element.answer === null || element.answer === undefined) {
+                    if (element.answer1 === null || element.answer1 === undefined) {
                         this.message.push("Answer #" + index +" is blank");
                         this.checkFile = false;
-                    } else if (element.answer.trim().length < 3 || element.answer.trim().length > 200) {
+                    } else if (element.answer1.trim().length < 3 || element.answer1.trim().length > 200) {
                         this.message.push("Answer #" + index +" must be in range from 3 to 200 characters ");
                         this.checkFile = false;
                     }
-                    if (element.point === null || element.point === undefined) {
-                        this.message.push("Point of answer #" + index +  " is blank!");
+                    if (element.percent === null || element.percent === undefined) {
+                        this.message.push("Percent of answer #" + index +  " is blank!");
                         this.checkFile = false;
-                    } else if (isNaN(element.point)) {
-                        this.message.push("Point of answer #" + index + " is not a number!");
+                    } else if (isNaN(element.percent)) {
+                        this.message.push("Percent of answer #" + index + " is not a number!");
                         this.checkFile = false;
                     }
-                    else if (element.point < 0 || element.point > 100) {
-                        this.message.push("Point of answer #" + index + " must be in range from 1 to 6! ");
+                    else if (element.percent < 0 || element.percent > 100) {
+                        this.message.push("Percent of answer #" + index + " must be in range from 1 to 6! ");
                         this.checkFile = false;
                     }
                 });

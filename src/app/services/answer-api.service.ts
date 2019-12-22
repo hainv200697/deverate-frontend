@@ -6,8 +6,8 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class AnswerApiService {
-    URL = 'http://localhost:9000/';
-    // URL = AppSettings.BASEURL;
+    // URL = 'http://localhost:9000/';
+    URL = AppSettings.BASEURL;
     constructor(
         private httpClient: HttpClient,
     ) { }
