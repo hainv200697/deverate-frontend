@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 
 import { Component, OnInit } from '@angular/core';
 import { Router,  } from '@angular/router';
@@ -37,6 +38,7 @@ export class RankComponent implements OnInit {
   searchText;
   check;
   companyId = localStorage.getItem("CompanyId");
+  rankData = [];
 
   ngOnInit() {
     this.restartData();
@@ -93,9 +95,10 @@ export class RankComponent implements OnInit {
   getRank(isActive) {
     this.loading = true;
     this.rankApi.getAllRank(isActive,this.companyId).subscribe(
-      (data : any[]) => {
+      (data) => {
         this.loading = false;
         this.listRank = data;
+        
         this.selectedAll = false;
       },
       (error) => {
@@ -123,6 +126,7 @@ export class RankComponent implements OnInit {
     this.updateRank['companyRankId'] = item.companyRankId;
     this.updateRank['name'] = item.name;
     this.updateRank['isActive'] = item.isActive;
+    this.updateRank['position'] = item.position;
     this.modalService.open(content, {backdrop: 'static',ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
     }).catch((error) => {
     });
@@ -132,12 +136,37 @@ export class RankComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
-  Save(){
-    this.validate();
-    if (this.check == false) {
-      return;
+  addRankToList(){
+    this.listRank.push({
+      'companyId' : localStorage.getItem('CompanyId'),
+      'name' : this.inputRank.name,
+      'isActive' : true,
+    })
+    this.inputRank.name = '';
+  }
+
+  swap(array:any[], x: any, y: any) {
+    var b = array[x];
+    array[x] = array[y];
+    array[y] = b;
+  }
+
+  up(index){
+    this.swap(this.listRank, index, index - 1);
+  }
+
+  down(index){
+    this.swap(this.listRank, index, index + 1);
+  }
+  
+  removeRank(index){
+    this.listRank.splice(index,1);
+  }
+  saveChange(){
+    // this.validate();
+    for(var i = 0 ; i < this.listRank.length ; i++){
+      this.listRank[i].position = i + 1;
     }
-    else {
     Swal.fire({
       title: 'Are you sure?',
       text: 'The rank will be create!',
@@ -148,8 +177,7 @@ export class RankComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.loading = true;
-        console.log(this.inputRank)
-        this.rankApi.insertRank(this.inputRank).subscribe(data => {
+        this.rankApi.insertRank(this.listRank).subscribe(data => {
           this.closeModal();
           this.restartData();
           this.toast.success(data['message']);
@@ -169,7 +197,6 @@ export class RankComponent implements OnInit {
         });
       }
     });
-  }
   }
 
   Update(){
@@ -214,7 +241,6 @@ export class RankComponent implements OnInit {
       }).then((result) => {
         if (result.value) {
           this.loading = true;
-          console.log(this.updateStatus)
           this.rankApi.changeStatus(this.updateStatus, status).subscribe(data => {
             this.getRank(status);
             this.closeModal();
@@ -266,36 +292,36 @@ export class RankComponent implements OnInit {
     }
   }
 
-  validate(){
-    this.check = true;
-    this.inputRank['name'] = $.trim(this.inputRank['name'].replace(/\s\s+/g, ' ')).toUpperCase();
-    $("#rankName").css("border-color", "");
-    if (this.inputRank['name'] == "" || this.inputRank['name'] == undefined) {
-      this.toast.error('Please input rank name');
-      $("#rankName").css("border-color", "red");
-      this.check = false;
-    }
-    else if (this.inputRank['name'].length < 3) {
-      this.toast.error('Please input rank name min 3 characters');
-      $("#rankName").css("border-color", "red");
-      this.check = false;
-    }
-  }
+  // validate(){
+  //   this.check = true;
+  //   this.inputRank['name'] = $.trim(this.inputRank['name'].replace(/\s\s+/g, ' ')).toUpperCase();
+  //   $("#rankName").css("border-color", "");
+  //   if (this.inputRank['name'] == "" || this.inputRank['name'] == undefined) {
+  //     this.toast.error('Please input rank name');
+  //     $("#rankName").css("border-color", "red");
+  //     this.check = false;
+  //   }
+  //   else if (this.inputRank['name'].length < 3) {
+  //     this.toast.error('Please input rank name min 3 characters');
+  //     $("#rankName").css("border-color", "red");
+  //     this.check = false;
+  //   }
+  // }
 
-  validateRankName(){
-    this.inputRank['name'] = $.trim(this.inputRank['name'].replace(/\s\s+/g, ' ')).toUpperCase();
-    $("#rankName").css("border-color", "");
-    if (this.inputRank['name'] == "" || this.inputRank['name'] == undefined) {
-      this.toast.error('Please input rank name');
-      $("#rankName").css("border-color", "red");
-      return false;
-    }
-    else if (this.inputRank['name'].length < 3) {
-      this.toast.error('Please input rank name min 3 characters');
-      $("#rankName").css("border-color", "red");
-      return false;
-    }
-  }
+  // validateRankName(){
+  //   this.inputRank['name'] = $.trim(this.inputRank['name'].replace(/\s\s+/g, ' ')).toUpperCase();
+  //   $("#rankName").css("border-color", "");
+  //   if (this.inputRank['name'] == "" || this.inputRank['name'] == undefined) {
+  //     this.toast.error('Please input rank name');
+  //     $("#rankName").css("border-color", "red");
+  //     return false;
+  //   }
+  //   else if (this.inputRank['name'].length < 3) {
+  //     this.toast.error('Please input rank name min 3 characters');
+  //     $("#rankName").css("border-color", "red");
+  //     return false;
+  //   }
+  // }
 
 
 }

@@ -12,12 +12,12 @@ export class RankApiService {
     getAllRank(isActive,companyId) {
         const param = new HttpParams().set('isActive', isActive).set('companyId',companyId);
         const API = 'RankApi/GetAllCompanyRank';
-        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
+        return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
 
-    insertRank(rankModel){
+    insertRank(listRankModel){
         const API = 'RankApi/CreateCompanyRank';
-        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API, rankModel);
+        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API, listRankModel);
     }
 
     updateRank(rankModel){
