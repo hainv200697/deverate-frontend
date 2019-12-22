@@ -40,6 +40,7 @@ export class ResultComponent implements OnInit {
   roleName;
   countApi = 0;
 
+
   constructor(private rankApi: RankApiService,
     private statisticApi: StatisticApiService,
     private route: ActivatedRoute,
@@ -62,18 +63,17 @@ export class ResultComponent implements OnInit {
     this.statisticApi.GetAccountByTestId(testId).subscribe(
       (data) => {
         this.accountInfo = data;
-        console.log(data);
         if (this.accountInfo.applicantId != undefined &&
-           this.accountInfo.applicantId != localStorage.getItem('applicantId') &&
-           localStorage.getItem('Role') != 'Test Owner'
-           ) {
+          this.accountInfo.applicantId != localStorage.getItem('applicantId') &&
+          localStorage.getItem('Role') != 'Test Owner'
+        ) {
           this.router.navigate(['**']);
           return;
         }
-        if (this.accountInfo.AccountId != undefined && 
+        if (this.accountInfo.AccountId != undefined &&
           this.accountInfo.AccountId != localStorage.getItem('AccountId') &&
           localStorage.getItem('Role') != 'Test Owner'
-          ) {
+        ) {
           this.router.navigate(['**']);
           return;
         }
@@ -115,7 +115,6 @@ export class ResultComponent implements OnInit {
         this.pointRank = data['data']['data'].configurationRanks;
         this.catalogueTable = data['data']['data'].catalogueInConfigs;
         let dialValue = data['data']['data'].rank;
-        console.log(dialValue)
 
         for (var i = 0; i < this.catalogueInRanks.length; i++) {
           var chartDateElement = {
@@ -137,126 +136,56 @@ export class ResultComponent implements OnInit {
             for (var z = 0; z < this.catalogueOverpoint.length; z++) {
               if (this.catalogue[j].catalogueId == this.catalogueOverpoint[z].catalogueId) {
                 this.catalogue[j].overallPoint = this.catalogueOverpoint[z].overallPoint;
-                this.catalogueTable[j].overallPoint = this.catalogueOverpoint[z].overallPoint;
               }
             }
           }
           this.radarChartData.push(chartDateElement);
         }
-
-        for (var a = 0; a < this.catalogue.length; a++) {
-          this.radarChartLabels.push(this.catalogue[a].name);
-          this.radarChartData[0].data.push(this.catalogue[a].overallPoint)
+        for (var a = 0; a < this.catalogueOverpoint.length; a++) {
+          this.radarChartLabels.push(this.catalogueOverpoint[a].name);
+          this.radarChartData[0].data.push(this.catalogueOverpoint[a].overallPoint)
         }
-        console.log(this.radarChartData);
 
-        this.datasource = {
-          "chart": {
-            "caption": "",
-            "baseFontSize": "15",
-            "gaugeOuterRadius": "140",
-            "gaugeInnerRadius": "90",
-            "lowerLimit": "0",
-            "upperLimit": "100",
-            "showValue": "1",
-            "numberSuffix": "",
-            "theme": "fusion",
-            "showToolTip": "1",
-            // "theme": "fint",
-            "showGaugeBorder": "1",
-            "pivotFillType": "linear",
-            "chartBottomMargin": "30",
-            "showTickMarks": "0",
-            "showTickValues": "0"
+        this.fusionChartAnotation.groups[0].items[1].label = "Overall point:" + this.statistic.point;
+        var dataTest = {
+          chart: this.fusionchart,
+          colorRange: {
+            color: [],
           },
-          "colorRange": {
-            "color": [{
-              "minValue": data['data']['data'].configurationRanks[3].point,
-              "maxValue": data['data']['data'].configurationRanks[2].point,
-              "code": "#F2726F",
-            }, {
-              "minValue": data['data']['data'].configurationRanks[2].point,
-              "maxValue": data['data']['data'].configurationRanks[1].point,
-              "code": "#FFC533",
-            }, {
-              "minValue": data['data']['data'].configurationRanks[1].point,
-              "maxValue": data['data']['data'].configurationRanks[0].point,
-              "code": "#00CC00",
-            }, {
-              "minValue": data['data']['data'].configurationRanks[0].point,
-              "maxValue": data['data']['data']['point'],
-              "code": "#62B58F",
-            },
-            ]
+          trendPoints: {
+            point: [],
           },
-          "trendPoints": {
-            "point": [
-              {
-                "startValue": data['data']['data'].configurationRanks[3].point,
-                "color": "#0075c2",
-                "dashed": "3",
-                "displayValue": "dev0",
-              },
-              {
-                "startValue": data['data']['data'].configurationRanks[2].point,
-                "color": "#0075c2",
-                "dashed": "3",
-                "displayValue": "dev1",
-              },
-              {
-                "startValue": data['data']['data'].configurationRanks[1].point,
-                "color": "#0075c2",
-                "dashed": "1",
-                "displayValue": "dev2",
-              },
-              {
-                "startValue": data['data']['data'].configurationRanks[0].point,
-                "color": "#0075c2",
-                "dashed": "2",
-                "displayValue": "dev3"
-              },
-            ]
+          dials: {
+            dial: [{
+              value: this.statistic.point,
+              showValue: "0",
+              valueFontSize: "25"
+            }],
           },
-          "dials": {
-            "dial": [{
-              "value": data['data']['data']['point'],
-              "showValue": "0",
-              "valueFontSize": "25"
-
-            }]
-          },
-          "annotations": {
-            "origw": "100",
-            "origh": "100",
-            "autoscale": "1",
-            "showBelow": "0",
-            "groups": [{
-              "id": "arcs",
-              "items": [
-                {
-                  "id": "store-cs-bg",
-                  "type": "",
-                  "x": "$chartCenterX-130",
-                  "y": "$chartEndY - 22",
-                  "tox": "$chartCenterX + 150",
-                  "toy": "$chartEndY - 2",
-                  "fillcolor": "#0075c2"
-                },
-                {
-                  "id": "state-cs-text",
-                  "type": "Text",
-                  "color": "black",
-                  "label": "Overall point:" + (data['data']['data']['point']),
-                  "fontSize": "18",
-                  "background-color": "#ffffff",
-                  "align": "center",
-                  "x": "$chartCenterX",
-                  "y": "$chartEndY - 12"
-                }
-              ]
-            }]
-          }
+          annotations: this.fusionChartAnotation,
         }
+        this.pointRank.unshift({
+          rank : 'Not ranked',
+          point: 0,
+        })
+        this.pointRank.push({
+          point: 100,
+        })
+        for (var i = 0; i < this.pointRank.length - 1; i++) {
+
+            dataTest.colorRange.color.push({
+              minValue: this.pointRank[i].point,
+              maxValue : this.pointRank[i + 1].point,
+              code: this.fusionChartColor[i],
+            })
+
+          dataTest.trendPoints.point.push({
+            startValue: this.pointRank[i].point,
+            color: "#0075c2",
+            displayValue: this.pointRank[i].rank,
+          })
+        }
+        this.datasource = dataTest
 
         this.countApi++;
         if (this.countApi == 2) {
@@ -338,39 +267,55 @@ export class ResultComponent implements OnInit {
 
   public radarChartType: string = 'radar';
 
-  public lineChartOptions: any = {
-    responsive: true
-  };
-  public lineChartColors: Array<any> = [
-    {
-      // grey
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(148,159,177,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    },
-    {
-      // dark grey
-      backgroundColor: 'rgba(77,83,96,0.2)',
-      borderColor: 'rgba(77,83,96,1)',
-      pointBackgroundColor: 'rgba(77,83,96,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(77,83,96,1)'
-    },
-    {
-      // grey
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(148,159,177,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    }
-  ];
-  public lineChartLegend: boolean;
-  public lineChartType: string;
-  // console.log(e);
+  public fusionchart: any = {
+    "caption": "",
+    "baseFontSize": "15",
+    "gaugeOuterRadius": "140",
+    "gaugeInnerRadius": "90",
+    "lowerLimit": "0",
+    "upperLimit": "100",
+    "showValue": "1",
+    "numberSuffix": "",
+    "theme": "fusion",
+    "showToolTip": "1",
+    "showGaugeBorder": "1",
+    "pivotFillType": "linear",
+    "chartBottomMargin": "30",
+    "showTickMarks": "0",
+    "showTickValues": "0"
+  }
+
+  public fusionChartColor = ['#F2726F', '#FFC533', '#00CC00', '#62B58F','black','blue','gray'];
+
+  public fusionChartAnotation: any = {
+    origw: 100,
+    origh: 100,
+    autoscale: 1,
+    showBelow: 0,
+    groups: [{
+      id: "arcs",
+      items: [
+        {
+          id: "store-cs-bg",
+          type: "",
+          x: "$chartCenterX-130",
+          y: "$chartEndY - 22",
+          tox: "$chartCenterX + 150",
+          toy: "$chartEndY - 2",
+          fillcolor: "#0075c2"
+        },
+        {
+          id: "state-cs-text",
+          type: "Text",
+          color: 'black',
+          label: "",
+          fontSize: "18",
+          backgroundcolor: "#ffffff",
+          align: "center",
+          x: "$chartCenterX",
+          y: "$chartEndY - 12"
+        }
+      ]
+    }]
+  }
 }
