@@ -182,13 +182,12 @@ export class EmployeeComponent implements OnInit {
                     element.Gender = false;
                 }
                 this.insEmployee['companyId'] = this.companyId;
-                this.insEmployee['fullname'] = element.Fullname.trim().toUpperCase;
-                this.insEmployee['email'] = element.Email.trim();
-                this.insEmployee['fullname'] = element.Fullname.trim();
+                this.insEmployee['fullname'] = $.trim(element.Fullname.replace(/\s\s+/g, ' ')).toUpperCase;
+                this.insEmployee['email'] = $.trim(element.Email.replace(/\s\s+/g, ' '));
                 this.insEmployee['role'] = element.Role;
                 this.insEmployee['gender'] = element.Gender;
-                this.insEmployee['phone'] = phone.trim();
-                this.insEmployee['address'] = element.Address.trim();
+                this.insEmployee['phone'] = $.trim(phone.replace(/\s\s+/g, ' '));
+                this.insEmployee['address'] =$.trim(element.Address.replace(/\s\s+/g, ' '));
                 this.employeeList.forEach(element => {
                     if (this.insEmployee['email'] === element.email) {
                         this.message.push("Email at #"+ index+" is existed");
@@ -609,7 +608,7 @@ export class EmployeeComponent implements OnInit {
     }
 
     validateEmail() {
-        let email = this.insEmployee['email'].trim();
+        let email = $.trim(this.insEmployee['email'].replace(/\s\s+/g, ' '));
         if (email == '' || email == null || email == undefined) {
             this.toastr.error('Email can not blank');
             document.getElementById('ins_manage_email').style.borderColor = 'red';

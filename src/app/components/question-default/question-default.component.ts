@@ -156,7 +156,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 const questionObj = new QuestionDefaultModel();
                 this.listAnswer = [];
                 questionObj.point = element['Point'];
-                questionObj.question = element['Question'].trim();
+                questionObj.question = $.trim(element['Question'].replace(/\s\s+/g, ' '));
                 questionObj.catalogueDefaultId = this.id;
                 questionObj.isActive = true;
                 if (element['Question'] == null) {
@@ -165,12 +165,12 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 for (let i = 1; i <= 6; i++) {
                     const answerObj = new AnswerDefaultModel();
                     answerObj.answer = element['Answer_' + i];
-                    answerObj.point = element['Point_' + i];
+                    answerObj.percent = element['Point_' + i];
                     answerObj.isActive = true;
                     this.listAnswer.push(answerObj);
                 }
                 for (let i = this.listAnswer.length - 1; i >= 0; i--) {
-                    if (this.listAnswer[i].answer == null && this.listAnswer[i].point == null) {
+                    if (this.listAnswer[i].answer == null && this.listAnswer[i].percent == null) {
                         this.listAnswer.splice(i, 1);
                     }
                     else {
@@ -196,21 +196,22 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 }
                 this.listAnswer.forEach((element, index) => {
                     index++;
-                    if (element.answer === null || element.answer === undefined) {
+                    const answer = $.trim(element.answer.replace(/\s\s+/g, ' '));
+                    if (answer === null || answer === undefined) {
                         this.message.push("Answer #" + index +" is blank");
                         this.checkFile = false;
-                    } else if (element.answer.trim().length < 3 || element.answer.trim().length > 200) {
+                    } else if (answer.length < 3 || answer.length > 200) {
                         this.message.push("Answer #" + index +" must be in range from 3 to 200 characters ");
                         this.checkFile = false;
                     }
-                    if (element.point === null || element.point === undefined) {
+                    if (element.percent === null || element.percent === undefined) {
                         this.message.push("Percent of answer #" + index +  " is blank!");
                         this.checkFile = false;
-                    } else if (isNaN(element.point)) {
+                    } else if (isNaN(element.percent)) {
                         this.message.push("Percent of answer #" + index + " is not a number!");
                         this.checkFile = false;
                     }
-                    else if (element.point < 0 || element.point > 100) {
+                    else if (element.percent < 0 || element.percent > 100) {
                         this.message.push("Percent of answer #" + index + " must be in range from 0 to 100! ");
                         this.checkFile = false;
                     }
@@ -245,18 +246,18 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 $('#ins_question_cate_id').focus();
                 return;
             }
-            const question = this.insQuestion['question'].trim();
+            const question = $.trim(this.insQuestion['question'].replace(/\s\s+/g, ' '));
             if (question === '' || question === undefined || question === null) {
                 this.toastr.error('Message', 'Question can not be blank!');
                 $('#ins_question_question').css('border-color', 'red');
                 $('#ins_question_question').focus();
                 return;
-            }else if (question.trim().length < 3) {
+            }else if (question.length < 3) {
                 this.toastr.error('Message', 'question must be more than 3 characters!');
                 $('#ins_question_question').css('border-color', 'red');
                 $('#ins_question_question').focus();
                 return;
-            }else if (question.trim().length > 200) {
+            }else if (question.length > 200) {
                 this.toastr.error('Message', 'question must be less than 200 characters!');
                 $('#ins_question_question').css('border-color', 'red');
                 $('#ins_question_question').focus();
@@ -338,14 +339,14 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 $('#upd_question_cate_id').focus();
                 return;
             }
-            const question = this.updQuestion['question'];
+            const question = $.trim(this.updQuestion['question'].replace(/\s\s+/g, ' '));
             if (question === '' || question === undefined || question === null) {
                 this.toastr.error('Message', 'Question can not be blank!');
                 $('#upd_question_question').css('border-color', 'red');
                 $('#upd_question_question').focus();
                 return;
             }
-            else if (question.trim().length < 3) {
+            else if (question.length < 3) {
                 this.toastr.error('Message', 'question must be more than 3 characters!');
                 $('#upd_question_question').css('border-color', 'red');
                 $('#upd_question_question').focus();
@@ -627,26 +628,25 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
     }
 
     async addQuestionByExcel() {
-        console.log(this.insertQuestion);
-        // this.questionService.insertQuestionDefault(this.insertQuestion).subscribe(
-        //     (results) => {
-        //         this.getQuestionById(this.iconIsActive);
-        //         this.toastr.success(results['message']);
-        //         this.closeModal();
-        //     },
-        //     (error) => {
-        //         if (error.status == 0) {
-        //             this.toastr.error("System is not available");
-        //         }
-        //         if (error.status == 400) {
-        //             this.toastr.error("Input is invalid");
-        //         }
-        //         if (error.status == 500) {
-        //             this.toastr.error("System error");
-        //         }
-        //         this.loading = false;
-        //     }
-        // );
+        this.questionService.insertQuestionDefault(this.insertQuestion).subscribe(
+            (results) => {
+                this.getQuestionById(this.iconIsActive);
+                this.toastr.success(results['message']);
+                this.closeModal();
+            },
+            (error) => {
+                if (error.status == 0) {
+                    this.toastr.error("System is not available");
+                }
+                if (error.status == 400) {
+                    this.toastr.error("Input is invalid");
+                }
+                if (error.status == 500) {
+                    this.toastr.error("System error");
+                }
+                this.loading = false;
+            }
+        );
     }
 
     updateQuestionSubmit() {

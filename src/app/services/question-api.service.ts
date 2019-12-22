@@ -7,8 +7,8 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class QuestionApiService {
-    URL = AppSettings.BASEURL;
-    // URL ='http://localhost:9000/';
+    // URL = AppSettings.BASEURL;
+    URL ='http://localhost:9000/';
     httpOptions = {
         headers: new HttpHeaders({
             'Content-Type': 'application/json'
@@ -16,42 +16,42 @@ export class QuestionApiService {
     };
     constructor(private httpClient: HttpClient) { }
     
-    getQuestion(id:any,companyId,status) {
+    getQuestion(id,companyId,status) {
         let param= new HttpParams().set('catalogueId',id).set('companyId',companyId).set('status',status);
         const API = 'api/Question/GetQuestionByCatalogue';
         return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API,{params :param} );
     }
 
-    insertQuestion(question: any) {
+    insertQuestion(question) {
         const API = 'api/Question/CreateQuestion';
         return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE+ API, question);
     }
 
-    updateQuestion(question: any) {
+    updateQuestion(question) {
         const API = 'api/Question/UpdateQuestion';
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE+ API, question);
     }
-    removeQuestion(question: any) {
+    removeQuestion(question) {
         const API = 'api/Question/RemoveQuestion';
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, question);
     }
 
-    getQuestionDefault(id:any,status) {
+    getQuestionDefault(id,status) {
         let param= new HttpParams().set('catalogueId',id).set('status',status);
         const API = 'api/Question/GetQuestionByCatalogueDefault';
         return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API,{params :param} );
     }
 
-    insertQuestionDefault(question: any) {
+    insertQuestionDefault(question) {
         const API = 'api/Question/CreateDefaultQuestion';
         return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE+ API, question);
     }
 
-    updateQuestionDefault(question: any) {
+    updateQuestionDefault(question) {
         const API = 'api/Question/UpdateQuestionDefault';
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE+ API, question);
     }
-    removeQuestionDefault(question: any) {
+    removeQuestionDefault(question) {
         const API = 'api/Question/RemoveQuestionDefault';
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, question);
     }

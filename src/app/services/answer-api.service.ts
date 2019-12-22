@@ -18,17 +18,17 @@ export class AnswerApiService {
         return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
 
-    insertAnswer(answer: any) {
+    insertAnswer(answer) {
         const API = 'api/Answer/CreateAnswer';
         return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API, answer);
     }
 
-    updateAnswer(answer: any) {
+    updateAnswer(answer) {
         const API = 'api/Answer/UpdateAnswer';
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, answer);
     }
 
-    disableAnswer(AnswerId: any) {
+    disableAnswer(AnswerId) {
         const API = 'api/Answer/RemoveAnswer';
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, AnswerId);
     }
@@ -38,17 +38,17 @@ export class AnswerApiService {
         return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
 
-    insertDefaultAnswer(answer: any) {
+    insertDefaultAnswer(answer) {
         const API = 'api/Answer/CreateAnswerDefault';
         return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API, answer);
     }
 
-    updateDefaultAnswer(answer: any) {
+    updateDefaultAnswer(answer) {
         const API = 'api/Answer/UpdateAnswerDefault';
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, answer);
     }
 
-    disableDefaultAnswer(AnswerId: any) {
+    disableDefaultAnswer(AnswerId) {
         const API = 'api/Answer/RemoveAnswerDefault';
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, AnswerId);
     }

@@ -136,7 +136,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             });
             list.forEach(element => {
                 this.allQuestions.forEach(ques => {
-                    if(element.Question.trim() == ques.question1){
+                    if($.trim(element.Question.replace(/\s\s+/g, ' ')) == ques.question1){
                         existedQues.push("Question  "+element.Question+" is existed");
                     }
                 });
@@ -155,10 +155,10 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 const questionObj = new QuestionModel();
                 this.listAnswer = [];
                 questionObj.point = element['Point']
-                questionObj.question1 = element['Question'].trim();
+                questionObj.question1 = $.trim(element['Question'].replace(/\s\s+/g, ' '));
                 questionObj.isActive = true;
                 questionObj.accountId = this.accountId;
-                questionObj.CompanyCatalogueId = this.id;
+                questionObj.companyCatalogueId = this.id;
                 if (element['Question'] == null) {
                     this.message.push("Question at # " + ind + " is blank");
                 }
@@ -195,11 +195,11 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                     this.checkFile = false;
                 }
                 this.listAnswer.forEach((element, index) => {
-                    index++;
-                    if (element.answer1 === null || element.answer1 === undefined) {
+                    const answer = $.trim(element.answer1.replace(/\s\s+/g, ' '));
+                    if (answer === null || answer === undefined) {
                         this.message.push("Answer #" + index +" is blank");
                         this.checkFile = false;
-                    } else if (element.answer1.trim().length < 3 || element.answer1.trim().length > 200) {
+                    } else if (answer.length < 3 || answer.length > 200) {
                         this.message.push("Answer #" + index +" must be in range from 3 to 200 characters ");
                         this.checkFile = false;
                     }
@@ -211,7 +211,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                         this.checkFile = false;
                     }
                     else if (element.percent < 0 || element.percent > 100) {
-                        this.message.push("Percent of answer #" + index + " must be in range from 1 to 6! ");
+                        this.message.push("Percent of answer #" + index + " must be in range from 0 to 100! ");
                         this.checkFile = false;
                     }
                 });
@@ -246,18 +246,18 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 $('#ins_question_cate_id').focus();
                 return;
             }
-            const question = this.insQuestion['question1'];
+            const question = $.trim(this.insQuestion['question1'].replace(/\s\s+/g, ' '));
             if (question === '' || question === undefined || question === null) {
                 this.toastr.error('Message', 'Question can not be blank!');
                 $('#ins_question_question').css('border-color', 'red');
                 $('#ins_question_question').focus();
                 return;
-            }else if (question.trim().length < 3) {
+            }else if (question.length < 3) {
                 this.toastr.error('Message', 'question must be more than 3 characters!');
                 $('#ins_question_question').css('border-color', 'red');
                 $('#ins_question_question').focus();
                 return;
-            }else if (question.trim().length > 200) {
+            }else if (question.length > 200) {
                 this.toastr.error('Message', 'question must be less than 200 characters!');
                 $('#ins_question_question').css('border-color', 'red');
                 $('#ins_question_question').focus();
@@ -328,14 +328,14 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 $('#upd_question_cate_id').focus();
                 return;
             }
-            const question = this.updQuestion['question1'];
+            const question = $.trim(this.updQuestion['question1'].replace(/\s\s+/g, ' '));
             if (question === '' || question === undefined || question === null) {
                 this.toastr.error('Message', 'Question can not be blank!');
                 $('#upd_question_question').css('border-color', 'red');
                 $('#upd_question_question').focus();
                 return;
             }
-            else if (question.trim().length < 3) {
+            else if (question.length < 3) {
                 this.toastr.error('Message', 'question must be more than 3 characters!');
                 $('#upd_question_question').css('border-color', 'red');
                 $('#upd_question_question').focus();
