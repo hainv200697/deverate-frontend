@@ -122,11 +122,8 @@ export class RankComponent implements OnInit {
     });
   }
 
-  openDetail(content, item){
-    this.updateRank['companyRankId'] = item.companyRankId;
-    this.updateRank['name'] = item.name;
-    this.updateRank['isActive'] = item.isActive;
-    this.updateRank['position'] = item.position;
+  openDetail(content, index){
+    this.updateRank = this.listRank[index]
     this.modalService.open(content, {backdrop: 'static',ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
     }).catch((error) => {
     });

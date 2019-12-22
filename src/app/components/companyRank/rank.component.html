@@ -20,7 +20,7 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
             <button type="button" class="btn btn-success save shadow-card" [hidden]="this.updateRank['isActive']==false"
-                (click)="Update()">Update</button>
+                (click)="saveChange()">Update</button>
         </div>
     </div>
 </ng-template>
@@ -148,7 +148,7 @@
                         </td>
                         <td class="text-center" style="width: 20%;">
                             <button class="btn-warning btn btn-circle shadow-item col-md-6" ngbTooltip="Edit"
-                                (click)="openDetail(update, c)">
+                                (click)="openDetail(update, i)">
                                 <i class="fa fa-edit edit-icon"></i>
                             </button>
                             <button *ngIf="c.companyRankId == null"  class="btn-danger btn btn-circle shadow-item col-md-6" ngbTooltip="Edit"

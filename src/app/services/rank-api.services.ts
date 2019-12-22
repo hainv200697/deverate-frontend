@@ -16,7 +16,7 @@ export class RankApiService {
     }
 
     insertRank(listRankModel){
-        const API = 'RankApi/CreateCompanyRank';
+        const API = 'RankApi/updateOrCreateRankIfNotExist';
         return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API, listRankModel);
     }
 
