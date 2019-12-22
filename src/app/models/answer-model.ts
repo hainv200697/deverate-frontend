@@ -1,5 +1,5 @@
 export class AnswerModel{
     answer1 : string
-    point : number
+    percent : number
     isActive: boolean
 }

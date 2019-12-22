@@ -317,5 +317,8 @@ export class CatalogueDefaultComponent implements OnInit {
         return true;
     }
 
+    viewCatalog(item) {
+        this.router.navigate(['/manage-question-default/', item['catalogueId']]);
+    }
 
 }

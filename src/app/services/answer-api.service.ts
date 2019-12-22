@@ -6,7 +6,7 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class AnswerApiService {
-    // URL = 'http://localhost:54318/';
+    // URL = 'http://localhost:9000/';
     URL = AppSettings.BASEURL;
     constructor(
         private httpClient: HttpClient,
@@ -18,18 +18,38 @@ export class AnswerApiService {
         return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
 
-    insertAnswer(answer: any) {
+    insertAnswer(answer) {
         const API = 'api/Answer/CreateAnswer';
         return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API, answer);
     }
 
-    updateAnswer(answer: any) {
+    updateAnswer(answer) {
         const API = 'api/Answer/UpdateAnswer';
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, answer);
     }
 
-    disableAnswer(AnswerId: any) {
+    disableAnswer(AnswerId) {
         const API = 'api/Answer/RemoveAnswer';
+        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, AnswerId);
+    }
+    getAllDefaultAnswerByQuestioId(questionId, status) {
+        const API = 'api/Answer/GetDefaultAnswerByQuestion';
+        const param = new HttpParams().set('id', questionId).set('status', status);
+        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
+    }
+
+    insertDefaultAnswer(answer) {
+        const API = 'api/Answer/CreateAnswerDefault';
+        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API, answer);
+    }
+
+    updateDefaultAnswer(answer) {
+        const API = 'api/Answer/UpdateAnswerDefault';
+        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, answer);
+    }
+
+    disableDefaultAnswer(AnswerId) {
+        const API = 'api/Answer/RemoveAnswerDefault';
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, AnswerId);
     }
 

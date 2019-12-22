@@ -181,17 +181,13 @@ export class EmployeeComponent implements OnInit {
                 } else if (element.Gender == "Female") {
                     element.Gender = false;
                 }
-                let checkDup = false;
-                
-
                 this.insEmployee['companyId'] = this.companyId;
-                this.insEmployee['fullname'] = element.Fullname.trim();
-                this.insEmployee['email'] = element.Email.trim();
-                this.insEmployee['fullname'] = element.Fullname.trim();
+                this.insEmployee['fullname'] = $.trim(element.Fullname.replace(/\s\s+/g, ' ')).toUpperCase;
+                this.insEmployee['email'] = $.trim(element.Email.replace(/\s\s+/g, ' '));
                 this.insEmployee['role'] = element.Role;
                 this.insEmployee['gender'] = element.Gender;
-                this.insEmployee['phone'] = phone.trim();
-                this.insEmployee['address'] = element.Address.trim();
+                this.insEmployee['phone'] = $.trim(phone.replace(/\s\s+/g, ' '));
+                this.insEmployee['address'] =$.trim(element.Address.replace(/\s\s+/g, ' '));
                 this.employeeList.forEach(element => {
                     if (this.insEmployee['email'] === element.email) {
                         this.message.push("Email at #"+ index+" is existed");
@@ -236,6 +232,7 @@ export class EmployeeComponent implements OnInit {
         this.loading = true;
         this.employeeService.getAllEmployee(this.companyId, this.iconIsActive).subscribe(
             (data) => {
+                console.log(data);
                 this.loading = false;
                 this.employeeList = data;
                 this.insEmployee = {};
@@ -245,10 +242,10 @@ export class EmployeeComponent implements OnInit {
                 this.selectedAll = false;
             }, (error) => {
                 if (error.status == 500) {
-                    this.loading = false;
                     this.toastr.error("System error");
                     this.closeModal();
                 }
+                this.loading = false;
             }
         );
     }
@@ -287,7 +284,7 @@ export class EmployeeComponent implements OnInit {
             this.insertEmployeeExcel();
         } else {
             this.employees = [];
-            this.insEmployee['fullname'] = this.insEmployee['fullname'];
+            this.insEmployee['fullname'] = this.insEmployee['fullname'].toUpperCase();
             this.insEmployee['companyId'] = this.companyId;
             this.employees.push(this.insEmployee);
             let check = true;
@@ -500,23 +497,23 @@ export class EmployeeComponent implements OnInit {
         return true;
     }
 
-    // updateStatus(item) {
-    //     this.loading = true;
-    //     this.updRole['accountId'] = item.accountId;
-    //     this.updRole['roleId'] = item.roleId;
-    //     this.employeeService.putUpdateAccount(this.updRole).subscribe(
-    //         results => {
-    //             this.loading = false;
-    //             this.toastr.success("Update success");
-    //             this.updRole = {};
-    //             this.getEmployee(this.iconIsActive);
-    //         },
-    //         (error) => {
-    //             this.loading = false;
-    //             this.toastr.error(error);
-    //         }
-    //     );
-    // }
+    updateRank(item) {
+        this.loading = true;
+        this.updRole['accountId'] = item.accountId;
+        this.updRole['roleId'] = item.roleId;
+        this.employeeService.putUpdateAccount(this.updRole).subscribe(
+            results => {
+                this.loading = false;
+                this.toastr.success("Update success");
+                this.updRole = {};
+                this.getEmployee(this.iconIsActive);
+            },
+            (error) => {
+                this.loading = false;
+                this.toastr.error(error);
+            }
+        );
+    }
 
     getAccount(item) {
         this.getRole = item;
@@ -611,7 +608,7 @@ export class EmployeeComponent implements OnInit {
     }
 
     validateEmail() {
-        let email = this.insEmployee['email'].trim();
+        let email = $.trim(this.insEmployee['email'].replace(/\s\s+/g, ' '));
         if (email == '' || email == null || email == undefined) {
             this.toastr.error('Email can not blank');
             document.getElementById('ins_manage_email').style.borderColor = 'red';

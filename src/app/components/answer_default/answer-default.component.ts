@@ -5,11 +5,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 @Component({
-    selector: 'app-answer',
-    templateUrl: './answer.component.html',
-    styleUrls: ['./answer.component.scss']
+    selector: 'app-answer-default',
+    templateUrl: './answer-default.component.html',
+    styleUrls: ['./answer-default.component.scss']
 })
-export class AnswerComponent implements OnInit {
+export class AnswerDefaultComponent implements OnInit {
     constructor(
         private answerService: AnswerApiService,
         private activeRoute: ActivatedRoute,
@@ -37,7 +37,7 @@ export class AnswerComponent implements OnInit {
 
     getAnswerById(status) {
         this.iconIsActive = status;
-        this.answerService.getAllAnswerByQuestioId(this.id, status).subscribe(
+        this.answerService.getAllDefaultAnswerByQuestioId(this.id, status).subscribe(
             (data: any) => {
                 console.log(data);
                 this.answerList = data;
@@ -88,7 +88,7 @@ export class AnswerComponent implements OnInit {
             this.insAnswer['questionId'] = this.id;
             this.loading = true;
             this.insAnswer['questionId'] = parseInt(this.insAnswer['questionId']);
-            this.answerService.insertAnswer(this.insAnswer).subscribe(
+            this.answerService.insertDefaultAnswer(this.insAnswer).subscribe(
                 (results) => {
                     console.log(results);
                     this.loading = false;
@@ -111,7 +111,7 @@ export class AnswerComponent implements OnInit {
     updateAnswer() {
         this.loading = true;
         console.log(this.updAnswer);
-        this.answerService.updateAnswer(this.updAnswer).subscribe(
+        this.answerService.updateDefaultAnswer(this.updAnswer).subscribe(
             (results) => {
                 console.log(results);
                 this.loading = false;
@@ -143,7 +143,7 @@ export class AnswerComponent implements OnInit {
                 for (let i = 0; i < this.updateStatus.length; i++) {
                     this.updateStatus[i].IsActive = status;
                 }
-                this.answerService.disableAnswer(this.updateStatus).subscribe(data => {
+                this.answerService.disableDefaultAnswer(this.updateStatus).subscribe(data => {
                     this.getAnswerById(this.iconIsActive);
                     this.selectedAll =false;
                     this.closeModal();

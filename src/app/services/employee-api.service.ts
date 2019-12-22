@@ -35,10 +35,10 @@ export class EmployeeApiService {
         return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employees,{ params: param });
     }
 
-    // putUpdateAccount(employee) {
-    //     const API = 'api/Employee/UpdateAccountRole';
-    //     return this.httpClient.put<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employee);
-    // }
+    putUpdateAccount(employee) {
+        const API = 'api/Employee/UpdateAccountRole';
+        return this.httpClient.put<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API, employee);
+    }
     getAllWithRole(companyId,status,role) {
         const API = 'api/Employee/GetAccountByRole';
         const param = new HttpParams().set('companyId', companyId).set('status', status).set('role', role);

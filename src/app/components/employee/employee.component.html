@@ -278,7 +278,7 @@
                         <sv-default-sorter by='gender'>Gender</sv-default-sorter>
                     </th>
                     <th class="two text-center" scope="col">
-                        <sv-default-sorter by='joinDate'>JoinDate</sv-default-sorter>
+                        <sv-default-sorter by='rank'>Rank</sv-default-sorter>
                     </th>
                     <th class="two text-center" scope="col">Status
                         <div ngbDropdown class="d-inline-block dropdown">
@@ -318,7 +318,13 @@
                     <td class="text-center two" [hidden]="item.gender==true">
                         Female
                     </td>
-                    <td class="two text-center">{{ item.joinDate.split('T')[0] }}</td>
+                    <!-- <td class="text-center three">
+                        <select class="custom-select" (change)="updateStatus(item)" [(ngModel)]="item.rankId">
+                            <option [ngValue]="0">Unknow</option>
+                            <option *ngFor="let item of listRank" [ngValue]="3">Employee</option>
+                        </select>
+                    </td> -->
+                    <td class="two text-center">{{ item.rankName }}</td>
                     <td class="text-center col-md-1" [hidden]="item.isActive==true">
                         <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
                     </td>

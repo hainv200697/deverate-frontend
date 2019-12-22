@@ -59,7 +59,7 @@
                                 (change)="selectAll();">
                         </th>
                         <th class=" text-center" scope="col" style="width: 5%;">#</th>
-                        <th class=" text-center" scope="col" style="width: 20%;">
+                        <th class=" text-center" scope="col" style="width: 30%;">
                             <sv-default-sorter by='name'>Catalog</sv-default-sorter>
                         </th>
                         <th class="text-center" scope="col" style="width: 30%;">
@@ -67,9 +67,6 @@
                         </th>
                         <th class="text-center" scope="col" style="width: 5%;">
                             <sv-default-sorter by='quescount'>Question</sv-default-sorter>
-                        </th>
-                        <th class="text-center" scope="col" style="width: 10%;">
-                            <sv-default-sorter by='type'>Type</sv-default-sorter>
                         </th>
                         <th class="text-center" scope="col" style="width: 15%;">Status
                             <div ngbDropdown class="d-inline-block dropdown">
@@ -92,11 +89,9 @@
                             </label>
                         </td>
                         <td class="text-center" style="width: 5%;">{{ i+1 }}</td>
-                        <td class="text-center" style="width: 20%;">{{ item.name }}</td>
+                        <td class="text-center" style="width: 30%;">{{ item.name }}</td>
                         <td class="text-center" style="width: 30%;">{{ item.description }}</td>
                         <td class="text-center" style="width: 5%;">{{ item.quescount }}</td>
-                        <td [hidden]="!item.type" style="width: 10%;" class="text-center">Company</td>
-                        <td [hidden]="item.type" style="width: 10%;" class="text-center">Default</td>
                         <td class="text-center" [hidden]="item.isActive==true" style="width: 15%;">
                             <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
                         </td>
