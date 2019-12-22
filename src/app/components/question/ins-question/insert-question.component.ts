@@ -155,6 +155,13 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 const questionObj = new QuestionModel();
                 this.listAnswer = [];
                 questionObj.point = element['Point']
+                if (questionObj.point === null || questionObj.point === undefined) {
+                    this.message.push("Percent of question #" + ind +" is blank");
+                    this.checkFile = false;
+                }else if (questionObj.point < 0 || questionObj.point > 100) {
+                    this.message.push("Percent of question #" + ind +" must be in range from 0 to 100 characters ");
+                    this.checkFile = false;
+                }
                 questionObj.question1 = $.trim(element['Question'].replace(/\s\s+/g, ' '));
                 questionObj.isActive = true;
                 questionObj.accountId = this.accountId;
@@ -237,7 +244,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             this.insAnswer.forEach(element => {
                 element['isActive'] = true;
             });
-            this.insQuestion['MaxPoint'] = Math.max.apply(Math, this.insAnswer.map(function (o) { return o.point; }));
             this.insQuestion['Answer'] = this.insAnswer;
             const catalog = this.id;
             if (catalog === undefined || catalog === null) {
@@ -263,7 +269,18 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 $('#ins_question_question').focus();
                 return;
             }
-
+            const point = this.insQuestion['point'];
+            if(point == null || point == undefined){
+                this.toastr.error('Message', 'Point of question can not be blank!');
+                $('#ins_question_point').css('border-color', 'red');
+                $('#ins_question_point').focus();
+                return;
+            }else if(point <1 || point >20){
+                this.toastr.error('Message', 'Point of question must be in range from 1 to 20!');
+                $('#ins_question_point').css('border-color', 'red');
+                $('#ins_question_point').focus();
+                return;
+            }
 
             let i = -1;
             let checkDup=[];

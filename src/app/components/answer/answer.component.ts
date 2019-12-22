@@ -223,7 +223,7 @@ export class AnswerComponent implements OnInit {
             return false;
         }
         if (this.updAnswer['point'] < 0 || this.updAnswer['point'] > 6) {
-            this.toastr.error("Point must be in range from 1 to 6");
+            this.toastr.error("Percent must be in range from 1 to 6");
             this.checkUpd = false;
             return false;
         }

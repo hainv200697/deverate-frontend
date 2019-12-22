@@ -156,6 +156,13 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 const questionObj = new QuestionDefaultModel();
                 this.listAnswer = [];
                 questionObj.point = element['Point'];
+                if (questionObj.point === null || questionObj.point === undefined) {
+                    this.message.push("Percent of question #" + ind +" is blank");
+                    this.checkFile = false;
+                }else if (questionObj.point < 0 || questionObj.point > 100) {
+                    this.message.push("Percent of question #" + ind +" must be in range from 0 to 100 characters ");
+                    this.checkFile = false;
+                }
                 questionObj.question = $.trim(element['Question'].replace(/\s\s+/g, ' '));
                 questionObj.catalogueDefaultId = this.id;
                 questionObj.isActive = true;
