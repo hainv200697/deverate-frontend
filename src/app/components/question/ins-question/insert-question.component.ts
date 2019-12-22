@@ -304,22 +304,22 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                             return;
                         }
                     });
-                    const mark: number = element['Percent'];
-                    if (mark === null || mark === undefined) {
-                        this.toastr.error('Message', 'Mark can not be blank!');
+                    const percent: number = element['Percent'];
+                    if (percent === null || percent === undefined) {
+                        this.toastr.error('Message', 'Percent can not be blank!');
                         check = false;
                         $('.mark-' + i).css('border-color', 'red');
                         $('.mark-' + i).focus();
                         return;
                     }
-                    if (100 < mark ) {
+                    if (100 < percent ) {
                         this.toastr.error('Message', 'Percent can not be bigger than 100!');
                         check = false;
                         $('.mark-' + i).css('border-color', 'red');
                         $('.mark-' + i).focus();
                         return;
                     }
-                    if (mark < 0) {
+                    if (percent < 0) {
                         this.toastr.error('Message', 'Percent can not be smaller than 0!');
                         check = false;
                         $('.mark-' + i).css('border-color', 'red');
