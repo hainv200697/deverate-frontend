@@ -31,10 +31,17 @@
                 <div class="bs-stepper-content">
                     <div id="test-l-1" class="content">
                         <div class="modal-body">
-                            <div class="col-sm-12 col-md-12 col-lg-12 ">
+                            <div class="col-sm-12 col-md-12 col-lg-12 row">
                                 <div class="col-sm-6 col-md-6 col-lg-6 create-file">
                                     <input type="file" style="display: inline-block;" (change)="incomingfile($event)"
                                         placeholder="Upload file" accept=".xlsx">
+                                </div>
+                                <div class="form-group input-group col-sm-6 col-md-6 col-lg-6">
+                                    <select id="ins_rank" name="ins_rank"  class="form-control col-md-12"
+                                        [(ngModel)]="insEmployee['rankId']">
+                                        <option [value]=0>-- Choose rank</option>
+                                        <option *ngFor="let item of rankList" [value]=item.companyRankId>{{item.name}}</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="message != null">
@@ -48,8 +55,7 @@
                     </div>
                     <div id="test-l-2" class="content">
                         <div class="modal-header header-custom">
-                            <div
-                                class="form-group col-sm-12 col-md-12 col-lg-12 table-wrapper-scroll-y my-custom-scrollbar">
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12 table-wrapper-scroll-y my-custom-scrollbar">
                                 <table class="table table-striped table-bordered table-hover customtable">
                                     <thead>
                                         <tr class=" no-padding-no-margin">
@@ -150,17 +156,23 @@
 
                     </div>
                     <div class="form-group input-group  justify-content-between ">
-                        <select id="ins_manage_role" name="ins_manage_role" class="form-control col-md-5" (change)="validateRole()"
+                        <select id="ins_manage_role" name="ins_manage_role" class="form-control col-md-5"
                             [(ngModel)]="insEmployee['role']">
-                            <option disabled [value]=0>-- Choosing role of account</option>
+                            <option [value]=2>Company manager</option>
                             <option [value]=3>Employee</option>
                             <option [value]=4>Test Owner</option>
                         </select>
-                        <select id="ins_manage_gender" name="ins_manage_gender" (change)="validateGender()" class="form-control col-md-5"
+                        <select id="ins_manage_gender" name="ins_manage_gender"  class="form-control col-md-5"
                             [(ngModel)]="insEmployee['gender']">
-                            <option disabled [value]=-1>-- Choosing gender</option>
                             <option [value]=true>Male</option>
                             <option [value]=false>Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group input-group">
+                        <select id="ins_rank" name="ins_rank"  class="form-control col-md-12"
+                            [(ngModel)]="insEmployee['rankId']">
+                            <option [value]=0>-- Choose rank</option>
+                            <option *ngFor="let item of rankList" [value]=item.rankId>{{item.name}}</option>
                         </select>
                     </div>
                 </div>
@@ -195,7 +207,7 @@
                     </div>
                     <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
                         <i class="fa fa-fw fa-plus"></i>
-                        Create Employee
+                        Create Account
                     </button>
                 </div>
                 <div class="row">
@@ -203,18 +215,18 @@
                         <div class="row justify-content-end " style="margin-left: 20px; margin-top: 20px;">
                             <div class=" col-md-4 custom-control custom-radio text-left">
                                 <input class="custom-control-input" type="radio" name="search_all" id="search_all"
-                                    (click)="getAccount(0)" [(ngModel)]="getRole" [value]="0">
-                                <label class="custom-control-label" for="search_all">All Account</label>
-                            </div>
-                            <div class=" col-md-4 custom-control custom-radio text-left">
-                                <input class="custom-control-input" type="radio" name="search_employee"
-                                    id="search_employee" (click)="getAccount(3)" [(ngModel)]="getRole" [value]="3">
-                                <label class="custom-control-label" for="search_employee">Employee</label>
+                                    (click)="getAccount(2)" [(ngModel)]="getRole" [value]="2">
+                                <label class="custom-control-label" for="search_all">Manager</label>
                             </div>
                             <div class=" col-md-4 custom-control custom-radio text-left">
                                 <input class="custom-control-input" [(ngModel)]="getRole" type="radio"
                                     name="search_testOwner" id="search_testOwner" (click)="getAccount(4)" [value]="4">
                                 <label class="custom-control-label" for="search_testOwner">Test Owner</label>
+                            </div>
+                            <div class=" col-md-4 custom-control custom-radio text-left">
+                                <input class="custom-control-input" type="radio" name="search_employee"
+                                    id="search_employee" (click)="getAccount(3)" [(ngModel)]="getRole" [value]="3">
+                                <label class="custom-control-label" for="search_employee">Employee</label>
                             </div>
                         </div>
                     </div>
@@ -255,7 +267,77 @@
             </div>
         </div>
 
-        <table class="table  table-hover customtable" [svData]="employeeList | EmployeeFilterPipe:searchText"
+        <table *ngIf="getRole != 3" class="table  table-hover customtable" [svData]="employeeList | EmployeeFilterPipe:searchText"
+            #sv="svDataTable" [svRowsOnPage]="25" svSortBy="name" svSortOrder="asc">
+            <thead>
+                <tr class="col-md-12 row no-padding-no-margin">
+                    <th class="text-center one" scope="col">
+                        <input [disabled]="sv.data.length == 0" class="btn" type="checkbox" value="" [(ngModel)]="selectedAll" (change)="selectAll();">
+                    </th>
+                    <th class="two text-center" scope="col">
+                        <sv-default-sorter by='username'>Username</sv-default-sorter>
+                    </th>
+                    <th class="six text-center" scope="col">
+                        <sv-default-sorter by='fullname'>Fullname</sv-default-sorter>
+                    </th>
+                    <th class="four text-center" scope="col">
+                        <sv-default-sorter by='email'>Email</sv-default-sorter>
+                    </th>
+                    <th class="three text-center" scope="col">
+                        <sv-default-sorter by='joinDate'>Join Date</sv-default-sorter>
+                    </th>
+                    <th class="two text-center" scope="col">
+                        <sv-default-sorter by='gender'>Gender</sv-default-sorter>
+                    </th>
+                    <th class="two text-center" scope="col">Status
+                        <div ngbDropdown class="d-inline-block dropdown">
+                            <button class=" icon-btn" ngbDropdownToggle style="color: black"></button>
+                            <div ngbDropdownMenu>
+                                <button class="dropdown-item" (click)="getEmployee(true)">Active</button>
+                                <button class="dropdown-item" (click)="getEmployee(false)">Deactive</button>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody *ngIf="sv.data.length != 0;  else searchNull">
+                <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data">
+                    <td class="text-center one">
+                        <label>
+                            <input type="checkbox" value="" [(ngModel)]="item.selected" class="btn"
+                                (change)="checkIfAllSelected();">
+                        </label>
+                    </td>
+                    <td class="two text-center">{{ item.username }}</td>
+                    <td class="six text-center">{{ item.fullname }}</td>
+                    <td class="four text-center">{{ item.email }}</td>
+                    <td class="text-center three">
+                        {{ item.joinDate | date : 'dd-MM-yyyy hh:mm a'}}
+                    </td>
+                    <td class="text-center two" [hidden]="item.gender==false">
+                        Male
+                    </td>
+                    <td class="text-center two" [hidden]="item.gender==true">
+                        Female
+                    </td>
+                    <td class="text-center col-md-1" [hidden]="item.isActive==true">
+                        <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
+                    </td>
+                    <td class="text-center two" [hidden]="item.isActive==false">
+                        <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <sv-bootstrap-paginator [rowsOnPageSet]="[5, 25, 50]"></sv-bootstrap-paginator>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <table *ngIf="getRole == 3" class="table  table-hover customtable" [svData]="employeeList | EmployeeFilterPipe:searchText"
             #sv="svDataTable" [svRowsOnPage]="25" svSortBy="name" svSortOrder="asc">
             <thead>
                 <tr class="col-md-12 row no-padding-no-margin">
@@ -272,12 +354,12 @@
                         <sv-default-sorter by='email'>Email</sv-default-sorter>
                     </th>
                     <th class="three text-center" scope="col">
-                        <sv-default-sorter by='email'>Role</sv-default-sorter>
+                        <sv-default-sorter by='joinDate'>Join Date</sv-default-sorter>
                     </th>
                     <th class="two text-center" scope="col">
                         <sv-default-sorter by='gender'>Gender</sv-default-sorter>
                     </th>
-                    <th class="two text-center" scope="col">
+                    <th  class="two text-center" scope="col">
                         <sv-default-sorter by='rank'>Rank</sv-default-sorter>
                     </th>
                     <th class="two text-center" scope="col">Status
@@ -302,15 +384,8 @@
                     <td class="two text-center">{{ item.username }}</td>
                     <td class="four text-center">{{ item.fullname }}</td>
                     <td class="four text-center">{{ item.email }}</td>
-                    <td [hidden]="item.roleId==3" class="text-center three">
-                        <!-- <select class="custom-select" (change)="updateStatus(item)" [(ngModel)]="item.roleId">
-                            <option [ngValue]="3">Employee</option>
-                            <option [ngValue]="4">Test Owner</option>
-                        </select> -->
-                        Test Owner
-                    </td>
-                    <td [hidden]="item.roleId==4" class="text-center three">
-                        Employee
+                    <td class="text-center three">
+                        {{ item.joinDate | date : 'dd-MM-yyyy hh:mm a'}}
                     </td>
                     <td class="text-center two" [hidden]="item.gender==false">
                         Male
@@ -318,12 +393,6 @@
                     <td class="text-center two" [hidden]="item.gender==true">
                         Female
                     </td>
-                    <!-- <td class="text-center three">
-                        <select class="custom-select" (change)="updateStatus(item)" [(ngModel)]="item.rankId">
-                            <option [ngValue]="0">Unknow</option>
-                            <option *ngFor="let item of listRank" [ngValue]="3">Employee</option>
-                        </select>
-                    </td> -->
                     <td class="two text-center">{{ item.rankName }}</td>
                     <td class="text-center col-md-1" [hidden]="item.isActive==true">
                         <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>

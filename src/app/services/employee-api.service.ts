@@ -23,6 +23,11 @@ export class EmployeeApiService {
         return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_AUTH+ API, employees);
     }
 
+    postCreateManager(manager) {
+        const API = 'api/Employee/CreateEmployee';
+        return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_AUTH+ API, manager);
+    }
+
     disableEmployee(employees,status){
         const API = 'api/Employee/UpdateEmployeeStatus';
         const param = new HttpParams().set('status', status);

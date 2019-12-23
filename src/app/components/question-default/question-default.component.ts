@@ -12,10 +12,8 @@ import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'ts-xlsx';
-import { AnswerModel } from '../../models/answer-model';
-import { QuestionModel } from '../../models/question-model';
-import { QuestionDefaultModel } from 'src/app/models/question-default-model';
-import { AnswerDefaultModel } from 'src/app/models/answer-default-model';
+import { QuestionDefaultModel } from '../../models/question-default-model';
+import { AnswerDefaultModel } from '../../models/answer-default-model';
 @Component({
     selector: 'app-question-default',
     templateUrl: './question-default.component.html',
