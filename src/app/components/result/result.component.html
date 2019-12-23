@@ -59,27 +59,24 @@
             </div>
             <div class="card-body">
                 <canvas baseChart height="100px" [datasets]="radarChartData" [labels]="radarChartLabels"
-                    [chartType]="radarChartType" [colors]="radarChartColor" [options]="radarChartOption" *ngIf="isLoaded">
+                    [chartType]="radarChartType" [colors]="radarChartColor" [options]="radarChartOption"
+                    *ngIf="isLoaded">
                 </canvas>
             </div>
         </div>
 
         <div class="col col-sm-6 col-md-4">
 
-            <div class="card" style="height: 94%;">
+            <div class="card" style="height: 100%;">
                 <div class="card-header">
-                    <b>Your Rank</b>
+                    <b>Potential Rank</b>
                 </div>
                 <div class="card-body d-flex justify-content-center col-md-12 row no-padding-no-margin">
 
-                    <fusioncharts type="angulargauge" width="100%" height="100%"
-                        [dataSource]="datasource" *ngIf="isLoaded">
+                    <fusioncharts type="angulargauge" width="100%" height="100%" [dataSource]="datasource"
+                        *ngIf="isLoaded">
                     </fusioncharts>
                 </div>
-            </div>
-
-            <div>
-                sasass
             </div>
         </div>
 
@@ -87,40 +84,47 @@
             <table class="table table-hover table-bordered customtable">
                 <thead style="background-color: rgba(0, 0, 0, 0.03);">
                     <tr class="col-md-12 row no-padding-no-margin">
-
-                        <th class="text-center col-md-1 no-padding-no-margin">
+                        <th class="text-center no-padding-no-margin" style="width: 10%;">
                             No.
                         </th>
-                        <th class="text-center col-md-5">
+                        <th class="text-center" style="width: 40%">
                             Criteria
-
                         </th>
-                        <th class="text-center col-md-2">
+                        <th class="text-center" style="width: 25%;">
                             Weight
                         </th>
-                        <th class="text-center col-md-4">
+                        <th class="text-center" style="width: 25%;">
                             Assessment Result
                         </th>
-
-
                     </tr>
                 </thead>
                 <tbody style="background-color: white;">
                     <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px"
                         *ngFor="let c of catalogueTable; let i = index ">
 
-                        <td class="text-center col-md-1" style="font-size: 16px;">{{i+1}}</td>
-                        <td class="text-center col-md-5" style="font-size: 16px;">{{c.companyCatalogueName}}</td>
-                        <td class="text-center col-md-2" style="font-size: 16px;">{{c.weightPoint}}%</td>
-                        <td class="text-center col-md-4" style="font-size: 16px;">{{catalogueOverpoint[i].overallPoint}}</td>
+                        <td class="text-center" style="font-size: 16px; width: 10%;">{{i+1}}</td>
+                        <td class="text-center" style="font-size: 16px; width: 40%;">{{c.companyCatalogueName}}</td>
+                        <td class="text-center" style="font-size: 16px; width: 25%;">{{c.weightPoint}}%</td>
+                        <td class="text-center" style="font-size: 16px; width: 25%;">{{catalogueOverpoint[i].overallPoint}}
+                        </td>
 
                     </tr>
                     <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px">
-                        <td class="text-center col-md-6" style="font-size: 16px;">Total</td>
-                        <td class="text-center col-md-6" style="font-size: 16px;">{{statistic?.point}}</td>
+                        <td class="text-center" style="font-size: 16px; width: 50%;">Total</td>
+                        <td class="text-center" style="font-size: 16px; width: 50%;">{{statistic?.point}}</td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="col-md-4 mt-4">
+        <h3><strong>Your score is higher than {{statistic.lowerTestPercent}}% people</strong></h3>
+            <div>
+                Here is the list of recommendations to improve your level:
+            <div *ngFor="let item of catalogueOverpoint">
+                <label *ngIf="item.differentPoint != 0">Improve {{item.name}}: {{item.differentPoint | number}} points</label>  
+            </div>
+            </div> 
         </div>
     </div>
 

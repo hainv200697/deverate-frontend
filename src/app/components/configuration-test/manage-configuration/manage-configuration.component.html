@@ -152,11 +152,11 @@
                                             <!-- Validate  -->
                                             <input (change)="calculateRank()" type="number" value="0" min="0" max="100"
                                                 step="10" style="height: 30px" class="col-md-12"
-                                                id="{{s1.catalogueId}}_{{s2.rankId}}" [ngModel]="point[i][j]"
+                                                id="{{s1.companyCatalogueId}}_{{s2.companyRankId}}" [ngModel]="point[i][j]"
                                                 *ngIf="isSampleConfig">
                                             <input (change)="calculateRank()" type="number" value="0" min="0" max="100"
                                                 step="10" style="height: 30px" class="col-md-12"
-                                                id="{{s1.catalogueId}}_{{s2.rankId}}" *ngIf="!isSampleConfig">
+                                                id="{{s1.companyCatalogueId}}_{{s2.companyRankId}}" *ngIf="!isSampleConfig">
                                         </td>
                                     </tr>
                                 </tbody>
@@ -279,7 +279,7 @@
                                             {{c.name}}
                                         </td>
                                         <td class="col-md-3">
-                                            {{c.weightPoint}}
+                                            {{c.point}}
                                         </td>
                                     </tr>
                                 </tbody>

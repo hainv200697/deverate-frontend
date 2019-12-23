@@ -2,11 +2,12 @@ import { element } from 'protractor';
 
 declare var d3: any;
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
-import { RankApiService } from 'src/app/services/rank-api.services';
-import { StatisticApiService } from 'src/app/services/statistic-api.service';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { RadialChartOptions } from 'chart.js';
 import { ToastrService } from 'ngx-toastr';
+import { RankApiService } from '../../services/rank-api.services';
+import { StatisticApiService } from '../../services/statistic-api.service';
 
 @Component({
   selector: 'app-result',
@@ -106,15 +107,15 @@ export class ResultComponent implements OnInit {
     this.showRank = 0;
     this.statisticApi.getStatistic(id).subscribe(
       (data) => {
-        this.statistic = data['data']['data'];
-        let tes = data['data']['data'].catalogueInRanks;
+        this.statistic = data;
+        let tes = data.catalogueInRanks;
 
         this.catalogueInRanks = tes;
 
-        this.catalogueOverpoint = data['data']['data'].catalogues;
-        this.pointRank = data['data']['data'].configurationRanks;
-        this.catalogueTable = data['data']['data'].catalogueInConfigs;
-        let dialValue = data['data']['data'].rank;
+        this.catalogueOverpoint = data.catalogues;
+        this.pointRank = data.configurationRanks;
+        this.catalogueTable = data.catalogueInConfigs;
+        let dialValue = data.rank;
 
         for (var i = 0; i < this.catalogueInRanks.length; i++) {
           var chartDateElement = {
@@ -313,7 +314,7 @@ export class ResultComponent implements OnInit {
           backgroundcolor: "#ffffff",
           align: "center",
           x: "$chartCenterX",
-          y: "$chartEndY - 12"
+          y: "$chartEndY - 3"
         }
       ]
     }]
