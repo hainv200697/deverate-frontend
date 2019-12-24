@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeeApiService } from 'src/app/services/employee-api.service';
+import { RankApiService } from 'src/app/services/rank-api.services';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -8,6 +9,7 @@ import * as XLSX from 'ts-xlsx';
 import Stepper from 'bs-stepper';
 import { GloblaService } from 'src/assets/service/global.service';
 import { empty } from 'rxjs';
+import * as moment from 'moment';
 @Component({
     selector: 'app-employee',
     templateUrl: './employee.component.html',
@@ -16,6 +18,7 @@ import { empty } from 'rxjs';
 export class EmployeeComponent implements OnInit {
     constructor(
         private employeeService: EmployeeApiService,
+        private rankService: RankApiService,
         private activeRoute: ActivatedRoute,
         private modalService: NgbModal,
         private toastr: ToastrService,
@@ -42,11 +45,14 @@ export class EmployeeComponent implements OnInit {
     listUser: String[] = [];
     listId: number[] = [];
     updRole = {};
-    getRole = 0;
+    getRole = 2;
     message: Array<string> = [];
+    rankList;
     ngOnInit() {
+        this.getRole=2;
         this.getEmployee(this.iconIsActive);
-
+        this.getRank()
+        
     }
     async next() {
         this.employees = [];
@@ -108,6 +114,7 @@ export class EmployeeComponent implements OnInit {
 
     async formatExcel() {
         try {
+            const rank =this.insEmployee['rankId'];
             let list: any;
             this.employees = [];
             this.message = [];
@@ -164,7 +171,9 @@ export class EmployeeComponent implements OnInit {
                     element.role = null;
                     this.message.push("Role of email " + element.Email + " is blank!");
                     this.checkExcel = false;
-                } else if (element.Role == "Employee") {
+                }else if (element.Role == "Company manager") {
+                    element.Role = 2;
+                }else if (element.Role == "Employee") {
                     element.Role = 3;
                 } else if (element.Role == "Test Owner") {
                     element.Role = 4;
@@ -182,15 +191,16 @@ export class EmployeeComponent implements OnInit {
                     element.Gender = false;
                 }
                 this.insEmployee['companyId'] = this.companyId;
-                this.insEmployee['fullname'] = $.trim(element.Fullname.replace(/\s\s+/g, ' ')).toUpperCase;
+                this.insEmployee['fullname'] = $.trim(element.Fullname.replace(/\s\s+/g, ' ')).toUpperCase();
                 this.insEmployee['email'] = $.trim(element.Email.replace(/\s\s+/g, ' '));
                 this.insEmployee['role'] = element.Role;
                 this.insEmployee['gender'] = element.Gender;
+                this.insEmployee['rankId'] = rank;
                 this.insEmployee['phone'] = $.trim(phone.replace(/\s\s+/g, ' '));
-                this.insEmployee['address'] =$.trim(element.Address.replace(/\s\s+/g, ' '));
+                this.insEmployee['address'] = $.trim(element.Address.replace(/\s\s+/g, ' '));
                 this.employeeList.forEach(element => {
                     if (this.insEmployee['email'] === element.email) {
-                        this.message.push("Email at #"+ index+" is existed");
+                        this.message.push("Email at #" + index + " is existed");
                         this.checkExcel = false;
                     }
                 });
@@ -208,7 +218,7 @@ export class EmployeeComponent implements OnInit {
                     listEmail.push(item.email);
                 }
             });
-            
+
             if (existedEmail.length > 0) {
                 const email = existedEmail.slice(0, 3);
                 const message = `Email ${email.join(',')}${existedEmail.length > 3 ? ',...' : ''} duplicate`;
@@ -226,24 +236,55 @@ export class EmployeeComponent implements OnInit {
         this.getEmployee(this.iconIsActive);
     }
 
+    getRank() {
+        this.loading = true;
+        this.rankService.getAllRank(true,this.companyId).subscribe(
+            (data) => {
+                this.loading = false;
+                this.rankList = data;
+            }, (error) => {
+                if (error.status == 500) {
+                    this.toastr.error("System error");
+                    this.closeModal();
+                }
+                if (error.status == 400) {
+                    this.toastr.error("Input is invalid");
+                }
+                if (error.status == 0) {
+                    this.toastr.error('System is not available')
+                }
+                this.loading = false;
+            }
+        );
+    }
+
     getEmployee(status) {
-        this.getRole = 0;
+        this.getRole = 2;
         this.iconIsActive = status;
         this.loading = true;
-        this.employeeService.getAllEmployee(this.companyId, this.iconIsActive).subscribe(
+        this.employeeService.getAllWithRole(this.companyId, this.iconIsActive, this.getRole).subscribe(
             (data) => {
-                console.log(data);
                 this.loading = false;
+                data.forEach(element => {
+                    element['joinDate'] = moment.utc(element['joinDate']).local().format();
+                });
                 this.employeeList = data;
                 this.insEmployee = {};
-                this.insEmployee['role'] = 0;
-                this.insEmployee['gender'] = -1;
+                this.insEmployee['role'] = this.getRole;
+                this.insEmployee['gender'] = true;
+
                 this.selected = false;
                 this.selectedAll = false;
             }, (error) => {
                 if (error.status == 500) {
                     this.toastr.error("System error");
                     this.closeModal();
+                }
+                if (error.status == 400) {
+                    this.toastr.error("Input is invalid");
+                }
+                if (error.status == 0) {
+                    this.toastr.error('System is not available')
                 }
                 this.loading = false;
             }
@@ -260,6 +301,7 @@ export class EmployeeComponent implements OnInit {
         this.index = 1;
         this.employees = [];
         this.checkFile = false;
+        this.insEmployee['rankId'] = 0;
         this.message = [];
         this.modalService.open(excel, { size: 'lg', backdrop: 'static', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
@@ -291,25 +333,16 @@ export class EmployeeComponent implements OnInit {
             if (!this.validate()) {
                 check = false;
             }
-            if(!this.validateRole()){
+            if (!this.validateAddress()) {
                 check = false;
             }
-            if(!this.validateAddress()){
+            if (!this.validateEmail()) {
                 check = false;
             }
-            if(!this.validateGender()){
+            if (!this.validatePhone()) {
                 check = false;
             }
-            if(!this.validateRole()){
-                check = false;
-            }
-            if(!this.validateEmail()){
-                check = false;
-            }
-            if(!this.validatePhone()){
-                check = false;
-            }
-            if(check == true){
+            if (check == true) {
                 this.insertEmployee();
             }
 
@@ -324,6 +357,7 @@ export class EmployeeComponent implements OnInit {
     // insert Employee function
     insertEmployee() {
         this.loading = true;
+        console.log(this.employees);
         this.employeeService.postCreateEmployee(this.employees).subscribe(
             results => {
                 this.loading = false;
@@ -517,38 +551,32 @@ export class EmployeeComponent implements OnInit {
 
     getAccount(item) {
         this.getRole = item;
-        if (this.getRole == 0) {
-            this.getEmployee(this.iconIsActive);
-        }
-        else {
-            this.employeeService.getAllWithRole(this.companyId, this.iconIsActive, this.getRole).subscribe(
-                (data) => {
-                    this.employeeList = data;
-                }, (error) => {
-                    if (error.status == 500) {
-                        this.toastr.error('System error')
-                    }
-                    if (error.status == 400) {
-                        this.toastr.error("Input is invalid");
-                    }
-                    if (error.status == 0) {
-                        this.toastr.error('System is not available')
-                    }
-                    this.loading = false;
+        this.employeeService.getAllWithRole(this.companyId, this.iconIsActive, this.getRole).subscribe(
+            (data) => {
+                data.forEach(element => {
+                    element['joinDate'] = moment.utc(element['joinDate']).local().format();
+                });
+                this.employeeList = data;
+                this.loading = false;
+                this.employeeList = data;
+                this.insEmployee = {};
+                this.insEmployee['role'] = this.getRole;
+                this.insEmployee['gender'] = 1;
+                this.selected = false;
+                this.selectedAll = false;
+            }, (error) => {
+                if (error.status == 500) {
+                    this.toastr.error('System error')
                 }
-            );
-        }
-    }
-    validateRole() {
-        if (this.insEmployee['role'] == 0) {
-            this.toastr.error('Please choosing role of account!');
-            document.getElementById('ins_manage_role').style.borderColor = 'red';
-            document.getElementById('ins_manage_role').focus();
-            return false;
-        } else {
-            document.getElementById('ins_manage_role').style.borderColor = 'green';
-        }
-        return true;
+                if (error.status == 400) {
+                    this.toastr.error("Input is invalid");
+                }
+                if (error.status == 0) {
+                    this.toastr.error('System is not available')
+                }
+                this.loading = false;
+            }
+        );
     }
 
     validateAddress() {
@@ -574,7 +602,7 @@ export class EmployeeComponent implements OnInit {
     }
     validatePhone() {
         const check = /((09|03|07|08|05)+([0-9]{8})\b)/g.test(this.insEmployee['phone']);
-        if(this.insEmployee['phone'] != undefined){
+        if (this.insEmployee['phone'] != undefined) {
             if (this.insEmployee['phone'] != '') {
                 if (!check) {
                     this.toastr.error('Phone number is invalid');
@@ -585,17 +613,6 @@ export class EmployeeComponent implements OnInit {
                     document.getElementById('ins_manage_phone').style.borderColor = 'green';
                 }
             }
-        }
-        return true;
-    }
-    validateGender() {
-        if (this.insEmployee['gender'] == -1) {
-            this.toastr.error('Please choosing gender of account!');
-            document.getElementById('ins_manage_gender').style.borderColor = 'red';
-            document.getElementById('ins_manage_gender').focus();
-            return false;
-        } else {
-            document.getElementById('ins_manage_gender').style.borderColor = 'green';
         }
         return true;
     }

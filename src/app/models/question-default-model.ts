@@ -1,4 +1,3 @@
-import { AnswerModel } from './answer-model';
 import { AnswerDefaultModel } from './answer-default-model';
 
 export class QuestionDefaultModel{
