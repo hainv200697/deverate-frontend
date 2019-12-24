@@ -31,26 +31,30 @@
                         </ng-multiselect-dropdown>
                     </div>
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 row">
-                        <label class="col-md-2">Semester:</label>
-                        <ng-multiselect-dropdown class="col-md-6" [placeholder]="'Select Semester'"
-                            [data]="listSemester" (onDeSelect)="DeSelectSemester($event)"
-                            (onSelect)="chooseSemesters($event)" [(ngModel)]="selectedSemester"
-                            [settings]="dropdownSettings">
-                        </ng-multiselect-dropdown>
                     </div>
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 row">
                         <label class="col-md-2">Test Setting:</label>
                         &nbsp;&nbsp;&nbsp;
                         <select id="ins_setting" name="ins_setting" class="form-control" style="width: 46%;"
-                            [(ngModel)]="config_id">
+                            [(ngModel)]="chooseConfig">
                             <option style="width: 46%;" disabled [value]=-1>-- Choosing setting --</option>
                             <option style="width: 46%;" *ngFor="let item of listConfig" [value]=item.configId>
                                 {{item.title}}</option>
                         </select>
                     </div>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6 row">
+                        <label class="col-md-3">Multiple Test:</label>
+                        &nbsp;&nbsp;&nbsp;
+                        <select id="ins_setting1" name="ins_setting1" class="form-control" style="width: 46%;"
+                            [(ngModel)]="chooseType">
+                            <option style="width: 46%;" disabled [value]=-1>-- Select --</option>
+                            <option style="width: 46%;" [value]=1 selected>All</option>
+                            <option style="width: 46%;" [value]=0>One</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="row justify-content-end" style="margin-top: 20px;">
-                    <button style="margin-right: 10px;" (click)="createTest();" class="btn btn-lg btn-warning"
+                    <button style="margin-right: 10px;" (click)="createTest();" class="btn btn-lg btn-success"
                         data-toggle="button">
                         <i class="fa fa-paper-plane" placement="top" ngbTooltip="Send test to applicant"
                             placement="top"></i>
@@ -70,10 +74,14 @@
             svSortBy="fullname" svSortOrder="asc">
             <thead>
                 <tr class="col-md-12 row no-padding-no-margin">
-                    <th class="text-center" style="width: 10%;" scope="col"><input class="btn" type="checkbox" value=""
+                    <th class="text-center" style="width: 5%;" scope="col"><input class="btn" type="checkbox" value=""
                             [(ngModel)]="selectedAll" (change)="selectAll();"></th>
-                    <th class="text-center" style="width: 10%;" scope="col">
+                    <th class="text-center" style="width: 5%;" scope="col">
                         No.
+                    </th>
+                    <th class="text-center" style="width: 20%;" scope="col">
+                        <sv-default-sorter by="username">Username
+                        </sv-default-sorter>
                     </th>
                     <th class="text-center" style="width: 20%;" scope="col">
                         <sv-default-sorter by="fullname">Fullname
@@ -87,23 +95,25 @@
                         <sv-default-sorter by="rank">Rank
                         </sv-default-sorter>
                     </th>
-                    <th class="text-center" style="width: 20%;" scope="col">
+                    <th class="text-center" style="width: 10%;" scope="col">
                         Action
                     </th>
                 </tr>
             </thead>
             <tbody *ngIf="sv.data.length != 0;  else searchNull">
                 <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data; let i=index">
-                    <td class="text-center" style="width: 10%;">
+                    <td class="text-center" style="width: 5%;">
                         <input type="checkbox" value="" [(ngModel)]="item.selected" class="btn"
                             (change)="checkIfAllSelected();">
                     </td>
-                    <td class="text-center" style="font-weight: bold;width: 10%;">{{i+1}}</td>
+                    <td class="text-center" style="font-weight: bold;width: 5%;">{{i+1}}</td>
+                    <td class="text-center" style="font-weight: bold;width: 20%;">{{item.username}}</td>
                     <td class="text-center" style="font-weight: bold;width: 20%;">{{item.fullname}}</td>
                     <td class="text-center" style="font-weight: bold;width: 20%;">{{item.email}}</td>
-                    <td class="text-center" style="font-weight: bold;width: 20%;">
-                        <button class="btn btn-lg btn-danger" data-toggle="button">
-                            <i class="fa fa-trash-o delete-icon" placement="top" ngbTooltip="Disable"
+                    <td class="text-center" style="font-weight: bold;width: 20%;">{{item.rankName}}</td>
+                    <td class="text-center" style="font-weight: bold;width: 10%;">
+                        <button class="btn btn-lg btn-warning" data-toggle="button" style="zoom: 0.8">
+                            <i class="fa fa-envelope" placement="top" ngbTooltip="Disable"
                                 placement="top"></i>
                         </button>
                     </td>
