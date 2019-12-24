@@ -47,7 +47,7 @@ export class CatalogueComponent implements OnInit {
 
     updateModal(item) {
         if (item != null) {
-            this.updCatalogue['CatalogueId'] = item['catalogueId'];
+            this.updCatalogue['CatalogueId'] = item['companyCatalogueId'];
             this.updCatalogue['Name'] = item['name'];
             this.updCatalogue['Description'] = item['description'];
             this.updCatalogue['IsActive'] = item['isActive'];
@@ -235,7 +235,7 @@ export class CatalogueComponent implements OnInit {
     }
 
     viewCatalog(item) {
-        this.router.navigate(['/manage-question/', item['catalogueId']]);
+        this.router.navigate(['/manage-question/', item['companyCatalogueId']]);
     }
 
     validate() {
