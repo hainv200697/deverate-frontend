@@ -78,8 +78,7 @@
 
                                 <angular2-multiselect class="form-control" [data]="catalogueList" style="width: 87%"
                                     [(ngModel)]="selectedItems" [settings]="dropdownSettings"
-                                    (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
-                                    (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
+                                    (onDeSelectAll)="onDeSelectAll($event)">
                                 </angular2-multiselect>
                             </div>
                             <div class="col-md-6" [hidden]="selectedItems.length == 0">

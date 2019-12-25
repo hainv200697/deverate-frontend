@@ -10,10 +10,8 @@ import { FormBuilder, FormGroup, FormControl, FormArray, Validators } from '@ang
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import Stepper from 'bs-stepper';
-import { from } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
-import { analyzeAndValidateNgModules } from '@angular/compiler';
 declare var $: any;
 @Component({
   selector: 'manage-configuration',
@@ -133,20 +131,8 @@ export class ManageConfigurationComponent implements OnInit {
     this.getConfigurationIsActive(true);
   }
 
-  onItemSelect(item: any) {
-  }
-
-  onSelectAll(item: any) {
-  }
-
   onDeSelectAll(item: any) {
     this.selectedItems = []
-  }
-
-  OnItemDeSelect(item: any) {
-  }
-
-  onDateSelect(item: any) {
   }
 
   removeItem(item, select) {
