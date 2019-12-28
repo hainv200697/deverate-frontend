@@ -25,10 +25,26 @@
             <i class="fa fa-level-up"></i>&nbsp;
             <span>Rank</span>
         </a>
-        <!-- <a [routerLink]="['/stastistic-manager']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Company Manager'">
-            <i class="fa fa-bar-chart"></i>&nbsp;
-            <span>Statistic</span>
-        </a> -->
+        <div class="nested-menu" *ngIf="role == 'Company Manager'">
+            <a class="list-group-item" (click)="addExpandClass('pages1')">
+                <i class="fa fa-bar-chart"></i>&nbsp;
+                <span>Statistic</span>
+            </a>
+            <li class="nested" [class.expand]="showMenu === 'pages1'">
+                <ul class="submenu">
+                    <li>
+                        <a [routerLink]="['/statistic-company']" [routerLinkActive]="['router-link-active']">
+                            <span>Employee</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['/statistic-company-applicant']" [routerLinkActive]="['router-link-active']">
+                            <span>Applicant</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </div>
         <!-- Test Owner -->
         <a [routerLink]="['/applicant']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
             <i class="fa fa-user"></i>&nbsp;

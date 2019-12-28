@@ -9,9 +9,9 @@
                 <div class="form-group col-md-12">
                     <div class="">
                         <div class="input-group input-group-icon">
+                            <div class="input-icon">Rank: </div> &nbsp;
                             <input type="text" [(ngModel)]="updateRank['name']" name="update_rank_name"
                                 [disabled]="this.updateRank['isActive']==false" id="updateRankName">
-                            <div class="input-icon">Rank</div>
                         </div>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                         <div class="form-group col-sm-12 col-md-6 col-lg-6">
                             <label>Rank:</label>
                             <input type="text" name="ins_Fullname" [(ngModel)]="inputRank['name']"
-                                class="form-control input-underline input-lg" id="" placeholder="Rank name">
+                                class="form-control input-underline input-lg" id="rankName" placeholder="Rank name">
                         </div>
 
                         <div class="form-group d-flex align-items-end col-sm-12 col-md-6 col-lg-6">
