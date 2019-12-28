@@ -78,8 +78,7 @@
 
                                 <angular2-multiselect class="form-control" [data]="catalogueList" style="width: 87%"
                                     [(ngModel)]="selectedItems" [settings]="dropdownSettings"
-                                    (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
-                                    (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
+                                    (onDeSelectAll)="onDeSelectAll($event)">
                                 </angular2-multiselect>
                             </div>
                             <div class="col-md-6" [hidden]="selectedItems.length == 0">
@@ -152,11 +151,11 @@
                                             <!-- Validate  -->
                                             <input (change)="calculateRank()" type="number" value="0" min="0" max="100"
                                                 step="10" style="height: 30px" class="col-md-12"
-                                                id="{{s1.catalogueId}}_{{s2.rankId}}" [ngModel]="point[i][j]"
+                                                id="{{s1.companyCatalogueId}}_{{s2.companyRankId}}" [ngModel]="point[i][j]"
                                                 *ngIf="isSampleConfig">
                                             <input (change)="calculateRank()" type="number" value="0" min="0" max="100"
                                                 step="10" style="height: 30px" class="col-md-12"
-                                                id="{{s1.catalogueId}}_{{s2.rankId}}" *ngIf="!isSampleConfig">
+                                                id="{{s1.companyCatalogueId}}_{{s2.companyRankId}}" *ngIf="!isSampleConfig">
                                         </td>
                                     </tr>
                                 </tbody>
@@ -183,14 +182,6 @@
                                         </td>
                                         <td class="col-md-9">
                                             {{inputConfiguration['title']}}
-                                        </td>
-                                    </tr>
-                                    <tr class="col-md-12 row no-padding-no-margin">
-                                        <td class="col-md-3" style="font-weight: bold">
-                                            Total question
-                                        </td>
-                                        <td class="col-md-9">
-                                            {{inputConfiguration['totalQuestion']}}
                                         </td>
                                     </tr>
                                     <tr class="col-md-12 row no-padding-no-margin">
@@ -279,7 +270,7 @@
                                             {{c.name}}
                                         </td>
                                         <td class="col-md-3">
-                                            {{c.weightPoint}}
+                                            {{c.point}}
                                         </td>
                                     </tr>
                                 </tbody>
