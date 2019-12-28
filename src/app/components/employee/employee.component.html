@@ -36,13 +36,6 @@
                                     <input type="file" style="display: inline-block;" (change)="incomingfile($event)"
                                         placeholder="Upload file" accept=".xlsx">
                                 </div>
-                                <div class="form-group input-group col-sm-6 col-md-6 col-lg-6">
-                                    <select id="ins_rank" name="ins_rank"  class="form-control col-md-12"
-                                        [(ngModel)]="insEmployee['rankId']">
-                                        <option [value]=0>-- Choose rank</option>
-                                        <option *ngFor="let item of rankList" [value]=item.companyRankId>{{item.name}}</option>
-                                    </select>
-                                </div>
                             </div>
                             <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="message != null">
                                 <div class="col-sm-12 col-md-12 col-lg-12" *ngFor="let item of message"
@@ -166,13 +159,6 @@
                             [(ngModel)]="insEmployee['gender']">
                             <option [value]=true>Male</option>
                             <option [value]=false>Female</option>
-                        </select>
-                    </div>
-                    <div class="form-group input-group">
-                        <select id="ins_rank" name="ins_rank"  class="form-control col-md-12"
-                            [(ngModel)]="insEmployee['rankId']">
-                            <option [value]=0>-- Choose rank</option>
-                            <option *ngFor="let item of rankList" [value]=item.rankId>{{item.name}}</option>
                         </select>
                     </div>
                 </div>
@@ -356,13 +342,10 @@
                     <th class="three text-center" scope="col">
                         <sv-default-sorter by='joinDate'>Join Date</sv-default-sorter>
                     </th>
-                    <th class="two text-center" scope="col">
+                    <th class="three text-center" scope="col">
                         <sv-default-sorter by='gender'>Gender</sv-default-sorter>
                     </th>
-                    <th  class="two text-center" scope="col">
-                        <sv-default-sorter by='rank'>Rank</sv-default-sorter>
-                    </th>
-                    <th class="two text-center" scope="col">Status
+                    <th class="three text-center" scope="col">Status
                         <div ngbDropdown class="d-inline-block dropdown">
                             <button class=" icon-btn" ngbDropdownToggle style="color: black"></button>
                             <div ngbDropdownMenu>
@@ -387,17 +370,16 @@
                     <td class="text-center three">
                         {{ item.joinDate | date : 'dd-MM-yyyy hh:mm a'}}
                     </td>
-                    <td class="text-center two" [hidden]="item.gender==false">
+                    <td class="text-center three" [hidden]="item.gender==false">
                         Male
                     </td>
-                    <td class="text-center two" [hidden]="item.gender==true">
+                    <td class="text-center three" [hidden]="item.gender==true">
                         Female
                     </td>
-                    <td class="two text-center">{{ item.rankName }}</td>
-                    <td class="text-center col-md-1" [hidden]="item.isActive==true">
+                    <td class="text-center three" [hidden]="item.isActive==true">
                         <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
                     </td>
-                    <td class="text-center two" [hidden]="item.isActive==false">
+                    <td class="text-center three" [hidden]="item.isActive==false">
                         <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
                     </td>
                 </tr>

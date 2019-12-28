@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeeApiService } from 'src/app/services/employee-api.service';
-import { RankApiService } from 'src/app/services/rank-api.services';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -18,7 +17,6 @@ import * as moment from 'moment';
 export class EmployeeComponent implements OnInit {
     constructor(
         private employeeService: EmployeeApiService,
-        private rankService: RankApiService,
         private activeRoute: ActivatedRoute,
         private modalService: NgbModal,
         private toastr: ToastrService,
@@ -47,11 +45,9 @@ export class EmployeeComponent implements OnInit {
     updRole = {};
     getRole = 2;
     message: Array<string> = [];
-    rankList;
     ngOnInit() {
         this.getRole=2;
         this.getEmployee(this.iconIsActive);
-        this.getRank()
         
     }
     async next() {
@@ -114,7 +110,6 @@ export class EmployeeComponent implements OnInit {
 
     async formatExcel() {
         try {
-            const rank =this.insEmployee['rankId'];
             let list: any;
             this.employees = [];
             this.message = [];
@@ -195,7 +190,6 @@ export class EmployeeComponent implements OnInit {
                 this.insEmployee['email'] = $.trim(element.Email.replace(/\s\s+/g, ' '));
                 this.insEmployee['role'] = element.Role;
                 this.insEmployee['gender'] = element.Gender;
-                this.insEmployee['rankId'] = rank;
                 this.insEmployee['phone'] = $.trim(phone.replace(/\s\s+/g, ' '));
                 this.insEmployee['address'] = $.trim(element.Address.replace(/\s\s+/g, ' '));
                 this.employeeList.forEach(element => {
@@ -236,27 +230,6 @@ export class EmployeeComponent implements OnInit {
         this.getEmployee(this.iconIsActive);
     }
 
-    getRank() {
-        this.loading = true;
-        this.rankService.getAllRank(true,this.companyId).subscribe(
-            (data) => {
-                this.loading = false;
-                this.rankList = data;
-            }, (error) => {
-                if (error.status == 500) {
-                    this.toastr.error("System error");
-                    this.closeModal();
-                }
-                if (error.status == 400) {
-                    this.toastr.error("Input is invalid");
-                }
-                if (error.status == 0) {
-                    this.toastr.error('System is not available')
-                }
-                this.loading = false;
-            }
-        );
-    }
 
     getEmployee(status) {
         this.getRole = 2;
@@ -301,7 +274,6 @@ export class EmployeeComponent implements OnInit {
         this.index = 1;
         this.employees = [];
         this.checkFile = false;
-        this.insEmployee['rankId'] = 0;
         this.message = [];
         this.modalService.open(excel, { size: 'lg', backdrop: 'static', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
