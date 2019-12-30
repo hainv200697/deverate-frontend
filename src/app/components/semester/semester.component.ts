@@ -17,10 +17,8 @@ export class SemesterComponent implements OnInit {
         private employeeApiService: EmployeeApiService,
         private modalService: NgbModal,
         private toast: ToastrService,
-    ) {
-        this.page = 1;
-        this.pageSize = 25;
-    }
+    ) {}
+    search;
     listConfig;
     chooseConfig = null;
     chooseType = 1;
@@ -38,8 +36,6 @@ export class SemesterComponent implements OnInit {
     companyId = localStorage.getItem('CompanyId');
     selectedRanks = [];
     selectedSemester = [];
-    page: number;
-    pageSize: number;
     chooseEmployee = [];
     selectedAll: any;
     public loading = false;
@@ -47,10 +43,6 @@ export class SemesterComponent implements OnInit {
     ngOnInit() {
         this.getAllConfig();
         this.getAllEmployeeInCompany();
-    }
-
-    PageSize(value: number) {
-        this.pageSize = value;
     }
 
     getAllEmployeeInCompany() {
@@ -72,7 +64,7 @@ export class SemesterComponent implements OnInit {
     }
 
     getAllConfig() {
-        this.configurationApiService.getAllConfiguration(true, this.companyId).subscribe(
+        this.configurationApiService.getConfigForEmployee(this.companyId).subscribe(
             (result) => {
                 this.listConfig = result;
             }, (error) => {

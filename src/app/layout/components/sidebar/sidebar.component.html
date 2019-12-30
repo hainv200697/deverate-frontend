@@ -50,7 +50,10 @@
             <i class="fa fa-user"></i>&nbsp;
             <span>Applicant</span>
         </a>
-
+        <a [routerLink]="['/generate-test']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
+            <i class="fa fa-question"></i>&nbsp;
+            <span>Generate Test</span>
+        </a>
         <div class="nested-menu" *ngIf="role == 'Test Owner'">
             <a class="list-group-item" (click)="addExpandClass('pages1')">
                 <i class="fa fa-bar-chart"></i>&nbsp;

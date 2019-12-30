@@ -29,10 +29,10 @@ export class SidebarComponent implements OnInit {
 
     ngOnInit() {
         this.role = localStorage.getItem('Role');
-        this.isActive = true;
-        this.collapsed = true;
+        this.isActive = false;
+        this.collapsed = false;
         this.showMenu = '';
-        this.pushRightClass = 'push-left';
+        this.pushRightClass = 'push-right';
     }
 
 
