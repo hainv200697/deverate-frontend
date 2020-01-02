@@ -136,19 +136,21 @@
         </div>
 
         <div class="col-md-5 mt-4">
-            <h3 *ngIf="statistic.lowerTestPercent != 0"><strong>Your score is higher than {{statistic.lowerTestPercent}}% people</strong></h3>
-            <div *ngIf="statistic.rankId != statistic.potentialRankId"  >
-                <strong>Here is the list of recommendations to improve your level:</strong>
+            <h3 *ngIf="statistic.lowerTestPercent != 0"><strong>Your score is higher than
+                    {{statistic.lowerTestPercent}}% people</strong></h3>
+            <div *ngIf="statistic.rank == statistic.potentialRank">
+                <strong>Here is the list of recommendations to improve your level to: {{statistic.nextRank}}</strong>
                 <div *ngFor="let item of catalogueOverpoint">
                     <label *ngIf="item.differentPoint != 0"> {{item.name}}</label>
                 </div>
             </div>
-            <h3 *ngIf="statistic.lowerTestPercent == 0 && statistic.rankId == statistic.potentialRankId">
-                <strong>
-                    There is nothing to recommend<br>
-                    I have reached your actual level
-                </strong>
-            </h3>
+            <div *ngIf="statistic.rank != statistic.potentialRank">
+                <strong>Here is the list of recommendations to improve your level to:
+                    {{statistic.potentialRank}}</strong>
+                <div *ngFor="let item of catalogueOverpoint">
+                    <label *ngIf="item.differentPoint != 0"> {{item.name}}</label>
+                </div>
+            </div>
         </div>
     </div>
 

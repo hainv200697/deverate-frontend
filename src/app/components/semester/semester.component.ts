@@ -21,7 +21,7 @@ export class SemesterComponent implements OnInit {
     search;
     listConfig;
     chooseConfig = null;
-    chooseType = 1;
+    chooseType = false;
     listEmployee = [];
     dropdownSettings = {
         singleSelection: false,
