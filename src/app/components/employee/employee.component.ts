@@ -47,7 +47,6 @@ export class EmployeeComponent implements OnInit {
     message: Array<string> = [];
     ngOnInit() {
         this.getEmployee();
-        
     }
     async next() {
         this.employees = [];
@@ -238,11 +237,19 @@ export class EmployeeComponent implements OnInit {
                 data.forEach(element => {
                     element['joinDate'] = moment.utc(element['joinDate']).local().format();
                 });
+                data.forEach(element => {
+                    if(element.roleId == 2){
+                        element.roleName = "Company manager"
+                    }
+                    if(element.roleId == 3){
+                        element.roleName = "Employee"
+                    }
+                    if(element.roleId == 4){
+                        element.roleName = "Test owner"
+                    }
+                });
                 this.employeeList = data;
                 this.insEmployee = {};
-                this.insEmployee['role'] = this.getRole;
-                this.insEmployee['gender'] = true;
-
                 this.selected = false;
                 this.selectedAll = false;
             }, (error) => {
@@ -264,6 +271,8 @@ export class EmployeeComponent implements OnInit {
     // modal
     // insert
     open(create) {
+        this.insEmployee['role'] = 2;
+        this.insEmployee['gender'] = true;
         this.modalService.open(create, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
     }
 
@@ -535,6 +544,17 @@ export class EmployeeComponent implements OnInit {
                 });
                 this.employeeList = data;
                 this.loading = false;
+                data.forEach(element => {
+                    if(element.roleId == 2){
+                        element.roleName = "Company manager"
+                    }
+                    if(element.roleId == 3){
+                        element.roleName = "Employee"
+                    }
+                    if(element.roleId == 4){
+                        element.roleName = "Test owner"
+                    }
+                });
                 this.employeeList = data;
                 this.insEmployee = {};
                 this.insEmployee['role'] = this.getRole;

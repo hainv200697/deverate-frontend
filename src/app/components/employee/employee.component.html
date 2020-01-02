@@ -255,11 +255,14 @@
                     <th class="two text-center" scope="col">
                         <sv-default-sorter by='username'>Username</sv-default-sorter>
                     </th>
-                    <th class="six text-center" scope="col">
+                    <th class="four text-center" scope="col">
                         <sv-default-sorter by='fullname'>Fullname</sv-default-sorter>
                     </th>
                     <th class="four text-center" scope="col">
                         <sv-default-sorter by='email'>Email</sv-default-sorter>
+                    </th>
+                    <th class="two text-center" scope="col">
+                        <sv-default-sorter by='roleId'>Role</sv-default-sorter>
                     </th>
                     <th class="three text-center" scope="col">
                         <sv-default-sorter by='joinDate'>Join Date</sv-default-sorter>
@@ -281,8 +284,9 @@
                         </label>
                     </td>
                     <td class="two text-center">{{ item.username }}</td>
-                    <td class="six text-center">{{ item.fullname }}</td>
+                    <td class="four text-center">{{ item.fullname }}</td>
                     <td class="four text-center">{{ item.email }}</td>
+                    <td class="text-center two" >{{ item.roleName }}</td>
                     <td class="text-center three">
                         {{ item.joinDate | date : 'dd-MM-yyyy hh:mm a'}}
                     </td>
