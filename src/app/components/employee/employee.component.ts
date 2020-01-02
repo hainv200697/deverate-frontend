@@ -326,7 +326,6 @@ export class EmployeeComponent implements OnInit {
     // insert Employee function
     insertEmployee() {
         this.loading = true;
-        console.log(this.employees);
         this.employeeService.postCreateEmployee(this.employees).subscribe(
             results => {
                 this.loading = false;
@@ -481,7 +480,6 @@ export class EmployeeComponent implements OnInit {
 
     checkIfAllSelected() {
         this.updateEmployee = [];
-        console.log(this.updateEmployee);
         this.selected = false;
         this.selectedAll = this.employeeList.every(function (item: any) {
             return item.selected === true;
@@ -530,7 +528,6 @@ export class EmployeeComponent implements OnInit {
     }
 
     getAccount() {
-        console.log(this.getRole);
         this.employeeService.getAllWithRole(this.companyId, this.getRole).subscribe(
             (data) => {
                 data.forEach(element => {

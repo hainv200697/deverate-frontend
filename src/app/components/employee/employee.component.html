@@ -106,7 +106,7 @@
 <ng-template #create let-modal>
     <div class="text-left mt-1 ">
         <div class="modal-header">
-            <h4 class="modal-title" id="modal-basic-title">Create Employees</h4>
+            <h4 class="modal-title" id="modal-basic-title">Create Account</h4>
         </div>
         <div class="modal-body modal-basic-title col-md-12 row no-padding-no-margin">
             <form class="col-md-12 no-padding-no-margin row">
@@ -228,7 +228,7 @@
                                 data-toggle="button" placement="top" ngbTooltip="Active account">
                                 <i class="fa fa-check"></i>
                             </button>
-                            <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
+                            <button [hidden]="getRole!=3" style="margin-right: 10px;" (click)="openModalExcel(excel);"
                                 class="btn btn-lg btn-success " data-toggle="button" placement="top"
                                 ngbTooltip="Import By Excel">
                                 <i class="fa fa-file-excel-o"></i>
