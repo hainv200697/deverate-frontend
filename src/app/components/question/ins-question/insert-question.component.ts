@@ -36,6 +36,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     // catalogue
     id: number = this.activeRoute.snapshot.params.id;
     catalogueName = '';
+    listCatalogue;
     accountId = Number(localStorage.getItem('AccountId'))
     companyId = Number(localStorage.getItem('CompanyId'));
     // excel param
@@ -414,6 +415,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.question['question'] = '';
         this.question['cate_id'] = '';
         this.getQuestionById(true);
+        this.getAllCatalogue();
         this.insQuestion['companyCatalogueId'] = this.id;
         this.updQuestion['companyCatalogueId'] = this.id;
     }
@@ -607,7 +609,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.insQuestion['isActive'] = true;
         this.insQuestion['accountId'] = this.accountId;
         this.insQuestion['companyCatalogueId'] = this.id;
-        this.insQuestion['catalogueName'] = this.catalogueName;
         this.insertQuestion = [];
         console.log(this.insQuestion);
         this.insertQuestion.push(this.insQuestion);
@@ -686,7 +687,29 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         );
     }
 
-
+    getQuestion() {
+        this.loading = true;
+        this.questionService.getQuestion(this.id, this.companyId, this.iconIsActive).subscribe(
+            (data: any) => {
+                this.loading = false;
+                this.allQuestions = data;
+                this.selected = false;
+                this.selectedAll = false;
+            },
+            (error: any) => {
+                if (error.status == 0) {
+                    this.toastr.error("System is not available");
+                }
+                if (error.status == 400) {
+                    this.toastr.error("Input is invalid");
+                }
+                if (error.status == 500) {
+                    this.toastr.error("System error");
+                }
+                this.loading = false;
+            }
+        );
+    }
 
     // Get all question
     getQuestionById(status) {
@@ -695,12 +718,34 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.questionService.getQuestion(this.id, this.companyId, this.iconIsActive).subscribe(
             (data: any) => {
                 this.loading = false;
-                this.catalogueName = data.catalogueName;
-                this.allQuestions = data.questions;
+                this.allQuestions = data;
+                console.log(data);
                 this.selected = false;
                 this.selectedAll = false;
             },
             (error: any) => {
+                if (error.status == 0) {
+                    this.toastr.error("System is not available");
+                }
+                if (error.status == 400) {
+                    this.toastr.error("Input is invalid");
+                }
+                if (error.status == 500) {
+                    this.toastr.error("System error");
+                }
+                this.loading = false;
+            }
+        );
+    }
+
+    getAllCatalogue() {
+        this.loading = true;
+        this.catelogueService.getAllCatalogue(true, this.companyId).subscribe(
+            (data: any[]) => {
+                this.loading = false;
+                this.listCatalogue = data;
+                console.log(this.listCatalogue);
+            }, error => {
                 if (error.status == 0) {
                     this.toastr.error("System is not available");
                 }

@@ -31,11 +31,24 @@
                                         <h4>Create Question</h4>
                                     </div>
                                     <div class="row col-sm-12 col-md-12 col-lg-12">
+                                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                            <label>Catalogue:</label>
+                                            <select id="catalogue_company" name="catalogue_company"
+                                                class="form-control col-md-7"
+                                                [(ngModel)]="insQuestion['companyCatalogueId']">
+                                                <option *ngFor="let item of listCatalogue"
+                                                    [value]=item.companyCatalogueId>
+                                                    {{item.name}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row col-sm-12 col-md-12 col-lg-12">
                                         <div class="form-group col-sm-8 col-md-8 col-lg-8">
                                             <label>Question:</label>
                                             <input type="text" [(ngModel)]="insQuestion['question1']"
-                                                name="ins_question_question" class="form-control input-underline input-lg"
-                                                id="ins_question_question" placeholder="Question">
+                                                name="ins_question_question"
+                                                class="form-control input-underline input-lg" id="ins_question_question"
+                                                placeholder="Question">
                                         </div>
                                         <div class="form-group col-sm-4 col-md-4 col-lg-4">
                                             <label>Point:</label>
@@ -176,10 +189,10 @@
                             <div class="col-sm-12 col-md-12 col-lg-12 question-ex" *ngFor="let mes of allError">
                                 <div class="col-sm-12 col-md-12 col-lg-12" style="color: red;">
                                     <div class="col-sm-12 col-md-12 col-lg-12">
-                                        {{mes.row}} 
+                                        {{mes.row}}
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12" *ngFor="let err of mes.error">
-                                       - {{err}} 
+                                        - {{err}}
                                     </div>
                                 </div>
                             </div>
@@ -228,11 +241,10 @@
         <div class="modal-footer">
             <button [hidden]="index == 1" class="shadow-item btn btn-secondary back" (click)="back()">Back</button>
             <button (click)="downloadTemplate()" [hidden]="index==2" class="btn btn-success" data-toggle="button">
-                    Download Template
-                    <i class="fa fa-download"></i>
-                </button>
-            <button [hidden]="index == 2" (click)="nextExcel()"
-                class="shadow-item btn btn-primary">Next</button>
+                Download Template
+                <i class="fa fa-download"></i>
+            </button>
+            <button [hidden]="index == 2" (click)="nextExcel()" class="shadow-item btn btn-primary">Next</button>
             <button [disabled]="check==false" [hidden]="index == 1" class="btn btn-success save"
                 (click)="insertQuestionSubmit('excel')">Create</button>
             <button type="button" class="btn btn-danger" (click)="closeExcel()">Close</button>
@@ -349,26 +361,40 @@
                             Create Question
                         </button>
                     </div>
-                    <div class="row justify-content-end" style="margin-top: 20px;">
-                        <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
-                            (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger"
-                            data-toggle="button">
-                            <i class="fa fa-ban" tooltip="delete" placement="top"></i>
-                        </button>
-                        <button [hidden]="iconIsActive==true" style="margin-right: 10px;"
-                            (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success"
-                            data-toggle="button">
-                            <i class="fa fa-check" tooltip="Active" placement="top"></i>
-                        </button>
-                        <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
-                            class="btn btn-lg btn-success " data-toggle="button">
-                            <i class="fa fa-file-excel-o"></i>
-                        </button>
-                        <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
-                            class="btn btn-lg btn-primary" data-toggle="button">
-                            <i #refesh class="fa fa-refresh" tooltip="common_refresh" placement="top"
-                                aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
-                        </button>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row" style="margin-left: 20px; margin-top: 20px;">
+                                <select id="catalogue_company" name="catalogue_company" class="form-control col-md-5"
+                                    [(ngModel)]="id" (change)="getQuestion()">
+                                    <option [value]=0>All question</option>
+                                    <option *ngFor="let item of listCatalogue" [value]=item.companyCatalogueId>
+                                        {{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row justify-content-end" style="margin-top: 20px;">
+                                <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
+                                    (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger"
+                                    data-toggle="button">
+                                    <i class="fa fa-ban" tooltip="delete" placement="top"></i>
+                                </button>
+                                <button [hidden]="iconIsActive==true" style="margin-right: 10px;"
+                                    (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success"
+                                    data-toggle="button">
+                                    <i class="fa fa-check" tooltip="Active" placement="top"></i>
+                                </button>
+                                <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
+                                    class="btn btn-lg btn-success " data-toggle="button">
+                                    <i class="fa fa-file-excel-o"></i>
+                                </button>
+                                <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
+                                    class="btn btn-lg btn-primary" data-toggle="button">
+                                    <i #refesh class="fa fa-refresh" tooltip="common_refresh" placement="top"
+                                        aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -382,7 +408,7 @@
                                 (change)="selectAll();">
                         </th>
                         <th class="col-md-3 text-center" scope="col">
-                            <sv-default-sorter by='catalogueName'>Catalog</sv-default-sorter>
+                            <sv-default-sorter by='catalogueName'>Catalogue</sv-default-sorter>
                         </th>
                         <th class="col-md-4 text-center" scope="col">
                             <sv-default-sorter by='question1'>Question</sv-default-sorter>
@@ -413,7 +439,7 @@
                                     (change)="checkIfAllSelected();">
                             </label>
                         </td>
-                        <td class="text-center col-md-3">{{catalogueName}}</td>
+                        <td class="text-center col-md-3">{{q.catalogueName}}</td>
                         <td class="text-center col-md-4">{{q.question1}}</td>
                         <!-- <td class="text-center col-md-1">{{q.fullname}}</td> -->
                         <td class="text-center col-md-1">{{q.point}}</td>
@@ -452,7 +478,8 @@
 
     </div>
 </ng-template>
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true  }"  [template]="customLoadingTemplate">
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true  }"
+    [template]="customLoadingTemplate">
 </ngx-loading>
 <ng-template #searchNull>
     <tr class="col-md-12 row no-padding-no-margin">

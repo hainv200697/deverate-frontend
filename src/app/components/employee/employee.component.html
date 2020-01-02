@@ -22,7 +22,7 @@
                     <div class="step" data-target="#test-l-2">
                         <button [disabled]="index != 2 " class="step-trigger">
                             <span class="bs-stepper-circle">2</span>
-                            <span class="bs-stepper-label">Review Account</span>
+                            <span class="bs-stepper-label">Review New Account</span>
                         </button>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
 <ng-template #create let-modal>
     <div class="text-left mt-1 ">
         <div class="modal-header">
-            <h4 class="modal-title" id="modal-basic-title">Create Account</h4>
+            <h4 class="modal-title" id="modal-basic-title">Create Employees</h4>
         </div>
         <div class="modal-body modal-basic-title col-md-12 row no-padding-no-margin">
             <form class="col-md-12 no-padding-no-margin row">
@@ -198,22 +198,14 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="row justify-content-end " style="margin-left: 20px; margin-top: 20px;">
-                            <div class=" col-md-4 custom-control custom-radio text-left">
-                                <input class="custom-control-input" type="radio" name="search_all" id="search_all"
-                                    (click)="getAccount(2)" [(ngModel)]="getRole" [value]="2">
-                                <label class="custom-control-label" for="search_all">Manager</label>
-                            </div>
-                            <div class=" col-md-4 custom-control custom-radio text-left">
-                                <input class="custom-control-input" [(ngModel)]="getRole" type="radio"
-                                    name="search_testOwner" id="search_testOwner" (click)="getAccount(4)" [value]="4">
-                                <label class="custom-control-label" for="search_testOwner">Test Owner</label>
-                            </div>
-                            <div class=" col-md-4 custom-control custom-radio text-left">
-                                <input class="custom-control-input" type="radio" name="search_employee"
-                                    id="search_employee" (click)="getAccount(3)" [(ngModel)]="getRole" [value]="3">
-                                <label class="custom-control-label" for="search_employee">Employee</label>
-                            </div>
+                        <div class="row" style="margin-left: 20px; margin-top: 20px;">
+                            <select id="ins_manage_role" name="ins_manage_role" class="form-control col-md-5"
+                            [(ngModel)]="getRole" (change)="getAccount(0)">
+                            <option [value]=0>All account</option>
+                            <option [value]=2>Company manager</option>
+                            <option [value]=3>Employee</option>
+                            <option [value]=4>Test Owner</option>
+                            </select>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -223,15 +215,15 @@
                                 <i class="fa fa-download"></i>
                             </button> -->
                             <button style="margin-right: 10px;" (click)="resendmail();" class="btn btn-lg btn-warning"
-                                placement="top" ngbTooltip="Resend passwword" data-toggle="button">
+                                placement="top" ngbTooltip="Resend password" data-toggle="button">
                                 <i class="fa fa-envelope"></i>
                             </button>
-                            <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
+                            <button [hidden]="selected==false" style="margin-right: 10px;"
                                 (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger" placement="top"
                                 ngbTooltip="Disable account" data-toggle="button">
                                 <i class="fa fa-ban"></i>
                             </button>
-                            <button [hidden]="iconIsActive==true" style="margin-right: 10px;"
+                            <button [hidden]="selected==false" style="margin-right: 10px;"
                                 (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success"
                                 data-toggle="button" placement="top" ngbTooltip="Active account">
                                 <i class="fa fa-check"></i>
@@ -253,8 +245,8 @@
             </div>
         </div>
 
-        <table *ngIf="getRole != 3" class="table  table-hover customtable" [svData]="employeeList | EmployeeFilterPipe:searchText"
-            #sv="svDataTable" [svRowsOnPage]="25" svSortBy="name" svSortOrder="asc">
+        <table  class="table  table-hover customtable" [svData]="employeeList | EmployeeFilterPipe:searchText"
+            #sv="svDataTable" [svRowsOnPage]="25" svSortBy="isActive" svSortOrder="desc">
             <thead>
                 <tr class="col-md-12 row no-padding-no-margin">
                     <th class="text-center one" scope="col">
@@ -275,14 +267,8 @@
                     <th class="two text-center" scope="col">
                         <sv-default-sorter by='gender'>Gender</sv-default-sorter>
                     </th>
-                    <th class="two text-center" scope="col">Status
-                        <div ngbDropdown class="d-inline-block dropdown">
-                            <button class=" icon-btn" ngbDropdownToggle style="color: black"></button>
-                            <div ngbDropdownMenu>
-                                <button class="dropdown-item" (click)="getEmployee(true)">Active</button>
-                                <button class="dropdown-item" (click)="getEmployee(false)">Deactive</button>
-                            </div>
-                        </div>
+                    <th class="two text-center" scope="col">
+                        <sv-default-sorter by='isActive'>Status</sv-default-sorter>
                     </th>
                 </tr>
             </thead>
@@ -310,76 +296,6 @@
                         <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
                     </td>
                     <td class="text-center two" [hidden]="item.isActive==false">
-                        <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="4">
-                        <sv-bootstrap-paginator [rowsOnPageSet]="[5, 25, 50]"></sv-bootstrap-paginator>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-
-        <table *ngIf="getRole == 3" class="table  table-hover customtable" [svData]="employeeList | EmployeeFilterPipe:searchText"
-            #sv="svDataTable" [svRowsOnPage]="25" svSortBy="name" svSortOrder="asc">
-            <thead>
-                <tr class="col-md-12 row no-padding-no-margin">
-                    <th class="text-center one" scope="col">
-                        <input [disabled]="sv.data.length == 0" class="btn" type="checkbox" value="" [(ngModel)]="selectedAll" (change)="selectAll();">
-                    </th>
-                    <th class="two text-center" scope="col">
-                        <sv-default-sorter by='username'>Username</sv-default-sorter>
-                    </th>
-                    <th class="four text-center" scope="col">
-                        <sv-default-sorter by='fullname'>Fullname</sv-default-sorter>
-                    </th>
-                    <th class="four text-center" scope="col">
-                        <sv-default-sorter by='email'>Email</sv-default-sorter>
-                    </th>
-                    <th class="three text-center" scope="col">
-                        <sv-default-sorter by='joinDate'>Join Date</sv-default-sorter>
-                    </th>
-                    <th class="three text-center" scope="col">
-                        <sv-default-sorter by='gender'>Gender</sv-default-sorter>
-                    </th>
-                    <th class="three text-center" scope="col">Status
-                        <div ngbDropdown class="d-inline-block dropdown">
-                            <button class=" icon-btn" ngbDropdownToggle style="color: black"></button>
-                            <div ngbDropdownMenu>
-                                <button class="dropdown-item" (click)="getEmployee(true)">Active</button>
-                                <button class="dropdown-item" (click)="getEmployee(false)">Deactive</button>
-                            </div>
-                        </div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody *ngIf="sv.data.length != 0;  else searchNull">
-                <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data">
-                    <td class="text-center one">
-                        <label>
-                            <input type="checkbox" value="" [(ngModel)]="item.selected" class="btn"
-                                (change)="checkIfAllSelected();">
-                        </label>
-                    </td>
-                    <td class="two text-center">{{ item.username }}</td>
-                    <td class="four text-center">{{ item.fullname }}</td>
-                    <td class="four text-center">{{ item.email }}</td>
-                    <td class="text-center three">
-                        {{ item.joinDate | date : 'dd-MM-yyyy hh:mm a'}}
-                    </td>
-                    <td class="text-center three" [hidden]="item.gender==false">
-                        Male
-                    </td>
-                    <td class="text-center three" [hidden]="item.gender==true">
-                        Female
-                    </td>
-                    <td class="text-center three" [hidden]="item.isActive==true">
-                        <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
-                    </td>
-                    <td class="text-center three" [hidden]="item.isActive==false">
                         <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
                     </td>
                 </tr>

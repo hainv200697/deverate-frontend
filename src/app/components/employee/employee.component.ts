@@ -43,11 +43,10 @@ export class EmployeeComponent implements OnInit {
     listUser: String[] = [];
     listId: number[] = [];
     updRole = {};
-    getRole = 2;
+    getRole = 0;
     message: Array<string> = [];
     ngOnInit() {
-        this.getRole=2;
-        this.getEmployee(this.iconIsActive);
+        this.getEmployee();
         
     }
     async next() {
@@ -227,15 +226,13 @@ export class EmployeeComponent implements OnInit {
     }
 
     clickButtonRefresh() {
-        this.getEmployee(this.iconIsActive);
+        this.getEmployee();
     }
 
 
-    getEmployee(status) {
-        this.getRole = 2;
-        this.iconIsActive = status;
+    getEmployee() {
         this.loading = true;
-        this.employeeService.getAllWithRole(this.companyId, this.iconIsActive, this.getRole).subscribe(
+        this.employeeService.getAllWithRole(this.companyId, this.getRole).subscribe(
             (data) => {
                 this.loading = false;
                 data.forEach(element => {
@@ -337,7 +334,7 @@ export class EmployeeComponent implements OnInit {
                 this.employees = [];
 
                 this.insEmployee = {};
-                this.getEmployee(this.iconIsActive);
+                this.getEmployee();
                 this.closeModal();
             },
             (error) => {
@@ -379,11 +376,15 @@ export class EmployeeComponent implements OnInit {
                     this.loading = true;
                     this.employeeService.disableEmployee(this.listId, status).subscribe(data => {
                         this.loading = false;
+                        this.selected = false;
                         this.selectedAll = false;
-                        this.getEmployee(this.iconIsActive);
+                        this.updateEmployee = [];
+                        this.getEmployee();
                         this.closeModal();
+                        this.listId = [];
                         Swal.fire('Success', 'The status has been change', 'success');
                     }, (error) => {
+                        this.listId = [];
                         if (error.status == 500) {
                             this.toastr.error('System error')
                         }
@@ -424,13 +425,14 @@ export class EmployeeComponent implements OnInit {
                         this.listUser.push(element.username);
                     });
                     this.employeeService.resendpassword(this.listUser, this.companyId).subscribe(data => {
-                        this.getEmployee(this.iconIsActive);
+                        this.getEmployee();
                         this.selectedAll = false;
                         this.closeModal();
                         Swal.fire({ title: 'Success', text: "Password was send to your email!", type: 'success' });
                         this.listUser = [];
                     }, error => {
                         if (error.status == 400) {
+                            this.listUser = [];
                             const account = error.error.slice(0, 3);
                             const message = `Account ${account.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
                             Swal.fire({
@@ -465,6 +467,11 @@ export class EmployeeComponent implements OnInit {
     // select employee
     selectAll() {
         this.updateEmployee = [];
+        if(this.selected == false){
+            this.selected = true;
+        }else{
+            this.selected = false;
+        }
         for (let i = 0; i < this.employeeList.length; i++) {
             this.employeeList[i].selected = this.selectedAll;
             this.employeeList[i].companyId = this.companyId;
@@ -474,6 +481,7 @@ export class EmployeeComponent implements OnInit {
 
     checkIfAllSelected() {
         this.updateEmployee = [];
+        console.log(this.updateEmployee);
         this.selected = false;
         this.selectedAll = this.employeeList.every(function (item: any) {
             return item.selected === true;
@@ -512,7 +520,7 @@ export class EmployeeComponent implements OnInit {
                 this.loading = false;
                 this.toastr.success("Update success");
                 this.updRole = {};
-                this.getEmployee(this.iconIsActive);
+                this.getEmployee();
             },
             (error) => {
                 this.loading = false;
@@ -521,9 +529,9 @@ export class EmployeeComponent implements OnInit {
         );
     }
 
-    getAccount(item) {
-        this.getRole = item;
-        this.employeeService.getAllWithRole(this.companyId, this.iconIsActive, this.getRole).subscribe(
+    getAccount() {
+        console.log(this.getRole);
+        this.employeeService.getAllWithRole(this.companyId, this.getRole).subscribe(
             (data) => {
                 data.forEach(element => {
                     element['joinDate'] = moment.utc(element['joinDate']).local().format();
