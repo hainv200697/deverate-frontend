@@ -27,7 +27,6 @@ export class EmployeeComponent implements OnInit {
     private stepper: Stepper;
     companyId = Number(localStorage.getItem('CompanyId'));
     // Excel
-    selected = false;
     index = 1;
     checkExcel = true;
     searchText = '';
@@ -39,9 +38,7 @@ export class EmployeeComponent implements OnInit {
     employeeList = [];
     insEmployee = {};
     employees = [];
-    updateEmployee = [];
     listUser: String[] = [];
-    listId: number[] = [];
     updRole = {};
     getRole = 0;
     message: Array<string> = [];
@@ -238,29 +235,25 @@ export class EmployeeComponent implements OnInit {
                     element['joinDate'] = moment.utc(element['joinDate']).local().format();
                 });
                 data.forEach(element => {
+                    element.selected = false;
                     if(element.roleId == 2){
                         element.roleName = "Company Manager"
-                    }
-                    if(element.roleId == 3){
+                    }else if(element.roleId == 3){
                         element.roleName = "Employee"
                     }
-                    if(element.roleId == 4){
+                    else{
                         element.roleName = "Test Owner"
                     }
                 });
                 this.employeeList = data;
                 this.insEmployee = {};
-                this.selected = false;
                 this.selectedAll = false;
             }, (error) => {
                 if (error.status == 500) {
-                    this.toastr.error("System error");
-                    this.closeModal();
-                }
-                if (error.status == 400) {
+                    this.toastr.error('System error')
+                }else if (error.status == 400) {
                     this.toastr.error("Input is invalid");
-                }
-                if (error.status == 0) {
+                }else if (error.status == 0) {
                     this.toastr.error('System is not available')
                 }
                 this.loading = false;
@@ -346,14 +339,12 @@ export class EmployeeComponent implements OnInit {
                 this.closeModal();
             },
             (error) => {
+                this.loading = false;
                 if (error.status == 0) {
                     this.toastr.error("System is not available");
-                }
-                if (error.status == 400) {
+                }else if (error.status == 400) {
                     this.toastr.error("Input is invalid");
-                }
-                this.loading = false;
-                if (error.status == 500) {
+                }else if (error.status == 500) {
                     this.toastr.error("System error");
                 } else {
                     this.loading = false;
@@ -368,7 +359,7 @@ export class EmployeeComponent implements OnInit {
 
     // change status
     clickButtonChangeStatus(status: boolean) {
-        if (this.selectedAll == true || this.selected == true) {
+        if (this.listUser.length > 0) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: 'Status will be change!',
@@ -378,21 +369,16 @@ export class EmployeeComponent implements OnInit {
                 cancelButtonText: 'No, keep it'
             }).then((result) => {
                 if (result.value) {
-                    for (let i = 0; i < this.updateEmployee.length; i++) {
-                        this.listId.push(this.updateEmployee[i].accountId)
-                    }
                     this.loading = true;
-                    this.employeeService.disableEmployee(this.listId, status).subscribe(data => {
+                    this.employeeService.disableEmployee(this.listUser, status).subscribe(data => {
                         this.loading = false;
-                        this.selected = false;
                         this.selectedAll = false;
-                        this.updateEmployee = [];
                         this.getEmployee();
                         this.closeModal();
-                        this.listId = [];
+                        this.listUser = [];
                         Swal.fire('Success', 'The status has been change', 'success');
                     }, (error) => {
-                        this.listId = [];
+                        this.listUser = [];
                         if (error.status == 500) {
                             this.toastr.error('System error')
                         }
@@ -408,7 +394,7 @@ export class EmployeeComponent implements OnInit {
                 }
             })
         } else {
-            this.updateEmployee = [];
+            this.listUser = [];
             Swal.fire(
                 'Cancelled',
                 'Please choose employee!',
@@ -419,7 +405,7 @@ export class EmployeeComponent implements OnInit {
 
     // send pass
     resendmail() {
-        if (this.selectedAll == true || this.selected == true) {
+        if (this.listUser.length > 0) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: 'Password will be send!',
@@ -429,9 +415,6 @@ export class EmployeeComponent implements OnInit {
                 cancelButtonText: 'No, Do not send it'
             }).then((result) => {
                 if (result.value) {
-                    this.updateEmployee.forEach(element => {
-                        this.listUser.push(element.username);
-                    });
                     this.employeeService.resendpassword(this.listUser, this.companyId).subscribe(data => {
                         this.getEmployee();
                         this.selectedAll = false;
@@ -439,8 +422,8 @@ export class EmployeeComponent implements OnInit {
                         Swal.fire({ title: 'Success', text: "Password was send to your email!", type: 'success' });
                         this.listUser = [];
                     }, error => {
+                        this.listUser = [];
                         if (error.status == 400) {
-                            this.listUser = [];
                             const account = error.error.slice(0, 3);
                             const message = `Account ${account.join(',')}${error.error.length > 3 ? ',...' : ''} existed`;
                             Swal.fire({
@@ -463,7 +446,7 @@ export class EmployeeComponent implements OnInit {
                 }
             })
         } else {
-            this.updateEmployee = [];
+            this.listUser = [];
             Swal.fire(
                 'Cancelled',
                 'Please choose employee!',
@@ -474,32 +457,33 @@ export class EmployeeComponent implements OnInit {
 
     // select employee
     selectAll() {
-        this.updateEmployee = [];
-        if(this.selected == false){
-            this.selected = true;
-        }else{
-            this.selected = false;
+        if(this.selectedAll){
+            this.employeeList.forEach(e=>{
+                e.selected = true;
+                this.listUser.push(e.username);
+            });
         }
-        for (let i = 0; i < this.employeeList.length; i++) {
-            this.employeeList[i].selected = this.selectedAll;
-            this.employeeList[i].companyId = this.companyId;
-            this.updateEmployee.push(this.employeeList[i]);
+        else{
+            this.employeeList.forEach(e=>{
+                e.selected = false;
+            });
+            this.listUser = [];
         }
     }
 
-    checkIfAllSelected() {
-        this.updateEmployee = [];
-        this.selected = false;
-        this.selectedAll = this.employeeList.every(function (item: any) {
-            return item.selected === true;
-        });
-        for (let i = 0; i < this.employeeList.length; i++) {
-            if (this.employeeList[i].selected === true) {
-                this.selected = true;
-                this.employeeList[i].companyId = this.companyId;
-                this.updateEmployee.push(this.employeeList[i]);
+    checkSelected(username) {
+        var index = this.employeeList.findIndex(x => x.username == username);
+        this.employeeList[index].selected = !this.employeeList[index].selected;
+        if(this.employeeList[index].selected == false){
+            this.listUser.splice( this.listUser.indexOf(username), 1 );
+            this.selectedAll = false;
+        }else{
+            this.listUser.push(username);
+            if(this.listUser.length == this.employeeList.length){
+                this.selectedAll = true;
             }
         }
+        console.log(this.listUser);
     }
     validate() {
         if (this.insEmployee['fullname'] == '' || this.insEmployee['fullname'] == null) {
@@ -532,46 +516,6 @@ export class EmployeeComponent implements OnInit {
             (error) => {
                 this.loading = false;
                 this.toastr.error(error);
-            }
-        );
-    }
-
-    getAccount() {
-        this.employeeService.getAllWithRole(this.companyId, this.getRole).subscribe(
-            (data) => {
-                data.forEach(element => {
-                    element['joinDate'] = moment.utc(element['joinDate']).local().format();
-                });
-                this.employeeList = data;
-                this.loading = false;
-                data.forEach(element => {
-                    if(element.roleId == 2){
-                        element.roleName = "Company Manager"
-                    }
-                    if(element.roleId == 3){
-                        element.roleName = "Employee"
-                    }
-                    if(element.roleId == 4){
-                        element.roleName = "Test Owner"
-                    }
-                });
-                this.employeeList = data;
-                this.insEmployee = {};
-                this.insEmployee['role'] = this.getRole;
-                this.insEmployee['gender'] = 1;
-                this.selected = false;
-                this.selectedAll = false;
-            }, (error) => {
-                if (error.status == 500) {
-                    this.toastr.error('System error')
-                }
-                if (error.status == 400) {
-                    this.toastr.error("Input is invalid");
-                }
-                if (error.status == 0) {
-                    this.toastr.error('System is not available')
-                }
-                this.loading = false;
             }
         );
     }

@@ -610,7 +610,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.insQuestion['accountId'] = this.accountId;
         this.insQuestion['companyCatalogueId'] = this.id;
         this.insertQuestion = [];
-        console.log(this.insQuestion);
         this.insertQuestion.push(this.insQuestion);
         this.questionService.insertQuestion(this.insertQuestion).subscribe(
             (results) => {
@@ -719,7 +718,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             (data: any) => {
                 this.loading = false;
                 this.allQuestions = data;
-                console.log(data);
                 this.selected = false;
                 this.selectedAll = false;
             },
@@ -744,7 +742,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             (data: any[]) => {
                 this.loading = false;
                 this.listCatalogue = data;
-                console.log(this.listCatalogue);
             }, error => {
                 if (error.status == 0) {
                     this.toastr.error("System is not available");

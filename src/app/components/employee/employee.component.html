@@ -200,7 +200,7 @@
                     <div class="col-md-6">
                         <div class="row" style="margin-left: 20px; margin-top: 20px;">
                             <select id="ins_manage_role" name="ins_manage_role" class="form-control col-md-5"
-                            [(ngModel)]="getRole" (change)="getAccount(0)">
+                            [(ngModel)]="getRole" (change)="getEmployee()">
                             <option [value]=0>All account</option>
                             <option [value]=2>Company Manager</option>
                             <option [value]=3>Employee</option>
@@ -279,8 +279,8 @@
                 <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data">
                     <td class="text-center one">
                         <label>
-                            <input type="checkbox" value="" [(ngModel)]="item.selected" class="btn"
-                                (change)="checkIfAllSelected();">
+                            <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                (change)="checkSelected(item.username);">
                         </label>
                     </td>
                     <td class="two text-center">{{ item.username }}</td>
