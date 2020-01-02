@@ -164,7 +164,7 @@ export class EmployeeComponent implements OnInit {
                     element.role = null;
                     this.message.push("Role of email " + element.Email + " is blank!");
                     this.checkExcel = false;
-                }else if (element.Role == "Company manager") {
+                }else if (element.Role == "Company Manager") {
                     element.Role = 2;
                 }else if (element.Role == "Employee") {
                     element.Role = 3;
@@ -239,7 +239,7 @@ export class EmployeeComponent implements OnInit {
                 });
                 data.forEach(element => {
                     if(element.roleId == 2){
-                        element.roleName = "Company manager"
+                        element.roleName = "Company Manager"
                     }
                     if(element.roleId == 3){
                         element.roleName = "Employee"
@@ -546,7 +546,7 @@ export class EmployeeComponent implements OnInit {
                 this.loading = false;
                 data.forEach(element => {
                     if(element.roleId == 2){
-                        element.roleName = "Company manager"
+                        element.roleName = "Company Manager"
                     }
                     if(element.roleId == 3){
                         element.roleName = "Employee"
