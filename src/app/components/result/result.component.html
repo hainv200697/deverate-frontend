@@ -98,21 +98,36 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody style="background-color: white;">
+                <tbody style="background-color: white;" class="row no-padding-no-margin">
                     <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px"
                         *ngFor="let c of catalogueTable; let i = index ">
 
                         <td class="text-center" style="font-size: 16px; width: 10%;">{{i+1}}</td>
                         <td class="text-center" style="font-size: 16px; width: 40%;">{{c.companyCatalogueName}}</td>
                         <td class="text-center" style="font-size: 16px; width: 25%;">{{c.weightPoint}}%</td>
-                        <td class="text-center" style="font-size: 16px; width: 25%;">{{catalogueOverpoint[i].overallPoint}}
+                        <td class="text-center" style="font-size: 16px; width: 25%;">
+                            {{catalogueOverpoint[i].overallPoint}}
                         </td>
 
                     </tr>
-                    <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px">
-                        <td class="text-center" style="font-size: 16px; width: 50%;">Total</td>
+                    <tr class="col-md-6 row no-padding-no-margin" style="font-size: 18px">
+                        <td class="text-center" style="font-size: 16px; width: 100%;">
+                            <strong>Total</strong>
+                        </td>
+                    </tr>
+                    <tr class="col-md-6 row no-padding-no-margin" style="font-size: 18px">
                         <td class="text-center" style="font-size: 16px; width: 50%;">
-                            {{statistic.point}} &nbsp;
+                            <strong>Point</strong>
+                        </td>
+                        <td class="text-center" style="font-size: 16px; width: 50%;">
+                            <strong>{{statistic.point}}</strong></td>
+                    </tr>
+                    <tr class="col-md-6 row no-padding-no-margin" style="font-size: 18px"></tr>
+                    <tr class="col-md-6 row no-padding-no-margin" style="font-size: 18px">
+                        <td class="text-center" style="font-size: 16px; width: 50%;">
+                            <strong>Rank</strong>
+                        </td>
+                        <td class="text-center" style="font-size: 16px; width: 50%;">
                             <strong>{{statistic.rank}}</strong>
                         </td>
                     </tr>
@@ -121,13 +136,21 @@
         </div>
 
         <div class="col-md-5 mt-4">
-        <h3><strong>Your score is higher than {{statistic.lowerTestPercent}}% people</strong></h3>
-            <div>
-                <strong>Here is the list of recommendations to improve your level:</strong> 
-            <div *ngFor="let item of catalogueOverpoint">
-                <label *ngIf="item.differentPoint != 0"> {{item.name}}: {{item.differentPoint | number}} points</label>  
+            <h3 *ngIf="statistic.lowerTestPercent != 0"><strong>Your score is higher than
+                    {{statistic.lowerTestPercent}}% people</strong></h3>
+            <div *ngIf="statistic.rank == statistic.potentialRank">
+                <strong>Here is the list of recommendations to improve your level to: {{statistic.nextRank}}</strong>
+                <div *ngFor="let item of catalogueOverpoint">
+                    <label *ngIf="item.differentPoint != 0"> {{item.name}}</label>
+                </div>
             </div>
-            </div> 
+            <div *ngIf="statistic.rank != statistic.potentialRank">
+                <strong>Here is the list of recommendations to improve your level to:
+                    {{statistic.potentialRank}}</strong>
+                <div *ngFor="let item of catalogueOverpoint">
+                    <label *ngIf="item.differentPoint != 0"> {{item.name}}</label>
+                </div>
+            </div>
         </div>
     </div>
 

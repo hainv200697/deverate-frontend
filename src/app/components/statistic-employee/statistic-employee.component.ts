@@ -33,7 +33,7 @@ export class StatisticEmployeeComponent implements OnInit {
     this.loading = true;
     this.historyApi.getHistory(this.accountId).subscribe(
       (data) => {
-        this.dataLineChart = data['data']['data'];
+        this.dataLineChart = data;
         var size = this.dataLineChart[0].series.length;
         this.averageCatalogue = [];
         if (itemSelect == 3) {

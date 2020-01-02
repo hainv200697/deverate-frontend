@@ -40,6 +40,12 @@ export class ConfigurationApiService {
         return this.httpClient.get(this.URL + AppSettings.ROUTE_TEST + API + id);
     }
 
+    getConfigForEmployee(companyId){
+        const param = new HttpParams().set('companyId',companyId);
+        const API = 'ConfigurationApi/GetConfigurationForEmployee';
+        return this.httpClient.get<any[]>(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });   
+    }
+
     getConfigForApplicant(status,companyId){    
         const param = new HttpParams().set('type', status).set('companyId',companyId);
         const API = 'ConfigurationApi/GetConfigurationForApplicant';

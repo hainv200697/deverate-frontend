@@ -90,16 +90,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12"></div>
-            <div ngbDropdown class="col-md-5 d-flex justify-content-start d-inline-block dropdown">
-                <button class="btn icon-btn border" ngbDropdownToggle>Item</button>
-                <div ngbDropdownMenu>
-                    <button class="dropdown-item" (click)="PageSize(5)">5</button>
-                    <button class="dropdown-item" (click)="PageSize(25)">25</button>
-                    <button class="dropdown-item" (click)="PageSize(50)">50</button>
-                </div>
-            </div>
-            <table class="table  table-hover customtable" [svData]="listRank" #sv="svDataTable">
+            <table class="table  table-hover customtable" [svData]="listRank" #sv="svDataTable" [svRowsOnPage]="25">
                 <thead class="">
                     <tr class="col-md-12 row no-padding-no-margin pt-3">
                         <th class="text-center" style="width: 5%;" scope="col"><input class="btn" type="checkbox"
@@ -158,12 +149,14 @@
                         </td>
                     </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <sv-bootstrap-paginator [rowsOnPageSet]="[5, 25, 50]"></sv-bootstrap-paginator>
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
-</div>
-
-<div class=" d-flex justify-content-center col-md-12">
-    <ngb-pagination [collectionSize]="listRank.length" [(page)]="page" [pageSize]="pageSize" [boundaryLinks]="true">
-    </ngb-pagination>
 </div>
