@@ -487,8 +487,14 @@ export class EmployeeComponent implements OnInit {
         }
     }
     validate() {
-        const fullname = this.insEmployee['fullname'].toUpperCase();
-        this.insEmployee['fullname'] = $.trim(fullname.replace(/\s\s+/g, ' ')).toUpperCase();
+        const fullname = $.trim(this.insEmployee['fullname'].replace(/\s\s+/g, ' ')).toUpperCase();
+        const str = fullname.split(" ");
+        if(str.length < 2){
+            this.toastr.error('Employee\'s name min 2 words');
+            document.getElementById('ins_manage_fullname').style.borderColor = 'red';
+            document.getElementById('ins_manage_fullname').focus();
+            return false;
+        }
         if (fullname == '' || fullname == null) {
             this.toastr.error('Please input employee name');
             document.getElementById('ins_manage_fullname').style.borderColor = 'red';
@@ -502,6 +508,7 @@ export class EmployeeComponent implements OnInit {
         } else {
             document.getElementById('ins_manage_fullname').style.borderColor = 'green';
         }
+        this.insEmployee['fullname'] = fullname;
         return true;
     }
 
@@ -554,8 +561,7 @@ export class EmployeeComponent implements OnInit {
     }
 
     validateAddress() {
-        const address = this.insEmployee['address'];
-        this.insEmployee['address'] = $.trim(address.replace(/\s\s+/g, ' '));
+        const address = $.trim(this.insEmployee['address'].replace(/\s\s+/g, ' '));
         if (address != undefined) {
             if (address != '') {
                 if (address.length < 3) {
@@ -574,6 +580,7 @@ export class EmployeeComponent implements OnInit {
                 }
             }
         }
+        this.insEmployee['address'] = address;
         return true;
     }
     validatePhone() {
@@ -602,7 +609,6 @@ export class EmployeeComponent implements OnInit {
 
     validateEmail() {
         let email = $.trim(this.insEmployee['email'].replace(/\s\s+/g, ' '));
-        this.insEmployee['email'] = email;
         if (email == '' || email == null || email == undefined) {
             this.toastr.error('Email can not blank');
             document.getElementById('ins_manage_email').style.borderColor = 'red';
@@ -627,7 +633,7 @@ export class EmployeeComponent implements OnInit {
                 document.getElementById('ins_manage_email').style.borderColor = 'green';
             }
         }
-
+        this.insEmployee['email'] = email;
         return true;
     }
 }

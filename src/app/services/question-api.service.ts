@@ -7,8 +7,8 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class QuestionApiService {
-    // URL = AppSettings.BASEURL;
-    URL ='http://localhost:9000/';
+    URL = AppSettings.BASEURL;
+    // URL ='http://localhost:9000/';
     httpOptions = {
         headers: new HttpHeaders({
             'Content-Type': 'application/json'
