@@ -11,7 +11,7 @@
     <div class="row justify-content-md-center">
         <div class="login col-md-5">
             <img src="assets/images/logo/Deverate_logo.jpg" width="150px" class="user-avatar" />
-            <form role="form">
+            <form #login = "ngForm" (ngSubmit) = "onLogin()">
                 <div class="form-content">
                     <div class="text-left form-group">
                         <label >Username</label>
@@ -24,8 +24,9 @@
                     </div>
                 </div>
                 <div class="button">
-                    <a class="btn btn-primary" style="color: white;" (click)="onLogin()">Log in</a>
+                    <input class="btn btn-primary" style="color: white;" type = "submit" value = "Log in">
                 </div>
+                
             </form>
         </div>
     </div>
