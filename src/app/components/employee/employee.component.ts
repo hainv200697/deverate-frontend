@@ -245,7 +245,7 @@ export class EmployeeComponent implements OnInit {
                         element.roleName = "Employee"
                     }
                     if(element.roleId == 4){
-                        element.roleName = "Test owner"
+                        element.roleName = "Test Owner"
                     }
                 });
                 this.employeeList = data;
@@ -552,7 +552,7 @@ export class EmployeeComponent implements OnInit {
                         element.roleName = "Employee"
                     }
                     if(element.roleId == 4){
-                        element.roleName = "Test owner"
+                        element.roleName = "Test Owner"
                     }
                 });
                 this.employeeList = data;
