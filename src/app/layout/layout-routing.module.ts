@@ -15,6 +15,7 @@ const routes: Routes = [
             // System Manager
             { path: 'default-catalogue', loadChildren: () => import('../components/catalogue-default/catalogue-default.module').then(m => m.CatalogueDefaultModule), canActivate: [SystemGuard]},
             { path: 'manage-company', loadChildren: () => import('../components/company/ins-company/insert-company.module').then(m => m.InsertCompanyModule), canActivate: [SystemGuard]},
+            { path: 'manage-company-account/:id', loadChildren: () => import('../components/employee-system/employee-system.module').then(m => m.EmployeeSystemModule), canActivate: [SystemGuard]},
             { path: 'manage-question-default/:id', loadChildren: () => import('../components/question-default/question-default.module').then(m => m.QuestionDefaultModule), canActivate: [SystemGuard]},
             { path: 'manage-answer-default/:id', loadChildren: () => import('../components/answer_default/answer-default.module').then(m => m.AnswerDefaultModule), canActivate: [SystemGuard]},
             // Company Manager

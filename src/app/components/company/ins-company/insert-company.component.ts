@@ -707,4 +707,8 @@ export class InsertCompanyComponent implements OnInit {
     }
   }
 
+  viewAccount(item) {
+    this.router.navigate(['/manage-company-account/', item['companyId']]);
+  }
+
 }

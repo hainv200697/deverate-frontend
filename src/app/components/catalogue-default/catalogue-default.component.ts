@@ -70,7 +70,18 @@ export class CatalogueDefaultComponent implements OnInit {
             (data: any[]) => {
                 this.loading = false;
                 this.catalogueList = data;
-                console.log(this.catalogueList);
+            },
+            (error)=>{
+                if (error.status == 0) {
+                    this.toastr.error("System is not available");
+                }
+                if (error.status == 400) {
+                    this.toastr.error("Input is invalid");
+                }
+                if (error.status == 500) {
+                    this.toastr.error("System error");
+                }
+                this.loading = false;
             }
         );
     }
