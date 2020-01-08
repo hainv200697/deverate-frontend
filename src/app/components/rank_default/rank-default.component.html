@@ -1,0 +1,79 @@
+<ng-template #customLoadingTemplate>
+    <div class="custom-class">
+
+    </div>
+</ng-template>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true  }"
+    [template]="customLoadingTemplate">
+</ngx-loading>
+
+
+<div class="insert-form col-md-12">
+    <app-page-header [heading]="'Rank Management'"></app-page-header>
+
+    <div class="card mb-3 shadow-card">
+        <div class="card-header">
+            Rank Management
+        </div>
+        <div class="table-responsive col-md-12 datatable">
+
+            <div class="row mb-1">
+                <div class="col">
+                    <div class="row justify-content-end" style="margin-top: 20px;">
+                        <button *ngIf="listRank.length" style="margin-right: 10px;" (click)="saveChange()"
+                            class="btn btn-lg btn-success">
+                            <i class="fa fa-save"></i>
+                        </button>
+                        <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)" ngbTooltip="Refesh"
+                            class="btn btn-lg btn-primary" data-toggle="button">
+                            <i #refesh class="fa fa-refresh" placement="top" aria-hidden="true"
+                                [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <table class="table table-bordered table-hover" style="width: auto;">
+
+                    <tr class="no-padding-no-margin">
+                        <th *ngFor="let item of clone">
+                            {{item.name}}
+                        </th>
+                    </tr>
+
+                    <tr class="no-padding-no-margin">
+                        <td *ngFor="let item of clone">
+                            {{item.point | number}}
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <div class="col-md-12 row no-padding-no-margin mt-5">
+                <div class="col-md-3">
+                    <div class="col-md-12">Catalogue</div>
+                    <div class="col-md-12 mt-3" *ngFor="let item of catalogueList">
+                        {{item.name}}
+                    </div>
+                </div>
+                <div class="col-md-1 no-padding-no-margin" *ngFor="let r of clone; let i = index">
+                    <div class="col-md-12">
+                        <input style="width: 90%;" type="text" [(ngModel)]="r.name">
+                    </div>
+                    <div class="col-md-12 mt-3" *ngFor="let item of r.catalogueInRanks; let j = index">
+                        <input style="width: 90%;" [(ngModel)]="item.point"
+                            (change)="calculateWeightPoint(item)" type="number" max="100" min="0" step="5">
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-primary" (click)="addRankToList()">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

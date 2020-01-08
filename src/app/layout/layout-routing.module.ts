@@ -1,3 +1,4 @@
+import { RankDefaultModule } from './../components/rank_default/rank-default.module';
 import { SemesterModule } from './../components/semester/semester.module';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -17,6 +18,8 @@ const routes: Routes = [
             { path: 'manage-company', loadChildren: () => import('../components/company/ins-company/insert-company.module').then(m => m.InsertCompanyModule), canActivate: [SystemGuard]},
             { path: 'manage-question-default/:id', loadChildren: () => import('../components/question-default/question-default.module').then(m => m.QuestionDefaultModule), canActivate: [SystemGuard]},
             { path: 'manage-answer-default/:id', loadChildren: () => import('../components/answer_default/answer-default.module').then(m => m.AnswerDefaultModule), canActivate: [SystemGuard]},
+            { path: 'rank-default', loadChildren: () => import('../components/rank_default/rank-default.module').then(m => m.RankDefaultModule),canActivate: [SystemGuard]},
+
             // Company Manager
             { path: 'manage-employee', loadChildren: () => import('../components/employee/employee.module').then(m => m.EmployeeModule), canActivate: [CompanyGuard]},
             { path: 'catalogue', loadChildren: () => import('../components/catalogue/catalogue.module').then(m => m.CatalogueModule),canActivate: [CompanyGuard] },

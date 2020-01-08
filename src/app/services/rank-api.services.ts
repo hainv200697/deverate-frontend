@@ -29,4 +29,10 @@ export class RankApiService {
         const API = 'RankApi/ChangeStatusCompanyRank?status=';
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API + isActive , rankId);
     }
+
+    getAllDefaultRank(){
+        const API = 'RankApi/GetAllDefaultRank';
+        return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE + API);
+    }
+
 }
