@@ -197,9 +197,10 @@
                     </button>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="row" style="margin-left: 20px; margin-top: 20px;">
-                            <select id="ins_manage_role" name="ins_manage_role" class="form-control col-md-5"
+                    <div class="col-md-8 row">
+                        <div class="col-md-6 row">
+                            <label class="col-md-3" for="ins_manage_role">Role</label>
+                            <select id="ins_manage_role" name="ins_manage_role" class="form-control col-md-8"
                             [(ngModel)]="getRole" (change)="getEmployee()">
                             <option [value]=0>All account</option>
                             <option [value]=2>Company Manager</option>
@@ -207,8 +208,16 @@
                             <option [value]=4>Test Owner</option>
                             </select>
                         </div>
+                        <div class="col-md-6 row">
+                            <label class="col-md-4" for="company">Company</label>
+                            <select id="company" name="company" class="form-control col-md-8"
+                                [(ngModel)]="companyId" (change)="getEmployee()">
+                                <option *ngFor="let item of companyList" [value]=item.companyId>
+                                    {{item.name}}</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="row justify-content-end" style="margin-top: 20px;">
                             <!-- <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
                             placement="top" ngbTooltip="Export Excel" class="btn btn-lg btn-secondary " data-toggle="button">

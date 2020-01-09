@@ -172,13 +172,13 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 }
                 for (let i = 1; i <= 6; i++) {
                     const answerObj = new AnswerModel();
-                    answerObj.answer1 = element['Answer_' + i];
+                    answerObj.answerText = element['Answer_' + i];
                     answerObj.percent = element['Point_' + i];
                     answerObj.isActive = true;
                     this.listAnswer.push(answerObj);
                 }
                 for (let i = this.listAnswer.length - 1; i >= 0; i--) {
-                    if (this.listAnswer[i].answer1 == null && this.listAnswer[i].percent == null) {
+                    if (this.listAnswer[i].answerText == null && this.listAnswer[i].percent == null) {
                         this.listAnswer.splice(i, 1);
                     }
                     else {
@@ -188,7 +188,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 let ans = [];
                 let dupAns : string[] = []
                 this.listAnswer.map(function (item) {
-                    var existItem = ans.find(x => x.answer1 == item.answer1);
+                    var existItem = ans.find(x => x.answerText == item.answerText);
                     if (existItem){
                         dupAns.push("Question #" + ind + " has duplicated answer");
                     }else{
@@ -203,7 +203,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                     this.checkFile = false;
                 }
                 this.listAnswer.forEach((element, index) => {
-                    const answer = $.trim(element.answer1.replace(/\s\s+/g, ' '));
+                    const answer = $.trim(element.answerText.replace(/\s\s+/g, ' '));
                     if (answer === null || answer === undefined) {
                         this.message.push("Answer #" + index +" is blank");
                         this.checkFile = false;
@@ -288,7 +288,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             this.insAnswer.forEach(element => {
                 i++;
                 if (check === true) {
-                    const ans = element['answer1'];
+                    const ans = element['answerText'];
                     if (ans === '' || ans.length < 3 || ans.length > 200) {
                         this.toastr.error('Message', 'Answer must be more than 3 characters!');
                         check = false;
@@ -431,7 +431,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
     }
 
-    onAddAnswers() {
+    onAddAnswers() { 
 
         this.count++;
         if (this.count < 6) {
@@ -444,7 +444,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
 
     addAnswerForm(): FormGroup {
         this.answersForm = this.formBuilder.group({
-            answer1: ['', Validators.required],
+            answerText: ['', Validators.required],
             Percent: ['', Validators.required]
         });
         return this.answersForm;
@@ -773,7 +773,8 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     viewAnswer(item) {
-        this.router.navigate(['/manage-answer/', item['questionId']]);
+        console.log(item);
+        this.router.navigate(['/manage-answer/', item['QuestionId']]);
     }
 
     downloadTemplate() {

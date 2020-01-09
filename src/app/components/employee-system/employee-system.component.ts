@@ -9,6 +9,7 @@ import Stepper from 'bs-stepper';
 import { GloblaService } from 'src/assets/service/global.service';
 import { empty } from 'rxjs';
 import * as moment from 'moment';
+import { CompanyApiService } from 'src/app/services/company-api.service';
 @Component({
     selector: 'app-employee-system',
     templateUrl: './employee-system.component.html',
@@ -20,12 +21,13 @@ export class EmployeeSystemComponent implements OnInit {
         private activeRoute: ActivatedRoute,
         private modalService: NgbModal,
         private toastr: ToastrService,
-        private globalservice: GloblaService
+        private globalservice: GloblaService,
+        private companyApi: CompanyApiService,
     ) { }
     public loading = false;
     iconIsActive = true;
     private stepper: Stepper;
-    companyId = this.activeRoute.snapshot.params.id;
+    companyId = Number(localStorage.getItem('CompanyId'));
     // Excel
     index = 1;
     checkExcel = true;
@@ -37,12 +39,14 @@ export class EmployeeSystemComponent implements OnInit {
     selectedAll: any;
     employeeList = [];
     insEmployee = {};
+    companyList = [];
     employees = [];
     listUser: String[] = [];
     updRole = {};
     getRole = 0;
     message: Array<string> = [];
     ngOnInit() {
+        this.getAllCompany();
         this.getEmployee();
     }
     async next() {
@@ -593,4 +597,30 @@ export class EmployeeSystemComponent implements OnInit {
 
         return true;
     }
+
+    getAllCompany() {
+        this.loading = true;
+        this.companyApi.getAllCompany().subscribe(
+          (data: any[]) => {
+            this.loading = false;
+            this.companyList = data;
+            console.log(this.companyList);
+            this.selectedAll = false;
+          },
+          (error) => {
+            if (error.status == 0) {
+              this.toastr.error('Server is not availiable');
+            }
+            if (error.status == 404) {
+              this.toastr.error('Not found');
+            }
+            if (error.status == 500) {
+              this.toastr.error('Server error');
+            }
+            this.loading = false;
+            this.closeModal()
+          }
+        );
+      }
+
 }
