@@ -81,6 +81,10 @@ export class RankDefaultComponent implements OnInit {
     this.calculateWeightPoint();
   }
 
+  removeRank(index){
+    this.clone.splice(index,1)
+  }
+
   calculateWeightPoint(item = null){
     if (item != null) {
       item.point = Math.round(item.point);
@@ -135,6 +139,11 @@ export class RankDefaultComponent implements OnInit {
         if (change) listSave.push(rank);
       }
     });
+    var listRemove = [];
+    if(listSave.length == 0 && listRemove.length ==0){
+      this.toast.error('No data change');
+      return;
+    }
     this.rankApi.saveDefaultRank(listSave)
     .subscribe((res) => {
       console.log('Save Success');
@@ -142,7 +151,7 @@ export class RankDefaultComponent implements OnInit {
     (err) => {
       console.log('Save fail');
     })
-    var listRemove = [];
+    
 
   }
 
