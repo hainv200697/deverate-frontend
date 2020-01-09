@@ -25,7 +25,7 @@
                         <label class="col-md-3">Test Setting:</label>
                         &nbsp;&nbsp;&nbsp;
                         <select id="ins_setting" name="ins_setting" class="form-control" style="width: 46%;"
-                            [(ngModel)]="chooseConfig">
+                            [(ngModel)]="chooseConfig" (change)="getAllEmployeeInCompany(chooseConfig)">
                             <option style="width: 46%;" disabled [value]=-1>-- Choosing setting --</option>
                             <option style="width: 46%;" *ngFor="let item of listConfig" [value]=item.configId>
                                 {{item.title}}</option>

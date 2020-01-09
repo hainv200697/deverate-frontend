@@ -201,36 +201,6 @@ export class RankComponent implements OnInit {
     });
   }
 
-  Update() {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'The rank will be update!',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, update it!',
-      cancelButtonText: 'No, do not update '
-    }).then((result) => {
-      if (result.value) {
-        this.loading = true;
-        this.rankApi.updateRank(this.updateRank).subscribe(data => {
-          this.closeModal();
-          this.restartData();
-          this.toast.success(data['message']);
-          this.getRank(true);
-          this.loading = false;
-        }, (error) => {
-          if (error.status == 0) {
-            this.toast.error('Server is not availiable');
-          }
-          if (error.status == 500) {
-            this.toast.error('Server error');
-          }
-          this.loading = false;
-        });
-      }
-    });
-  }
-
   clickButtonChangeStatus(status: boolean) {
     if (status == false) {
       Swal.fire({

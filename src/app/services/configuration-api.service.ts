@@ -30,9 +30,9 @@ export class ConfigurationApiService {
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, ConfigurationModel);
     }
 
-    changeStatusConfiguration(ConfigurationModel) {
-        const API = 'ConfigurationApi/ChangeStatusConfiguration';
-        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE+ API, ConfigurationModel);
+    changeStatusConfiguration(lstConfigId, isActive) {
+        const API = 'ConfigurationApi/ChangeStatusConfiguration?isActive=';
+        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API + isActive , lstConfigId);
     }
 
     sendMail(id){

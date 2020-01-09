@@ -13,14 +13,6 @@
                 <div class="step" data-target="#test-l-2">
                     <button [disabled]="index != 2" class="step-trigger">
                         <span class="bs-stepper-circle">2</span>
-                        <span class="bs-stepper-label">Configuration Rank</span>
-                    </button>
-                </div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="step" data-target="#test-l-3">
-                    <button [disabled]="index != 3" class="step-trigger">
-                        <span class="bs-stepper-circle">3</span>
                         <span class="bs-stepper-label">View Configuration Test</span>
                     </button>
                 </div>
@@ -30,7 +22,6 @@
             <div class="bs-stepper-content">
 
                 <div id="test-l-1" class="content">
-                    <!-- Add question -->
 
                     <div class="form-content row">
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 row no-padding-no-margin">
@@ -46,20 +37,16 @@
                                     name="ins_config_title">
                             </div>
 
-
-
                             <label class="col-md-12"></label>
                             <div class="col-md-5 row">
                                 <label class="col-md-8" style="text-align: right;">Duration:</label>
                                 <input class="col-md-4" type="number" [(ngModel)]="inputConfiguration['duration']"
-                                    name="ins_config_durartion" step="5" [min]="selectedItems.length * 5"
-                                    style="height: 30px">
+                                    name="ins_config_durartion" step="5" [min]="5" style="height: 30px">
                             </div>
                             <div class="col-md-7 row ">
                                 <label class="col-md-4" style="text-align: right">Start Date:</label>
                                 <div class="col-md-7">
-                                    <angular2-date-picker [(ngModel)]="startDate" name="mydate"
-                                     [settings]="settings1">
+                                    <angular2-date-picker [(ngModel)]="startDate" name="mydate" [settings]="settings1">
                                     </angular2-date-picker>
                                 </div>
                                 <label class="col-md-12"></label>
@@ -73,97 +60,28 @@
                         </div>
 
                         <div class="form-group col-md-12 row no-padding-no-margin">
-                            <label class="col-md-12">Catalog:</label>
-                            <div class="col-md-6">
-
-                                <angular2-multiselect class="form-control" [data]="catalogueList" style="width: 87%"
+                            <label class="col-md-12">Rank:</label>
+                            <div class="col-md-5">
+                                <angular2-multiselect class="form-control" [data]="ListRank" style="width: 87%"
                                     [(ngModel)]="selectedItems" [settings]="dropdownSettings"
-                                    (onDeSelectAll)="onDeSelectAll($event)">
+                                    (onDeSelect)="DeSelectRank($event)" (onDeSelectAll)="onDeSelectAll($event)">
                                 </angular2-multiselect>
                             </div>
-                            <div class="col-md-6" [hidden]="selectedItems.length == 0">
-                                <div class="form-row" *ngFor="let c of selectedItems" style="margin-left: -55px;">
-                                    <div class="form-group col-md-5">
-                                        <input type="text" disabled="disabled" class="form-control"
-                                            style="font-size: 15px" [value]="c['name']" />
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <input type="text" class="form-control"
-                                            style="font-size: 15px" [(ngModel)]="c.numberQuestion"/>
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <input type="number" min="10" max="100" step="10" class="form-control"
-                                            style="font-size: 15px" [(ngModel)]="c.weightPoint" id="mark" />
-                                    </div>
-                                    <div class="form-group col-1" style="position: relative;">
-                                        <button type="button " class="btn btn-danger" mat-mini-fab color="warn"
-                                            fxFlex="nogrow" (click)="removeItem(c, selectedItems)">
-                                            <span class="fa fa-fw fa-trash-o "></span>
-                                        </button>
-                                    </div>
+                            <div class="col-md-7" [hidden]="selectedItems.length == 0">
+                                <div class="col-md-12 row">
+                                    <label class="col-md-10">Catalogue</label>
+                                    <label class="col-md-2" style="padding-left: 0px;">Number</label>
+                                </div>
+                                <div class="col-md-12 row" *ngFor="let cata of listCatalogue">
+                                    <label class="col-md-10 mt-2">{{cata.name}}</label>
+                                    <input type="number" class="form-control col-md-2 mt-2" style="font-size: 15px"
+                                        [(ngModel)]="cata.numberQuestion" min="0" max="{{cata.quescount}}" step="1">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div id="test-l-2" class="content">
-
-                    <!--Add rank rate  -->
-                    <div class="form-content answer-form">
-                        <h4>Configutation Rank Rate</h4>
-                        <div class="d-flex justify-content-center col-md-12">
-                            <table class="table table-striped table-bordered table-hover customtable">
-                                <thead>
-                                    <tr class="col-md-12 row no-padding-no-margin">
-                                        <td class="col-md-9" style="font-weight: bold">Rank</td>
-                                        <td class="col-md-3" style="font-weight: bold">Rate</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let c of ListRank">
-                                        <td class="col-md-9">
-                                            {{c['name']}}
-                                        </td>
-                                        <td class="col-md-3">
-                                            {{c['weightPoint'] | number}}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="col-md-12">
-                            <table #table01 class="table table-striped table-bordered table-hover customtable mt-3">
-                                <thead>
-                                    <tr class="col-md-12 row no-padding-no-margin">
-                                        <th class="text-center col-md-3"></th>
-                                        <th class="text-center col-md-3" *ngFor="let s of ListRank" scope="col">
-                                            {{s.name}}
-                                        </th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    <tr class="col-md-12 row no-padding-no-margin"
-                                        *ngFor="let s1 of selectedItems; let i = index">
-                                        <td class="text-center col-md-3">{{s1.name}}</td>
-                                        <td class="text-center col-md-3" *ngFor="let s2 of ListRank; let j = index">
-                                            <!-- Validate  -->
-                                            <input (change)="calculateRank()" type="number" value="0" min="0" max="100"
-                                                step="10" style="height: 30px" class="col-md-12"
-                                                id="{{s1.companyCatalogueId}}_{{s2.companyRankId}}" [ngModel]="point[i][j]"
-                                                *ngIf="isSampleConfig">
-                                            <input (change)="calculateRank()" type="number" value="0" min="0" max="100"
-                                                step="10" style="height: 30px" class="col-md-12"
-                                                id="{{s1.companyCatalogueId}}_{{s2.companyRankId}}" *ngIf="!isSampleConfig">
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div id="test-l-3" class="content">
                     <div class="form-content">
                         <div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <table class="table table-striped table-bordered table-hover customtable">
@@ -211,66 +129,22 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                            <table class="table table-striped table-bordered table-hover customtable">
-                                <thead>
-                                    <tr class="col-md-12 row no-padding-no-margin">
-                                        <td class="col-md-9" style="font-weight: bold">Rank</td>
-                                        <td class="col-md-3" style="font-weight: bold">Rate</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let c of ListRank">
-                                        <td class="col-md-9">
-                                            {{c['name']}}
-                                        </td>
-                                        <td class="col-md-3">
-                                            {{c['weightPoint'] | number}}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
                         <br>
                         <div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <table class="table table-striped table-bordered table-hover customtable">
                                 <thead>
                                     <tr class="col-md-12 row no-padding-no-margin">
                                         <td class="col-md-9" style="font-weight: bold">Catalogue</td>
-                                        <td class="col-md-3" style="font-weight: bold">Rate</td>
+                                        <td class="col-md-3" style="font-weight: bold">Number Of Question</td>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let c of selectedItems">
+                                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let c of listCatalogue">
                                         <td class="col-md-9">
-                                            {{c['name']}}
-                                        </td>
-                                        <td class="col-md-3">
-                                            {{c['weightPoint']}}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                            <table class="table table-striped table-bordered table-hover customtable">
-                                <thead>
-                                    <tr class="col-md-12 row no-padding-no-margin">
-                                        <td class="col-md-3" style="font-weight: bold">Rank</td>
-                                        <td class="col-md-6" style="font-weight: bold">Catalogue</td>
-                                        <td class="col-md-3" style="font-weight: bold">Rate</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let c of catalogueInRank">
-                                        <td class="col-md-3">
-                                            {{c.rank}}
-                                        </td>
-                                        <td class="col-md-6">
                                             {{c.name}}
                                         </td>
                                         <td class="col-md-3">
-                                            {{c.point}}
+                                            {{c.numberQuestion}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -282,10 +156,11 @@
         </div>
     </div>
     <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
         <button class="btn btn-secondary back" (click)="back()" [hidden]="index == 1">Back</button>
-        <button (click)="next()" class="btn btn-primary" [hidden]="index == 3">Next</button>
-        <button class="btn btn-info save" (click)="Sample()" [hidden]="index != 3">Sample Test</button>
-        <button class="btn btn-success save" (click)="Create()" [hidden]="index ==1 || index == 2">Create</button>
+        <button (click)="next()" class="btn btn-primary" [hidden]="index == 2">Next</button>
+        <button class="btn btn-info save" (click)="Sample()" [hidden]="index != 2">Sample Test</button>
+        <button class="btn btn-success save" (click)="Create()" [hidden]="index ==1">Create</button>
     </div>
 </ng-template>
 
@@ -564,8 +439,6 @@
 </ngx-loading>
 <!-- Search -->
 
-<!-- Table question -->
-
 <div class="insert-form col-md-12">
     <app-page-header [heading]="'Employee Test Management'"></app-page-header>
     <div class="card-header">
@@ -589,12 +462,12 @@
                         </button>
                     </div>
                     <div class="row justify-content-end" style="margin-top: 20px;">
-                        <button style="margin-right: 10px;"
-                            (click)="DisableConfiguration(false);" class="btn btn-lg btn-danger" data-toggle="button">
+                        <button style="margin-right: 10px;" (click)="DisableConfiguration(false);"
+                            class="btn btn-lg btn-danger" data-toggle="button" *ngIf="selectConfiguration.length != 0">
                             <i class="fa fa-trash-o delete-icon" placement="top"></i>
                         </button>
-                        <button (click)="DisableConfiguration(true);"
-                            class="btn btn-lg btn-success" style="margin-right: 10px;">
+                        <button (click)="DisableConfiguration(true);" class="btn btn-lg btn-success"
+                            style="margin-right: 10px;" *ngIf="selectConfiguration.length != 0">
                             <i class="fa fa-check" placement="top"></i>
                         </button>
                         <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
@@ -610,8 +483,8 @@
                 svSortOrder="asc" [svRowsOnPage]="25" class="table  table-hover customtable">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin">
-                        <th class="text-center" style="width: 5%;" scope="col"><input class="btn" type="checkbox" value=""
-                                [(ngModel)]="selectedAll" (change)="selectAll();"></th>
+                        <th class="text-center" style="width: 5%;" scope="col"><input class="btn" type="checkbox"
+                                value="" [(ngModel)]="selectedAll" (change)="selectAll();"></th>
                         <th class="text-center" style="width: 15%;" scope="col">
                             <sv-default-sorter>Type
                             </sv-default-sorter>
@@ -637,10 +510,10 @@
                 </thead>
                 <tbody *ngIf="sv.data.length != 0;  else searchNull">
                     <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px"
-                        *ngFor="let c of sv.data | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index">
+                        *ngFor="let c of sv.data; let i = index">
                         <td class="text-center" style="width: 5%;">
-                            <input type="checkbox" value="" [(ngModel)]="c.selected" class="btn"
-                                (change)="checkIfAllSelected();">
+                            <input type="checkbox" value="" [checked]="c.selected" class="btn"
+                                (change)="checkIfAllSelected(c.configId);">
                         </td>
                         <td class="text-center" [hidden]="!c.type" style="width: 15%;">Employee</td>
                         <td class="text-center" [hidden]="c.type" style="width: 15%;">Applicant</td>
@@ -653,7 +526,8 @@
                         <td class="text-center" [hidden]="c.isActive==false" style="width: 10%;">
                             <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
                         </td>
-                        <td style="width: 20%;" class="nowrap text-center action-column row no-padding-no-margin d-flex justify-content-center">
+                        <td style="width: 20%;"
+                            class="nowrap text-center action-column row no-padding-no-margin d-flex justify-content-center">
                             <button class="btn-warning btn btn-circle shadow-item"
                                 (click)="openDetail(update, c.configId)">
                                 <i class="fa fa-edit"></i>
@@ -663,13 +537,11 @@
                                 <i class="fa fa fa-eye"></i>
                             </button>
                             &nbsp;
-                            <button [hidden]="c.isActive==false" class=" btn btn-circle shadow-item" (click)="sendMail(c.configId)">
+                            <button [hidden]="c.isActive==false" class=" btn btn-circle shadow-item"
+                                (click)="sendMail(c.configId)">
                                 <i class="fa fa-envelope"></i>
                             </button>
                             &nbsp;
-                            <button class="btn-dark btn btn-circle shadow-item" (click)="cloneConfig(c.configId)">
-                                <i class="fa fa-clone"></i>
-                            </button>
                         </td>
                     </tr>
                 </tbody>
@@ -684,4 +556,3 @@
         </div>
     </div>
 </div>
-

@@ -42,12 +42,11 @@ export class SemesterComponent implements OnInit {
     check;
     ngOnInit() {
         this.getAllConfig();
-        this.getAllEmployeeInCompany();
     }
 
-    getAllEmployeeInCompany() {
+    getAllEmployeeInCompany(configId) {
         this.loading = true;
-        this.employeeApiService.getAllWithRole(this.companyId,true,3).subscribe(
+        this.employeeApiService.getEmployeeDotheTest(configId,this.companyId).subscribe(
             (data) => {
                 this.loading = false;
                 this.listEmployee = data;
