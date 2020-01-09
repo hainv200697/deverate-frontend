@@ -1,12 +1,8 @@
-import { element } from 'protractor';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router, } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2'
 import { RankApiService } from '../../services/rank-api.services'
 import { ToastrService } from 'ngx-toastr';
-import { CatalogueApiService } from 'src/app/services/catalogue-api.service';
-declare var $: any;
 
 @Component({
   selector: 'app-rank',
@@ -16,10 +12,8 @@ declare var $: any;
 export class RankDefaultComponent implements OnInit {
   constructor(
     public router: Router,
-    private modalService: NgbModal,
     private toast: ToastrService,
     private rankApi: RankApiService,
-    private catelogueService: CatalogueApiService,
   ) {
   }
   public loading = false;
