@@ -35,4 +35,9 @@ export class RankApiService {
         return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE + API);
     }
 
+    saveDefaultRank(data) {
+        const API = 'RankApi/SaveDefaultRank';
+        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API , data);
+    }
+
 }

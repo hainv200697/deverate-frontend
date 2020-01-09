@@ -18,15 +18,12 @@ export class RankDefaultComponent implements OnInit {
   }
   public loading = false;
   iconIsActive: boolean;
-  inputRank = [];
 
   updateRank = {};
   updateStatus = [];
 
   listRank = [];
   catalogueList = [];
-  check;
-  rankData = [];
   clone = [];
   avaragePercent = [];
 
@@ -49,10 +46,7 @@ export class RankDefaultComponent implements OnInit {
         this.loading = false;
         this.listRank = data.defaultRankDTOs;
         this.catalogueList = data.catalogueDefaultDTOs;
-        this.listRank.forEach(element => {
-          element.selected = false;
-        });
-        Object.assign(this.clone,this.listRank)
+        this.clone = JSON.parse(JSON.stringify(this.listRank));
         this.calculateWeightPoint();
       },
       (error) => {
@@ -79,6 +73,7 @@ export class RankDefaultComponent implements OnInit {
       })
     }
     this.clone.push({
+      rankId: -1,
       name: 'RankSample',
       isDefault: true,
       catalogueInRanks: catalogueInRank
@@ -121,6 +116,34 @@ export class RankDefaultComponent implements OnInit {
     this.clone.sort(function (a, b) {
       return a.point - b.point;
     })
+  }
+
+  saveChange() {
+    var listSave = [];
+    this.clone.forEach(rank => {
+      var find = this.listRank.find(x => x.rankId == rank.rankId);
+      if (find == undefined || find.name != rank.name) listSave.push(rank);
+      else {
+        var change = false;
+        for(let i = 0; i < rank.catalogueInRanks.length; i++) {
+          var findCataloguePoint = find.catalogueInRanks.find(x => x.catalogueId == rank.catalogueInRanks[i].catalogueId).point;
+          if (findCataloguePoint != rank.catalogueInRanks[i].point) {
+            change = true;
+            break;
+          }
+        }
+        if (change) listSave.push(rank);
+      }
+    });
+    this.rankApi.saveDefaultRank(listSave)
+    .subscribe((res) => {
+      console.log('Save Success');
+    }, 
+    (err) => {
+      console.log('Save fail');
+    })
+    var listRemove = [];
+
   }
 
 }
