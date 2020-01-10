@@ -157,7 +157,7 @@ export class RankDefaultComponent implements OnInit {
         this.loading = true;
         this.rankApi.saveDefaultRank(listSave)
           .subscribe((res) => {
-            this.toast.error(res['message']);
+            this.toast.success('Save Success');
           },
             (err) => {
               if (err.status == 0) {
