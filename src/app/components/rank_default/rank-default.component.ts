@@ -81,6 +81,10 @@ export class RankDefaultComponent implements OnInit {
     this.calculateWeightPoint();
   }
 
+  removeRank(index){
+    this.clone.splice(index,1)
+  }
+
   calculateWeightPoint(item = null){
     if (item != null) {
       item.point = Math.round(item.point);
@@ -135,15 +139,36 @@ export class RankDefaultComponent implements OnInit {
         if (change) listSave.push(rank);
       }
     });
-    this.rankApi.saveDefaultRank(listSave)
-    .subscribe((res) => {
-      console.log('Save Success');
-    }, 
-    (err) => {
-      console.log('Save fail');
-    })
     var listRemove = [];
+    if (listSave.length == 0 && listRemove.length == 0) {
+      this.toast.error('No data change');
+      return;
+    }
 
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'The rank will be save!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, save it!',
+      cancelButtonText: 'No, do not save '
+    }).then((result) => {
+      if (result.value) {
+        this.loading = true;
+        this.rankApi.saveDefaultRank(listSave)
+          .subscribe((res) => {
+            this.toast.success('Save success');
+            this.loading = false;
+          },
+            (err) => {
+              if (err.status == 0) {
+                this.toast.error('Server is not availiable');
+              }
+              if (err.status == 500) {
+                this.toast.error('Server error');
+              }
+              this.loading = false;
+            });}
+    });
   }
-
 }

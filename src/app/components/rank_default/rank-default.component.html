@@ -9,20 +9,20 @@
 </ngx-loading>
 
 
-<div class="insert-form col-md-12">
+<div class="insert-form" style=" overflow-x: auto;">
     <app-page-header [heading]="'Rank Management'"></app-page-header>
 
     <div class="card mb-3 shadow-card">
         <div class="card-header">
             Rank Management
         </div>
-        <div class="table-responsive col-md-12 datatable">
+        <div class="table-responsive datatable">
 
-            <div class="row mb-1">
+            <div class="row mb-1 mt-4">
                 <div class="col">
                     <div class="row justify-content-end" style="margin-top: 20px;">
                         <button *ngIf="listRank.length" style="margin-right: 10px;" (click)="saveChange()"
-                            class="btn btn-lg btn-success">
+                            class="btn btn-lg btn-success" ngbTooltip="Save">
                             <i class="fa fa-save"></i>
                         </button>
                         <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)" ngbTooltip="Refesh"
@@ -52,23 +52,26 @@
                 </table>
             </div>
 
-            <div class="col-md-12 row no-padding-no-margin mt-5">
+            <div class="row no-padding-no-margin mt-5 mb-3">
                 <div class="col-md-3">
                     <div class="col-md-12">Catalogue</div>
-                    <div class="col-md-12 mt-3" *ngFor="let item of catalogueList">
-                        {{item.name}}
+                    <div class="col-md-12" style="margin-top: 9%;" *ngFor="let item of catalogueList">
+                    <label ngbTooltip="{{item.name}}">{{item.name}}</label>
                     </div>
                 </div>
-                <div class="col-md-1 no-padding-no-margin" *ngFor="let r of clone; let i = index">
-                    <div class="col-md-12">
-                        <input style="width: 90%;" type="text" [(ngModel)]="r.name">
+                <div class="no-padding-no-margin" style="width: 10%;" *ngFor="let r of clone; let i = index">
+                    <div class="col-md-12 row no-padding-no-margin">
+                        <input class="form-control" style="width: 60%;"
+                        ngbTooltip="{{r.name}}"
+                        type="text" [(ngModel)]="r.name">
+                        <i (click)="removeRank(i)" style="width: 40%; margin-left: -10px;" class="fa fa-window-close mt-1 btn" aria-hidden="true"></i>
                     </div>
-                    <div class="col-md-12 mt-3" *ngFor="let item of r.catalogueInRanks; let j = index">
-                        <input style="width: 90%;" [(ngModel)]="item.point"
+                    <div class="col-md-12 mt-3 row no-padding-no-margin" *ngFor="let item of r.catalogueInRanks">
+                        <input class="form-control" style="width: 60%;" [(ngModel)]="item.point"
                             (change)="calculateWeightPoint(item)" type="number" max="100" min="0" step="5">
                     </div>
                 </div>
-                <div class="col-md-1">
+                <div style="width: 10%;">
                     <button class="btn btn-primary" (click)="addRankToList()">
                         <i class="fa fa-plus"></i>
                     </button>
