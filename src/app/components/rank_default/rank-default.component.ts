@@ -122,6 +122,10 @@ export class RankDefaultComponent implements OnInit {
     })
   }
 
+  formatRankName(index) {
+    this.clone[index].name = this.clone[index].name.toUpperCase().replace(/\s/g,'');
+  }
+
   saveChange() {
     var listSave = [];
     this.clone.forEach(rank => {
@@ -140,6 +144,11 @@ export class RankDefaultComponent implements OnInit {
       }
     });
     var listRemove = [];
+    this.listRank.forEach(rank => {
+      var find = this.clone.find(x => x.rankId == rank.rankId);
+      if (find == undefined) listRemove.push(rank.rankId);
+    });
+    console.log(listRemove);
     if (listSave.length == 0 && listRemove.length == 0) {
       this.toast.error('No data change');
       return;
@@ -155,10 +164,14 @@ export class RankDefaultComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.loading = true;
+        var count = 0;
         this.rankApi.saveDefaultRank(listSave)
           .subscribe((res) => {
-            this.toast.success('Save success');
-            this.loading = false;
+            count++;
+            if (count == 2) {
+              this.toast.success('Save success');
+              this.loading = false;
+            }
           },
             (err) => {
               if (err.status == 0) {
@@ -168,7 +181,26 @@ export class RankDefaultComponent implements OnInit {
                 this.toast.error('Server error');
               }
               this.loading = false;
-            });}
+            });
+        
+            this.rankApi.disableDefaultRank(listRemove)
+            .subscribe((res) => {
+              count++;
+              if (count == 2) {
+                this.toast.success('Save success');
+                this.loading = false;
+              }
+            },
+              (err) => {
+                if (err.status == 0) {
+                  this.toast.error('Server is not availiable');
+                }
+                if (err.status == 500) {
+                  this.toast.error('Server error');
+                }
+                this.loading = false;
+              });
+      }
     });
   }
 }

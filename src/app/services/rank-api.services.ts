@@ -40,4 +40,9 @@ export class RankApiService {
         return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API , data);
     }
 
+    disableDefaultRank(data) {
+        const API = 'RankApi/DisableDefaultRank';
+        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API , data);
+    }
+    
 }

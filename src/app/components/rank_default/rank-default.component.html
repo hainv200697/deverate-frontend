@@ -63,7 +63,7 @@
                     <div class="col-md-12 row no-padding-no-margin">
                         <input class="form-control" style="width: 60%;"
                         ngbTooltip="{{r.name}}"
-                        type="text" [(ngModel)]="r.name">
+                        type="text" [(ngModel)]="r.name" (change)="formatRankName(i)">
                         <i (click)="removeRank(i)" style="width: 40%; margin-left: -10px;" class="fa fa-window-close mt-1 btn" aria-hidden="true"></i>
                     </div>
                     <div class="col-md-12 mt-3 row no-padding-no-margin" *ngFor="let item of r.catalogueInRanks">
