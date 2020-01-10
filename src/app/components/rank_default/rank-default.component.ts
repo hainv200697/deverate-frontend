@@ -140,19 +140,34 @@ export class RankDefaultComponent implements OnInit {
       }
     });
     var listRemove = [];
-    if(listSave.length == 0 && listRemove.length ==0){
+    if (listSave.length == 0 && listRemove.length == 0) {
       this.toast.error('No data change');
       return;
     }
-    this.rankApi.saveDefaultRank(listSave)
-    .subscribe((res) => {
-      console.log('Save Success');
-    }, 
-    (err) => {
-      console.log('Save fail');
-    })
-    
 
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'The rank will be save!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, save it!',
+      cancelButtonText: 'No, don not save '
+    }).then((result) => {
+      if (result.value) {
+        this.loading = true;
+        this.rankApi.saveDefaultRank(listSave)
+          .subscribe((res) => {
+            this.toast.error(res['message']);
+          },
+            (err) => {
+              if (err.status == 0) {
+                this.toast.error('Server is not availiable');
+              }
+              if (err.status == 500) {
+                this.toast.error('Server error');
+              }
+              this.loading = false;
+            });}
+    });
   }
-
 }
