@@ -1,5 +1,5 @@
 export class AppSettings {
-    public static BASEURL = 'http://35.198.247.46:8760/';
+    public static BASEURL = 'http://34.87.29.5:8760/';
     public static ROUTE_AUTH = 'authenticate/'
     public static ROUTE_TEST = 'testmanagement/'
     public static ROUTE_RESOURCE = 'resource/'
