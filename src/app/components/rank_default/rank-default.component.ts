@@ -151,7 +151,7 @@ export class RankDefaultComponent implements OnInit {
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, save it!',
-      cancelButtonText: 'No, don not save '
+      cancelButtonText: 'No, do not save '
     }).then((result) => {
       if (result.value) {
         this.loading = true;
