@@ -148,7 +148,6 @@ export class RankDefaultComponent implements OnInit {
       var find = this.clone.find(x => x.rankId == rank.rankId);
       if (find == undefined) listRemove.push(rank.rankId);
     });
-    console.log(listRemove);
     if (listSave.length == 0 && listRemove.length == 0) {
       this.toast.error('No data change');
       return;
