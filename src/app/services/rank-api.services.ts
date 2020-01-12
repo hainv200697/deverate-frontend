@@ -16,7 +16,7 @@ export class RankApiService {
     }
 
     saveCompanyRank(listRankModel, companyId){
-        const API = '/RankApi/SaveCompanyRank?companyId=';
+        const API = 'RankApi/SaveCompanyRank?companyId=';
         return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API + companyId, listRankModel);
     }
 
