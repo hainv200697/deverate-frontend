@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { EmployeeApiService } from 'src/app/services/employee-api.service';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -10,6 +9,7 @@ import { GloblaService } from 'src/assets/service/global.service';
 import { empty } from 'rxjs';
 import * as moment from 'moment';
 import { CompanyApiService } from 'src/app/services/company-api.service';
+import { SystemEmployeeApiService } from 'src/app/services/system-employee-api.service';
 @Component({
     selector: 'app-employee-system',
     templateUrl: './employee-system.component.html',
@@ -17,7 +17,7 @@ import { CompanyApiService } from 'src/app/services/company-api.service';
 })
 export class EmployeeSystemComponent implements OnInit {
     constructor(
-        private employeeService: EmployeeApiService,
+        private employeeService: SystemEmployeeApiService,
         private activeRoute: ActivatedRoute,
         private modalService: NgbModal,
         private toastr: ToastrService,
