@@ -1,13 +1,8 @@
-import { element } from 'protractor';
-
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router, } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2'
-import { from } from 'rxjs';
-import { RankApiService } from './../../services/rank-api.services'
+import { RankApiService } from '../../services/rank-api.services'
 import { ToastrService } from 'ngx-toastr';
-
 
 @Component({
   selector: 'app-rank',
@@ -17,44 +12,24 @@ import { ToastrService } from 'ngx-toastr';
 export class RankComponent implements OnInit {
   constructor(
     public router: Router,
-    private modalService: NgbModal,
     private toast: ToastrService,
     private rankApi: RankApiService,
   ) {
-    this.page = 1;
-    this.pageSize = 25;
   }
   public loading = false;
   iconIsActive: boolean;
-  page: number;
-  pageSize: number;
-  selectedAll: any;
-  inputRank;
 
   updateRank = {};
   updateStatus = [];
 
   listRank = [];
-  searchText;
-  check;
-  companyId = localStorage.getItem("CompanyId");
-  rankData = [];
+  catalogueList = [];
+  clone = [];
+  avaragePercent = [];
+  companyId = localStorage.getItem('CompanyId');
 
   ngOnInit() {
-    this.restartData();
-    this.getRank(true);
-  }
-
-  PageSize(test: number) {
-    this.pageSize = test;
-  }
-
-  restartData() {
-    this.inputRank = {
-      companyId: this.companyId,
-      name: '',
-      isActive: true,
-    };
+    this.getRank();
   }
 
   clickButtonRefresh(refesh) {
@@ -62,44 +37,18 @@ export class RankComponent implements OnInit {
     setTimeout(function () {
       refesh.classList.remove('spin-animation');
     }, 500);
-    this.getRank(true);
-    this.selectedAll = false;
+    this.getRank();
   }
 
-  checkIfAllSelected() {
-    this.updateStatus = [];
-    this.selectedAll = this.listRank.every(function (item: any) {
-      return item.selected == true;
-    })
-    for (var i = 0; i < this.listRank.length; i++) {
-      if (this.listRank[i].selected == true) {
-        this.updateStatus.push(this.listRank[i].companyRankId)
-      }
-    }
-  }
-
-  selectAll() {
-    if (this.updateStatus.length != 0) {
-      this.updateStatus = [];
-      this.listRank.forEach(element => {
-        element.selected = false
-      });
-      return;
-    }
-    for (var i = 0; i < this.listRank.length; i++) {
-      this.listRank[i].selected = this.selectedAll;
-      this.updateStatus.push(this.listRank[i].companyRankId)
-    }
-  }
-
-  getRank(isActive) {
+  getRank() {
     this.loading = true;
-    this.rankApi.getAllRank(isActive, this.companyId).subscribe(
+    this.rankApi.getAllRank(this.companyId).subscribe(
       (data) => {
         this.loading = false;
-        this.listRank = data;
-
-        this.selectedAll = false;
+        this.listRank = data.rankDTOs;
+        this.catalogueList = data.catalogueDTOs;
+        this.clone = JSON.parse(JSON.stringify(this.listRank));
+        this.calculateWeightPoint();
       },
       (error) => {
         if (error.status == 0) {
@@ -116,206 +65,142 @@ export class RankComponent implements OnInit {
     );
   }
 
-  open(content) {
-    this.modalService.open(content, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-    }).catch((error) => {
-    });
-  }
-
-  openDetail(content, index) {
-    this.updateRank = this.listRank[index]
-    this.modalService.open(content, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-    }).catch((error) => {
-    });
-  }
-
-  closeModal() {
-    this.modalService.dismissAll();
-  }
-
   addRankToList() {
-    this.validate();
-    if (this.check == false) {
+    var catalogueInRank = [];
+    for (var i = 0; i < this.catalogueList.length; i++) {
+      catalogueInRank.push({
+        catalogueId : this.catalogueList[i].companyCatalogueId,
+        point: 100,
+      })
+    }
+    this.clone.push({
+      rankId: -1,
+      name: 'RankSample',
+      isDefault: false,
+      catalogueInRanks: catalogueInRank
+    })
+    this.calculateWeightPoint();
+  }
+
+  removeRank(index){
+    this.clone.splice(index,1)
+  }
+
+  calculateWeightPoint(item = null){
+    if (item != null) {
+      item.point = Math.round(item.point);
+      if (item.point > 100) item.point = 100;
+      else if (item.point < 0) item.point = 0;
+    }
+    this.avaragePercent.length = 0;
+    var number = this.clone.length;
+    this.clone.forEach(rank => {
+      var i = 0;
+      var points = rank.catalogueInRanks.map(a => a.point);
+      var total = points.reduce((a, b) => a + b, 0);
+      if (total == 0) total = 1;
+      rank.catalogueInRanks.forEach(element => {
+        element.percent = element.point / total;
+        if (this.avaragePercent[i] == undefined) this.avaragePercent.push(element.percent); else this.avaragePercent[i] += element.percent;
+        i++;
+      });
+    });
+
+    for(let i = 0; i < this.avaragePercent.length; i++) {
+      this.avaragePercent[i] = this.avaragePercent[i] / number;
+    }
+
+    this.clone.forEach(rank => {
+      var points = rank.catalogueInRanks.map(a => a.point);
+      var sum = 0;
+      for (let i = 0; i < points.length; i++) {
+        sum += (points[i] * this.avaragePercent[i]);
+      }
+      rank.point = Math.round(sum);
+    });
+    this.clone.sort(function (a, b) {
+      return a.point - b.point;
+    })
+  }
+
+  formatRankName(index) {
+    this.clone[index].name = this.clone[index].name.toUpperCase().replace(/\s/g,'');
+  }
+
+  saveChange() {
+    var listSave = [];
+    this.clone.forEach(rank => {
+      var find = this.listRank.find(x => x.rankId == rank.rankId);
+      if (find == undefined || find.name != rank.name) listSave.push(rank);
+      else {
+        var change = false;
+        for(let i = 0; i < rank.catalogueInRanks.length; i++) {
+          var findCataloguePoint = find.catalogueInRanks.find(x => x.catalogueId == rank.catalogueInRanks[i].catalogueId).point;
+          if (findCataloguePoint != rank.catalogueInRanks[i].point) {
+            change = true;
+            break;
+          }
+        }
+        if (change) listSave.push(rank);
+      }
+    });
+    var listRemove = [];
+    this.listRank.forEach(rank => {
+      var find = this.clone.find(x => x.rankId == rank.rankId);
+      if (find == undefined) listRemove.push(rank.rankId);
+    });
+    if (listSave.length == 0 && listRemove.length == 0) {
+      this.toast.error('No data change');
       return;
     }
-    else {
-      this.listRank.push({
-        'companyId': localStorage.getItem('CompanyId'),
-        'name': this.inputRank.name,
-        'isActive': true,
-      })
-      this.inputRank.name = '';
-    }
-  }
 
-  swap(array: any[], x: any, y: any) {
-    var b = array[x];
-    array[x] = array[y];
-    array[y] = b;
-  }
-
-  up(index) {
-    this.swap(this.listRank, index, index - 1);
-  }
-
-  down(index) {
-    this.swap(this.listRank, index, index + 1);
-  }
-
-  removeRank(index) {
-    this.listRank.splice(index, 1);
-  }
-  saveChange() {
-    for (var i = 0; i < this.listRank.length; i++) {
-      this.listRank[i].position = i + 1;
-    }
     Swal.fire({
       title: 'Are you sure?',
-      text: 'The rank will be create!',
+      text: 'The rank will be save!',
       type: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, create it!',
-      cancelButtonText: 'No, do not create '
+      confirmButtonText: 'Yes, save it!',
+      cancelButtonText: 'No, do not save '
     }).then((result) => {
       if (result.value) {
         this.loading = true;
-        this.rankApi.insertRank(this.listRank).subscribe(data => {
-          this.closeModal();
-          this.restartData();
-          this.toast.success(data['message']);
-          this.getRank(true);
-          this.loading = false;
-        }, (error) => {
-          if (error.status == 0) {
-            this.toast.error('Server is not availiable');
-          }
-          if (error.status == 400) {
-            this.toast.error('Company name is exist');
-          }
-          if (error.status == 500) {
-            this.toast.error('Server error');
-          }
-          this.loading = false;
-        });
+        var count = 0;
+        this.rankApi.saveCompanyRank(listSave, this.companyId)
+          .subscribe((res) => {
+            count++;
+            if (count == 2) {
+              this.toast.success('Save success');
+              this.loading = false;
+            }
+          },
+            (err) => {
+              if (err.status == 0) {
+                this.toast.error('Server is not availiable');
+              }
+              if (err.status == 500) {
+                this.toast.error('Server error');
+              }
+              this.loading = false;
+            });
+        
+            this.rankApi.disableDefaultRank(listRemove)
+            .subscribe((res) => {
+              count++;
+              if (count == 2) {
+                this.toast.success('Save success');
+                this.loading = false;
+              }
+            },
+              (err) => {
+                if (err.status == 0) {
+                  this.toast.error('Server is not availiable');
+                }
+                if (err.status == 500) {
+                  this.toast.error('Server error');
+                }
+                this.loading = false;
+              });
       }
     });
   }
-
-  Update() {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'The rank will be update!',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, update it!',
-      cancelButtonText: 'No, do not update '
-    }).then((result) => {
-      if (result.value) {
-        this.loading = true;
-        this.rankApi.updateRank(this.updateRank).subscribe(data => {
-          this.closeModal();
-          this.restartData();
-          this.toast.success(data['message']);
-          this.getRank(true);
-          this.loading = false;
-        }, (error) => {
-          if (error.status == 0) {
-            this.toast.error('Server is not availiable');
-          }
-          if (error.status == 500) {
-            this.toast.error('Server error');
-          }
-          this.loading = false;
-        });
-      }
-    });
-  }
-
-  clickButtonChangeStatus(status: boolean) {
-    if (status == false) {
-      Swal.fire({
-        title: 'Are you sure?',
-        text: 'The rank will be delete!',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'No, keep it'
-      }).then((result) => {
-        if (result.value) {
-          this.loading = true;
-          this.rankApi.changeStatus(this.updateStatus, status).subscribe(data => {
-            this.getRank(status);
-            this.closeModal();
-            this.loading = false;
-            this.toast.success(data['message'])
-            this.selectedAll = false;
-          }, (error) => {
-            if (error.status == 0) {
-              this.toast.error('Server is not availiable');
-            }
-            if (error.status == 500) {
-              this.toast.error('Server error');
-            }
-            this.closeModal();
-            this.loading = false;
-          });
-        }
-      });
-    }
-    else {
-      Swal.fire({
-        title: 'Are you sure?',
-        text: 'The company will be enable!',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, enable it!',
-        cancelButtonText: 'No, keep it'
-      }).then((result) => {
-        if (result.value) {
-          this.loading = true;
-          this.rankApi.changeStatus(this.updateStatus, status).subscribe(data => {
-            this.getRank(status);
-            this.closeModal();
-            this.loading = false;
-            this.toast.success(data['message'])
-            this.selectedAll = false;
-          }, (error) => {
-            if (error.status == 0) {
-              this.toast.error('Server is not availiable');
-            }
-            if (error.status == 500) {
-              this.toast.error('Server error');
-            }
-            this.closeModal();
-            this.loading = false;
-          });
-        }
-      });
-    }
-  }
-
-  validate() {
-    this.check = true;
-    this.inputRank['name'] = $.trim(this.inputRank['name'].replace(/\s\s+/g, ' ')).toUpperCase();
-    $("#rankName").css("border-color", "");
-    if (this.inputRank['name'] == "" || this.inputRank['name'] == undefined) {
-      this.toast.error('Please input rank name');
-      $("#rankName").css("border-color", "red");
-      this.check = false;
-    }
-    else if (this.inputRank['name'].length < 3) {
-      this.toast.error('Please input rank name min 3 characters');
-      $("#rankName").css("border-color", "red");
-      this.check = false;
-    }
-    this.listRank.forEach(element => {
-      if (element.name == this.inputRank['name']) {
-        this.check = false;
-        this.toast.error('Rank name is existed');
-        $("#rankName").css("border-color", "red");
-        return;
-      }
-    });
-  }
-
 }

@@ -44,8 +44,8 @@ export class RankDefaultComponent implements OnInit {
     this.rankApi.getAllDefaultRank().subscribe(
       (data) => {
         this.loading = false;
-        this.listRank = data.defaultRankDTOs;
-        this.catalogueList = data.catalogueDefaultDTOs;
+        this.listRank = data.rankDTOs;
+        this.catalogueList = data.catalogueDTOs;
         this.clone = JSON.parse(JSON.stringify(this.listRank));
         this.calculateWeightPoint();
       },
@@ -68,7 +68,7 @@ export class RankDefaultComponent implements OnInit {
     var catalogueInRank = [];
     for (var i = 0; i < this.catalogueList.length; i++) {
       catalogueInRank.push({
-        catalogueId : this.catalogueList[i].catalogueId,
+        catalogueId : this.catalogueList[i].companyCatalogueId,
         point: 100,
       })
     }

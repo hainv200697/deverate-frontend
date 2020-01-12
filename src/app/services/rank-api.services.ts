@@ -9,15 +9,15 @@ export class RankApiService {
     URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
 
-    getAllRank(isActive,companyId) {
-        const param = new HttpParams().set('isActive', isActive).set('companyId',companyId);
+    getAllRank(companyId) {
+        const param = new HttpParams().set('companyId',companyId);
         const API = 'RankApi/GetAllCompanyRank';
         return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
 
-    insertRank(listRankModel){
-        const API = 'RankApi/updateOrCreateRankIfNotExist';
-        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API, listRankModel);
+    saveCompanyRank(listRankModel, companyId){
+        const API = '/RankApi/SaveCompanyRank?companyId=';
+        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API + companyId, listRankModel);
     }
 
     updateRank(rankModel){
