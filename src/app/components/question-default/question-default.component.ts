@@ -162,7 +162,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                     this.message.push("Percent of question #" + ind + " must be in range from 0 to 100 characters ");
                     this.checkFile = false;
                 }
-                questionObj.question = $.trim(element['Question'].replace(/\s\s+/g, ' '));
+                questionObj.question = $.trim(element['Question']);
                 questionObj.catalogueDefaultId = this.id;
                 questionObj.isActive = true;
                 if (element['Question'] == null) {
@@ -257,7 +257,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 $('#ins_question_cate_id').focus();
                 return;
             }
-            const question = $.trim(this.insQuestion['question'].replace(/\s\s+/g, ' '));
+            const question = $.trim(this.insQuestion['question']);
             if (question === '' || question === undefined || question === null) {
                 this.toastr.error('Message', 'Question can not be blank!');
                 $('#ins_question_question').css('border-color', 'red');
@@ -352,7 +352,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 $('#upd_question_cate_id').focus();
                 return;
             }
-            const question = $.trim(this.updQuestion['question'].replace(/\s\s+/g, ' '));
+            const question = $.trim(this.updQuestion['question']);
             if (question === '' || question === undefined || question === null) {
                 this.toastr.error('Message', 'Question can not be blank!');
                 $('#upd_question_question').css('border-color', 'red');

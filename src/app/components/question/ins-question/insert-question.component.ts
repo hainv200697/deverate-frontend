@@ -137,7 +137,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             });
             list.forEach(element => {
                 this.allQuestions.forEach(ques => {
-                    if ($.trim(element.Question.replace(/\s\s+/g, ' ')) == ques.question1) {
+                    if ($.trim(element.Question) == ques.question1) {
                         existedQues.push("Question  " + element.Question + " is existed");
                     }
                 });
@@ -164,7 +164,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                     this.message.push("Percent of question #" + ind + " must be in range from 0 to 100 characters ");
                     this.checkFile = false;
                 }
-                questionObj.question1 = $.trim(element['Question'].replace(/^\s+|\s+$/gm, ' '));
+                questionObj.question1 = $.trim(element['Question']);
                 questionObj.isActive = true;
                 questionObj.accountId = this.accountId;
                 questionObj.companyCatalogueId = this.id;
@@ -210,7 +210,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                     this.checkFile = false;
                 }
                 this.listAnswer.forEach((element, index) => {
-                    const answer = $.trim(element.answerText.replace(/^\s+|\s+$/gm, ' '));
+                    const answer = $.trim(element.answerText);
                     if (answer === null || answer === undefined) {
                         this.message.push("Answer #" + index + " is blank");
                         this.checkFile = false;
@@ -259,7 +259,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 $('#ins_question_cate_id').focus();
                 return;
             }
-            const question = $.trim(this.insQuestion['question1'].replace(/\s\s+/g, ' '));
+            const question = $.trim(this.insQuestion['question1']);
             if (question === '' || question === undefined || question === null) {
                 this.toastr.error('Message', 'Question can not be blank!');
                 $('#ins_question_question').css('border-color', 'red');
@@ -354,7 +354,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 $('#upd_question_cate_id').focus();
                 return;
             }
-            const question = $.trim(this.updQuestion['question1'].replace(/\s\s+/g, ' '));
+            const question = $.trim(this.updQuestion['question1']);
             if (question === '' || question === undefined || question === null) {
                 this.toastr.error('Message', 'Question can not be blank!');
                 $('#upd_question_question').css('border-color', 'red');
