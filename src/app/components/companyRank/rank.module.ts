@@ -1,4 +1,3 @@
-import { RankFilterPipe } from './rank-filter.pipe';
 import { PageHeaderModule } from '../../shared';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -28,6 +27,6 @@ import { RankComponent } from './rank.component';
     NgbTooltipModule
   ],
   
-  declarations: [RankComponent,RankFilterPipe]
+  declarations: [RankComponent]
 })
 export class RankModule { }

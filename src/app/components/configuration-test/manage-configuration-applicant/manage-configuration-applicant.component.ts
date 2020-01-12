@@ -124,7 +124,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
   loadData = false;
 
   ngOnInit() {
-    this.getAllRank(true);
+    this.getAllRank();
     this.getAllCatalogue();
     this.getConfigurationIsActive(true);
   }
@@ -173,7 +173,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
     this.inputConfiguration['duration'] = 15;
     this.inputConfiguration['startDate'] = this.startDate;
     this.selectedItems = [];
-    this.getAllRank(true);
+    this.getAllRank();
     this.modalService.open(content, { size: 'lg', windowClass: 'myCustomModalClass' });
     const a = document.querySelector('#stepper1');
     this.stepper = new Stepper(a, {
@@ -259,8 +259,8 @@ export class ManageConfigurationApplicantComponent implements OnInit {
     this.index = 1;
   }
 
-  getAllRank(status: boolean) {
-    this.rankApi.getAllRank(status, this.companyId).subscribe(
+  getAllRank() {
+    this.rankApi.getAllRank(this.companyId).subscribe(
       (data: any[]) => {
         let tmp = []
         tmp = data;
