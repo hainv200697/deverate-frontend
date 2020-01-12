@@ -271,6 +271,7 @@ export class EmployeeSystemComponent implements OnInit {
         this.insEmployee['role'] = 2;
         this.insEmployee['gender'] = true;
         this.modalService.open(create, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+        this.insEmployee['companyId']=0;
     }
 
     openModalExcel(excel) {
@@ -621,6 +622,14 @@ export class EmployeeSystemComponent implements OnInit {
             this.closeModal()
           }
         );
+      }
+
+      validateCompany(){
+        const companyId =this.insEmployee['companyId'];
+        if(companyId == 0){
+            this.toastr.error('Please choose company');
+            return false;
+        }
       }
 
 }
