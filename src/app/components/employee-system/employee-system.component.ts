@@ -47,7 +47,6 @@ export class EmployeeSystemComponent implements OnInit {
     message: Array<string> = [];
     ngOnInit() {
         this.getAllCompany();
-        this.getEmployee();
     }
     async next() {
         this.employees = [];
@@ -605,8 +604,11 @@ export class EmployeeSystemComponent implements OnInit {
           (data: any[]) => {
             this.loading = false;
             this.companyList = data;
-            console.log(this.companyList);
             this.selectedAll = false;
+            if(this.companyList.length > 0){
+                this.companyId = this.companyList[0].companyId;
+            }
+            this.getEmployee();
           },
           (error) => {
             if (error.status == 0) {
