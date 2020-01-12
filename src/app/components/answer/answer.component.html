@@ -58,7 +58,7 @@
                         <sv-default-sorter by='Name'>Answer</sv-default-sorter>
                     </th>
                     <th class="col-md-4 text-center" scope="col">
-                        <sv-default-sorter by='Point'>Percent</sv-default-sorter>
+                        <sv-default-sorter by='Percent'>Percent</sv-default-sorter>
                     </th>
                     <th class="col-md-1 text-center" scope="col">Status
                             <div ngbDropdown class="d-inline-block dropdown">
@@ -126,7 +126,7 @@
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <label>Percent:</label>
-                            <input type="number" [(ngModel)]="insAnswer['point']" name="ins_point"
+                            <input type="number" [(ngModel)]="insAnswer['percent']" name="ins_point"
                                 class="form-control input-underline input-lg" id=""
                                 (change)="validate()"
                                 placeholder="Percent">
@@ -161,7 +161,7 @@
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <label>Percent:</label>
-                            <input type="number" [(ngModel)]="updAnswer['point']" name="upd_point"
+                            <input type="number" [(ngModel)]="updAnswer['percent']" name="upd_point"
                                 class="form-control input-underline input-lg" id=""
                                 (change)="validateUpdate()"
                                 placeholder="Percent">

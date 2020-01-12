@@ -256,12 +256,18 @@
                                 (click)="resendmail(c.managerUserName, c.companyId)">
                                 <i class="fa fa-envelope"></i>
                             </button>
+                            &nbsp;
+                            <button class="btn-primary btn btn-circle shadow-item" (click)="viewAccount(c);"
+                                tooltip="view">
+                                <i class="fa fa fa-eye"></i>
+                            </button>
                         </td>
                         <td class=" text-center" style="width: 10%;" [hidden]="c.isActive==true">
                             <button class="btn-warning btn btn-circle shadow-item col-md-6" ngbTooltip="Edit"
                                 (click)="openDetail(update, c.companyId)">
                                 <i class="fa fa-edit edit-icon"></i>
                             </button>
+                            
                         </td>
                     </tr>
                 </tbody>

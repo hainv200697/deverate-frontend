@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { EmployeeApiService } from 'src/app/services/employee-api.service';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -9,18 +8,21 @@ import Stepper from 'bs-stepper';
 import { GloblaService } from 'src/assets/service/global.service';
 import { empty } from 'rxjs';
 import * as moment from 'moment';
+import { CompanyApiService } from 'src/app/services/company-api.service';
+import { SystemEmployeeApiService } from 'src/app/services/system-employee-api.service';
 @Component({
-    selector: 'app-employee',
-    templateUrl: './employee.component.html',
-    styleUrls: ['./employee.component.scss']
+    selector: 'app-employee-system',
+    templateUrl: './employee-system.component.html',
+    styleUrls: ['./employee-system.component.scss']
 })
-export class EmployeeComponent implements OnInit {
+export class EmployeeSystemComponent implements OnInit {
     constructor(
-        private employeeService: EmployeeApiService,
+        private employeeService: SystemEmployeeApiService,
         private activeRoute: ActivatedRoute,
         private modalService: NgbModal,
         private toastr: ToastrService,
-        private globalservice: GloblaService
+        private globalservice: GloblaService,
+        private companyApi: CompanyApiService,
     ) { }
     public loading = false;
     iconIsActive = true;
@@ -37,13 +39,14 @@ export class EmployeeComponent implements OnInit {
     selectedAll: any;
     employeeList = [];
     insEmployee = {};
+    companyList = [];
     employees = [];
     listUser: String[] = [];
     updRole = {};
     getRole = 0;
     message: Array<string> = [];
     ngOnInit() {
-        this.getEmployee();
+        this.getAllCompany();
     }
     async next() {
         this.employees = [];
@@ -267,6 +270,7 @@ export class EmployeeComponent implements OnInit {
         this.insEmployee['role'] = 2;
         this.insEmployee['gender'] = true;
         this.modalService.open(create, { backdrop: 'static', ariaLabelledBy: 'modal-basic-title' });
+        this.insEmployee['companyId']=0;
     }
 
     openModalExcel(excel) {
@@ -483,23 +487,14 @@ export class EmployeeComponent implements OnInit {
                 this.selectedAll = true;
             }
         }
-        console.log(this.listUser);
     }
     validate() {
-        const fullname = $.trim(this.insEmployee['fullname'].replace(/\s\s+/g, ' ')).toUpperCase();
-        const str = fullname.split(" ");
-        if(str.length < 2){
-            this.toastr.error('Employee\'s name min 2 words');
-            document.getElementById('ins_manage_fullname').style.borderColor = 'red';
-            document.getElementById('ins_manage_fullname').focus();
-            return false;
-        }
-        if (fullname == '' || fullname == null) {
+        if (this.insEmployee['fullname'] == '' || this.insEmployee['fullname'] == null) {
             this.toastr.error('Please input employee name');
             document.getElementById('ins_manage_fullname').style.borderColor = 'red';
             document.getElementById('ins_manage_fullname').focus();
             return false;
-        } else if (fullname.length < 3) {
+        } else if (this.insEmployee['fullname'].length < 3) {
             this.toastr.error('Please input employee name min 3 letter');
             document.getElementById('ins_manage_fullname').style.borderColor = 'red';
             document.getElementById('ins_manage_fullname').focus();
@@ -507,7 +502,6 @@ export class EmployeeComponent implements OnInit {
         } else {
             document.getElementById('ins_manage_fullname').style.borderColor = 'green';
         }
-        this.insEmployee['fullname'] = fullname;
         return true;
     }
 
@@ -530,16 +524,15 @@ export class EmployeeComponent implements OnInit {
     }
 
     validateAddress() {
-        const address = $.trim(this.insEmployee['address'].replace(/\s\s+/g, ' '));
-        if (address != undefined) {
-            if (address != '') {
-                if (address.length < 3) {
+        if (this.insEmployee['address'] != undefined) {
+            if (this.insEmployee['address'] != '') {
+                if (this.insEmployee['address'].length < 3) {
                     this.toastr.error('Please input employee address min 3 characters');
                     document.getElementById('ins_manage_address').style.borderColor = 'red';
                     document.getElementById('ins_manage_address').focus();
                     return false;
                 }
-                else if (address.length > 200) {
+                else if (this.insEmployee['address'].length > 200) {
                     this.toastr.error('Please input employee Employee address max 200 characters');
                     document.getElementById('ins_manage_address').style.borderColor = 'red';
                     document.getElementById('ins_manage_address').focus();
@@ -549,7 +542,6 @@ export class EmployeeComponent implements OnInit {
                 }
             }
         }
-        this.insEmployee['address'] = address;
         return true;
     }
     validatePhone() {
@@ -602,7 +594,44 @@ export class EmployeeComponent implements OnInit {
                 document.getElementById('ins_manage_email').style.borderColor = 'green';
             }
         }
-        this.insEmployee['email'] = email;
+
         return true;
     }
+
+    getAllCompany() {
+        this.loading = true;
+        this.companyApi.getAllCompany().subscribe(
+          (data: any[]) => {
+            this.loading = false;
+            this.companyList = data;
+            this.selectedAll = false;
+            if(this.companyList.length > 0){
+                this.companyId = this.companyList[0].companyId;
+            }
+            this.getEmployee();
+          },
+          (error) => {
+            if (error.status == 0) {
+              this.toastr.error('Server is not availiable');
+            }
+            if (error.status == 404) {
+              this.toastr.error('Not found');
+            }
+            if (error.status == 500) {
+              this.toastr.error('Server error');
+            }
+            this.loading = false;
+            this.closeModal()
+          }
+        );
+      }
+
+      validateCompany(){
+        const companyId =this.insEmployee['companyId'];
+        if(companyId == 0){
+            this.toastr.error('Please choose company');
+            return false;
+        }
+      }
+
 }

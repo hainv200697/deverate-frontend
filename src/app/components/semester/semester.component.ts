@@ -47,7 +47,7 @@ export class SemesterComponent implements OnInit {
 
     getAllEmployeeInCompany() {
         this.loading = true;
-        this.employeeApiService.getAllWithRole(this.companyId,true,3).subscribe(
+        this.employeeApiService.getAllWithRole(this.companyId,3).subscribe(
             (data) => {
                 this.loading = false;
                 this.listEmployee = data;

@@ -5,7 +5,7 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class CompanyApiService {
-    // URL = 'http://localhost:54318/';
+    // URL = 'http://localhost:9000/';
     URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
 
