@@ -9,15 +9,15 @@ export class RankApiService {
     URL = AppSettings.BASEURL;
     constructor(private httpClient: HttpClient) { }
 
-    getAllRank(isActive,companyId) {
-        const param = new HttpParams().set('isActive', isActive).set('companyId',companyId);
+    getAllRank(companyId) {
+        const param = new HttpParams().set('companyId',companyId);
         const API = 'RankApi/GetAllCompanyRank';
         return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
 
-    insertRank(listRankModel){
-        const API = 'RankApi/updateOrCreateRankIfNotExist';
-        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API, listRankModel);
+    saveCompanyRank(listRankModel, companyId){
+        const API = 'RankApi/SaveCompanyRank?companyId=';
+        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API + companyId, listRankModel);
     }
 
     updateRank(rankModel){
@@ -29,4 +29,20 @@ export class RankApiService {
         const API = 'RankApi/ChangeStatusCompanyRank?status=';
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API + isActive , rankId);
     }
+
+    getAllDefaultRank(){
+        const API = 'RankApi/GetAllDefaultRank';
+        return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE + API);
+    }
+
+    saveDefaultRank(data) {
+        const API = 'RankApi/SaveDefaultRank';
+        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API , data);
+    }
+
+    disableDefaultRank(data) {
+        const API = 'RankApi/DisableDefaultRank';
+        return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API , data);
+    }
+    
 }

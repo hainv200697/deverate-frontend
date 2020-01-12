@@ -1,3 +1,4 @@
+import { SemesterFilterPipe } from './semester-filter.pipe';
 import { PageHeaderModule } from './../../shared/modules/page-header/page-header.module';
 import { SemesterRoutingModule } from './semester-routing.module';
 import { SemesterComponent } from './semester.component';
@@ -20,9 +21,10 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     SemesterRoutingModule,
     NgbTooltipModule,
     NgxLoadingModule,
-    NgMultiSelectDropDownModule
+    NgMultiSelectDropDownModule,
     ],
     declarations: [
+      SemesterFilterPipe,
       SemesterComponent
       ]
 })

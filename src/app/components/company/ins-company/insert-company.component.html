@@ -204,16 +204,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12"></div>
-            <div ngbDropdown class="col-md-11 d-flex justify-content-start d-inline-block dropdown">
-                <button class="btn icon-btn border" ngbDropdownToggle>Item</button>
-                <div ngbDropdownMenu>
-                    <button class="dropdown-item" (click)="PageSize(5)">5</button>
-                    <button class="dropdown-item" (click)="PageSize(25)">25</button>
-                    <button class="dropdown-item" (click)="PageSize(50)">50</button>
-                </div>
-            </div>
-            <table class="table  table-hover customtable" [svData]="Companies|CompanyFilterPipe:searchText"
+            <table class="table  table-hover customtable" [svData]="Companies|CompanyFilterPipe:searchText" [svRowsOnPage]="25"
                 #sv="svDataTable">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin pt-3">
@@ -222,15 +213,11 @@
                         <th class="text-center" style="width: 5%;" scope="col">
                             No.
                         </th>
-                        <th class="text-center" style="width: 20%;" scope="col">
+                        <th class="text-center" style="width: 30%;" scope="col">
                             <sv-default-sorter by="Name">Company
                             </sv-default-sorter>
                         </th>
-                        <th class="text-center" style="width: 20%;" scope="col">
-                            <sv-default-sorter by="ManagerName">Manager
-                            </sv-default-sorter>
-                        </th>
-                        <th class="text-center" style="width: 15%;" scope="col">Phone</th>
+                        <th class="text-center" style="width: 25%;" scope="col">Phone</th>
                         <th class="text-center" scope="col" style="width: 15%;">
                             <sv-default-sorter by="Create_At">Creat At
                             </sv-default-sorter>
@@ -250,9 +237,8 @@
                                 (change)="checkIfAllSelected();">
                         </td>
                         <td class="text-center" style="width: 5%;">{{i+1}}</td>
-                        <td class="text-center" style="width: 20%;">{{c.name}}</td>
-                        <td class="text-center" style="width: 20%;">{{c?.managerName}}</td>
-                        <td class="text-center" style="width: 15%;">{{c.phone}}</td>
+                        <td class="text-center" style="width: 30%;">{{c.name}}</td>
+                        <td class="text-center" style="width: 25%;">{{c.phone}}</td>
                         <td class="text-center" style="width: 15%;">{{c.create_At.split('T')[0]}}</td>
                         <td class="text-center" style="width: 10%;" [hidden]="c.isActive==true">
                             <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
@@ -285,12 +271,14 @@
                         </td>
                     </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <sv-bootstrap-paginator [rowsOnPageSet]="[5, 25, 50]"></sv-bootstrap-paginator>
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
-    </div>
-    <div class=" d-flex justify-content-center col-md-12">
-        <ngb-pagination [collectionSize]="Companies.length" [(page)]="page" [pageSize]="pageSize"
-            [boundaryLinks]="true">
-        </ngb-pagination>
     </div>
 </div>

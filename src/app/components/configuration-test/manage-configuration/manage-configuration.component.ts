@@ -126,7 +126,7 @@ export class ManageConfigurationComponent implements OnInit {
   loadData = false;
 
   ngOnInit() {
-    this.getAllRank(true);
+    this.getAllRank();
     this.getAllCatalogue();
     this.getConfigurationIsActive(true);
   }
@@ -177,7 +177,7 @@ export class ManageConfigurationComponent implements OnInit {
     this.inputConfiguration['startDate'] = this.startDate;
     this.inputConfiguration['endDate'] = this.endDate.setDate(this.startDate.getDate() + 1);
     this.selectedItems = [];
-    this.getAllRank(true);
+    this.getAllRank();
     this.modalService.open(content, { size: 'lg', windowClass: 'myCustomModalClass' });
     const a = document.querySelector('#stepper1');
     this.stepper = new Stepper(a, {
@@ -264,8 +264,8 @@ export class ManageConfigurationComponent implements OnInit {
     this.index = 1;
   }
 
-  getAllRank(status: boolean) {
-    this.rankApi.getAllRank(status, this.companyId).subscribe(
+  getAllRank() {
+    this.rankApi.getAllRank(this.companyId).subscribe(
       (data: any[]) => {
         let tmp = []
         tmp = data;
@@ -333,8 +333,8 @@ export class ManageConfigurationComponent implements OnInit {
     this.loading = true;
     this.configAPi.GetConfigurationCatalogueByConfigId(id).subscribe(
       (res) => {
-        this.updateConfig['ConfigId'] = res['configId'];
-        this.updateConfig['testOwnerId'] = res['testOwnerId'];
+        this.updateConfig['configId'] = res['configId'];
+        this.updateConfig['accountId'] = res['testOwnerId'];
         this.updateConfig['type'] = res['type'];
         this.updateConfig['title'] = res['title'];
         this.updateConfig['createDate'] = res['createDate'];
@@ -342,14 +342,13 @@ export class ManageConfigurationComponent implements OnInit {
         this.updateConfig['endDate'] = moment.utc(res['endDate']).local();
         this.updateConfig['duration'] = res['duration'];
         this.updateConfig['isActive'] = res['isActive'];
-        this.updateConfig['catalogueInConfigs'] = res['catalogueInConfigs'];
-        this.updateConfig['configurationRanks'] = res['configurationRanks'];
+        this.updateConfig['catalogueInConfigs'] = res['catalogueInConfigurationDTO'];
 
-        let tmp = res['catalogueInConfigs'];
+        let tmp = res['catalogueInConfigurationDTO'];
         this.selectedItemsUpdate = [];
         //khoi tao mang 2 chieu theo catalogue
-        var numberCatalogue = res['configurationRanks'][0].catalogueInRanks.length;
-        var numberRank = res['configurationRanks'].length - 1
+        var numberCatalogue = res['catalogueInConfigurationDTO'][0].catalogueInRankDTO.length;
+        var numberRank = res['catalogueInConfigurationDTO'].length - 1
         this.catalogueInRanks = new Array(numberCatalogue).fill(0);
 
         //khoi tao mang 2 chieu theo rank ung voi tung catalogue
@@ -362,7 +361,7 @@ export class ManageConfigurationComponent implements OnInit {
         for (var i = 0; i < numberRank; i++) {
           // lay weight point cua catalogue theo rank
           for (var j = 0; j < numberCatalogue; j++) {
-            this.catalogueInRanks[h][c] = res['configurationRanks'][i].catalogueInRanks[j].catalogue.weightPoint;
+            this.catalogueInRanks[h][c] = res['catalogueInConfigurationDTO'][i].catalogueInRankDTO[j].point;
             h++
           }
           c++
@@ -371,15 +370,15 @@ export class ManageConfigurationComponent implements OnInit {
         tmp.forEach(x => {
           this.selectedItemsUpdate.push(new Object(
             {
-              cicId: x.cicId,
+              catalogueInConfigId: x.catalogueInConfigId,
               configId: x.configId,
               catalogueId: x.catalogueId,
-              catalogueName: x.name,
               weightPoint: x.weightPoint,
               isActive: x.isActive,
             }
           ));
         });
+        console.log(this.catalogueInRanks)
         this.loading = false;
         this.loadData = true;
       },

@@ -88,7 +88,7 @@
                             <td class="text-center" style="width: 15%;">{{data.rank}}
                             </td>
                             <td class="text-center" style="width: 25%;">
-                                {{data?.startTime.split('T')[0]}}</td>
+                                {{data.startTime | date}}</td>
                             <th class="text-center" style="width: 15%;">
                                 <a href='result/{{data.testId}}' target="_blank">
                                     <button class="btn-warning btn btn-circle shadow-item">

@@ -3,12 +3,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RankRoutingModule } from './rank-routing.module';
+import { RankDefaultRoutingModule } from './rank-default-routing.module';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { DataTableModule } from 'ng-angular8-datatable';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxLoadingModule } from 'ngx-loading';
-import { RankComponent } from './rank.component';
+import { RankDefaultComponent } from './rank-default.component';
 
 @NgModule({
   imports: [
@@ -16,7 +16,7 @@ import { RankComponent } from './rank.component';
     NgbModule,
     FormsModule,
     ReactiveFormsModule,
-    RankRoutingModule,
+    RankDefaultRoutingModule,
     PageHeaderModule,
     SweetAlert2Module.forRoot(),
     SweetAlert2Module,
@@ -27,6 +27,6 @@ import { RankComponent } from './rank.component';
     NgbTooltipModule
   ],
   
-  declarations: [RankComponent]
+  declarations: [RankDefaultComponent]
 })
-export class RankModule { }
+export class RankDefaultModule { }

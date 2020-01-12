@@ -12,6 +12,9 @@
         <a [routerLink]="['/manage-company-account']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'System Manager'">
             <i class="fa fa-user"></i>&nbsp;
             <span>Manage Employee</span>
+        <a [routerLink]="['/rank-default']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'System Manager'">
+            <i class="fa fa-level-up"></i>&nbsp;
+            <span>Rank Default</span>
         </a>
 
         <!-- Company Manager -->
@@ -54,7 +57,10 @@
             <i class="fa fa-user"></i>&nbsp;
             <span>Applicant</span>
         </a>
-
+        <a [routerLink]="['/generate-test']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
+            <i class="fa fa-question"></i>&nbsp;
+            <span>Generate Test</span>
+        </a>
         <div class="nested-menu" *ngIf="role == 'Test Owner'">
             <a class="list-group-item" (click)="addExpandClass('pages1')">
                 <i class="fa fa-bar-chart"></i>&nbsp;

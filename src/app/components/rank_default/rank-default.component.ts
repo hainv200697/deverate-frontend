@@ -6,10 +6,10 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-rank',
-  templateUrl: './rank.component.html',
-  styleUrls: ['./rank.component.scss']
+  templateUrl: './rank-default.component.html',
+  styleUrls: ['./rank-default.component.scss']
 })
-export class RankComponent implements OnInit {
+export class RankDefaultComponent implements OnInit {
   constructor(
     public router: Router,
     private toast: ToastrService,
@@ -26,7 +26,6 @@ export class RankComponent implements OnInit {
   catalogueList = [];
   clone = [];
   avaragePercent = [];
-  companyId = localStorage.getItem('CompanyId');
 
   ngOnInit() {
     this.getRank();
@@ -42,7 +41,7 @@ export class RankComponent implements OnInit {
 
   getRank() {
     this.loading = true;
-    this.rankApi.getAllRank(this.companyId).subscribe(
+    this.rankApi.getAllDefaultRank().subscribe(
       (data) => {
         this.loading = false;
         this.listRank = data.rankDTOs;
@@ -76,7 +75,7 @@ export class RankComponent implements OnInit {
     this.clone.push({
       rankId: -1,
       name: 'RankSample',
-      isDefault: false,
+      isDefault: true,
       catalogueInRanks: catalogueInRank
     })
     this.calculateWeightPoint();
@@ -165,7 +164,7 @@ export class RankComponent implements OnInit {
       if (result.value) {
         this.loading = true;
         var count = 0;
-        this.rankApi.saveCompanyRank(listSave, this.companyId)
+        this.rankApi.saveDefaultRank(listSave)
           .subscribe((res) => {
             count++;
             if (count == 2) {

@@ -1,0 +1,20 @@
+@import "../../../styles/custom.scss";
+
+.icon-btn{
+    border: none;
+    background-color: transparent;
+    outline: 0;
+    
+    i{
+        color: #007bff;
+        font-size: 2em;
+        cursor: pointer;
+    }
+}
+
+.no-padding-no-margin{
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+}

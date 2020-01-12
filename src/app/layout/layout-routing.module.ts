@@ -1,3 +1,4 @@
+import { RankDefaultModule } from './../components/rank_default/rank-default.module';
 import { SemesterModule } from './../components/semester/semester.module';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -18,6 +19,8 @@ const routes: Routes = [
             { path: 'manage-company-account', loadChildren: () => import('../components/employee-system/employee-system.module').then(m => m.EmployeeSystemModule), canActivate: [SystemGuard]},
             { path: 'manage-question-default/:id', loadChildren: () => import('../components/question-default/question-default.module').then(m => m.QuestionDefaultModule), canActivate: [SystemGuard]},
             { path: 'manage-answer-default/:id', loadChildren: () => import('../components/answer_default/answer-default.module').then(m => m.AnswerDefaultModule), canActivate: [SystemGuard]},
+            { path: 'rank-default', loadChildren: () => import('../components/rank_default/rank-default.module').then(m => m.RankDefaultModule),canActivate: [SystemGuard]},
+
             // Company Manager
             { path: 'manage-employee', loadChildren: () => import('../components/employee/employee.module').then(m => m.EmployeeModule), canActivate: [CompanyGuard]},
             { path: 'catalogue', loadChildren: () => import('../components/catalogue/catalogue.module').then(m => m.CatalogueModule),canActivate: [CompanyGuard] },
@@ -37,7 +40,7 @@ const routes: Routes = [
             { path: 'applicant', loadChildren: () => import('../components/applicant/applicant.module').then(m => m.ApplicantModule), canActivate: [OwnerGuard]},
             { path: 'sample-test', loadChildren: () => import('../components/sample-test/sample-test.module').then(m => m.SampleTestModule), canActivate: [OwnerGuard] },
             { path: 'statistic-applicant', loadChildren: () => import('../components/statistic-applicant-forTestOwner/statistic-applicant.module').then(m => m.StatisticApplicantModule), canActivate: [OwnerGuard]},
-            { path: 'semester', loadChildren: () => import('../components/semester/semester.module').then(m => m.SemesterModule), canActivate: [OwnerGuard]},
+            { path: 'generate-test', loadChildren: () => import('../components/semester/semester.module').then(m => m.SemesterModule), canActivate: [OwnerGuard]},
             //Employee
             { path: 'reranking', component: RerankingComponent, canActivate: [EmployeeGuard]},
             { path: 'statistic-employee', loadChildren: () => import('../components/statistic-employee/statistic-employee.module').then(m => m.StatisticEmployeeModule), canActivate: [EmployeeGuard]},
