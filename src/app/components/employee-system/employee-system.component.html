@@ -1,0 +1,319 @@
+<ng-template #customLoadingTemplate>
+    <div class="custom-class">
+
+    </div>
+</ng-template> 
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true }"
+    [template]="customLoadingTemplate">
+</ngx-loading>
+
+<ng-template #excel let-modal>
+    <div class="container">
+        <div id="stepper1" class="bs-stepper">
+            <div class="modal-header header-custom text-center">
+                <div class="bs-stepper-header" style="padding-left: 20%;">
+                    <div class="step" data-target="#test-l-1">
+                        <button [disabled]="index != 1" class="step-trigger">
+                            <span class="bs-stepper-circle">1</span>
+                            <span class="bs-stepper-label">Create Account</span>
+                        </button>
+                    </div>
+                    <div class="line"></div>
+                    <div class="step" data-target="#test-l-2">
+                        <button [disabled]="index != 2 " class="step-trigger">
+                            <span class="bs-stepper-circle">2</span>
+                            <span class="bs-stepper-label">Review New Account</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="bs-stepper-content">
+                    <div id="test-l-1" class="content">
+                        <div class="modal-body">
+                            <div class="col-sm-12 col-md-12 col-lg-12 row">
+                                <div class="col-sm-6 col-md-6 col-lg-6 create-file">
+                                    <input type="file" style="display: inline-block;" (change)="incomingfile($event)"
+                                        placeholder="Upload file" accept=".xlsx">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="message != null">
+                                <div class="col-sm-12 col-md-12 col-lg-12" *ngFor="let item of message"
+                                    style="color: red;">
+                                    {{item}}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div id="test-l-2" class="content">
+                        <div class="modal-header header-custom">
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12 table-wrapper-scroll-y my-custom-scrollbar">
+                                <table class="table table-striped table-bordered table-hover customtable">
+                                    <thead>
+                                        <tr class=" no-padding-no-margin">
+                                            <td class="six" style="font-weight: bold">Fullname</td>
+                                            <td class="seven" style="font-weight: bold">Email</td>
+                                            <td class="four" style="font-weight: bold">Role</td>
+                                            <td class="three" style="font-weight: bold">Gender</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr  *ngFor="let q of employees">
+                                            <td >
+                                                {{q.fullname}}
+                                            </td>
+                                            <td >
+                                                {{q.email}}
+                                            </td>
+                                            <td  *ngIf="q.role==4">
+                                                Test Owner
+                                            </td>
+                                            <td  *ngIf="q.role==3">
+                                                Employee
+                                            </td>
+                                            <td  *ngIf="q.gender==true">
+                                                Male
+                                            </td>
+                                            <td  *ngIf="q.gender==false">
+                                                Female
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button [hidden]="index == 2" class=" btn btn-success " (click)="downloadTemplate()"
+            data-toggle="button" placement="top" ngbTooltip="Download Template">
+            Download Template
+            <i class="fa fa-download"></i>
+        </button>
+        <button [hidden]="index == 1" class="btn btn-secondary back" (click)="back()">Back</button>
+        <button [hidden]="index == 2" [disabled]="checkFile==false" (click)="next()"
+            class=" btn btn-primary">Next</button>
+        <button [disabled]="checkExcel==false" [hidden]="index == 1" class="btn btn-success save"
+            (click)="insertEmployeeSubmit('excel')">Create</button>
+        <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
+    </div>
+</ng-template>
+
+<ng-template #create let-modal>
+    <div class="text-left mt-1 ">
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Create Account</h4>
+        </div>
+        <div class="modal-body modal-basic-title col-md-12 row no-padding-no-margin">
+            <form class="col-md-12 no-padding-no-margin row">
+                <div class="form-group col-md-12">
+                    <label>Account Information: </label>
+                    <div class="form-group input-group">
+                        <div class="input-group-append">
+                            <button disabled="true" class="btn btn-secondary" type="button"><i
+                                    class="fa fa-user"></i></button>
+                        </div>
+                        <input id="ins_manage_fullname" type="text" placeholder="FullName" minlength="3" [(ngModel)]="insEmployee['fullname']"
+                            (change)="validate()" name="ins_manage_fullname" class="form-control">
+
+                    </div>
+                    <div class="form-group input-group">
+                        <div class="input-group-append">
+                            <button disabled="true" class="btn btn-secondary" type="button"><i
+                                    class="fa fa-envelope"></i></button>
+                        </div>
+                        <input id="ins_manage_email" class="form-control" type="email" placeholder="Email" [(ngModel)]="insEmployee['email']"
+                            (change)="validateEmail()" name="ins_manage_email">
+
+                    </div>
+                    <div class="form-group input-group">
+                        <div class="input-group-append">
+                            <button disabled="true" class="btn btn-secondary" type="button"><i
+                                    class="fa fa-phone"></i></button>
+                        </div>
+                        <input id="ins_manage_phone" class="form-control" type="text" placeholder="Phone" [(ngModel)]="insEmployee['phone']"
+                            (change)="validatePhone()" name="ins_manage_phone">
+
+                    </div>
+                    <div class="form-group input-group">
+                        <div class="input-group-append">
+                            <button disabled="true" class="btn btn-secondary" type="button"><i
+                                    class="fa fa-home"></i></button>
+                        </div>
+                        <input id="ins_manage_address" class="form-control" type="text" placeholder="Address"
+                            [(ngModel)]="insEmployee['address']" (change)="validateAddress()" name="ins_manage_address">
+
+                    </div>
+                    <div class="form-group input-group">
+                        <select id="company" name="company" class="form-control col-md-12"
+                                [(ngModel)]="insEmployee['companyId']" (change)="validateCompany()" >
+                                <option [value]=0>-- Choosing Company</option>
+                                <option *ngFor="let item of companyList" [value]=item.companyId>
+                                    {{item.name}}</option>
+                            </select>
+                    </div>
+                    <div class="form-group input-group  justify-content-between ">
+                        <select id="ins_manage_role" name="ins_manage_role" class="form-control col-md-5"
+                            [(ngModel)]="insEmployee['role']">
+                            <option [value]=2>Company Manager</option>
+                            <option [value]=3>Employee</option>
+                            <option [value]=4>Test Owner</option>
+                        </select>
+                        <select id="ins_manage_gender" name="ins_manage_gender"  class="form-control col-md-5"
+                            [(ngModel)]="insEmployee['gender']">
+                            <option [value]=true>Male</option>
+                            <option [value]=false>Female</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success save shadow-card"
+            (click)="insertEmployeeSubmit('default')">Create</button>
+        <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
+    </div>
+</ng-template>
+
+
+
+<app-page-header [heading]="'Manage Account'"></app-page-header>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h5>Manage Account</h5>
+    </div>
+    <div class="table-responsive col-md-12 datatable">
+        <div class="row mb-1">
+            <div class="col">
+                <div class=" row justify-content-between" style="margin-top: 20px;">
+                    <div class="form-group row input-group col-md-6">
+                        <div class="col-md-6 row">
+                            <label class="col-md-3" for="ins_manage_role">Role</label>
+                            <select id="ins_manage_role" name="ins_manage_role" class="form-control col-md-8"
+                            [(ngModel)]="getRole" (change)="getEmployee()">
+                            <option [value]=0>All account</option>
+                            <option [value]=2>Company Manager</option>
+                            <option [value]=3>Employee</option>
+                            <option [value]=4>Test Owner</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 row">
+                            <label class="col-md-4" for="company">Company</label>
+                            <select id="company" name="company" class="form-control col-md-8"
+                                [(ngModel)]="companyId" (change)="getEmployee()">
+                                <option *ngFor="let item of companyList" [value]=item.companyId>
+                                    {{item.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
+                        <i class="fa fa-fw fa-plus"></i>
+                        Create Account
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="form-group input-group col-md-8">
+                        <input type="text" class="form-control" placeholder="Enter your key word" name="searchText"
+                            [(ngModel)]="searchText">
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row justify-content-end" style="margin-top: 20px;">
+                            <!-- <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
+                            placement="top" ngbTooltip="Export Excel" class="btn btn-lg btn-secondary " data-toggle="button">
+                                <i class="fa fa-download"></i>
+                            </button> -->
+                            <button style="margin-right: 10px;" (click)="resendmail();" class="btn btn-lg btn-warning"
+                                placement="top" ngbTooltip="Resend password" data-toggle="button">
+                                <i class="fa fa-envelope"></i>
+                            </button>
+                            <button [hidden]="selected==false" style="margin-right: 10px;"
+                                (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger" placement="top"
+                                ngbTooltip="Disable account" data-toggle="button">
+                                <i class="fa fa-ban"></i>
+                            </button>
+                            <button [hidden]="selected==false" style="margin-right: 10px;"
+                                (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success"
+                                data-toggle="button" placement="top" ngbTooltip="Active account">
+                                <i class="fa fa-check"></i>
+                            </button>
+                            <button [hidden]="getRole!=3" style="margin-right: 10px;" (click)="openModalExcel(excel);"
+                                class="btn btn-lg btn-success " data-toggle="button" placement="top"
+                                ngbTooltip="Import By Excel">
+                                <i class="fa fa-file-excel-o"></i>
+                            </button>
+                            <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
+                                class="btn btn-lg btn-primary" data-toggle="button" placement="top"
+                                ngbTooltip="Refresh">
+                                <i #refesh class="fa fa-refresh" aria-hidden="true"
+                                    [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table  class="table  table-hover customtable" [svData]="employeeList | EmployeeFilterPipe:searchText"
+            #sv="svDataTable" [svRowsOnPage]="25" svSortBy="isActive" svSortOrder="desc">
+            <thead>
+                <tr class="col-md-12 row no-padding-no-margin">
+                    <th class="text-center two" scope="col">
+                        <input [disabled]="sv.data.length == 0" class="btn" type="checkbox" value="" [(ngModel)]="selectedAll" (change)="selectAll();">
+                    </th>
+                    <th class="six text-center" scope="col">
+                        <sv-default-sorter by='username'>Username</sv-default-sorter>
+                    </th>
+                    <th class="four text-center" scope="col">
+                        <sv-default-sorter by='roleId'>Role</sv-default-sorter>
+                    </th>
+                    <th class="four text-center" scope="col">
+                        <sv-default-sorter by='joinDate'>Join Date</sv-default-sorter>
+                    </th>
+                    <th class="four text-center" scope="col">
+                        <sv-default-sorter by='isActive'>Status</sv-default-sorter>
+                    </th>
+                </tr>
+            </thead>
+            <tbody *ngIf="sv.data.length != 0;  else searchNull">
+                <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data">
+                    <td class="text-center two">
+                        <label>
+                            <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                                (change)="checkSelected(item.username);">
+                        </label>
+                    </td>
+                    <td class="six text-center">{{ item.username }}</td>
+                    <td class="text-center four" >{{ item.roleName }}</td>
+                    <td class="text-center four">
+                        {{ item.joinDate | date : 'dd-MM-yyyy hh:mm a'}}
+                    </td>
+                    <td class="text-center four" [hidden]="item.isActive==true">
+                        <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
+                    </td>
+                    <td class="text-center four" [hidden]="item.isActive==false">
+                        <span class="shadow-item text-center badge badge-pill badge-success">Active</span>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <sv-bootstrap-paginator [rowsOnPageSet]="[5, 25, 50]"></sv-bootstrap-paginator>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<ng-template #searchNull>
+    <tr class="col-md-12 row no-padding-no-margin">
+        <th class="text-center col-md-12" scope="col">No data</th>
+    </tr>
+</ng-template>
