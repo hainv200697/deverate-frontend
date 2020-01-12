@@ -1,5 +1,5 @@
 export class AnswerDefaultModel{
-    answer : string
+    answerText : string
     percent : number
     isActive: boolean
 }

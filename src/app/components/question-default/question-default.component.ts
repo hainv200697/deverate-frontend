@@ -169,13 +169,13 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 }
                 for (let i = 1; i <= 6; i++) {
                     const answerObj = new AnswerDefaultModel();
-                    answerObj.answer = element['Answer_' + i];
+                    answerObj.answerText = element['Answer_' + i];
                     answerObj.percent = element['Point_' + i];
                     answerObj.isActive = true;
                     this.listAnswer.push(answerObj);
                 }
                 for (let i = this.listAnswer.length - 1; i >= 0; i--) {
-                    if (this.listAnswer[i].answer == null && this.listAnswer[i].percent == null) {
+                    if (this.listAnswer[i].answerText == null && this.listAnswer[i].percent == null) {
                         this.listAnswer.splice(i, 1);
                     }
                     else {
@@ -185,7 +185,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 let ans = [];
                 let dupAns : string[] = []
                 this.listAnswer.map(function (item) {
-                    var existItem = ans.find(x => x.answer == item.answer);
+                    var existItem = ans.find(x => x.answer == item.answerText);
                     if (existItem){
                         dupAns.push("Question #" + ind + " has duplicated answer");
                     }else{
@@ -201,7 +201,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 }
                 this.listAnswer.forEach((element, index) => {
                     index++;
-                    const answer = $.trim(element.answer.replace(/\s\s+/g, ' '));
+                    const answer = $.trim(element.answerText);
                     if (answer === null || answer === undefined) {
                         this.message.push("Answer #" + index +" is blank");
                         this.checkFile = false;
@@ -243,7 +243,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
             this.insAnswer.forEach(element => {
                 element['isActive'] = true;
             });
-            this.insQuestion['Answer'] = this.insAnswer;
+            console.log(this.insQuestion['Answer']);
             const catalog = this.id;
             if (catalog === undefined || catalog === null) {
                 this.toastr.error('Message', 'Cataloguecan not be blank!');
@@ -286,7 +286,8 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
             this.insAnswer.forEach(element => {
                 i++;
                 if (check === true) {
-                    const ans = element['answer'];
+                    const ans = $.trim(element['answer']);
+                    element['answer'] = ans;
                     if (ans === '' || ans.length < 3 || ans.length > 200) {
                         this.toastr.error('Message', 'Answer must be more than 3 characters!');
                         check = false;
@@ -331,6 +332,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 }
             });
             if (check === true) {
+                this.insQuestion['Answer'] = this.insAnswer;
                 this.stepper.next();
                 this.index = 2;
             }

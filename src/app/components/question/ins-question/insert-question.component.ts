@@ -163,11 +163,11 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                     this.message.push("Percent of question #" + ind +" must be in range from 0 to 100 characters ");
                     this.checkFile = false;
                 }
-                questionObj.question1 = $.trim(element['Question'].replace(/\s\s+/g, ' '));
+                questionObj.question1 = $.trim(element['Question'].replace(/^\s+|\s+$/gm, ' '));
                 questionObj.isActive = true;
                 questionObj.accountId = this.accountId;
                 questionObj.companyCatalogueId = this.id;
-                if (element['Question'] == null) {
+                if (element['Question'] == null || element['Question'] == '') {
                     this.message.push("Question at # " + ind + " is blank");
                 }
                 for (let i = 1; i <= 6; i++) {
@@ -203,7 +203,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                     this.checkFile = false;
                 }
                 this.listAnswer.forEach((element, index) => {
-                    const answer = $.trim(element.answerText.replace(/\s\s+/g, ' '));
+                    const answer = $.trim(element.answerText.replace(/^\s+|\s+$/gm, ' '));
                     if (answer === null || answer === undefined) {
                         this.message.push("Answer #" + index +" is blank");
                         this.checkFile = false;
@@ -245,7 +245,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             this.insAnswer.forEach(element => {
                 element['isActive'] = true;
             });
-            this.insQuestion['Answer'] = this.insAnswer;
             const catalog = this.id;
             if (catalog === undefined || catalog === null) {
                 this.toastr.error('Message', 'Cataloguecan not be blank!');
@@ -288,7 +287,8 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             this.insAnswer.forEach(element => {
                 i++;
                 if (check === true) {
-                    const ans = element['answerText'];
+                    const ans = $.trim(element['answer']);
+                    element['answer'] = ans;
                     if (ans === '' || ans.length < 3 || ans.length > 200) {
                         this.toastr.error('Message', 'Answer must be more than 3 characters!');
                         check = false;
@@ -333,6 +333,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 }
             });
             if (check === true) {
+                this.insQuestion['Answer'] = this.insAnswer;
                 this.stepper.next();
                 this.index = 2;
             }
