@@ -25,7 +25,7 @@
                         <label class="col-md-3">Test Setting:</label>
                         &nbsp;&nbsp;&nbsp;
                         <select id="ins_setting" name="ins_setting" class="form-control" style="width: 46%;"
-                            [(ngModel)]="chooseConfig">
+                            [(ngModel)]="chooseConfig" (change)="getEmployeeDoTheTest(chooseConfig)">
                             <option style="width: 46%;" disabled [value]=-1>-- Choosing setting --</option>
                             <option style="width: 46%;" *ngFor="let item of listConfig" [value]=item.configId>
                                 {{item.title}}</option>
@@ -51,8 +51,7 @@
             svSortBy="fullname" svSortOrder="asc">
             <thead>
                 <tr class="col-md-12 row no-padding-no-margin">
-                    <th class="text-center" style="width: 5%;" scope="col"><input class="btn" type="checkbox" value=""
-                            [(ngModel)]="selectedAll" (change)="selectAll();"></th>
+                    <th class="text-center" style="width: 5%;" scope="col"></th>
                     <th class="text-center" style="width: 5%;" scope="col">
                         No.
                     </th>
@@ -60,11 +59,11 @@
                         <sv-default-sorter by="username">Username
                         </sv-default-sorter>
                     </th>
-                    <th class="text-center" style="width: 20%;" scope="col">
+                    <th class="text-center" style="width: 25%;" scope="col">
                         <sv-default-sorter by="fullname">Fullname
                         </sv-default-sorter>
                     </th>
-                    <th class="text-center" style="width: 20%;" scope="col">
+                    <th class="text-center" style="width: 25%;" scope="col">
                         <sv-default-sorter by="email">Email
                         </sv-default-sorter>
                     </th>
@@ -72,28 +71,20 @@
                         <sv-default-sorter by="rank">Rank
                         </sv-default-sorter>
                     </th>
-                    <th class="text-center" style="width: 10%;" scope="col">
-                        Action
-                    </th>
                 </tr>
             </thead>
             <tbody *ngIf="sv.data.length != 0;  else searchNull">
                 <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data; let i=index">
                     <td class="text-center" style="width: 5%;">
-                        <input type="checkbox" value="" [(ngModel)]="item.selected" class="btn"
-                            (change)="checkIfAllSelected();">
+                        <input type="checkbox" value="" [checked]="item.selected" class="btn"
+                            (change)="checkSelected(item.accountId);">
                     </td>
                     <td class="text-center" style="font-weight: bold;width: 5%;">{{i+1}}</td>
                     <td class="text-center" style="font-weight: bold;width: 20%;">{{item.username}}</td>
-                    <td class="text-center" style="font-weight: bold;width: 20%;">{{item.fullname}}</td>
-                    <td class="text-center" style="font-weight: bold;width: 20%;">{{item.email}}</td>
+                    <td class="text-center" style="font-weight: bold;width: 25%;">{{item.fullname}}</td>
+                    <td class="text-center" style="font-weight: bold;width: 25%;">{{item.email}}</td>
                     <td class="text-center" style="font-weight: bold;width: 20%;">{{item.rankName}}</td>
-                    <td class="text-center" style="font-weight: bold;width: 10%;">
-                        <button class="btn btn-lg btn-warning" data-toggle="button" style="zoom: 0.8">
-                            <i class="fa fa-envelope" placement="top" ngbTooltip="Disable"
-                                placement="top"></i>
-                        </button>
-                    </td>
+
                 </tr>
             </tbody>
             <tfoot>
