@@ -199,7 +199,7 @@ export class ManageConfigurationComponent implements OnInit {
     );
   }
 
-  getConfigById(content ,configId){
+  getConfigById(content, configId) {
     this.loading = true;
     this.configAPi.GetConfigurationCatalogueByConfigId(configId).subscribe(
       (data) => {
@@ -253,16 +253,18 @@ export class ManageConfigurationComponent implements OnInit {
     var number = this.selectedItems.length;
     this.selectedItems.forEach(rank => {
       var i = 0;
-      var points = rank.catalogueInRanks.map(a => a.point);
+      var catas = rank.catalogueInRanks.filter(x => x.questionCount > 0);
+      var points = catas.map(a => a.point);
       var total = points.reduce((a, b) => a + b, 0);
       if (total == 0) total = 1;
       rank.catalogueInRanks.forEach(element => {
-        element.percent = element.point / total;
-        if (this.avaragePercent[i] == undefined) this.avaragePercent.push(element.percent); else this.avaragePercent[i] += element.percent;
-        i++;
+        if (element.questionCount > 0) {
+          element.percent = element.point / total;
+          if (this.avaragePercent[i] == undefined) this.avaragePercent.push(element.percent); else this.avaragePercent[i] += element.percent;
+          i++;
+        }
       });
     });
-
     for (let i = 0; i < this.avaragePercent.length; i++) {
       this.avaragePercent[i] = this.avaragePercent[i] / number;
     }
@@ -271,7 +273,8 @@ export class ManageConfigurationComponent implements OnInit {
       this.listCatalogue[index].point = this.avaragePercent[index];
     }
     this.selectedItems.forEach(rank => {
-      var points = rank.catalogueInRanks.map(a => a.point);
+      var catas = rank.catalogueInRanks.filter(x => x.questionCount > 0);
+      var points = catas.map(a => a.point);
       var sum = 0;
       for (let i = 0; i < points.length; i++) {
         sum += (points[i] * this.avaragePercent[i]);
