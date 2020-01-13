@@ -51,10 +51,8 @@ export class ManageConfigurationComponent implements OnInit {
 
   private stepper: Stepper;
   index = 1;
-  indexDetail = 1;
   iconIsActive: boolean;
 
-  selectedAll;
   selectConfiguration = [];
   Configurations = [];
 
@@ -63,10 +61,7 @@ export class ManageConfigurationComponent implements OnInit {
 
   searchText = '';
 
-  updateConfig = {};
-
   selectedItems = [];
-  selectedItemsUpdate = []
   dropdownSettings = {
     singleSelection: false,
     text: 'Select Rank',
@@ -80,24 +75,12 @@ export class ManageConfigurationComponent implements OnInit {
     showCheckbox: true,
     badgeShowLimit: 3,
   };
-  dropdownSettingsDetail = {
-    singleSelection: false,
-    text: 'Select Catalogue',
-    selectAllText: 'Select All',
-    unSelectAllText: 'UnSelect All',
-    enableSearchFilter: true,
-    classes: 'form-control form-group',
-    labelKey: 'name',
-    primaryKey: 'companyCatalogueId',
-    maxHeight: 240,
-    showCheckbox: true,
-    badgeShowLimit: 0,
-  };
 
   companyId = localStorage.getItem('CompanyId');
   avaragePercent = [];
 
   listCatalogue = [];
+  configDetail
 
   ngOnInit() {
     this.getAllRank();
@@ -129,16 +112,6 @@ export class ManageConfigurationComponent implements OnInit {
     });
   }
 
-  openDetail(content, id: number) {
-    this.indexDetail = 1;
-    this.modalService.open(content, { size: 'lg', windowClass: 'myCustomModalClass' });
-    const a = document.querySelector('#update');
-    this.stepper = new Stepper(a, {
-      linear: false,
-      animation: true
-    });
-  }
-
   next() {
     if (this.validateConfiguration() === false) {
       return;
@@ -149,18 +122,8 @@ export class ManageConfigurationComponent implements OnInit {
     this.inputConfiguration['endDate'] = this.endDate;
   }
 
-  nextDetail() {
-    this.stepper.next();
-    this.indexDetail += 1;
-  }
-
   back() {
     this.index = this.index - 1;
-    this.stepper.previous();
-  }
-
-  backDetail() {
-    this.indexDetail = this.indexDetail - 1;
     this.stepper.previous();
   }
 
@@ -223,40 +186,50 @@ export class ManageConfigurationComponent implements OnInit {
       },
       (error) => {
         this.loading = false;
-        this.toast.error(error.name);
+        if (error.status == 0) {
+          this.toast.error('Server is not availiable');
+        }
+        if (error.status == 404) {
+          this.toast.error('Not found');
+        }
+        if (error.status == 500) {
+          this.toast.error('Server error');
+        }
       }
     );
   }
 
-  selectAll() {
-    if (this.selectedAll) {
-      this.Configurations.forEach(e => {
-        e.selected = true;
-        this.selectConfiguration.push(e.configId);
-      });
-    }
-    else {
-      this.Configurations.forEach(e => {
-        e.selected = false;
-      });
-      this.selectConfiguration = [];
-    }
-
+  getConfigById(content ,configId){
+    this.loading = true;
+    this.configAPi.GetConfigurationCatalogueByConfigId(configId).subscribe(
+      (data) => {
+        this.configDetail = data;
+        this.modalService.open(content, { size: 'lg', windowClass: 'myCustomModalClass' });
+        this.loading = false;
+      },
+      (error) => {
+        this.loading = false;
+        if (error.status == 0) {
+          this.toast.error('Server is not availiable');
+        }
+        if (error.status == 404) {
+          this.toast.error('Not found');
+        }
+        if (error.status == 500) {
+          this.toast.error('Server error');
+        }
+      }
+    );
   }
 
-  checkIfAllSelected(configId) {
+  checkSelected(configId) {
     var index = this.Configurations.findIndex(x => x.configId == configId);
     this.Configurations[index].selected = !this.Configurations[index].selected;
     if (this.Configurations[index].selected == false) {
       this.selectConfiguration.splice(this.Configurations.indexOf(configId), 1);
-      this.selectedAll = false;
     } else {
       this.selectConfiguration.push(configId);
-      if (this.selectConfiguration.length == this.Configurations.length) {
-        this.selectedAll = true;
-      }
     }
-
   }
 
   Sample() {
@@ -354,6 +327,15 @@ export class ManageConfigurationComponent implements OnInit {
           this.closeModal();
           this.index = 1;
           this.loading = false;
+          if (error.status == 0) {
+            this.toast.error('Server is not availiable');
+          }
+          if (error.status == 404) {
+            this.toast.error('Not found');
+          }
+          if (error.status == 500) {
+            this.toast.error('Server error');
+          }
         });
       }
     });
@@ -375,21 +357,18 @@ export class ManageConfigurationComponent implements OnInit {
           this.closeModal();
           this.toast.success(data['message']);
           this.selectConfiguration = [];
-          this.selectedAll = false;
           this.loading = false;
         }, (error) => {
           if (error.status == 0) {
             this.toast.error('Server is not availiable');
           }
           if (error.status == 400) {
-            this.toast.error('Company name is exist');
+            this.toast.error(error['message']);
           }
           if (error.status == 500) {
             this.toast.error('Server error');
           }
           this.loading = false;
-          this.selectedAll = false;
-          this.selectConfiguration = [];
         });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         this.closeModal();
