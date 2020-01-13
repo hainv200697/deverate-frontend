@@ -500,7 +500,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
           for (let i = 0; i < this.selectConfiguration.length; i++) {
             this.selectConfiguration[i].isActive = status;
           }
-          this.configAPi.changeStatusConfiguration(this.selectConfiguration).subscribe(data => {
+          this.configAPi.changeStatusConfiguration(this.selectConfiguration , status).subscribe(data => {
             this.getConfigurationIsActive(true);
             this.closeModal();
             Swal.fire('Success', 'The configuration has been deleted', 'success');
@@ -527,7 +527,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
           for (let i = 0; i < this.selectConfiguration.length; i++) {
             this.selectConfiguration[i].isActive = status;
           }
-          this.configAPi.changeStatusConfiguration(this.selectConfiguration).subscribe(data => {
+          this.configAPi.changeStatusConfiguration(this.selectConfiguration , status).subscribe(data => {
             this.getConfigurationIsActive(true);
             this.closeModal();
             Swal.fire('Success', 'The configuration has been enabled', 'success');

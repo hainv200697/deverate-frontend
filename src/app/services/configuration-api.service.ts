@@ -9,12 +9,12 @@ export class ConfigurationApiService {
     URL = AppSettings.BASEURL;   
     constructor(private httpClient: HttpClient) { }
 
-    getAllConfiguration(status: boolean, id) {
+    getAllConfiguration(status, id) {
         const API = 'ConfigurationAPI/GetAllConfiguration?type=';
         return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API + status + '&companyId=' +id);
     }
 
-    GetConfigurationCatalogueByConfigId(id: number) {
+    GetConfigurationCatalogueByConfigId(id) {
         const API = 'ConfigurationApi/GetConfigurationById?id=';
         return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE+ API + id);
     }
@@ -30,9 +30,9 @@ export class ConfigurationApiService {
         return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API, ConfigurationModel);
     }
 
-    changeStatusConfiguration(ConfigurationModel) {
-        const API = 'ConfigurationApi/ChangeStatusConfiguration';
-        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE+ API, ConfigurationModel);
+    changeStatusConfiguration(lstConfigId, isActive) {
+        const API = 'ConfigurationApi/ChangeStatusConfiguration?isActive=';
+        return this.httpClient.put(this.URL + AppSettings.ROUTE_RESOURCE + API + isActive , lstConfigId);
     }
 
     sendMail(id){
