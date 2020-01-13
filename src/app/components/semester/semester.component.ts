@@ -17,40 +17,29 @@ export class SemesterComponent implements OnInit {
         private employeeApiService: EmployeeApiService,
         private modalService: NgbModal,
         private toast: ToastrService,
-    ) {}
+    ) { }
     search;
     listConfig;
     chooseConfig = null;
     chooseType = false;
     listEmployee = [];
-    dropdownSettings = {
-        singleSelection: false,
-        idField: 'id',
-        textField: 'text',
-        enableCheckAll: false,
-        itemsShowLimit: 3,
-        allowSearchFilter: true,
-    };
-    listRankOfEmployee = [];
-    listSemester = [];
     companyId = localStorage.getItem('CompanyId');
-    selectedRanks = [];
-    selectedSemester = [];
     chooseEmployee = [];
-    selectedAll: any;
     public loading = false;
     check;
     ngOnInit() {
         this.getAllConfig();
-        this.getAllEmployeeInCompany();
     }
 
-    getAllEmployeeInCompany() {
+    getEmployeeDoTheTest(configId) {
         this.loading = true;
-        this.employeeApiService.getAllWithRole(this.companyId,3).subscribe(
+        this.employeeApiService.getEmployeeDoTheTest(configId, this.companyId).subscribe(
             (data) => {
                 this.loading = false;
                 this.listEmployee = data;
+                this.listEmployee.forEach(element => {
+                    element.selected = false;
+                  });
             }, (error) => {
                 if (error.status == 0) {
                     this.toast.error("Connection timeout");
@@ -64,9 +53,11 @@ export class SemesterComponent implements OnInit {
     }
 
     getAllConfig() {
+        this.loading = true;
         this.configurationApiService.getConfigForEmployee(this.companyId).subscribe(
             (result) => {
                 this.listConfig = result;
+                this.loading = false;
             }, (error) => {
                 if (error.status == 0) {
                     this.toast.error("Connection timeout");
@@ -74,53 +65,18 @@ export class SemesterComponent implements OnInit {
                 if (error.status == 500) {
                     this.toast.error("System error");
                 }
+                this.loading = false;
             }
         )
     }
 
-    checkIfAllSelected() {
-        this.chooseEmployee = [];
-        this.selectedAll = this.listEmployee.every(function (item: any) {
-            return item.selected == true;
-        })
-        for (var i = 0; i < this.listEmployee.length; i++) {
-            if (this.listEmployee[i].selected == true) {
-                this.chooseEmployee.push(this.listEmployee[i].accountId)
-            }
-        }
-    }
-
-    selectAll() {
-        this.chooseEmployee = [];
-        for (var i = 0; i < this.listEmployee.length; i++) {
-            this.listEmployee[i].selected = this.selectedAll;
-            this.chooseEmployee.push(this.listEmployee[i].companyId)
-        }
-    }
-
-    chooseRanks(item) {
-        this.selectedRanks.push(item);
-    }
-
-    DeSelectRank(item) {
-        for (let i = 0; i < this.selectedRanks.length; i++) {
-            if (this.selectedRanks[i].id == item.id) {
-                this.selectedRanks.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    chooseSemesters(item) {
-        this.selectedSemester.push(item)
-    }
-
-    DeSelectSemester(item) {
-        for (let i = 0; i < this.selectedSemester.length; i++) {
-            if (this.selectedSemester[i].id == item.id) {
-                this.selectedSemester.splice(i, 1);
-                break;
-            }
+    checkSelected(accountId) {
+        var index = this.listEmployee.findIndex(x => x.accountId == accountId);
+        this.listEmployee[index].selected = !this.listEmployee[index].selected;
+        if (this.listEmployee[index].selected == false) {
+            this.chooseEmployee.splice(this.listEmployee.indexOf(accountId), 1);
+        } else {
+            this.chooseEmployee.push(accountId);
         }
     }
 
@@ -146,6 +102,8 @@ export class SemesterComponent implements OnInit {
                 this.loading = true;
                 this.semesterApiService.createTest(data).subscribe(data => {
                     this.toast.success('Create success');
+                    this.getEmployeeDoTheTest(this.chooseConfig);
+                    this.chooseEmployee = [];
                     this.loading = false;
                 }, (error) => {
                     if (error.status == 0) {
@@ -156,11 +114,6 @@ export class SemesterComponent implements OnInit {
                     }
                     this.loading = false;
                 });
-                this.chooseConfig = null;
-                this.selectedAll = false;
-                for (let i = 0; i < this.listEmployee.length; i++) {
-                    this.listEmployee[i].selected = false;
-                }
             }
         });
     }
