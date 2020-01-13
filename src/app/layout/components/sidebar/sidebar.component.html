@@ -12,6 +12,7 @@
         <a [routerLink]="['/manage-company-account']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'System Manager'">
             <i class="fa fa-user"></i>&nbsp;
             <span>Manage Employee</span>
+        </a>
         <a [routerLink]="['/rank-default']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'System Manager'">
             <i class="fa fa-level-up"></i>&nbsp;
             <span>Rank Default</span>

@@ -59,8 +59,9 @@ export class LoginComponent implements OnInit {
                     localStorage.setItem('AccountId', userInfo.accountId);
                     localStorage.setItem('Fullname', userInfo.fullname);
                     localStorage.setItem('CompanyId', userInfo.companyId);
-                    localStorage.setItem('Role', userInfo.role);
-                    switch (userInfo.role) {
+                    const role = userInfo['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+                    localStorage.setItem('Role', role);
+                    switch (role) {
                         case 'System Manager':
                             this.router.navigate(['/manage-company']);
                             break;
