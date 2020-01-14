@@ -20,4 +20,17 @@ export class GobalService {
     random(min,max){
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
+
+    stringToOpjectDate(date){
+        let time = {
+            year: 0,
+            month: 0,
+            day: 0
+        }
+        const dateArr = date.split('-',3);
+        time.year = parseInt(dateArr[0]);
+        time.month = parseInt(dateArr[1]);
+        time.day = parseInt(dateArr[2]);
+        return time;
+    }
 }

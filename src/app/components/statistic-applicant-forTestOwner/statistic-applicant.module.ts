@@ -6,11 +6,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartsModule as Ng2Charts } from 'ng2-charts';
 import { NgxLoadingModule } from 'ngx-loading';
-import { FusionChartsModule } from 'angular-fusioncharts';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { DataTableModule } from 'ng-angular8-datatable';
-
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   imports: [
@@ -22,10 +20,9 @@ import { DataTableModule } from 'ng-angular8-datatable';
     Ng2Charts,
     NgxChartsModule,
     NgxLoadingModule.forRoot({}),
-    NgMultiSelectDropDownModule.forRoot(),
     DataTableModule,
   ],
-  
+  providers: [DatePipe],
   declarations: [StatisticApplicantComponent]
 })
 export class StatisticApplicantModule { }
