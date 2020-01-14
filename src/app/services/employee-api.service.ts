@@ -49,4 +49,10 @@ export class EmployeeApiService {
         const param = new HttpParams().set('companyId', companyId).set('role', role);
         return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
+    
+    getEmployeeDoTheTest(configId,companyId){
+        const API = 'api/Employee/GetEmployee';
+        const param = new HttpParams().set('configId', configId).set('companyId', companyId);
+        return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
+    }
 }   
