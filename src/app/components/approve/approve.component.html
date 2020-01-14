@@ -1,0 +1,102 @@
+<ng-template #customLoadingTemplate>
+    <div class="custom-class">
+
+    </div>
+</ng-template>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true }"
+    [template]="customLoadingTemplate">
+</ngx-loading>
+
+<app-page-header [heading]="'Answer'"></app-page-header>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h5>Request</h5>
+    </div>
+    <div class="table-responsive col-md-12 datatable">
+        <div class="row mb-1">
+            <div class="col">
+                <div class=" row justify-content-between" style="margin-top: 20px;">
+                    <div class="form-group input-group col-md-6">
+                        <select id="config" name="config" class="form-control col-md-12"
+                            [(ngModel)]="configId" (change)="getApproveById()">
+                            <option *ngFor="let item of listConfig" [value]=item.configId>
+                                {{item.title}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group input-group col-md-6">
+                        <input type="text" class="form-control" placeholder="Enter your key word" name="searchText"
+                            [(ngModel)]="searchText">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table class="table  table-hover customtable" [svData]="approveList "
+            #sv="svDataTable" [svRowsOnPage]="25" svSortBy="isApprove" svSortOrder="asc">
+            <thead>
+                <tr class="col-md-12 row no-padding-no-margin">
+                    <th class="text-center" scope="col" style="width: 5%;">#
+                    </th>
+                    <th class="text-center" scope="col" style="width: 20%;">
+                        <sv-default-sorter by='Name'>Username</sv-default-sorter>
+                    </th>
+                    <th class="text-center" scope="col" style="width: 20%;">
+                        <sv-default-sorter by='Percent'>Email</sv-default-sorter>
+                    </th>
+                    <th class="text-center" scope="col" style="width: 10%;">
+                        <sv-default-sorter by='Percent'>Point</sv-default-sorter>
+                    </th>
+                    <th class="text-center" scope="col" style="width: 10%;">
+                        <sv-default-sorter by='Percent'>Potential Rank</sv-default-sorter>
+                    </th>
+                    <th class="text-center" scope="col" style="width: 15%;">Status</th>
+                    <th class="text-center" scope="col" style="width: 20%;">Action</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="sv.data.length != 0;  else searchNull">
+                <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data; let i=index">
+                    <td class="text-center">{{ i+1 }}</td>
+                    <td class="text-center">{{ item.fullname }}</td>
+                    <td class="text-center">{{ item.email }}</td>
+                    <td class="text-center">{{ item.point }}</td>
+                    <td class="text-center">{{ item.potentialRank }}</td>
+                    <td class="text-center" [hidden]="item.upGrade==true">
+                        <i class="fa fa-level-up" style="color: green;" aria-hidden="true"></i>
+                    </td>
+                    <td class="text-center" [hidden]="item.upGrade==false">
+                        <i class="fa fa-level-down" style="color: red;" aria-hidden="true"></i>
+                    </td>
+                    <td class="text-center nowrap text-center action-column" style="color: red;">
+                        <button class="btn-success btn btn-circle shadow-item" (click)="approve(item,true)"
+                            placement="top" ngbTooltip="Approve">
+                            <i class="fa fa-check"></i>
+                        </button>
+                        &nbsp;
+                        <button class="btn-danger btn btn-circle shadow-item" (click)="approve(item,false)"
+                            placement="top" ngbTooltip="Reject">
+                            <i class="fa fa-window-close"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <sv-bootstrap-paginator [rowsOnPageSet]="[4, 25, 50]"></sv-bootstrap-paginator>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+
+<ng-template #searchNull>
+    <tr class="col-md-12 row no-padding-no-margin">
+        <th class="text-center col-md-12" scope="col">No data</th>
+    </tr>
+</ng-template>
