@@ -25,15 +25,9 @@ export class InsertCompanyComponent implements OnInit {
     private toast: ToastrService,
     private globalservice: GloblaService,
     private employeeService: EmployeeApiService,
-  ) {
-    this.page = 1;
-    this.pageSize = 25;
-  }
+  ) {}
   public loading = false;
   iconIsActive: boolean;
-  page: number;
-  pageSize: number;
-  selectedAll: any;
   Companies = [];
   Account = {};
   Company: {};
@@ -57,14 +51,9 @@ export class InsertCompanyComponent implements OnInit {
     address: '',
     phone: '',
   };
-  updateManager = {};
   updateStatus = [];
   check = true;
   isLoaded = false
-
-  PageSize(test: number) {
-    this.pageSize = test;
-  }
 
   ngOnInit() {
     this.getCompanyIsActive();
@@ -72,7 +61,7 @@ export class InsertCompanyComponent implements OnInit {
   }
 
   open(content) {
-    this.modalService.open(content, { size: 'lg', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+    this.modalService.open(content, {backdrop: 'static', size: 'lg', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
     }).catch((error) => {
     });
   }
@@ -99,24 +88,10 @@ export class InsertCompanyComponent implements OnInit {
 
   openDetail(content, companyId) {
     this.getCompanyById(companyId);
-    this.modalService.open(content, { size: 'lg', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+    this.modalService.open(content, {backdrop: 'static' ,ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
 
     }).catch((error) => {
     });;
-  }
-
-  selectAll() {
-    if (this.updateStatus.length != 0) {
-      this.updateStatus = [];
-      this.Companies.forEach(element => {
-        element.selected = false
-      });
-      return;
-    }
-    for (var i = 0; i < this.Companies.length; i++) {
-      this.Companies[i].selected = this.selectedAll;
-      this.updateStatus.push(this.Companies[i].companyId)
-    }
   }
 
   clickButtonRefresh(refesh) {
@@ -125,7 +100,6 @@ export class InsertCompanyComponent implements OnInit {
       refesh.classList.remove('spin-animation');
     }, 500);
     this.getCompanyIsActive();
-    this.selectedAll = false;
   }
 
   clickButtonChangeStatus(status: boolean) {
@@ -144,8 +118,8 @@ export class InsertCompanyComponent implements OnInit {
             this.loading = false;
             this.getCompanyIsActive();
             this.closeModal();
-            this.toast.success('The company has been deleted')
-            this.selectedAll = false;
+            this.toast.success('The company has been deleted');
+            this.updateStatus = [];
           }, (error) => {
             if (error.status == 0) {
               this.toast.error('Server is not availiable');
@@ -178,7 +152,6 @@ export class InsertCompanyComponent implements OnInit {
             this.getCompanyIsActive();
             this.closeModal();
             Swal.fire('Success', 'The company has been enabled', 'success');
-            this.selectedAll = false;
           }, (error) => {
             if (error.status == 0) {
               this.toast.error('Server is not availiable');
@@ -206,15 +179,13 @@ export class InsertCompanyComponent implements OnInit {
     this.companyApi.disableCompany(this.updateStatus, status);
   }
 
-  checkIfAllSelected() {
-    this.updateStatus = [];
-    this.selectedAll = this.Companies.every(function (item: any) {
-      return item.selected == true;
-    })
-    for (var i = 0; i < this.Companies.length; i++) {
-      if (this.Companies[i].selected == true) {
-        this.updateStatus.push(this.Companies[i].companyId)
-      }
+  checkSelected(companyId) {
+    var index = this.Companies.findIndex(x => x.companyId == companyId);
+    this.Companies[index].selected = !this.Companies[index].selected;
+    if (this.Companies[index].selected == false) {
+      this.updateStatus.splice(this.Companies.indexOf(companyId), 1);
+    } else {
+      this.updateStatus.push(companyId);
     }
   }
 
@@ -251,7 +222,9 @@ export class InsertCompanyComponent implements OnInit {
       (data: any[]) => {
         this.loading = false;
         this.Companies = data;
-        this.selectedAll = false;
+        this.Companies.forEach(element => {
+          element.selected = false;
+        });
         this.isLoaded = true
       },
       (error) => {
@@ -377,40 +350,6 @@ export class InsertCompanyComponent implements OnInit {
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         this.updateStatus = [];
         this.closeModal();
-      }
-    });
-  }
-
-  resendmail(managerId, companyId) {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'Password will be send!',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, send it!',
-      cancelButtonText: 'No, Do not send it'
-    }).then((result) => {
-      if (result.value) {
-        this.loading = true;
-        let manager: string[] = [];
-        manager.push(managerId);
-        this.employeeService.resendpassword(manager, companyId).subscribe(data => {
-          this.getCompanyIsActive();
-          this.closeModal();
-          this.toast.success('The mail has been send');
-        }, (error) => {
-          if (error.status == 0) {
-            this.toast.error('Server is not availiable');
-          }
-          if (error.status == 404) {
-            this.toast.error('Not found');
-          }
-          if (error.status == 500) {
-            this.toast.error('Server error');
-          }
-          this.loading = false;
-          this.closeModal()
-        });
       }
     });
   }
