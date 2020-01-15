@@ -123,6 +123,10 @@ export class ResultComponent implements OnInit {
             label: '',
             hidden: true
           }
+          this.radarChartColor.push({
+            borderColor: this.fusionChartColor[i + 1],
+            pointBorderColor: "rgba(133, 0, 97, 1)",
+          })
           this.catalogue = this.catalogueInRanks[i].catalogues
           chartDateElement.label = this.catalogueInRanks[i].rank
           if (chartDateElement.label === dialValue) {
@@ -223,7 +227,7 @@ export class ResultComponent implements OnInit {
     scale: {
       ticks: {
         beginAtZero: true,
-        stepSize: 10,
+        stepSize: 20,
         max: 100
       }
     }
@@ -231,39 +235,9 @@ export class ResultComponent implements OnInit {
 
   public radarChartColor = [
     {
-      fill: true,
-      hoverBackgroundColor: "#FF0",
       borderColor: "rgb(29, 138, 198)",
-      hoverBorderColor: "#00F",
-      strokeColor: "rgb(29, 138, 198)",
       pointBorderColor: "rgba(133, 0, 97, 1)",
     },
-    {
-      borderColor: "rgb(78, 144, 114)",
-      fill: false,
-      strokeColor: "rgb(78, 144, 114)",
-      pointBorderColor: "rgba(133, 0, 97, 1)",
-
-    },
-    {
-      borderColor: "rgb(0, 204, 0)",
-      fill: false,
-      strokeColor: "rgb(0, 204, 0)",
-      pointBorderColor: "rgba(133, 0, 97, 1)",
-    },
-    {
-      borderColor: "rgb(204, 157, 40)",
-      fill: false,
-      strokeColor: "rgb(204, 157, 40)",
-      pointBorderColor: "rgba(133, 0, 97, 1)",
-    },
-    {
-      borderColor: "rgb(242, 114, 111)",
-      fill: false,
-      strokeColor: "rgb(242, 114, 111)",
-      pointBorderColor: "rgba(133, 0, 97, 1)",
-    }
-
   ]
 
   public radarChartType: string = 'radar';
