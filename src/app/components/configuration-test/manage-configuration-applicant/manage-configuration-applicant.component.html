@@ -279,14 +279,6 @@
                         </button>
                     </div>
                     <div class="row justify-content-end" style="margin-top: 20px;">
-                        <button ngbTooltip="Deactive" style="margin-right: 10px;" (click)="DisableConfiguration(false);"
-                            class="btn btn-lg btn-danger" data-toggle="button" *ngIf="selectConfiguration.length != 0">
-                            <i class="fa fa-trash-o delete-icon" placement="top"></i>
-                        </button>
-                        <button ngbTooltip="Active" (click)="DisableConfiguration(true);" class="btn btn-lg btn-success"
-                            style="margin-right: 10px;" *ngIf="selectConfiguration.length != 0">
-                            <i class="fa fa-check" placement="top"></i>
-                        </button>
                         <button ngbTooltip="Refesh" style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
                             class="btn btn-lg btn-primary" data-toggle="button">
                             <i #refesh class="fa fa-refresh" placement="top" aria-hidden="true"
@@ -300,8 +292,8 @@
                 svSortOrder="asc" [svRowsOnPage]="25" class="table  table-hover customtable">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin">
-                        <th class="text-center" style="width: 5%;" scope="col"></th>
-                        <th class="text-center" style="width: 15%;" scope="col">
+                        <th class="text-center" style="width: 7%;" scope="col">No.</th>
+                        <th class="text-center" style="width: 13%;" scope="col">
                             <sv-default-sorter>Type
                             </sv-default-sorter>
                         </th>
@@ -327,12 +319,8 @@
                 <tbody *ngIf="sv.data.length != 0;  else searchNull">
                     <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px"
                         *ngFor="let c of sv.data; let i = index">
-                        <td class="text-center" style="width: 5%;">
-                            <input type="checkbox" value="" [checked]="c.selected" class="btn"
-                                (change)="checkSelected(c.configId);">
-                        </td>
-                        <td class="text-center" [hidden]="!c.type" style="width: 15%;">Employee</td>
-                        <td class="text-center" [hidden]="c.type" style="width: 15%;">Applicant</td>
+                        <td class="text-center" style="width: 7%;">{{i + 1}}</td>
+                        <td class="text-center" style="width: 13%;">Applicant</td>
                         <td class="text-center" style="width: 20%;">{{c.title}}</td>
                         <td class="text-center" style="width: 20%;">{{c.createDate | date : 'dd-MM-yyyy'}}</td>
                         <td class="text-center" style="width: 10%;">{{c.duration}}'</td>

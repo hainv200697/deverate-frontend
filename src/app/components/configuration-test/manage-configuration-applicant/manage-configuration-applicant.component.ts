@@ -38,7 +38,6 @@ export class ManageConfigurationApplicantComponent implements OnInit {
   index = 1;
   iconIsActive: boolean;
 
-  selectConfiguration = [];
   Configurations = [];
 
   ListRank = [];
@@ -205,16 +204,6 @@ export class ManageConfigurationApplicantComponent implements OnInit {
     );
   }
 
-  checkSelected(configId) {
-    var index = this.Configurations.findIndex(x => x.configId == configId);
-    this.Configurations[index].selected = !this.Configurations[index].selected;
-    if (this.Configurations[index].selected == false) {
-      this.selectConfiguration.splice(this.Configurations.indexOf(configId), 1);
-    } else {
-      this.selectConfiguration.push(configId);
-    }
-  }
-
   Sample() {
     const sampleTest = {
       companyId: this.companyId,
@@ -300,7 +289,6 @@ export class ManageConfigurationApplicantComponent implements OnInit {
         this.inputConfiguration['catalogueInConfigurations'] = catalogueInConfiguration;
         this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
         this.loading = true;
-        console.log(this.inputConfiguration);
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
           this.getConfigurationIsActive(true);
           this.closeModal();
@@ -323,41 +311,6 @@ export class ManageConfigurationApplicantComponent implements OnInit {
             this.toast.error('Server error');
           }
         });
-      }
-    });
-  }
-
-  DisableConfiguration(status) {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'The config will be delete!',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, keep it'
-    }).then((result) => {
-      if (result.value) {
-        this.loading = true;
-        this.configAPi.changeStatusConfiguration(this.selectConfiguration, status).subscribe(data => {
-          this.getConfigurationIsActive(true);
-          this.closeModal();
-          this.toast.success(data['message']);
-          this.selectConfiguration = [];
-          this.loading = false;
-        }, (error) => {
-          if (error.status == 0) {
-            this.toast.error('Server is not availiable');
-          }
-          if (error.status == 400) {
-            this.toast.error(error['message']);
-          }
-          if (error.status == 500) {
-            this.toast.error('Server error');
-          }
-          this.loading = false;
-        });
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.closeModal();
       }
     });
   }
