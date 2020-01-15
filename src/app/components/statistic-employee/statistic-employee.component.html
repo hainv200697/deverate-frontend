@@ -96,7 +96,7 @@
                                 <label *ngIf="data.rank == null" >Not Ranked</label>
                             </td>
                             <td class="text-center" style="width: 18%;">
-                                {{data.createDate | date}}
+                                {{data.createDate | date : 'MM-dd-yyyy'}}
                             </td>
                             <td class="text-center" style="width: 15%;">
                                 <label *ngIf="data.status == 'Submitted'"  class="shadow-item text-center badge badge-pill badge-success">Submitted</label>
