@@ -223,7 +223,7 @@ export class ResultComponent implements OnInit {
     scale: {
       ticks: {
         beginAtZero: true,
-        stepSize: 10,
+        stepSize: 20,
         max: 100
       }
     }
@@ -239,31 +239,41 @@ export class ResultComponent implements OnInit {
       pointBorderColor: "rgba(133, 0, 97, 1)",
     },
     {
-      borderColor: "rgb(78, 144, 114)",
+      borderColor: "#FFC533",
       fill: false,
-      strokeColor: "rgb(78, 144, 114)",
-      pointBorderColor: "rgba(133, 0, 97, 1)",
-
-    },
-    {
-      borderColor: "rgb(0, 204, 0)",
-      fill: false,
-      strokeColor: "rgb(0, 204, 0)",
+      strokeColor: "#FFC533",
       pointBorderColor: "rgba(133, 0, 97, 1)",
     },
     {
-      borderColor: "rgb(204, 157, 40)",
+      borderColor: "#00CC00",
       fill: false,
-      strokeColor: "rgb(204, 157, 40)",
+      strokeColor: "#00CC00",
       pointBorderColor: "rgba(133, 0, 97, 1)",
     },
     {
-      borderColor: "rgb(242, 114, 111)",
+      borderColor: "#62B58F",
       fill: false,
-      strokeColor: "rgb(242, 114, 111)",
+      strokeColor: "#62B58F",
       pointBorderColor: "rgba(133, 0, 97, 1)",
-    }
-
+    },
+    {
+      borderColor: "black",
+      fill: false,
+      strokeColor: "black",
+      pointBorderColor: "rgba(133, 0, 97, 1)",
+    },
+    {
+      borderColor: "blue",
+      fill: false,
+      strokeColor: "blue",
+      pointBorderColor: "rgba(133, 0, 97, 1)",
+    },
+    {
+      borderColor: "gray",
+      fill: false,
+      strokeColor: "gray",
+      pointBorderColor: "rgba(133, 0, 97, 1)",
+    },
   ]
 
   public radarChartType: string = 'radar';

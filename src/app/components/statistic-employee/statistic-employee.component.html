@@ -69,11 +69,14 @@
                                 <sv-default-sorter by="rank">Rank
                                 </sv-default-sorter>
                             </th>
-                            <th class="text-center" style="width: 25%;">
+                            <th class="text-center" style="width: 18%;">
                                 <sv-default-sorter by="startTime">Date
                                 </sv-default-sorter>
                             </th>
                             <th class="text-center" style="width: 15%;">
+                                Status
+                            </th>
+                            <th class="text-center" style="width: 7%;">
                                 Action
                             </th>
                         </tr>
@@ -83,15 +86,27 @@
                             *ngFor="let data of sv.data; let i = index">
                             <td class="text-center" style="width: 8%;">{{i+1}}</td>
                             <td class="text-center" style="width: 25%;">{{data.name}}</td>
-                            <td class="text-center" style="width: 12%;">{{data.point}}
+                            <td class="text-center" style="width: 12%;">
+                                <label *ngIf="data.status == 'Submitted'" >{{data.point}}</label>
+                                <label *ngIf="data.status == 'Pending'" >Updating</label>
+                                <label *ngIf="data.status == 'Expired'" >0</label>
                             </td>
-                            <td class="text-center" style="width: 15%;">{{data.rank}}
+                            <td class="text-center" style="width: 15%;">
+                                <label *ngIf="data.rank != null" >{{data.rank}}</label>
+                                <label *ngIf="data.rank == null" >Not Ranked</label>
                             </td>
-                            <td class="text-center" style="width: 25%;">
-                                {{data.startTime | date}}</td>
-                            <th class="text-center" style="width: 15%;">
-                                <a href='result/{{data.testId}}' target="_blank">
-                                    <button class="btn-warning btn btn-circle shadow-item">
+                            <td class="text-center" style="width: 18%;">
+                                {{data.createDate | date}}
+                            </td>
+                            <td class="text-center" style="width: 15%;">
+                                <label *ngIf="data.status == 'Submitted'"  class="shadow-item text-center badge badge-pill badge-success">Submitted</label>
+                                <label *ngIf="data.status == 'Pending'"  class="shadow-item text-center badge badge-pill badge-warning">Pending</label>
+                                <label *ngIf="data.status == 'Expired'"  class="shadow-item text-center badge badge-pill badge-secondary">Expired</label>
+                                <label *ngIf="data.status == 'Doing'"  class="shadow-item text-center badge badge-pill badge-warning">Doing</label>
+                            </td>
+                            <th class="text-center" style="width: 7%;">
+                                <a href='result/{{data.testId}}' target="_blank" *ngIf="data.status == 'Submitted'" >
+                                    <button class="btn-warning btn btn-circle shadow-item" ngbTooltip="Detail">
                                         <i class="fa fa-edit"></i>
                                     </button>
                                 </a>
