@@ -16,7 +16,7 @@ export class ConfigurationApiService {
 
     GetConfigurationCatalogueByConfigId(id) {
         const API = 'ConfigurationApi/GetConfigurationById?id=';
-        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE+ API + id);
+        return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE+ API + id);
     }
 
     createConfigurartion(ConfigurationModel) {
