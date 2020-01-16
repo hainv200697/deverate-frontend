@@ -47,7 +47,7 @@ export class CatalogueComponent implements OnInit {
 
     updateModal(item) {
         if (item != null) {
-            this.updCatalogue['CatalogueId'] = item['companyCatalogueId'];
+            this.updCatalogue['companyCatalogueId'] = item['companyCatalogueId'];
             this.updCatalogue['Name'] = item['name'];
             this.updCatalogue['Description'] = item['description'];
             this.updCatalogue['IsActive'] = item['isActive'];

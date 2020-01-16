@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { GobalService } from 'src/app/shared/services/gobal-service';
 import { DatePipe } from '@angular/common';
-
+import * as moment from 'moment';
 @Component({
   selector: 'statistic-applicant',
   templateUrl: './statistic-applicant.component.html',
@@ -25,19 +25,21 @@ export class StatisticApplicantComponent implements OnInit {
     private datepipe: DatePipe
   ) { }
   startDate;
-  endDate;
+  filter = {
+    configId: 0,
+    from: null,
+    to: null
+  };
+  configId;
+  minDate;
   current;
+  endDate;
   listConfig = [];
   applicantList = [];
-  configId = 0;
   loading = false;
   companyId = Number(localStorage.getItem('CompanyId'));
   // Pie chart
-  data = [
-    { 'name': "dev1", 'value': 9 },
-    { 'name': "dev2", 'value': 10 },
-    { 'name': "dev3", 'value': 5 }
-  ]
+  valuePieChart;
   colorScheme = {
     domain: ['#08DDC1', '#FFDC1B', '#FF5E3A']
   };
@@ -46,7 +48,7 @@ export class StatisticApplicantComponent implements OnInit {
   showLabels = true;
   explodeSlices = false;
   doughnut = false;
-  // item duplicate
+  // item duplicate 
   showLegend = true;
   // Line chart
   viewLine: any[] = [700, 400];
@@ -62,34 +64,10 @@ export class StatisticApplicantComponent implements OnInit {
   showYAxisLabel = true;
   yAxisLabel: "Average Point";
   graphDataChart: any[];
-  value =
-    [{
-      "name": "cata1",
-      "series": [
-        {
-          "name": "1/1/2016",
-          "value": "15000"
-        },
-        {
-          "name": "2/1/2016",
-          "value": "20000"
-        },
-        {
-          "name": "3/1/2016",
-          "value": "25000"
-        },
-        {
-          "name": "4/1/2016",
-          "value": "30000"
-        }
-      ],
-    },
-    ]
-
+  valueLineChart;
 
   ngOnInit() {
-    this.current = this.gblServices.stringToOpjectDate(this.datepipe.transform(Date.now(), 'yyyy-MM-dd'));
-    this.endDate = this.current;
+    this.current = this.momentToOpjectDate(moment());
     this.loading = false;
     this.getConfig();
   }
@@ -99,10 +77,9 @@ export class StatisticApplicantComponent implements OnInit {
     this.configApi.getConfigForApplicant(false, this.companyId).subscribe(
       (data) => {
         this.listConfig = data;
-        this.configId = this.listConfig[0].configId;
-        const date = this.listConfig[0].startDate.split('T', 1);
-        this.startDate = this.gblServices.stringToOpjectDate(date[0]);
-        console.log(this.startDate);
+        this.setFilter(0);
+        this.changeLineChart();
+        this.changePieChart();
         this.loading = false;
       }
       , (error) => {
@@ -111,34 +88,72 @@ export class StatisticApplicantComponent implements OnInit {
     );
   }
 
-  changeLineChart(input) {
-    console.log(input);
+  setFilter(index){
+    this.configId = this.listConfig[index].configId;
+    this.filter.configId = this.listConfig[index].configId;
+    const date = moment.utc(this.listConfig[index].startDate).local();
+    this.minDate = this.momentToOpjectDate(date);
+    this.startDate = this.minDate;
+    this.endDate = this.momentToOpjectDate(moment());
   }
 
-  changePieChart(input) {
-    console.log(input);
+  changeLineChart() {
+    this.loading = true;
+    this.historyApi.GetCatalogueStatisticApplicant(this.filter).subscribe(
+      (data) => {
+        this.valueLineChart = data;
+        this.loading = false;
+      }
+      , (error) => {
+        this.loading = false;
+      }
+    );
+  }
+
+  changePieChart() {
+    this.loading = true;
+    this.historyApi.GetRankStatisticApplicant(this.filter).subscribe(
+      (data) => {
+        this.valuePieChart = data;
+        this.loading = false;
+      }
+      , (error) => {
+        this.loading = false;
+      }
+    );
   }
 
   getApplicant(input) {
-    console.log(input);
   }
 
-  changeInput() {
-    const start = this.changeObjDateToString(this.startDate);
-    const end = this.changeObjDateToString(this.endDate);
-    const input = {
-      start : start,
-      end   : end,
-      configId : this.configId
+  changeConfig() {
+    const index = this.listConfig.findIndex(x=> x.configId == this.configId);
+    this.setFilter(index);
+    this.filter = {
+      configId: this.configId,
+      from: null,
+      to: null
+    };
+    this.changeLineChart();
+    this.changePieChart();
+  }
+
+  momentToOpjectDate(date) {
+    return {
+      year: date.year(),
+      month: date.month() + 1,
+      day: date.date()
     }
-    this.changeLineChart(input);
-    this.changePieChart(input);
-    this.getApplicant(input);
   }
-
-  changeObjDateToString(date) {
-    const time = date.year + '-' + date.month + '-' + date.day;
-    return time
+  changeDate(){
+    console.log(moment(this.startDate.year+'-'+this.startDate.month+'-'+this.startDate.day+'T00:00:01.000+07:00'))
+    this.filter = {
+      configId: this.configId,
+      from: moment(this.startDate.year+'-'+this.startDate.month+'-'+this.startDate.day+'T00:00:01.000+07:00').format('DD-MM-YYYY'),
+      to: moment(this.endDate.year+'-'+this.endDate.month+'-'+this.endDate.day+'T23:59:59.000+07:00').format('DD-MM-YYYY'),
+    };
+    this.changeLineChart();
+    this.changePieChart();
   }
 
 }
