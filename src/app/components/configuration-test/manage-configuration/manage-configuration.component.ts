@@ -9,7 +9,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import Stepper from 'bs-stepper';
 import { ToastrService } from 'ngx-toastr';
-import * as moment from 'moment';
 declare var $: any;
 @Component({
   selector: 'manage-configuration',
@@ -31,23 +30,6 @@ export class ManageConfigurationComponent implements OnInit {
 
   }
   public loading = false;
-  startDate: Date = new Date();
-
-  endDate: Date = new Date();
-  settings1 = {
-    bigBanner: true,
-    timePicker: true,
-    format: 'dd-MM-yyyy hh:mm a',
-    defaultOpen: false,
-    closeOnSelect: false,
-  };
-  settings2 = {
-    bigBanner: true,
-    timePicker: true,
-    format: 'dd-MM-yyyy hh:mm a',
-    defaultOpen: false,
-    closeOnSelect: true,
-  };
 
   private stepper: Stepper;
   index = 1;
@@ -93,16 +75,12 @@ export class ManageConfigurationComponent implements OnInit {
 
   open(content) {
     this.index = 1;
-    this.startDate = new Date();
-
-    this.endDate = new Date();
     this.inputConfiguration['title'] = "";
     this.inputConfiguration['companyId'] = localStorage.getItem("CompanyId");
     this.inputConfiguration['title'] = '';
     this.inputConfiguration['type'] = true;
     this.inputConfiguration['duration'] = 15;
-    this.inputConfiguration['startDate'] = this.startDate;
-    this.inputConfiguration['endDate'] = this.endDate.setDate(this.startDate.getDate() + 1);
+    this.inputConfiguration['expiredDays'] = 7;
     this.selectedItems = [];
     this.modalService.open(content, { backdrop: 'static', size: 'lg', windowClass: 'myCustomModalClass' });
     const a = document.querySelector('#stepper1');
@@ -118,8 +96,6 @@ export class ManageConfigurationComponent implements OnInit {
     }
     this.stepper.next();
     this.index = this.index + 1;
-    this.inputConfiguration['startDate'] = this.startDate;
-    this.inputConfiguration['endDate'] = this.endDate;
   }
 
   back() {
@@ -315,8 +291,6 @@ export class ManageConfigurationComponent implements OnInit {
 
         this.inputConfiguration['rankInConfigs'] = rankInConfig;
         this.inputConfiguration['catalogueInConfigurations'] = catalogueInConfiguration;
-        this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
-        this.inputConfiguration['endDate'] = new Date(this.inputConfiguration['endDate']);
         this.loading = true;
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
           this.getConfigurationIsActive(true);
