@@ -18,11 +18,11 @@
             <div class="col">
                 <div class=" col-sm-12 col-md-12 col-lg-12 row" style="margin-top: 20px;">
                     <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                        <input type="text" name="search" class="form-control input-underline input-lg col-md-6" id="search"
-                            placeholder="enter data" [(ngModel)]="search">
+                        <input type="text" name="search" class="form-control input-underline input-lg col-md-6"
+                            id="search" placeholder="enter data" [(ngModel)]="search">
                     </div>
-                    <div class="form-group col-sm-12 col-md-6 col-lg-6 row">
-                        <label class="col-md-3">Test Setting:</label>
+                    <div class="form-group col-md-5 row">
+                        <label style="width: 29%;">Choose config:</label>
                         &nbsp;&nbsp;&nbsp;
                         <select id="ins_setting" name="ins_setting" class="form-control" style="width: 46%;"
                             [(ngModel)]="chooseConfig" (change)="getEmployeeDoTheTest(chooseConfig)">
@@ -31,8 +31,17 @@
                                 {{item.title}}</option>
                         </select>
                     </div>
-                    <div class="form-group col-sm-12 col-md-6 col-lg-6 row">
-                        <div class="col-md-3 text-left">
+                    <div class="form-group col-md-5 row">
+                        <label style="width: 29%;">Start Date: </label>
+                        <input id="startDate" style="width: 50%;" class="form-control" placeholder="yyyy-mm-dd" name="start" ngbDatepicker
+                            #start="ngbDatepicker" [(ngModel)]="startDate" [minDate]="minDate">
+                        <div class="input-group-append" style="width: 20%;">
+                            <button class="btn btn-outline-secondary fa fa-calendar" (click)="start.toggle()"
+                                type="button"></button>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-2 row">
+                        <div class="text-center">
                             <input type="checkbox" [(ngModel)]="chooseType" [value]=true>
                             <label class="ml-2">Share Quiz</label>
                         </div>
@@ -41,14 +50,13 @@
                 <div class="row justify-content-end" style="margin-top: 20px;">
                     <button style="margin-right: 10px;" (click)="createTest();" class="btn btn-lg btn-success"
                         data-toggle="button">
-                        <i class="fa fa-paper-plane" placement="top" ngbTooltip="Send test to applicant"
-                            placement="top"></i>
+                        <i class="fa fa-paper-plane" placement="top" placement="top">&nbsp; Gen test</i>
                     </button>
                 </div>
             </div>
         </div>
-        <table class="table  table-hover customtable" [svData]="listEmployee | SemesterFilterPipe:search" #sv="svDataTable" [svRowsOnPage]="25"
-            svSortBy="fullname" svSortOrder="asc">
+        <table class="table  table-hover customtable" [svData]="listEmployee | SemesterFilterPipe:search"
+            #sv="svDataTable" [svRowsOnPage]="25" svSortBy="fullname" svSortOrder="asc">
             <thead>
                 <tr class="col-md-12 row no-padding-no-margin">
                     <th class="text-center" style="width: 5%;" scope="col"></th>
@@ -83,8 +91,10 @@
                     <td class="text-center" style="font-weight: bold;width: 20%;">{{item.username}}</td>
                     <td class="text-center" style="font-weight: bold;width: 25%;">{{item.fullname}}</td>
                     <td class="text-center" style="font-weight: bold;width: 25%;">{{item.email}}</td>
-                    <td class="text-center" style="font-weight: bold;width: 20%;">{{item.rankName}}</td>
-
+                    <td class="text-center" style="font-weight: bold;width: 20%;" *ngIf="item.rankName != null">
+                        {{item.rankName}}</td>
+                    <td class="text-center" style="font-weight: bold;width: 20%;" *ngIf="item.rankName == null">Updating
+                    </td>
                 </tr>
             </tbody>
             <tfoot>
