@@ -114,6 +114,8 @@ export class RankComponent implements OnInit {
   calculateWeightPoint(item = null){
     if (item != null) {
       item.point = Math.round(item.point);
+      var parsePoint = parseInt(item.point,10);
+      item.point = parsePoint;
       if (item.point > 100) item.point = 100;
       else if (item.point < 0) item.point = 0;
     }
