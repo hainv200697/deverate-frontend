@@ -119,6 +119,13 @@ export class ManageConfigurationComponent implements OnInit {
           }
         }
         this.listCatalogue = data.catalogueDTOs;
+        this.calculateWeightPoint(this.ListRank);
+        for (let i = 0; i < this.listCatalogue.length; i++) {
+          if (this.listCatalogue[i].point == 0) {
+            this.listCatalogue.splice(i, 1);
+            i--
+          }
+        }
       },
       (error) => {
         this.loading = false;
@@ -224,10 +231,10 @@ export class ManageConfigurationComponent implements OnInit {
 
   }
 
-  calculateWeightPoint(item = null) {
+  calculateWeightPoint(ranks) {
     this.avaragePercent.length = 0;
-    var number = this.selectedItems.length;
-    this.selectedItems.forEach(rank => {
+    var number = ranks.length;
+    ranks.forEach(rank => {
       var i = 0;
       var catas = rank.catalogueInRanks.filter(x => x.questionCount > 0);
       var points = catas.map(a => a.point);
@@ -248,7 +255,7 @@ export class ManageConfigurationComponent implements OnInit {
     for (let index = 0; index < this.listCatalogue.length; index++) {
       this.listCatalogue[index].point = this.avaragePercent[index];
     }
-    this.selectedItems.forEach(rank => {
+    ranks.forEach(rank => {
       var catas = rank.catalogueInRanks.filter(x => x.questionCount > 0);
       var points = catas.map(a => a.point);
       var sum = 0;
@@ -257,6 +264,9 @@ export class ManageConfigurationComponent implements OnInit {
       }
       rank.point = Math.round(sum);
     });
+    ranks.sort(function (a, b) {
+      return a.point - b.point;
+    })
   }
 
   Create() {
@@ -270,7 +280,7 @@ export class ManageConfigurationComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
-        this.calculateWeightPoint();
+        this.calculateWeightPoint(this.selectedItems);
 
         var rankInConfig = [];
         this.selectedItems.forEach(item => {
