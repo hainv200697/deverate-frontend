@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import { EmployeeApiService } from '../../services/employee-api.service';
 import { SemesterApiService } from '../../services/semester-api.service';
+import * as moment from 'moment';
 @Component({
     selector: 'app-applicant',
     templateUrl: './semester.component.html',
@@ -27,8 +28,12 @@ export class SemesterComponent implements OnInit {
     chooseEmployee = [];
     public loading = false;
     check;
+    startDate;
+    endDate;
+    minDate;
     ngOnInit() {
         this.getAllConfig();
+        this.minDate = this.momentToOpjectDate(moment());
     }
 
     getEmployeeDoTheTest(configId) {
@@ -39,7 +44,7 @@ export class SemesterComponent implements OnInit {
                 this.listEmployee = data;
                 this.listEmployee.forEach(element => {
                     element.selected = false;
-                  });
+                });
             }, (error) => {
                 if (error.status == 0) {
                     this.toast.error("Connection timeout");
@@ -85,10 +90,26 @@ export class SemesterComponent implements OnInit {
         if (this.check == false) {
             return;
         }
+        for (let index = 0; index < this.listConfig.length; index++) {
+            if (this.listConfig[index].configId == this.chooseConfig) {
+                const date = moment(this.startDate);
+                this.endDate = this.calculateEndDate(date, this.listConfig[index].expiredDays);
+            }
+        }
+        if (this.startDate.month < 10) {
+            this.startDate.month =  ("0" + this.startDate.month).slice(-2);
+        }
+        if (this.startDate.day < 10) {
+            this.startDate.day =  ("0" + this.startDate.day).slice(-2)
+        }
+        var startDateString = `${this.startDate.year}-${this.startDate.month}-${this.startDate.day}T00:00:01.000+07:00`;
+        var endDateString =  `${this.endDate.year}-${this.endDate.month}-${this.endDate.day}T23:59:59.000+07:00`;
         var data = {
             accountIds: this.chooseEmployee,
             configId: this.chooseConfig,
-            oneForAll: this.chooseType
+            oneForAll: this.chooseType,
+            startDate: startDateString,
+            endDate: endDateString
         };
         Swal.fire({
             title: 'Are you sure?',
@@ -116,6 +137,22 @@ export class SemesterComponent implements OnInit {
                 });
             }
         });
+    }
+
+    calculateEndDate(date, expiredDays) {
+        return {
+            year: date.year(),
+            month: date.month() < 10 ? ("0" + date.month()).slice(-2) : date.month(),
+            day: date.date() + expiredDays < 10 ? ("0" + date.date() + expiredDays).slice(-2) : date.date() + expiredDays
+        }
+    }
+
+    momentToOpjectDate(date) {
+        return {
+            year: date.year(),
+            month: date.month() + 1,
+            day: date.date()
+        }
     }
 
     validate() {

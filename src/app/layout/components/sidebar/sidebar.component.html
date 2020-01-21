@@ -95,17 +95,17 @@
         <div class="nested-menu" *ngIf="role == 'Test Owner'">
             <a class="list-group-item" (click)="addExpandClass('pages')">
                 <i class="fa fa-cog"></i>&nbsp;
-                <span>Config Management</span>
+                <span>Semester Management</span>
             </a>
             <li class="nested" [class.expand]="showMenu === 'pages'">
                 <ul class="submenu">
                     <li>
-                        <a [routerLink]="['/manage-configuration']" [routerLinkActive]="['router-link-active']">
+                        <a [routerLink]="['/semester']" [routerLinkActive]="['router-link-active']">
                             <span>Employee</span>
                         </a>
                     </li>
                     <li>
-                        <a [routerLink]="['/manage-configuration-applicant']"
+                        <a [routerLink]="['/semester-applicant']"
                             [routerLinkActive]="['router-link-active']">
                             <span>Applicant</span>
                         </a>
