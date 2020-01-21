@@ -32,7 +32,7 @@
                             </div>
 
                             <div class="col-md-7 row">
-                                <label class="col-md-3" style="text-align: center">Title:</label>
+                                <label class="col-md-4" style="text-align: center">Title:</label>
                                 <input class="col-md-6" type="text" [(ngModel)]="inputConfiguration['title']"
                                     name="ins_config_title">
                             </div>
@@ -43,19 +43,10 @@
                                 <input class="col-md-4" type="number" [(ngModel)]="inputConfiguration['duration']"
                                     name="ins_config_durartion" step="5" [min]="5" style="height: 30px">
                             </div>
-                            <div class="col-md-7 row ">
-                                <label class="col-md-4" style="text-align: right">Start Date:</label>
-                                <div class="col-md-7">
-                                    <angular2-date-picker [(ngModel)]="startDate" name="mydate" [settings]="settings1">
-                                    </angular2-date-picker>
-                                </div>
-                                <label class="col-md-12"></label>
-                                <label class="col-md-4" style="text-align: right">End Date:</label>
-                                <div class="col-md-7">
-                                    <angular2-date-picker id="endtimepicker" [(ngModel)]="endDate"
-                                        [settings]="settings2">
-                                    </angular2-date-picker>
-                                </div>
+                            <div class="col-md-7 row" style="margin-left: 33px;">
+                                <label class="col-md-4" style="text-align: right;">ExpiredDays:</label>
+                                <input class="col-md-6" type="number" [(ngModel)]="inputConfiguration['expiredDays']"
+                                    name="ins_config_expiredDays" step="1" [min]="1">
                             </div>
                         </div>
 
@@ -107,23 +98,25 @@
                                             Duration
                                         </td>
                                         <td class="col-md-9">
-                                            {{inputConfiguration['duration']}}
+                                            {{inputConfiguration['duration']}}'
                                         </td>
                                     </tr>
                                     <tr class="col-md-12 row no-padding-no-margin">
                                         <td class="col-md-3" style="font-weight: bold">
-                                            Start Date
+                                            ExpiredDays
                                         </td>
                                         <td class="col-md-9">
-                                            {{inputConfiguration['startDate'] | date : 'dd-MM-yyyy hh:mm a'}}
+                                            {{inputConfiguration['expiredDays']}}
                                         </td>
                                     </tr>
                                     <tr class="col-md-12 row no-padding-no-margin">
                                         <td class="col-md-3" style="font-weight: bold">
-                                            End Date
+                                            List Rank
                                         </td>
                                         <td class="col-md-9">
-                                            {{inputConfiguration['endDate'] | date : 'dd-MM-yyyy hh:mm a'}}
+                                            <label *ngFor="let i of selectedItems">
+                                                <b>{{i.name}}</b> &nbsp; &nbsp;
+                                            </label>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -200,18 +193,10 @@
                     </tr>
                     <tr class="col-md-12 row no-padding-no-margin">
                         <td class="col-md-3" style="font-weight: bold">
-                            Start Date
+                            Expired Days
                         </td>
                         <td class="col-md-9">
-                            {{configDetail.startDate | date : 'dd-MM-yyyy hh:mm a'}}
-                        </td>
-                    </tr>
-                    <tr class="col-md-12 row no-padding-no-margin">
-                        <td class="col-md-3" style="font-weight: bold">
-                            End Date
-                        </td>
-                        <td class="col-md-9">
-                            {{configDetail.endDate | date : 'dd-MM-yyyy hh:mm a'}}
+                            {{configDetail.expiredDays}}
                         </td>
                     </tr>
                     <tr class="col-md-12 row no-padding-no-margin">
