@@ -22,11 +22,10 @@
                             id="search" placeholder="enter data" [(ngModel)]="search">
                     </div>
                     <div class="form-group col-md-5 row">
-                        <label style="width: 29%;">Choose config:</label>
+                        <label style="width: 29%;">Choose semester:</label>
                         &nbsp;&nbsp;&nbsp;
                         <select id="ins_setting" name="ins_setting" class="form-control" style="width: 46%;"
                             [(ngModel)]="chooseConfig" (change)="getEmployeeDoTheTest(chooseConfig)">
-                            <option style="width: 46%;" disabled [value]=-1>-- Choosing setting --</option>
                             <option style="width: 46%;" *ngFor="let item of listConfig" [value]=item.configId>
                                 {{item.title}}</option>
                         </select>
