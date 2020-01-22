@@ -14,8 +14,7 @@ export class RankDefaultComponent implements OnInit {
     public router: Router,
     private toast: ToastrService,
     private rankApi: RankApiService,
-  ) {
-  }
+  ) { }
   public loading = false;
   iconIsActive: boolean;
 
@@ -48,6 +47,19 @@ export class RankDefaultComponent implements OnInit {
         this.catalogueList = data.catalogueDTOs;
         this.clone = JSON.parse(JSON.stringify(this.listRank));
         this.calculateWeightPoint();
+        for (let i = 0; i < this.catalogueList.length; i++) {
+          this.catalogueList[i].isShow = true;
+          if (this.catalogueList[i].point == 0) {
+            this.catalogueList[i].isShow = false
+          }
+        }
+        for (let i = 0; i < this.clone.length; i++) {
+          for (let z = 0; z < this.clone[i].catalogueInRanks.length; z++) {
+            this.clone[i].catalogueInRanks[z].isShow = true;
+            if (this.clone[i].catalogueInRanks[z].catalogueId == this.catalogueList[z].companyCatalogueId && this.catalogueList[z].isShow == false)
+              this.clone[i].catalogueInRanks[z].isShow = false
+          }
+        }
       },
       (error) => {
         if (error.status == 0) {
@@ -68,8 +80,9 @@ export class RankDefaultComponent implements OnInit {
     var catalogueInRank = [];
     for (var i = 0; i < this.catalogueList.length; i++) {
       catalogueInRank.push({
-        catalogueId : this.catalogueList[i].companyCatalogueId,
+        catalogueId: this.catalogueList[i].companyCatalogueId,
         point: 100,
+        isShow: this.catalogueList[i].isShow,
       })
     }
     this.clone.push({
@@ -81,13 +94,26 @@ export class RankDefaultComponent implements OnInit {
     this.calculateWeightPoint();
   }
 
-  removeRank(index){
-    this.clone.splice(index,1)
+  removeRank(index) {
+    this.clone.splice(index, 1)
   }
 
-  calculateWeightPoint(item = null){
+  checkSelected(catalogue) {
+    catalogue.isShow = true;
+    for (let i = 0; i < this.clone.length; i++) {
+      for (let z = 0; z < this.clone[i].catalogueInRanks.length; z++) {
+        if (this.clone[i].catalogueInRanks[z].catalogueId == catalogue.companyCatalogueId) {
+          this.clone[i].catalogueInRanks[z].isShow = true;
+        }
+      }
+    }
+  }
+
+  calculateWeightPoint(item = null) {
     if (item != null) {
       item.point = Math.round(item.point);
+      var parsePoint = parseInt(item.point, 10);
+      item.point = parsePoint;
       if (item.point > 100) item.point = 100;
       else if (item.point < 0) item.point = 0;
     }
@@ -105,10 +131,12 @@ export class RankDefaultComponent implements OnInit {
       });
     });
 
-    for(let i = 0; i < this.avaragePercent.length; i++) {
+    for (let i = 0; i < this.avaragePercent.length; i++) {
       this.avaragePercent[i] = this.avaragePercent[i] / number;
     }
-
+    for (let index = 0; index < this.catalogueList.length; index++) {
+      this.catalogueList[index].point = this.avaragePercent[index];
+    }
     this.clone.forEach(rank => {
       var points = rank.catalogueInRanks.map(a => a.point);
       var sum = 0;
@@ -123,7 +151,7 @@ export class RankDefaultComponent implements OnInit {
   }
 
   formatRankName(index) {
-    this.clone[index].name = this.clone[index].name.toUpperCase().replace(/\s/g,'');
+    this.clone[index].name = this.clone[index].name.toUpperCase().replace(/\s/g, '');
   }
 
   saveChange() {
@@ -133,7 +161,7 @@ export class RankDefaultComponent implements OnInit {
       if (find == undefined || find.name != rank.name) listSave.push(rank);
       else {
         var change = false;
-        for(let i = 0; i < rank.catalogueInRanks.length; i++) {
+        for (let i = 0; i < rank.catalogueInRanks.length; i++) {
           var findCataloguePoint = find.catalogueInRanks.find(x => x.catalogueId == rank.catalogueInRanks[i].catalogueId).point;
           if (findCataloguePoint != rank.catalogueInRanks[i].point) {
             change = true;
@@ -168,6 +196,7 @@ export class RankDefaultComponent implements OnInit {
           .subscribe((res) => {
             count++;
             if (count == 2) {
+              this.getRank();
               this.toast.success('Save success');
               this.loading = false;
             }
@@ -181,24 +210,25 @@ export class RankDefaultComponent implements OnInit {
               }
               this.loading = false;
             });
-        
-            this.rankApi.disableDefaultRank(listRemove)
-            .subscribe((res) => {
-              count++;
-              if (count == 2) {
-                this.toast.success('Save success');
-                this.loading = false;
+
+        this.rankApi.disableDefaultRank(listRemove)
+          .subscribe((res) => {
+            count++;
+            if (count == 2) {
+              this.getRank()
+              this.toast.success('Save success');
+              this.loading = false;
+            }
+          },
+            (err) => {
+              if (err.status == 0) {
+                this.toast.error('Server is not availiable');
               }
-            },
-              (err) => {
-                if (err.status == 0) {
-                  this.toast.error('Server is not availiable');
-                }
-                if (err.status == 500) {
-                  this.toast.error('Server error');
-                }
-                this.loading = false;
-              });
+              if (err.status == 500) {
+                this.toast.error('Server error');
+              }
+              this.loading = false;
+            });
       }
     });
   }
