@@ -33,27 +33,33 @@
                                 {{item.title}}</option>
                         </select>
                     </div>
+                    <div class="form-group col-md-6 d-flex justify-content-end">
+                        <button style="margin-right: 10px;" ngbTooltip="Refesh" (click)="getEmployeeToApprove(chooseConfig)"
+                            class="btn btn-lg btn-primary">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <table class="table  table-hover customtable" [svData]="" #sv="svDataTable" [svRowsOnPage]="25"
-            svSortBy="isApprove" svSortOrder="asc">
+        <table class="table  table-hover customtable" [svData]="listEmployee|ApproveFilterPipe:searchText" #sv="svDataTable" [svRowsOnPage]="25"
+            svSortBy="username" svSortOrder="asc">
             <thead>
                 <tr class="col-md-12 row no-padding-no-margin">
-                    <th class="text-center" scope="col" style="width: 5%;">.No
+                    <th class="text-center" scope="col" style="width: 5%;">No.
                     </th>
                     <th class="text-center" scope="col" style="width: 20%;">
-                        <sv-default-sorter by='Name'>Fullname</sv-default-sorter>
+                        <sv-default-sorter by='username'>Username</sv-default-sorter>
                     </th>
                     <th class="text-center" scope="col" style="width: 20%;">
-                        <sv-default-sorter by='Percent'>Email</sv-default-sorter>
+                        <sv-default-sorter by='fullname'>Fullname</sv-default-sorter>
                     </th>
                     <th class="text-center" scope="col" style="width: 15%;">
-                        <sv-default-sorter by='Percent'>Rank</sv-default-sorter>
+                        <sv-default-sorter by='accountRankName'>Rank</sv-default-sorter>
                     </th>
                     <th class="text-center" scope="col" style="width: 15%;">
-                        <sv-default-sorter by='Percent'>Potential Rank</sv-default-sorter>
+                        <sv-default-sorter by='potentialRank'>Potential Rank</sv-default-sorter>
                     </th>
                     <th class="text-center" scope="col" style="width: 25%;">Action</th>
                 </tr>
@@ -61,20 +67,19 @@
             <tbody *ngIf="sv.data.length != 0;  else searchNull">
                 <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data; let i=index">
                     <td class="text-center" style="width: 5%;">{{ i+1 }}</td>
+                    <td class="text-center" style="width: 20%;">{{ item.username }}</td>
                     <td class="text-center" style="width: 20%;">{{ item.fullname }}</td>
-                    <td class="text-center" style="width: 20%;">{{ item.email }}</td>
-                    <td class="text-center" style="width: 15%;">{{ item.point }}</td>
-                    <td class="text-center" style="width: 15%;">{{ item.potentialRank }}</td>
-                    <td class="text-center" [hidden]="item.upGrade==false">
-                        <i class="fa fa-level-down" style="color: red;" aria-hidden="true"></i>
-                    </td>
+                    <td class="text-center" style="width: 15%;" *ngIf="item.accountRankName != null" >{{ item.accountRankName }}</td>
+                    <td class="text-center" style="width: 15%;" *ngIf="item.accountRankName == null" >Updating</td>
+                    <td class="text-center" style="width: 15%;" *ngIf="item.potentialRank != null">{{ item.potentialRank }}</td>
+                    <td class="text-center" style="width: 15%;" *ngIf="item.potentialRank == null">Not Ranked</td>
                     <td class="text-center nowrap text-center action-column" style="color: red; width: 25%;">
-                        <button class="btn-success btn btn-circle shadow-item" (click)="approve(item,true)"
+                        <button class="btn-success btn btn-circle shadow-item" (click)="approve(item.accountId,true)"
                             placement="top" ngbTooltip="Approve">
                             <i class="fa fa-check"></i>
                         </button>
                         &nbsp;
-                        <button class="btn-danger btn btn-circle shadow-item" (click)="approve(item,false)"
+                        <button class="btn-danger btn btn-circle shadow-item" (click)="approve(item.accountId,false)"
                             placement="top" ngbTooltip="Reject">
                             <i class="fa fa-window-close"></i>
                         </button>

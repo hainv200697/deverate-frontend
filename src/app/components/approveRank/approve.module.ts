@@ -1,3 +1,4 @@
+import { ApproveFilterPipe } from './approve-filter.pipe';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ApproveComponent } from './approve.component';
@@ -21,6 +22,6 @@ import { NgxLoadingModule } from 'ngx-loading';
       ApproveRoutingModule,
       NgxLoadingModule
     ],
-    declarations: [ApproveComponent]
+    declarations: [ApproveComponent,ApproveFilterPipe]
 })
 export class ApproveModule {}

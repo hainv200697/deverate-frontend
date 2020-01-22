@@ -13,13 +13,14 @@ export class ApproveComponent implements OnInit {
   constructor(
     private toastr: ToastrService,
     private configApi: ConfigurationApiService,
-    private approveService: ApproveApiService,
+    private approveApi: ApproveApiService,
   ) { }
   listConfig = [];
   public loading = false;
   searchText = '';
   chooseConfig;
   companyId = localStorage.getItem('CompanyId');
+  listEmployee = [];
   ngOnInit() {
     this.getConfig();
   }
@@ -44,10 +45,41 @@ export class ApproveComponent implements OnInit {
   }
 
   getEmployeeToApprove(configId){
-    console.log(configId)
+    this.loading = true
+    this.approveApi.getAllApproveRequest(configId).subscribe(
+      (data) => {
+        this.listEmployee = data;
+        this.loading = false;
+      }
+      , (error) => {
+        if (error.status == 0) {
+          this.toastr.error("Connection timeout");
+        }
+        if (error.status == 500) {
+          this.toastr.error("System error");
+        }
+        this.loading = false;
+      }
+    );
   }
 
   approve(accountId, isApprove){
-    
+    this.loading = true
+    this.approveApi.approveRank(this.chooseConfig,accountId,isApprove).subscribe(
+      (data) => {
+        this.toastr.success("Success");
+        this.getEmployeeToApprove(this.chooseConfig)
+        this.loading = false;
+      }
+      , (error) => {
+        if (error.status == 0) {
+          this.toastr.error("Connection timeout");
+        }
+        if (error.status == 500) {
+          this.toastr.error("System error");
+        }
+        this.loading = false;
+      }
+    );
   }
 }

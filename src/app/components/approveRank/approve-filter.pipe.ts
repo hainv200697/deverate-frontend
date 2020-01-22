@@ -7,7 +7,8 @@ export class ApproveFilterPipe implements PipeTransform {
     if (value) {
       return value.filter(item => {
           return (
-            (item.name.search(searchText) !== -1)
+            (item.username.search(searchText) !== -1) ||
+            (item.fullname.search(searchText) !== -1)
           );
       });
     }

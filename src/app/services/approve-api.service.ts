@@ -6,15 +6,20 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class ApproveApiService {
-    URL = 'http://localhost:5000/';
-    // URL = AppSettings.BASEURL;
+    URL = AppSettings.BASEURL;
     constructor(
         private httpClient: HttpClient,
     ) { }
 
     getAllApproveRequest(configId) {
-        const API = '';
+        const API = 'api/approve/getapproverequest/';
         const param = new HttpParams().set('configId', configId);
-        return this.httpClient.get(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
+        return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
+    }
+
+    approveRank(configId,accountId,isApprove){
+        const API = 'api/approve/approveorrejectrank/';
+        const param = new HttpParams().set('configId', configId).set('accountId', accountId).set('isApprove', isApprove);
+        return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
 }
