@@ -6,7 +6,6 @@ import { NgbModal, } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import Stepper from 'bs-stepper';
 import { ToastrService } from 'ngx-toastr';
-import * as moment from 'moment';
 declare var $: any;
 @Component({
   selector: 'manage-configuration',
@@ -24,20 +23,12 @@ export class ManageConfigurationApplicantComponent implements OnInit {
 
   }
   public loading = false;
-  startDate: Date = new Date();
-
-  settings1 = {
-    bigBanner: true,
-    timePicker: true,
-    format: 'dd-MM-yyyy hh:mm a',
-    defaultOpen: false,
-    closeOnSelect: false,
-  };
 
   private stepper: Stepper;
   index = 1;
   iconIsActive: boolean;
 
+  selectConfiguration = [];
   Configurations = [];
 
   ListRank = [];
@@ -77,14 +68,12 @@ export class ManageConfigurationApplicantComponent implements OnInit {
 
   open(content) {
     this.index = 1;
-    this.startDate = new Date();
-
     this.inputConfiguration['title'] = "";
     this.inputConfiguration['companyId'] = localStorage.getItem("CompanyId");
     this.inputConfiguration['title'] = '';
     this.inputConfiguration['type'] = false;
     this.inputConfiguration['duration'] = 15;
-    this.inputConfiguration['startDate'] = this.startDate;
+    this.inputConfiguration['expiredDays'] = 7;
     this.selectedItems = [];
     this.modalService.open(content, { backdrop: 'static', size: 'lg', windowClass: 'myCustomModalClass' });
     const a = document.querySelector('#stepper1');
@@ -100,7 +89,6 @@ export class ManageConfigurationApplicantComponent implements OnInit {
     }
     this.stepper.next();
     this.index = this.index + 1;
-    this.inputConfiguration['startDate'] = this.startDate;
   }
 
   back() {
@@ -124,6 +112,13 @@ export class ManageConfigurationApplicantComponent implements OnInit {
           }
         }
         this.listCatalogue = data.catalogueDTOs;
+        this.calculateWeightPoint(this.ListRank);
+        for (let i = 0; i < this.listCatalogue.length; i++) {
+          if (this.listCatalogue[i].point == 0) {
+            this.listCatalogue.splice(i, 1);
+            i--
+          }
+        }
       },
       (error) => {
         this.loading = false;
@@ -184,7 +179,6 @@ export class ManageConfigurationApplicantComponent implements OnInit {
     this.loading = true;
     this.configAPi.GetConfigurationCatalogueByConfigId(configId).subscribe(
       (data) => {
-        data.startDate = moment.utc(data.startDate).local().format('MM/DD/YYYY hh:mm a');
         this.configDetail = data;
         this.modalService.open(content, { size: 'lg', windowClass: 'myCustomModalClass' });
         this.loading = false;
@@ -204,6 +198,16 @@ export class ManageConfigurationApplicantComponent implements OnInit {
     );
   }
 
+  checkSelected(configId) {
+    var index = this.Configurations.findIndex(x => x.configId == configId);
+    this.Configurations[index].selected = !this.Configurations[index].selected;
+    if (this.Configurations[index].selected == false) {
+      this.selectConfiguration.splice(this.Configurations.indexOf(configId), 1);
+    } else {
+      this.selectConfiguration.push(configId);
+    }
+  }
+
   Sample() {
     const sampleTest = {
       companyId: this.companyId,
@@ -220,10 +224,10 @@ export class ManageConfigurationApplicantComponent implements OnInit {
 
   }
 
-  calculateWeightPoint(item = null) {
+  calculateWeightPoint(ranks) {
     this.avaragePercent.length = 0;
-    var number = this.selectedItems.length;
-    this.selectedItems.forEach(rank => {
+    var number = ranks.length;
+    ranks.forEach(rank => {
       var i = 0;
       var catas = rank.catalogueInRanks.filter(x => x.questionCount > 0);
       var points = catas.map(a => a.point);
@@ -244,7 +248,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
     for (let index = 0; index < this.listCatalogue.length; index++) {
       this.listCatalogue[index].point = this.avaragePercent[index];
     }
-    this.selectedItems.forEach(rank => {
+    ranks.forEach(rank => {
       var catas = rank.catalogueInRanks.filter(x => x.questionCount > 0);
       var points = catas.map(a => a.point);
       var sum = 0;
@@ -253,6 +257,9 @@ export class ManageConfigurationApplicantComponent implements OnInit {
       }
       rank.point = Math.round(sum);
     });
+    ranks.sort(function (a, b) {
+      return a.point - b.point;
+    })
   }
 
   Create() {
@@ -266,7 +273,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
-        this.calculateWeightPoint();
+        this.calculateWeightPoint(this.selectedItems);
 
         var rankInConfig = [];
         this.selectedItems.forEach(item => {
@@ -287,7 +294,6 @@ export class ManageConfigurationApplicantComponent implements OnInit {
 
         this.inputConfiguration['rankInConfigs'] = rankInConfig;
         this.inputConfiguration['catalogueInConfigurations'] = catalogueInConfiguration;
-        this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
         this.loading = true;
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
           this.getConfigurationIsActive(true);
@@ -311,6 +317,41 @@ export class ManageConfigurationApplicantComponent implements OnInit {
             this.toast.error('Server error');
           }
         });
+      }
+    });
+  }
+
+  DisableConfiguration(status) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'The config will be delete!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
+      if (result.value) {
+        this.loading = true;
+        this.configAPi.changeStatusConfiguration(this.selectConfiguration, status).subscribe(data => {
+          this.getConfigurationIsActive(true);
+          this.closeModal();
+          this.toast.success(data['message']);
+          this.selectConfiguration = [];
+          this.loading = false;
+        }, (error) => {
+          if (error.status == 0) {
+            this.toast.error('Server is not availiable');
+          }
+          if (error.status == 400) {
+            this.toast.error(error['message']);
+          }
+          if (error.status == 500) {
+            this.toast.error('Server error');
+          }
+          this.loading = false;
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.closeModal();
       }
     });
   }

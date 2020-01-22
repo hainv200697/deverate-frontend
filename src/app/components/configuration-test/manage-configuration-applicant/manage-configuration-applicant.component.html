@@ -32,7 +32,7 @@
                             </div>
 
                             <div class="col-md-7 row">
-                                <label class="col-md-3" style="text-align: center">Title:</label>
+                                <label class="col-md-4" style="text-align: center">Title:</label>
                                 <input class="col-md-6" type="text" [(ngModel)]="inputConfiguration['title']"
                                     name="ins_config_title">
                             </div>
@@ -43,12 +43,10 @@
                                 <input class="col-md-4" type="number" [(ngModel)]="inputConfiguration['duration']"
                                     name="ins_config_durartion" step="5" [min]="5" style="height: 30px">
                             </div>
-                            <div class="col-md-7 row ">
-                                <label class="col-md-4" style="text-align: right">Start Date:</label>
-                                <div class="col-md-7">
-                                    <angular2-date-picker [(ngModel)]="startDate" name="mydate" [settings]="settings1">
-                                    </angular2-date-picker>
-                                </div>
+                            <div class="col-md-7 row" style="margin-left: 33px;">
+                                <label class="col-md-4" style="text-align: right;">ExpiredDays:</label>
+                                <input class="col-md-6" type="number" [(ngModel)]="inputConfiguration['expiredDays']"
+                                    name="ins_config_expiredDays" step="1" [min]="1">
                             </div>
                         </div>
 
@@ -68,7 +66,7 @@
                                 <div class="col-md-12 row" *ngFor="let cata of listCatalogue">
                                     <label class="col-md-10 mt-2">{{cata.name}}</label>
                                     <input type="number" class="form-control col-md-2 mt-1" style="font-size: 15px"
-                                        [(ngModel)]="cata.numberQuestion" min="0" max="{{cata.quescount}}" step="1">
+                                       [(ngModel)]="cata.numberQuestion" min="0" max="{{cata.quescount}}" step="1">
                                 </div>
                             </div>
                         </div>
@@ -105,10 +103,10 @@
                                     </tr>
                                     <tr class="col-md-12 row no-padding-no-margin">
                                         <td class="col-md-3" style="font-weight: bold">
-                                            Start Date
+                                            ExpiredDays
                                         </td>
                                         <td class="col-md-9">
-                                            {{inputConfiguration['startDate'] | date : 'dd-MM-yyyy hh:mm a'}}
+                                            {{inputConfiguration['expiredDays']}}
                                         </td>
                                     </tr>
                                     <tr class="col-md-12 row no-padding-no-margin">
@@ -195,10 +193,10 @@
                     </tr>
                     <tr class="col-md-12 row no-padding-no-margin">
                         <td class="col-md-3" style="font-weight: bold">
-                            Start Date
+                            Expired Days
                         </td>
                         <td class="col-md-9">
-                            {{configDetail.startDate | date : 'dd-MM-yyyy hh:mm a'}}
+                            {{configDetail.expiredDays}}
                         </td>
                     </tr>
                     <tr class="col-md-12 row no-padding-no-margin">
@@ -224,8 +222,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="col-md-12 row no-padding-no-margin"
-                        *ngFor="let c of configDetail.catalogueInConfigurations">
+                    <tr class="col-md-12 row no-padding-no-margin" *ngFor="let c of configDetail.catalogueInConfigurations">
                         <td class="col-md-9">
                             {{c.catalogue}}
                         </td>
@@ -279,6 +276,14 @@
                         </button>
                     </div>
                     <div class="row justify-content-end" style="margin-top: 20px;">
+                        <button ngbTooltip="Deactive" style="margin-right: 10px;" (click)="DisableConfiguration(false);"
+                            class="btn btn-lg btn-danger" data-toggle="button" *ngIf="selectConfiguration.length != 0">
+                            <i class="fa fa-trash-o delete-icon" placement="top"></i>
+                        </button>
+                        <button ngbTooltip="Active" (click)="DisableConfiguration(true);" class="btn btn-lg btn-success"
+                            style="margin-right: 10px;" *ngIf="selectConfiguration.length != 0">
+                            <i class="fa fa-check" placement="top"></i>
+                        </button>
                         <button ngbTooltip="Refesh" style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
                             class="btn btn-lg btn-primary" data-toggle="button">
                             <i #refesh class="fa fa-refresh" placement="top" aria-hidden="true"
@@ -292,8 +297,8 @@
                 svSortOrder="asc" [svRowsOnPage]="25" class="table  table-hover customtable">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin">
-                        <th class="text-center" style="width: 7%;" scope="col">No.</th>
-                        <th class="text-center" style="width: 13%;" scope="col">
+                        <th class="text-center" style="width: 5%;" scope="col"></th>
+                        <th class="text-center" style="width: 15%;" scope="col">
                             <sv-default-sorter>Type
                             </sv-default-sorter>
                         </th>
@@ -319,10 +324,13 @@
                 <tbody *ngIf="sv.data.length != 0;  else searchNull">
                     <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px"
                         *ngFor="let c of sv.data; let i = index">
-                        <td class="text-center" style="width: 7%;">{{i + 1}}</td>
-                        <td class="text-center" style="width: 13%;">Applicant</td>
+                        <td class="text-center" style="width: 5%;">
+                            <input type="checkbox" value="" [checked]="c.selected" class="btn"
+                                (change)="checkSelected(c.configId);">
+                        </td>
+                        <td class="text-center" [hidden]="c.type" style="width: 15%;">Applicant</td>
                         <td class="text-center" style="width: 20%;">{{c.title}}</td>
-                        <td class="text-center" style="width: 20%;">{{c.createDate | date : 'dd-MM-yyyy'}}</td>
+                        <td class="text-center" style="width: 20%;">{{c?.createDate.split('T')[0]}}</td>
                         <td class="text-center" style="width: 10%;">{{c.duration}}'</td>
                         <td class="text-center" [hidden]="c.isActive==true" style="width: 10%;">
                             <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
@@ -337,8 +345,7 @@
                                 <i class="fa fa-edit"></i>
                             </button>
                             &nbsp;
-                            <button ngbTooltip="View Test" class="btn-primary btn btn-circle shadow-item"
-                                (click)="viewTest(c.configId)">
+                            <button ngbTooltip="View Test" class="btn-primary btn btn-circle shadow-item" (click)="viewTest(c.configId)">
                                 <i class="fa fa fa-eye"></i>
                             </button>
                             &nbsp;
