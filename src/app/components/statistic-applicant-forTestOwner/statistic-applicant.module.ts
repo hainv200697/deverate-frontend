@@ -9,6 +9,7 @@ import { NgxLoadingModule } from 'ngx-loading';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { DataTableModule } from 'ng-angular8-datatable';
 import { DatePipe } from '@angular/common';
+import { ExcelService } from './../../shared/services/excel.service';
 
 @NgModule({
   imports: [

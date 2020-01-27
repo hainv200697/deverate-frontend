@@ -5,8 +5,8 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class StatisticApiService {
-    URL = 'http://localhost:8080/';
-    // URL = AppSettings.BASEURL;
+    // URL = 'http://localhost:8080/';
+    URL = AppSettings.BASEURL;
 
     constructor(private httpClient: HttpClient) { }
 
@@ -52,28 +52,25 @@ export class StatisticApiService {
     }
 
     GetCatalogueStatisticApplicant(filter) {
-        console.log(filter);
         const API = 'api/Test/CatalogueStatisticApplicant';
         let params = new HttpParams().set('configId', filter.configId);
-        if(filter.from != null){
-            params.set('from', filter.from);
+        if(filter.to != null){
+            params = params.set('from',new Date(filter.from).toISOString());
         }
         if(filter.to != null){
-            params.set('to', filter.to);
+            params = params.set('to',new Date(filter.to).toISOString());
         }
         return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_TEST + API, {params});
     }
 
     GetRankStatisticApplicant(filter) {
-        console.log(filter);
         const API = 'api/Test/RankStatisticApplicant';
         let params = new HttpParams().set('configId', filter.configId);
-        
         if(filter.from != null){
-            params.set('from', filter.from);
+            params = params.set('from',new Date(filter.from).toISOString());
         }
         if(filter.to != null){
-            params.set('to', filter.to);
+            params = params.set('to',new Date(filter.to).toISOString());
         }
         return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_TEST + API, {params});
     }
