@@ -361,6 +361,10 @@ export class ManageConfigurationApplicantComponent implements OnInit {
       this.toast.error('Message', 'Please input title config');
       return false;
     }
+    else if(this.listCatalogue.length == 0 ){
+      this.toast.error('Message', 'Please add questions into catalogue');
+      return false;
+    }
     else if (this.inputConfiguration['title'].length > 20) {
       this.toast.error('Message', 'The maximum exam name is 20');
       return false;

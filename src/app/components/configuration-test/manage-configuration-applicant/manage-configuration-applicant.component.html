@@ -58,7 +58,7 @@
                                     (onDeSelect)="DeSelectRank($event)" (onDeSelectAll)="onDeSelectAll($event)">
                                 </angular2-multiselect>
                             </div>
-                            <div class="col-md-7" [hidden]="selectedItems.length == 0">
+                            <div class="col-md-7" [hidden]="selectedItems.length == 0 || listCatalogue.length ==0">
                                 <div class="col-md-12 row">
                                     <label class="col-md-10">Catalogue</label>
                                     <label class="col-md-2" style="padding-left: 0px;">Quantity</label>
