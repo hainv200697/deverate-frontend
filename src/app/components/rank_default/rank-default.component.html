@@ -59,27 +59,44 @@
             </div>
 
             <div class="no-padding-no-margin mt-5 mb-3" style=" display: flex;">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div style="height: 40px; width: 100%;">
                         <b>Catalogue</b></div>
-                    <div class="row mt-3 no-padding-no-margin" style="height: 40px; width: 100%;" *ngFor="let item of catalogueList">
-                        <label ngbTooltip="{{item.name}}">{{item.name}}</label>
+                    <div style="width: 100%;"
+                        *ngFor="let item of catalogueList">
+                        <label class="mt-3 form-control" style="border-color: white;width: 100%" ngbTooltip="{{item.name}}" *ngIf="item.isShow" >{{item.name}}</label>
+                    </div>
+                    <div style="height: 40px; width: 100%;" class="mt-3" *ngIf="catalogueList.length != 0" >
+
+                        <div ngbDropdown class="d-inline-block">
+                            <button class="btn btn-lg btn-outline-primary" id="dropdownForm1" ngbDropdownToggle>
+                                <i class="fa fa-plus"></i></button>
+                            <div ngbDropdownMenu aria-labelledby="dropdownForm1" style="width: 300px;">
+                                <div class="form-group row">
+                                    <div class="input-group col-md-12" *ngFor="let item of catalogueList; let i = index ">
+                                        <input *ngIf="!item.isShow" type="checkbox" value="" class="btn" style="height: 20px; width: 10%;"
+                                            (change)="checkSelected(item);">
+                                    <label style="width: 90%; height: 20px;" *ngIf="!item.isShow" >{{item.name}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div class="no-padding-no-margin" style="width: 150px" *ngFor="let r of clone; let i = index">
                     <div class="row no-padding-no-margin" style="width: 150px; height: 40px;">
-                        <input class="form-control" style="width: 100px; font-weight: bold;" ngbTooltip="{{r.name}}" type="text"
-                            [(ngModel)]="r.name" (change)="formatRankName(i)">
+                        <input class="form-control" style="width: 100px; font-weight: bold;" ngbTooltip="{{r.name}}"
+                            type="text" [(ngModel)]="r.name" (change)="formatRankName(i)">
                         <i (click)="removeRank(i)" style="width: 50px; margin-left: -10px; color: red;"
                             class="fa fa-window-close mt-1 btn" aria-hidden="true"></i>
                     </div>
-                    <div style="width: 150px; height: 40px;" class="mt-3 row no-padding-no-margin"
-                        *ngFor="let item of r.catalogueInRanks">
-                        <input class="form-control" style="width: 100px;" [(ngModel)]="item.point"
+                    <div *ngFor="let item of r.catalogueInRanks">
+                        <input *ngIf="item.isShow"  class="form-control mt-3" style="width: 100px;" [(ngModel)]="item.point"
                             (change)="calculateWeightPoint(item)" type="number" max="100" min="0" step="5">
                     </div>
                 </div>
-                <div style="width: 50px;">
+                <div style="width: 50px;" *ngIf="catalogueList.length != 0" >
                     <button class="btn btn-primary" (click)="addRankToList()">
                         <i class="fa fa-plus"></i>
                     </button>
