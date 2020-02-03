@@ -156,12 +156,13 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 ind = ind + 1;
                 const questionObj = new QuestionModel();
                 this.listAnswer = [];
-                questionObj.point = element['Point']
+                questionObj.point = element['QuestionPoint'];
+                console.log(questionObj.point);
                 if (questionObj.point === null || questionObj.point === undefined) {
                     this.message.push("Percent of question #" + ind + " is blank");
                     this.checkFile = false;
                 } else if (questionObj.point < 0 || questionObj.point > 100) {
-                    this.message.push("Percent of question #" + ind + " must be in range from 0 to 100 characters ");
+                    this.message.push("Percent of question #" + ind + " must be in range from 0 to 100");
                     this.checkFile = false;
                 }
                 questionObj.question1 = $.trim(element['Question']);
@@ -593,6 +594,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     // end Modal
     insertQuestionSubmit(key) {
         if (key === 'excel') {
+
             this.addQuestionByExcel();
         } else {
             this.addQuestion();
