@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
                             this.router.navigate(['/manage-employee']);
                             break;
                         case 'Test Owner':
-                             this.router.navigate(['/manage-configuration']);
+                             this.router.navigate(['/semester']);
                             break;
                         case 'Employee':
                              this.router.navigate(['/reranking']);

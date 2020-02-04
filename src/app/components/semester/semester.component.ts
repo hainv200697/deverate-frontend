@@ -27,6 +27,7 @@ export class SemesterComponent implements OnInit {
     companyId = localStorage.getItem('CompanyId');
     chooseEmployee = [];
     public loading = false;
+    selectedAll: any;
     check;
     startDate;
     endDate;
@@ -45,6 +46,7 @@ export class SemesterComponent implements OnInit {
                 this.listEmployee.forEach(element => {
                     element.selected = false;
                 });
+                this.selectedAll = false;
             }, (error) => {
                 if (error.status == 0) {
                     this.toast.error("Connection timeout");
@@ -73,6 +75,21 @@ export class SemesterComponent implements OnInit {
                 this.loading = false;
             }
         )
+    }
+
+    selectAll() {
+        if(this.selectedAll){
+            this.listEmployee.forEach(e=>{
+                e.selected = true;
+                this.listEmployee.push(e.username);
+            });
+        }
+        else{
+            this.listEmployee.forEach(e=>{
+                e.selected = false;
+            });
+            this.listEmployee = [];
+        }
     }
 
     checkSelected(accountId) {
@@ -126,6 +143,7 @@ export class SemesterComponent implements OnInit {
                     this.getEmployeeDoTheTest(this.chooseConfig);
                     this.chooseEmployee = [];
                     this.loading = false;
+                    this.selectedAll = false;
                 }, (error) => {
                     if (error.status == 0) {
                         this.toast.error('Conection time out');
@@ -163,6 +181,10 @@ export class SemesterComponent implements OnInit {
         }
         if (this.chooseEmployee == undefined || this.chooseEmployee.length == 0) {
             this.toast.error('Please choose employee');
+            this.check = false;
+        }
+        if(this.startDate == undefined || this.startDate == null){
+            this.toast.error('Please choose startdate');
             this.check = false;
         }
     }
