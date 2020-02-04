@@ -73,7 +73,8 @@ export class ResultComponent implements OnInit {
         }
         if (this.accountInfo.AccountId != undefined &&
           this.accountInfo.AccountId != localStorage.getItem('AccountId') &&
-          localStorage.getItem('Role') != 'Test Owner'
+          localStorage.getItem('Role') != 'Test Owner' &&
+          localStorage.getItem('Role') != 'Company Manager'
         ) {
           this.router.navigate(['**']);
           return;
