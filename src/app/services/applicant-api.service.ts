@@ -6,16 +6,17 @@ import { AppSettings } from '../appsetting';
     providedIn: 'root'
 })
 export class ApplicantApiService {
-    // URL = 'http://localhost:9000/';
+    // URL = 'http://localhost:5000/';
     URL = AppSettings.BASEURL;
     constructor(
         private httpClient: HttpClient,
     ) { }
 
-
-    postCreateApplicant(applicants, configId) {
-        const API = 'api/Applicant/CreateApplicant?configId=';
-        return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE + API + configId, applicants);
+    postCreateApplicant(applicants, configId,startDate,endDate) {
+        let start =  new Date(startDate).toISOString();
+        let end = new Date(endDate).toISOString();
+        const API = 'api/Applicant/CreateApplicant?configId='+configId+'&startDate='+start+'&endDate='+end;
+        return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_RESOURCE + API, applicants);
     }
 
 
