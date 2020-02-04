@@ -156,8 +156,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 ind = ind + 1;
                 const questionObj = new QuestionModel();
                 this.listAnswer = [];
-                questionObj.point = element['QuestionPoint'];
-                console.log(questionObj.point);
+                questionObj.point = element['QuestionPoint']
                 if (questionObj.point === null || questionObj.point === undefined) {
                     this.message.push("Percent of question #" + ind + " is blank");
                     this.checkFile = false;
@@ -496,7 +495,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     openUpdate(item, update) {
         this.count = 0;
         this.index = 1;
-        this.updQuestion['QuestionId'] = item['questionId'];
+        this.updQuestion['questionId'] = item['QuestionId'];
         this.updQuestion['question1'] = item['question1'];
         this.updQuestion['isActive'] = true;
         this.updQuestion['accountId'] = this.accountId;

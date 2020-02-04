@@ -33,6 +33,8 @@
     "bs-stepper": "^1.7.0",
     "chart.js": "2.7.3",
     "core-js": "2.5.7",
+    "exceljs": "^1.12.0",
+    "file-saver": "^2.0.2",
     "font-awesome": "4.7.0",
     "fusioncharts": "^3.14.1",
     "jquery": "^3.4.1",

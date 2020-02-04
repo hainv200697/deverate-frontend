@@ -11,138 +11,144 @@
 <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true  }"
     [template]="customLoadingTemplate">
 </ngx-loading>
-<div class=" row col-md-12 d-flex justify-content-center no-padding-no-margin" *ngIf="isLoaded">
-    <div class="row col-md-12 d-flex justify-content-center">
-        <div class="col-md-6">
+<div class=" row col-md-12">
+    <div class="row col-md-12">
+        <div class="col-md-3">
             <b>
                 <h2 class="page-header ">
                     Applicant Statistic
                 </h2>
             </b>
         </div>
-        <div class="d-flex justify-content-end col-md-6">
-            <ng-multiselect-dropdown [placeholder]="'Select Period'" [data]="dropdownList"
-                (onDeSelect)="onItemDeSelect($event)" (onSelect)="getDataStatistic($event)"
-                (onSelectAll)="onSelectAll($event)" [(ngModel)]="selectedItems" [settings]="dropdownSettings"
-                *ngIf="isLoaded">
-            </ng-multiselect-dropdown>
-            &nbsp;
-            <button class="btn btn-success save shadow-card" (click)="Apply()" style="height: 88%;"
-                [hidden]="selectedItems.length ==0">Apply</button>
+
+        <div class="col-md-3">
+            <select id="catalogue_company" [(ngModel)]="configId" (change)="changeConfig($event.target.value)"
+                name="catalogue_company" class="form-control col-md-12">
+                <option *ngFor="let item of listConfig" [value]=item.configId>
+                    {{item.title}}</option>
+            </select>
         </div>
-    </div>
 
-    <div class="col col-md-12 mt-3" *ngIf="dataGroupChart != null">
-        <div class="col col-md-12 mt-3">
-            <div class="card mb-5">
-                <div class="card-header">
-                    Statistic Rank
-                </div>
-                <div class="card-body" *ngIf="isLoaded">
-                    <ngx-charts-bar-horizontal-2d [view]="[1300, 0]" [scheme]="colorScheme" [results]="dataGroupChart"
-                        [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
-                        [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
-                        [yAxisLabel]="yAxisLabel" [legendTitle]="legendTitle" *ngIf="isLoaded">
-                        <ng-template #tooltipTemplate let-model="model">
-                            <h5>{{model.name}}</h5>
-                            <h4>{{model.value}}</h4>
-                        </ng-template>
-
-                        <ng-template #seriesTooltipTemplate let-model="model">
-                            This is vertical line tooltip template
-                            <pre>{{model|json}}</pre>
-                        </ng-template>
-                    </ngx-charts-bar-horizontal-2d>
+        <div class="col-md-6">
+            <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-lg btn-outline-primary" id="dropdownForm1" ngbDropdownToggle>
+                    <i class="fa fa-filter"></i>
+                    Filter By Date</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownForm1" style="width: 300px;">
+                    <form class="px-4 py-3">
+                        <div class="form-group row">
+                            <label for="startDate" class="col-md-12">From</label>
+                            <div class="input-group col-md-12">
+                                <input id="startDate" class="form-control" placeholder="yyyy-mm-dd" name="start"
+                                    [(ngModel)]="startDate" [minDate]="minDate" [maxDate]="current" ngbDatepicker
+                                    #start="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary fa fa-calendar" (click)="start.toggle()"
+                                        type="button"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="endDate" class="col-md-12">To</label>
+                            <div class="input-group col-md-12">
+                                <input id="endDate" class="form-control" placeholder="yyyy-mm-dd" name="end"
+                                    [(ngModel)]="endDate" [minDate]="startDate" [maxDate]="current" ngbDatepicker
+                                    #end="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary fa fa-calendar" (click)="end.toggle()"
+                                        type="button"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" (click)="changeDate()" class="btn btn-primary">Search</button>
+                    </form>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="col col-md-12 mt-3 row">
-        <div class="col col-md-6 mt-3">
-            <div class="card mb-5">
-                <div class="card-header">
-                    Average Point Catalogue
+        <div class="card" style="width: 49%; margin-top: 50px;">
+            <h5 class="card-header">Rank</h5>
+            <div class="card-body">
+                <div style="width: 100%; height: 400px;">
+                    <ngx-charts-bar-vertical-2d [scheme]="colorGroupScheme" [results]="dataGourp" [gradient]="gradient"
+                        [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+                        [showYAxisLabel]="showYAxisLabel"  [yAxisLabel]="yAxisGroupLabel"
+                        [legendTitle]="legendGroupTitle" >
+                    </ngx-charts-bar-vertical-2d>
                 </div>
-                <div class="card-body" *ngIf="isLoaded">
-                    <ngx-charts-line-chart [legendPosition]="legendPosition" [view]="[630, 0]" [scheme]="colorScheme"
-                        [results]="averageCatalogue" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis"
-                        [legend]="legend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
-                        [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [legendTitle]="legendTitle"
-                        *ngIf="isLoaded">
+            </div>
+        </div>
+
+        <div class="card" style="width: 50%; margin-left: 1%; margin-top: 50px;">
+            <h5 class="card-header">Rank</h5>
+            <div class="card-body">
+                <div style="width: 100%; height: 400px;">
+                    <ngx-charts-pie-chart [results]="valuePieChart" [scheme]="colorScheme" [animations]="true"
+                        [legendTitle]="legendTitle" [legend]="showLegend" [explodeSlices]="explodeSlices"
+                        [labels]="showLabels" [doughnut]="doughnut">
+                        <ng-template #tooltipTemplate let-model="model">
+                            <p style="font-size: 15px; font-weight: bold;">
+                                Rank:{{model.name}}
+                            </p>
+                            <p style="font-size: 15px;">Number of applicant: {{model.value}}</p>
+                        </ng-template>
+                    </ngx-charts-pie-chart>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="width: 49%; margin-top: 10px;">
+            <h5 class="card-header">Average of catalogue</h5>
+            <div class="card-body">
+                <div style="width: 100%; height: 500px;">
+                    <ngx-charts-line-chart [scheme]="colorLineScheme" [results]="valueLineChart" [gradient]="gradient"
+                        [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+                        [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
+                        [legendTitle]="legendLineTitle">
                     </ngx-charts-line-chart>
                 </div>
             </div>
         </div>
 
-        <div class="col col-md-6 mt-3">
-            <div class="card mb-5">
-                <div class="card-header row no-padding-no-margin">
-                    <div class="col-md-7"> Rank</div>
-                    <select (change)="GetOverallPointStatistic(false)" [(ngModel)]="selectData"
-                        class="form-control col-md-5">
-                        <option *ngFor="let data of selectedItems" [value]="data.id" selected="">{{data.text}}</option>
-                    </select>
-                </div>
-                <div class="card-body" style="height: 440px; overflow: auto;" *ngIf="isLoaded">
-                    <table class="table table-hover table-bordered customtable" [svData]="dataEmployeeOverPoint"
-                        #sv="svDataTable">
-                        <thead style="background-color: rgba(0, 0, 0, 0.03);">
-                            <tr class="col-md-12 row no-padding-no-margin">
 
-                                <th class="text-center no-padding-no-margin" style="width: 8%;">
-                                    No.
-                                </th>
-                                <th class="text-center" style="width: 25%;">
-                                    <sv-default-sorter by="username">Applicant
-                                    </sv-default-sorter>
-                                </th>
-                                <th class="text-center" style="width: 12%;">
-                                    <sv-default-sorter by="overallPoint">Point
-                                    </sv-default-sorter>
-                                </th>
-                                <th class="text-center" style="width: 15%;">
-                                    <sv-default-sorter by="rank">Rank
-                                    </sv-default-sorter>
-                                </th>
-                                <th class="text-center" style="width: 25%;">
-                                    <sv-default-sorter by="startDate">Date
-                                    </sv-default-sorter>
-                                </th>
-                                <th class="text-center" style="width: 15%;">
-                                    Action
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody style="background-color: white;" *ngIf="sv.data.length != 0;  else searchNull">
-                            <tr class="col-md-12 row no-padding-no-margin" style="font-size: 18px"
-                                *ngFor="let data of sv.data; let i = index">
-                                <td class="text-center" style="width: 8%;">{{i+1}}</td>
-                                <td class="text-center" style="width: 25%;">{{data.username}}</td>
-                                <td class="text-center" style="width: 12%;">{{data.overallPoint}}
-                                </td>
-                                <td class="text-center" style="width: 15%;">{{data.rank}}
-                                </td>
-                                <td class="text-center" style="width: 25%;">
-                                    {{data?.startDate.split('T')[0]}}</td>
-                                <th class="text-center" style="width: 15%;">
-                                    <a href='result/{{data.testId}}' target="_blank">
-                                        <button class="btn btn-primary btn-xs btn-circle">
-                                            <i class="fa fa-edit"></i>
-                                        </button>
-                                    </a>
-                                </th>
-                            </tr>
-                        </tbody>
-                    </table>
+
+        <div class="card" style="width: 50%; margin-left: 1%; margin-top: 10px;">
+            <h5 class="card-header">List applicant</h5>
+            <div class="card-body">
+                <div class="d-flex justify-content-end">
+                    <button (click)="generateExcel();" class="btn btn-lg btn-success "
+                     data-toggle="button" placement="top"
+                        ngbTooltip="Export to Excel">
+                        <i class="fa fa-download"></i>
+                    </button>
                 </div>
+                <table class="table table-hover" [svData]="applicantList" #sv="svDataTable" [svRowsOnPage]="10"
+                    svSortBy="name" svSortOrder="asc">
+                    <thead>
+                        <tr style="background-color: black; color: white;" class="col-md-12">
+                            <td class="text-center" style="width: 10%; font-weight: bold">#</td>
+                            <td class="text-center" style="width: 40%; font-weight: bold">Fullname</td>
+                            <td class="text-center" style="width: 20%; font-weight: bold">Point</td>
+                            <td class="text-center" style="width: 30%; font-weight: bold">Rank</td>
+                        </tr>
+                    </thead>
+                    <tbody style="height: 300px; overflow: scroll;" *ngIf="sv.data.length != 0;  else searchNull">
+                        <tr class="col-md-12" *ngFor="let item of sv.data; let i=index">
+                            <td class="text-center" style="width: 10%;font-weight: bold">{{i+1}}</td>
+                            <td class="text-center" style="width: 40%; font-weight: bold">{{item.fullName}}</td>
+                            <td class="text-center" style="width: 20%; font-weight: bold">{{item.point}}</td>
+                            <td class="text-center" style="width: 30%; font-weight: bold">{{item.rank}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4">
+                                <sv-bootstrap-paginator [rowsOnPageSet]="[5, 25, 50]"></sv-bootstrap-paginator>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>
-
-    <ng-template #modal let-modal>
-        <div class="modal-header">
-            <h4 class="modal-title modal-header" id="modal-basic-title">Chart</h4>
-        </div>
-    </ng-template>
 </div>
