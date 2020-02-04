@@ -29,6 +29,7 @@ export class CatalogueDefaultComponent implements OnInit {
     insCatalogue = {};
     updCatalogue = {};
     updateStatus = [];
+    oldName;
     ngOnInit() {
         this.getAllCatalogue(true);
     }
@@ -48,6 +49,7 @@ export class CatalogueDefaultComponent implements OnInit {
         if (item != null) {
             this.updCatalogue['CatalogueId'] = item['catalogueId'];
             this.updCatalogue['Name'] = item['name'];
+            this.oldName = item['name'];
             this.updCatalogue['Description'] = item['description'];
             this.updCatalogue['IsActive'] = item['isActive'];
         }
@@ -266,7 +268,8 @@ export class CatalogueDefaultComponent implements OnInit {
             document.getElementById('upd_Cataloguedf_name').style.borderColor = 'red';
             document.getElementById('upd_Cataloguedf_name').focus();
             return false;
-        } else {
+        } else if(this.oldName != this.updCatalogue['Name'])
+        {
             let checkDup = false;
             this.catalogueList.forEach(element => {
                 if (this.updCatalogue['Name'] === element.name) {

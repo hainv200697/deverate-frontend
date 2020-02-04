@@ -35,7 +35,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     iconIsActive: boolean;
     // catalogue
     id: number = this.activeRoute.snapshot.params.id;
-    catalogueName = '';
+    catalogueName;
     listCatalogue;
     accountId = Number(localStorage.getItem('AccountId'))
     companyId = Number(localStorage.getItem('CompanyId'));
@@ -157,7 +157,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 const questionObj = new QuestionModel();
                 this.listAnswer = [];
                 questionObj.point = element['QuestionPoint'];
-                console.log(questionObj.point);
                 if (questionObj.point === null || questionObj.point === undefined) {
                     this.message.push("Percent of question #" + ind + " is blank");
                     this.checkFile = false;
@@ -247,7 +246,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     // End import
     next(key) {
         if (key === 'ins') {
-
             this.insAnswer = this.answerForm.controls['answers'].value;
             let check = true;
             this.insAnswer.forEach(element => {
@@ -295,7 +293,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             this.insAnswer.forEach(element => {
                 i++;
                 if (check === true) {
-                    const ans = $.trim(element['answer']);
+                    const ans = $.trim(element['answerText']);
                     element['answer'] = ans;
                     if (ans === '' || ans.length < 3 || ans.length > 200) {
                         this.toastr.error('Message', 'Answer must be more than 3 characters!');
@@ -459,10 +457,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         control.removeAt(i);
     }
 
-
-
-    // Endynamic form
-
     // Open modal
     open(content) {
         this.index = 1;
@@ -496,8 +490,9 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     openUpdate(item, update) {
         this.count = 0;
         this.index = 1;
-        this.updQuestion['QuestionId'] = item['questionId'];
+        this.updQuestion['questionId'] = item['QuestionId'];
         this.updQuestion['question1'] = item['question1'];
+        this.updQuestion['point'] = item['point'];
         this.updQuestion['isActive'] = true;
         this.updQuestion['accountId'] = this.accountId;
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
@@ -589,8 +584,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             });
         }
     }
-
-
     // end Modal
     insertQuestionSubmit(key) {
         if (key === 'excel') {
@@ -724,6 +717,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 this.loading = false;
                 this.allQuestions = data;
                 this.selected = false;
+                this.catalogueName = this.allQuestions[0].catalogueName;
                 this.selectedAll = false;
             },
             (error: any) => {
@@ -778,7 +772,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     }
 
     viewAnswer(item) {
-        console.log(item);
         this.router.navigate(['/manage-answer/', item['QuestionId']]);
     }
 
