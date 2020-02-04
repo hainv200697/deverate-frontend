@@ -28,7 +28,7 @@
                         <label style="width: 30%;">Choose config:</label>
                         &nbsp;
                         <select id="config" name="config" class="form-control" style="width: 36%;"
-                            [(ngModel)]="chooseConfig" (change)="getEmployeeToApprove(chooseConfig)">
+                            [(ngModel)]="chooseConfig" (change)="getEmployeeToApprove()">
                             <option style="width: 36%;" *ngFor="let item of listConfig" [value]=item.configId>
                                 {{item.title}}</option>
                         </select>
@@ -56,10 +56,10 @@
                         <sv-default-sorter by='fullname'>Fullname</sv-default-sorter>
                     </th>
                     <th class="text-center" scope="col" style="width: 15%;">
-                        <sv-default-sorter by='accountRankName'>Rank</sv-default-sorter>
+                        <sv-default-sorter by='accountRankName'>Current Rank</sv-default-sorter>
                     </th>
                     <th class="text-center" scope="col" style="width: 15%;">
-                        <sv-default-sorter by='potentialRank'>Potential Rank</sv-default-sorter>
+                        <sv-default-sorter by='potentialRank'>New Rank</sv-default-sorter>
                     </th>
                     <th class="text-center" scope="col" style="width: 25%;">Action</th>
                 </tr>
@@ -69,17 +69,15 @@
                     <td class="text-center" style="width: 5%;">{{ i+1 }}</td>
                     <td class="text-center" style="width: 20%;">{{ item.username }}</td>
                     <td class="text-center" style="width: 20%;">{{ item.fullname }}</td>
-                    <td class="text-center" style="width: 15%;" *ngIf="item.accountRankName != null" >{{ item.accountRankName }}</td>
-                    <td class="text-center" style="width: 15%;" *ngIf="item.accountRankName == null" >Updating</td>
-                    <td class="text-center" style="width: 15%;" *ngIf="item.potentialRank != null">{{ item.potentialRank }}</td>
-                    <td class="text-center" style="width: 15%;" *ngIf="item.potentialRank == null">Not Ranked</td>
+                    <td class="text-center" style="width: 15%;">{{ item.accountRankName }}</td>
+                    <td class="text-center" style="width: 15%;">{{ item.rankInTestName }}</td>
                     <td class="text-center nowrap text-center action-column" style="color: red; width: 25%;">
-                        <button class="btn-success btn btn-circle shadow-item" (click)="approve(item.accountId,true)"
+                        <button class="btn-success btn btn-circle shadow-item" (click)="approve(item.testId,true)"
                             placement="top" ngbTooltip="Approve">
                             <i class="fa fa-check"></i>
                         </button>
                         &nbsp;
-                        <button class="btn-danger btn btn-circle shadow-item" (click)="approve(item.accountId,false)"
+                        <button class="btn-danger btn btn-circle shadow-item" (click)="approve(item.testId,false)"
                             placement="top" ngbTooltip="Reject">
                             <i class="fa fa-window-close"></i>
                         </button>
