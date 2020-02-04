@@ -58,7 +58,9 @@
             #sv="svDataTable" [svRowsOnPage]="25" svSortBy="fullname" svSortOrder="asc">
             <thead>
                 <tr class="col-md-12 row no-padding-no-margin">
-                    <th class="text-center" style="width: 5%;" scope="col"></th>
+                    <th class="text-center" style="width: 5%;" scope="col">
+                        <input [disabled]="sv.data.length == 0" class="btn" type="checkbox" value="" [(ngModel)]="selectedAll" (change)="selectAll();">
+                    </th>
                     <th class="text-center" style="width: 5%;" scope="col">
                         No.
                     </th>
