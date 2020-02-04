@@ -30,10 +30,11 @@ const routes: Routes = [
             { path: 'rank', loadChildren: () => import('../components/companyRank/rank.module').then(m => m.RankModule),canActivate: [CompanyGuard]},
             { path: 'statistic-company', loadChildren: () => import('../components/statistic/statistic.module').then(m => m.StatisticModule), canActivate: [CompanyGuard]},
             { path: 'statistic-company-applicant', loadChildren: () => import('../components/statistic-applicant-forTestOwner/statistic-applicant.module').then(m => m.StatisticApplicantModule), canActivate: [CompanyGuard]},
+            { path: 'approve-rank', loadChildren: () => import('../components/approveRank/approve.module').then(m => m.ApproveModule), canActivate: [CompanyGuard]},
 
             // Test Owner
-            { path: 'manage-configuration-applicant', loadChildren: () => import('../components/configuration-test/manage-configuration-applicant/manage-configuration-applicant.module').then(m => m.ManageConfigurationApplicantModule), canActivate: [OwnerGuard] },
-            { path: 'manage-configuration', loadChildren: () => import('../components/configuration-test/manage-configuration/manage-configuration.module').then(m => m.ManageConfigurationModule), canActivate: [OwnerGuard] },
+            { path: 'semester-applicant', loadChildren: () => import('../components/configuration-test/manage-configuration-applicant/manage-configuration-applicant.module').then(m => m.ManageConfigurationApplicantModule), canActivate: [OwnerGuard] },
+            { path: 'semester', loadChildren: () => import('../components/configuration-test/manage-configuration/manage-configuration.module').then(m => m.ManageConfigurationModule), canActivate: [OwnerGuard] },
             { path: 'manage-test/:id', loadChildren: () => import('../components/view-test/view-test.module').then(m => m.TestModule), canActivate: [OwnerGuard] },
             { path: 'manage-detail-test/:id', loadChildren: () => import('../components/default-test/defaut-test.module').then(m => m.DefautTestModule), canActivate: [OwnerGuard] },
             { path: 'statistic', loadChildren: () => import('../components/statistic/statistic.module').then(m => m.StatisticModule), canActivate: [OwnerGuard]},

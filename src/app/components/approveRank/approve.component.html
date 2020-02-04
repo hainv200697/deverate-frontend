@@ -1,0 +1,105 @@
+<ng-template #customLoadingTemplate>
+    <div class="custom-class">
+
+    </div>
+</ng-template>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true }"
+    [template]="customLoadingTemplate">
+</ngx-loading>
+
+<app-page-header [heading]="'Approve rank'"></app-page-header>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h5>Approve rank</h5>
+    </div>
+    <div class="table-responsive col-md-12 datatable">
+        <div class="row mb-1 ml-2">
+            <div class="col">
+                <div class=" row justify-content-between" style="margin-top: 20px;">
+                    <div class="form-group col-md-12 row">
+                        <input type="text" class="form-control col-md-6" placeholder="Enter your key word"
+                            name="searchText" [(ngModel)]="searchText">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 row">
+                        <label style="width: 30%;">Choose config:</label>
+                        &nbsp;
+                        <select id="config" name="config" class="form-control" style="width: 36%;"
+                            [(ngModel)]="chooseConfig" (change)="getEmployeeToApprove(chooseConfig)">
+                            <option style="width: 36%;" *ngFor="let item of listConfig" [value]=item.configId>
+                                {{item.title}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6 d-flex justify-content-end">
+                        <button style="margin-right: 10px;" ngbTooltip="Refesh" (click)="getEmployeeToApprove(chooseConfig)"
+                            class="btn btn-lg btn-primary">
+                            <i class="fa fa-refresh"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table class="table  table-hover customtable" [svData]="listEmployee|ApproveFilterPipe:searchText" #sv="svDataTable" [svRowsOnPage]="25"
+            svSortBy="username" svSortOrder="asc">
+            <thead>
+                <tr class="col-md-12 row no-padding-no-margin">
+                    <th class="text-center" scope="col" style="width: 5%;">No.
+                    </th>
+                    <th class="text-center" scope="col" style="width: 20%;">
+                        <sv-default-sorter by='username'>Username</sv-default-sorter>
+                    </th>
+                    <th class="text-center" scope="col" style="width: 20%;">
+                        <sv-default-sorter by='fullname'>Fullname</sv-default-sorter>
+                    </th>
+                    <th class="text-center" scope="col" style="width: 15%;">
+                        <sv-default-sorter by='accountRankName'>Rank</sv-default-sorter>
+                    </th>
+                    <th class="text-center" scope="col" style="width: 15%;">
+                        <sv-default-sorter by='potentialRank'>Potential Rank</sv-default-sorter>
+                    </th>
+                    <th class="text-center" scope="col" style="width: 25%;">Action</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="sv.data.length != 0;  else searchNull">
+                <tr class="col-md-12 row no-padding-no-margin" *ngFor="let item of sv.data; let i=index">
+                    <td class="text-center" style="width: 5%;">{{ i+1 }}</td>
+                    <td class="text-center" style="width: 20%;">{{ item.username }}</td>
+                    <td class="text-center" style="width: 20%;">{{ item.fullname }}</td>
+                    <td class="text-center" style="width: 15%;" *ngIf="item.accountRankName != null" >{{ item.accountRankName }}</td>
+                    <td class="text-center" style="width: 15%;" *ngIf="item.accountRankName == null" >Updating</td>
+                    <td class="text-center" style="width: 15%;" *ngIf="item.potentialRank != null">{{ item.potentialRank }}</td>
+                    <td class="text-center" style="width: 15%;" *ngIf="item.potentialRank == null">Not Ranked</td>
+                    <td class="text-center nowrap text-center action-column" style="color: red; width: 25%;">
+                        <button class="btn-success btn btn-circle shadow-item" (click)="approve(item.accountId,true)"
+                            placement="top" ngbTooltip="Approve">
+                            <i class="fa fa-check"></i>
+                        </button>
+                        &nbsp;
+                        <button class="btn-danger btn btn-circle shadow-item" (click)="approve(item.accountId,false)"
+                            placement="top" ngbTooltip="Reject">
+                            <i class="fa fa-window-close"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <sv-bootstrap-paginator [rowsOnPageSet]="[4, 25, 50]"></sv-bootstrap-paginator>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+
+<ng-template #searchNull>
+    <tr class="col-md-12 row no-padding-no-margin">
+        <th class="text-center col-md-12" scope="col">No data</th>
+    </tr>
+</ng-template>

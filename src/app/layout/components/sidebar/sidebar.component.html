@@ -1,38 +1,52 @@
 <nav class="sidebar" [ngClass]="{sidebarPushRight: isActive, collapsed: collapsed}">
     <div class="list-group">
         <!-- System Manager -->
-        <a [routerLink]="['/manage-company']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'System Manager'">
+        <a [routerLink]="['/manage-company']" [routerLinkActive]="['router-link-active']" class="list-group-item"
+            *ngIf="role == 'System Manager'">
             <i class="fa fa-institution"></i>&nbsp;
             <span>Manage Company</span>
         </a>
-        <a [routerLink]="['/default-catalogue']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'System Manager'">
+        <a [routerLink]="['/default-catalogue']" [routerLinkActive]="['router-link-active']" class="list-group-item"
+            *ngIf="role == 'System Manager'">
             <i class="fa fa-th-list"></i>&nbsp;
             <span>Catalogue Default</span>
         </a>
-        <a [routerLink]="['/manage-company-account']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'System Manager'">
+        <a [routerLink]="['/manage-company-account']" [routerLinkActive]="['router-link-active']"
+            class="list-group-item" *ngIf="role == 'System Manager'">
             <i class="fa fa-user"></i>&nbsp;
             <span>Manage Employee</span>
         </a>
-        <a [routerLink]="['/rank-default']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'System Manager'">
+        <a [routerLink]="['/rank-default']" [routerLinkActive]="['router-link-active']" class="list-group-item"
+            *ngIf="role == 'System Manager'">
             <i class="fa fa-level-up"></i>&nbsp;
             <span>Rank Default</span>
         </a>
 
         <!-- Company Manager -->
-        <a [routerLink]="['/manage-employee']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Company Manager'">
+        <a [routerLink]="['/manage-employee']" [routerLinkActive]="['router-link-active']" class="list-group-item"
+            *ngIf="role == 'Company Manager'">
             <i class="fa fa-user"></i>&nbsp;
             <span>Manage Employee</span>
         </a>
-        
-        <a [routerLink]="['/catalogue']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Company Manager'">
+
+        <a [routerLink]="['/catalogue']" [routerLinkActive]="['router-link-active']" class="list-group-item"
+            *ngIf="role == 'Company Manager'">
             <i class="fa fa-th-list"></i>&nbsp;
             <span>Catalogue</span>
         </a>
 
-        <a [routerLink]="['/rank']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Company Manager'">
+        <a [routerLink]="['/rank']" [routerLinkActive]="['router-link-active']" class="list-group-item"
+            *ngIf="role == 'Company Manager'">
             <i class="fa fa-level-up"></i>&nbsp;
             <span>Rank</span>
         </a>
+
+        <a [routerLink]="['/approve-rank']" [routerLinkActive]="['router-link-active']" class="list-group-item"
+            *ngIf="role == 'Company Manager'">
+            <i class="fa fa-check"></i>&nbsp;
+            <span>Approve rank</span>
+        </a>
+
         <div class="nested-menu" *ngIf="role == 'Company Manager'">
             <a class="list-group-item" (click)="addExpandClass('pages1')">
                 <i class="fa fa-bar-chart"></i>&nbsp;
@@ -54,11 +68,13 @@
             </li>
         </div>
         <!-- Test Owner -->
-        <a [routerLink]="['/applicant']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
+        <a [routerLink]="['/applicant']" [routerLinkActive]="['router-link-active']" class="list-group-item"
+            *ngIf="role == 'Test Owner'">
             <i class="fa fa-user"></i>&nbsp;
             <span>Applicant</span>
         </a>
-        <a [routerLink]="['/generate-test']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Test Owner'">
+        <a [routerLink]="['/generate-test']" [routerLinkActive]="['router-link-active']" class="list-group-item"
+            *ngIf="role == 'Test Owner'">
             <i class="fa fa-question"></i>&nbsp;
             <span>Generate Test</span>
         </a>
@@ -82,21 +98,22 @@
                 </ul>
             </li>
         </div>
-        
+
         <div class="nested-menu" *ngIf="role == 'Test Owner'">
             <a class="list-group-item" (click)="addExpandClass('pages')">
                 <i class="fa fa-cog"></i>&nbsp;
-                <span>Config Management</span>
+                <span>Semester Management</span>
             </a>
             <li class="nested" [class.expand]="showMenu === 'pages'">
                 <ul class="submenu">
                     <li>
-                        <a [routerLink]="['/manage-configuration']" [routerLinkActive]="['router-link-active']">
+                        <a [routerLink]="['/semester']" [routerLinkActive]="['router-link-active']">
                             <span>Employee</span>
                         </a>
                     </li>
                     <li>
-                        <a [routerLink]="['/manage-configuration-applicant']" [routerLinkActive]="['router-link-active']">
+                        <a [routerLink]="['/semester-applicant']"
+                            [routerLinkActive]="['router-link-active']">
                             <span>Applicant</span>
                         </a>
                     </li>
@@ -104,11 +121,13 @@
             </li>
         </div>
         <!-- Employee -->
-        <a [routerLink]="['/reranking']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Employee'">
+        <a [routerLink]="['/reranking']" [routerLinkActive]="['router-link-active']" class="list-group-item"
+            *ngIf="role == 'Employee'">
             <i class="fa fa-plus"></i>&nbsp;
             <span>Quiz</span>
         </a>
-        <a [routerLink]="['/statistic-employee']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="role == 'Employee'">
+        <a [routerLink]="['/statistic-employee']" [routerLinkActive]="['router-link-active']" class="list-group-item"
+            *ngIf="role == 'Employee'">
             <i class="fa fa-bar-chart"></i>&nbsp;
             <span>Statistic</span>
         </a>
@@ -117,50 +136,6 @@
             <a (click)="rltAndLtr()" class="list-group-item">
                 <span><i class="fa fa-arrows-h"></i>&nbsp; RTL/LTR</span>
             </a>
-            <div class="nested-menu">
-                <a class="list-group-item" (click)="addExpandClass('languages')">
-                    <span><i class="fa fa-language"></i>&nbsp; Language <b class="caret"></b></span>
-                </a>
-                <li class="nested" [class.expand]="showMenu === 'languages'">
-                    <ul class="submenu">
-                        <li>
-                            <a href="javascript:void(0)" (click)="changeLang('en')">
-                                English
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" (click)="changeLang('fr')">
-                                French
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" (click)="changeLang('ur')">
-                                Urdu
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" (click)="changeLang('es')">
-                               Spanish
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" (click)="changeLang('it')">
-                                Italian
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" (click)="changeLang('fa')">
-                                Farsi
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" (click)="changeLang('de')">
-                                German
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </div>
             <div class="nested-menu">
                 <a class="list-group-item" (click)="addExpandClass('profile')">
                     <span><i class="fa fa-user"></i>&nbsp; John Smith</span>

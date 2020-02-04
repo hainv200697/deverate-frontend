@@ -9,7 +9,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import Stepper from 'bs-stepper';
 import { ToastrService } from 'ngx-toastr';
-import * as moment from 'moment';
 declare var $: any;
 @Component({
   selector: 'manage-configuration',
@@ -31,30 +30,11 @@ export class ManageConfigurationComponent implements OnInit {
 
   }
   public loading = false;
-  startDate: Date = new Date();
-
-  endDate: Date = new Date();
-  settings1 = {
-    bigBanner: true,
-    timePicker: true,
-    format: 'dd-MM-yyyy hh:mm a',
-    defaultOpen: false,
-    closeOnSelect: false,
-  };
-  settings2 = {
-    bigBanner: true,
-    timePicker: true,
-    format: 'dd-MM-yyyy hh:mm a',
-    defaultOpen: false,
-    closeOnSelect: true,
-  };
 
   private stepper: Stepper;
   index = 1;
-  indexDetail = 1;
   iconIsActive: boolean;
 
-  selectedAll;
   selectConfiguration = [];
   Configurations = [];
 
@@ -63,10 +43,7 @@ export class ManageConfigurationComponent implements OnInit {
 
   searchText = '';
 
-  updateConfig = {};
-
   selectedItems = [];
-  selectedItemsUpdate = []
   dropdownSettings = {
     singleSelection: false,
     text: 'Select Rank',
@@ -80,24 +57,12 @@ export class ManageConfigurationComponent implements OnInit {
     showCheckbox: true,
     badgeShowLimit: 3,
   };
-  dropdownSettingsDetail = {
-    singleSelection: false,
-    text: 'Select Catalogue',
-    selectAllText: 'Select All',
-    unSelectAllText: 'UnSelect All',
-    enableSearchFilter: true,
-    classes: 'form-control form-group',
-    labelKey: 'name',
-    primaryKey: 'companyCatalogueId',
-    maxHeight: 240,
-    showCheckbox: true,
-    badgeShowLimit: 0,
-  };
 
   companyId = localStorage.getItem('CompanyId');
   avaragePercent = [];
 
   listCatalogue = [];
+  configDetail
 
   ngOnInit() {
     this.getAllRank();
@@ -110,29 +75,15 @@ export class ManageConfigurationComponent implements OnInit {
 
   open(content) {
     this.index = 1;
-    this.startDate = new Date();
-
-    this.endDate = new Date();
     this.inputConfiguration['title'] = "";
     this.inputConfiguration['companyId'] = localStorage.getItem("CompanyId");
     this.inputConfiguration['title'] = '';
     this.inputConfiguration['type'] = true;
     this.inputConfiguration['duration'] = 15;
-    this.inputConfiguration['startDate'] = this.startDate;
-    this.inputConfiguration['endDate'] = this.endDate.setDate(this.startDate.getDate() + 1);
+    this.inputConfiguration['expiredDays'] = 7;
     this.selectedItems = [];
     this.modalService.open(content, { backdrop: 'static', size: 'lg', windowClass: 'myCustomModalClass' });
     const a = document.querySelector('#stepper1');
-    this.stepper = new Stepper(a, {
-      linear: false,
-      animation: true
-    });
-  }
-
-  openDetail(content, id: number) {
-    this.indexDetail = 1;
-    this.modalService.open(content, { size: 'lg', windowClass: 'myCustomModalClass' });
-    const a = document.querySelector('#update');
     this.stepper = new Stepper(a, {
       linear: false,
       animation: true
@@ -145,22 +96,10 @@ export class ManageConfigurationComponent implements OnInit {
     }
     this.stepper.next();
     this.index = this.index + 1;
-    this.inputConfiguration['startDate'] = this.startDate;
-    this.inputConfiguration['endDate'] = this.endDate;
-  }
-
-  nextDetail() {
-    this.stepper.next();
-    this.indexDetail += 1;
   }
 
   back() {
     this.index = this.index - 1;
-    this.stepper.previous();
-  }
-
-  backDetail() {
-    this.indexDetail = this.indexDetail - 1;
     this.stepper.previous();
   }
 
@@ -180,6 +119,13 @@ export class ManageConfigurationComponent implements OnInit {
           }
         }
         this.listCatalogue = data.catalogueDTOs;
+        this.calculateWeightPoint(this.ListRank);
+        for (let i = 0; i < this.listCatalogue.length; i++) {
+          if (this.listCatalogue[i].point == 0) {
+            this.listCatalogue.splice(i, 1);
+            i--
+          }
+        }
       },
       (error) => {
         this.loading = false;
@@ -223,40 +169,50 @@ export class ManageConfigurationComponent implements OnInit {
       },
       (error) => {
         this.loading = false;
-        this.toast.error(error.name);
+        if (error.status == 0) {
+          this.toast.error('Server is not availiable');
+        }
+        if (error.status == 404) {
+          this.toast.error('Not found');
+        }
+        if (error.status == 500) {
+          this.toast.error('Server error');
+        }
       }
     );
   }
 
-  selectAll() {
-    if (this.selectedAll) {
-      this.Configurations.forEach(e => {
-        e.selected = true;
-        this.selectConfiguration.push(e.configId);
-      });
-    }
-    else {
-      this.Configurations.forEach(e => {
-        e.selected = false;
-      });
-      this.selectConfiguration = [];
-    }
-
+  getConfigById(content, configId) {
+    this.loading = true;
+    this.configAPi.GetConfigurationCatalogueByConfigId(configId).subscribe(
+      (data) => {
+        this.configDetail = data;
+        this.modalService.open(content, { size: 'lg', windowClass: 'myCustomModalClass' });
+        this.loading = false;
+      },
+      (error) => {
+        this.loading = false;
+        if (error.status == 0) {
+          this.toast.error('Server is not availiable');
+        }
+        if (error.status == 404) {
+          this.toast.error('Not found');
+        }
+        if (error.status == 500) {
+          this.toast.error('Server error');
+        }
+      }
+    );
   }
 
-  checkIfAllSelected(configId) {
+  checkSelected(configId) {
     var index = this.Configurations.findIndex(x => x.configId == configId);
     this.Configurations[index].selected = !this.Configurations[index].selected;
     if (this.Configurations[index].selected == false) {
       this.selectConfiguration.splice(this.Configurations.indexOf(configId), 1);
-      this.selectedAll = false;
     } else {
       this.selectConfiguration.push(configId);
-      if (this.selectConfiguration.length == this.Configurations.length) {
-        this.selectedAll = true;
-      }
     }
-
   }
 
   Sample() {
@@ -275,21 +231,23 @@ export class ManageConfigurationComponent implements OnInit {
 
   }
 
-  calculateWeightPoint(item = null) {
+  calculateWeightPoint(ranks) {
     this.avaragePercent.length = 0;
-    var number = this.selectedItems.length;
-    this.selectedItems.forEach(rank => {
+    var number = ranks.length;
+    ranks.forEach(rank => {
       var i = 0;
-      var points = rank.catalogueInRanks.map(a => a.point);
+      var catas = rank.catalogueInRanks.filter(x => x.questionCount > 0);
+      var points = catas.map(a => a.point);
       var total = points.reduce((a, b) => a + b, 0);
       if (total == 0) total = 1;
       rank.catalogueInRanks.forEach(element => {
-        element.percent = element.point / total;
-        if (this.avaragePercent[i] == undefined) this.avaragePercent.push(element.percent); else this.avaragePercent[i] += element.percent;
-        i++;
+        if (element.questionCount > 0) {
+          element.percent = element.point / total;
+          if (this.avaragePercent[i] == undefined) this.avaragePercent.push(element.percent); else this.avaragePercent[i] += element.percent;
+          i++;
+        }
       });
     });
-
     for (let i = 0; i < this.avaragePercent.length; i++) {
       this.avaragePercent[i] = this.avaragePercent[i] / number;
     }
@@ -297,14 +255,18 @@ export class ManageConfigurationComponent implements OnInit {
     for (let index = 0; index < this.listCatalogue.length; index++) {
       this.listCatalogue[index].point = this.avaragePercent[index];
     }
-    this.selectedItems.forEach(rank => {
-      var points = rank.catalogueInRanks.map(a => a.point);
+    ranks.forEach(rank => {
+      var catas = rank.catalogueInRanks.filter(x => x.questionCount > 0);
+      var points = catas.map(a => a.point);
       var sum = 0;
       for (let i = 0; i < points.length; i++) {
         sum += (points[i] * this.avaragePercent[i]);
       }
       rank.point = Math.round(sum);
     });
+    ranks.sort(function (a, b) {
+      return a.point - b.point;
+    })
   }
 
   Create() {
@@ -318,7 +280,7 @@ export class ManageConfigurationComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
-        this.calculateWeightPoint();
+        this.calculateWeightPoint(this.selectedItems);
 
         var rankInConfig = [];
         this.selectedItems.forEach(item => {
@@ -339,8 +301,6 @@ export class ManageConfigurationComponent implements OnInit {
 
         this.inputConfiguration['rankInConfigs'] = rankInConfig;
         this.inputConfiguration['catalogueInConfigurations'] = catalogueInConfiguration;
-        this.inputConfiguration['startDate'] = new Date(this.inputConfiguration['startDate']);
-        this.inputConfiguration['endDate'] = new Date(this.inputConfiguration['endDate']);
         this.loading = true;
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
           this.getConfigurationIsActive(true);
@@ -354,6 +314,15 @@ export class ManageConfigurationComponent implements OnInit {
           this.closeModal();
           this.index = 1;
           this.loading = false;
+          if (error.status == 0) {
+            this.toast.error('Server is not availiable');
+          }
+          if (error.status == 404) {
+            this.toast.error('Not found');
+          }
+          if (error.status == 500) {
+            this.toast.error('Server error');
+          }
         });
       }
     });
@@ -375,21 +344,18 @@ export class ManageConfigurationComponent implements OnInit {
           this.closeModal();
           this.toast.success(data['message']);
           this.selectConfiguration = [];
-          this.selectedAll = false;
           this.loading = false;
         }, (error) => {
           if (error.status == 0) {
             this.toast.error('Server is not availiable');
           }
           if (error.status == 400) {
-            this.toast.error('Company name is exist');
+            this.toast.error(error['message']);
           }
           if (error.status == 500) {
             this.toast.error('Server error');
           }
           this.loading = false;
-          this.selectedAll = false;
-          this.selectConfiguration = [];
         });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         this.closeModal();
