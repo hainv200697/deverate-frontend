@@ -30,6 +30,10 @@ export class ApproveComponent implements OnInit {
     this.configApi.getConfigForApplicant(true, this.companyId).subscribe(
       (data) => {
         this.listConfig = data;
+        if(this.listConfig.length != 0){
+          this.chooseConfig = this.listConfig[0].configId;
+          this.getEmployeeToApprove();
+        }
         this.loading = false;
       }
       , (error) => {
@@ -44,9 +48,9 @@ export class ApproveComponent implements OnInit {
     );
   }
 
-  getEmployeeToApprove(configId){
+  getEmployeeToApprove(){
     this.loading = true
-    this.approveApi.getAllApproveRequest(configId).subscribe(
+    this.approveApi.getAllApproveRequest(this.chooseConfig).subscribe(
       (data) => {
         this.listEmployee = data;
         this.loading = false;
@@ -63,12 +67,12 @@ export class ApproveComponent implements OnInit {
     );
   }
 
-  approve(accountId, isApprove){
+  approve(testId, isApprove){
     this.loading = true
-    this.approveApi.approveRank(this.chooseConfig,accountId,isApprove).subscribe(
+    this.approveApi.approveRank(testId,isApprove).subscribe(
       (data) => {
         this.toastr.success("Success");
-        this.getEmployeeToApprove(this.chooseConfig)
+        this.getEmployeeToApprove();
         this.loading = false;
       }
       , (error) => {
