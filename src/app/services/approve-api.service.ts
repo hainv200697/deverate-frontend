@@ -17,9 +17,9 @@ export class ApproveApiService {
         return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
 
-    approveRank(configId,accountId,isApprove){
+    approveRank(testId,isApprove){
         const API = 'api/approve/approveorrejectrank/';
-        const param = new HttpParams().set('configId', configId).set('accountId', accountId).set('isApprove', isApprove);
+        const param = new HttpParams().set('testId', testId).set('isApprove', isApprove);
         return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_RESOURCE + API, { params: param });
     }
 }
