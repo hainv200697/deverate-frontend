@@ -19,11 +19,6 @@ export class StatisticApplicantComponent implements OnInit {
   constructor(
     private historyApi: StatisticApiService,
     private configApi: ConfigurationApiService,
-    private modalService: NgbModal,
-    private toast: ToastrService,
-    private router: Router,
-    private gblServices: GobalService,
-    private datepipe: DatePipe,
     private excelService: ExcelService
   ) { }
   startDate;
@@ -37,26 +32,7 @@ export class StatisticApplicantComponent implements OnInit {
   current;
   endDate;
   listConfig = [];
-  applicantList = [
-    {
-      fullName : 'thong',
-      rank : 'dev1',
-      point : 50,
-      email : 'thongnd21@gamil.com'
-    },
-    {
-      fullName : 'huy',
-      rank : 'dev2',
-      point : 80,
-      email : 'thongnd21@gamil.com'
-    },
-    {
-      fullName : 'hai',
-      rank : 'unrank',
-      point : 40,
-      email : 'thongnd21@gamil.com'
-    }
-  ];
+  applicantList;
   loading = false;
   companyId = Number(localStorage.getItem('CompanyId'));
   // Pie chart
@@ -89,25 +65,8 @@ export class StatisticApplicantComponent implements OnInit {
   // Group chart
   dataGourp = [
     {
-      "name": "Total Applicant",
-      "series": [
-        {
-          "name": "Total",
-          "value": 17
-        },
-        {
-          "name": "Pending",
-          "value": 10
-        },
-        {
-          "name": "Submited",
-          "value": 5
-        },
-        {
-          "name": "Expired",
-          "value": 2
-        }
-      ]
+      name: "Total Applicant",
+      series: []
     }
   ];
   yAxisGroupLabel: string = 'People';
@@ -116,7 +75,8 @@ export class StatisticApplicantComponent implements OnInit {
     domain: ['Green', 'Blue', '#990000', 'Red']
   };
   // import excel
-  header = ["FullName", "Rank", "Point", "Email"]
+  header = ["FullName", "Rank", "Point", "Email"];
+  groupReady = false;
 
   ngOnInit() {
     this.current = this.momentToOpjectDate(moment());
@@ -132,6 +92,8 @@ export class StatisticApplicantComponent implements OnInit {
         this.setFilter(0);
         this.changeLineChart();
         this.changePieChart();
+        this.changeApplicantResult();
+        this.changeGroupStatusTest();
         this.loading = false;
       }
       , (error) => {
@@ -175,6 +137,34 @@ export class StatisticApplicantComponent implements OnInit {
     );
   }
 
+  changeApplicantResult() {
+    this.loading = true;
+    this.historyApi.GetApplicantResult(this.filter).subscribe(
+      (data) => {
+        this.applicantList = data;
+        this.loading = false;
+      }
+      , (error) => {
+        this.loading = false;
+      }
+    );
+  }
+
+  changeGroupStatusTest() {
+    this.loading = true;
+    this.groupReady = false;
+    this.historyApi.GetGroupStatusTest(this.filter).subscribe(
+      (data) => {
+        this.dataGourp[0].series = data;
+        this.groupReady = true;
+        this.loading = false;
+      }
+      , (error) => {
+        this.loading = false;
+      }
+    );
+  }
+
   changeConfig() {
     const index = this.listConfig.findIndex(x => x.configId == this.configId);
     this.setFilter(index);
@@ -185,6 +175,8 @@ export class StatisticApplicantComponent implements OnInit {
     };
     this.changeLineChart();
     this.changePieChart();
+    this.changeApplicantResult();
+    this.changeGroupStatusTest();
   }
 
   momentToOpjectDate(date) {
@@ -218,6 +210,8 @@ export class StatisticApplicantComponent implements OnInit {
     };
     this.changeLineChart();
     this.changePieChart();
+    this.changeApplicantResult();
+    this.changeGroupStatusTest();
   }
 
   generateExcel() {

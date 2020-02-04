@@ -75,4 +75,27 @@ export class StatisticApiService {
         return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_TEST + API, {params});
     }
 
+    GetApplicantResult(filter) {
+        const API = 'api/Test/ApplicantResultByConfigId';
+        let params = new HttpParams().set('configId', filter.configId);
+        if(filter.from != null){
+            params = params.set('from',new Date(filter.from).toISOString());
+        }
+        if(filter.to != null){
+            params = params.set('to',new Date(filter.to).toISOString());
+        }
+        return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_TEST + API, {params});
+    }
+
+    GetGroupStatusTest(filter) {
+        const API = 'api/Test/GroupStatusTestByConfigId';
+        let params = new HttpParams().set('configId', filter.configId);
+        if(filter.from != null){
+            params = params.set('from',new Date(filter.from).toISOString());
+        }
+        if(filter.to != null){
+            params = params.set('to',new Date(filter.to).toISOString());
+        }
+        return this.httpClient.get<any>(this.URL + AppSettings.ROUTE_TEST + API, {params});
+    }
 }
