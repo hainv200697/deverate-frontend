@@ -14,23 +14,29 @@ export class ExcelService {
 
     public generateExcel(header, data, excelFileName: string): void {
         let workbook = new Workbook();
-        let worksheet = workbook.addWorksheet('Car Data');
-        let titleRow = worksheet.addRow([excelFileName]);
+        let worksheet = workbook.addWorksheet('Applicant');
+        worksheet.mergeCells('A1:D1');
+        worksheet.getCell('A1').value = excelFileName;
+        worksheet.getCell('A1').alignment = { horizontal:'center'} ;
         // Set font, size and style in title row.
-        titleRow.font = { name: 'Comic Sans MS', family: 4, size: 16, underline: 'double', bold: true };
+        worksheet.getCell('A1').font = { name: 'Calibri', family: 4, size: 20, bold: true };
         //Add header
         let headerRow = worksheet.addRow(header);
         headerRow.eachCell((cell, number) => {
+            
             cell.fill = {
                 type: 'pattern',
                 pattern: 'solid',
-                fgColor: { argb: 'FFFFFF00' },
-                bgColor: { argb: 'FF0000FF' }
+                fgColor: { argb: 'CCCCCC' }
             }
             cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } }
+            cell.font = { name: 'Calibri', family: 4, size: 13, bold: true };
         });
+        worksheet.columns[0].width = 30;
+        worksheet.columns[3].width = 30;
         //Add data
         worksheet.addRows(data);
+
         workbook.xlsx.writeBuffer().then((data) => {
             let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
             fs.saveAs(blob, excelFileName + '.xlsx');

@@ -87,9 +87,9 @@ export class StatisticApplicantComponent implements OnInit {
   graphDataChart: any[];
   valueLineChart;
   // Group chart
-  dataGourp: any[] = [
+  dataGourp = [
     {
-      "name": "Total applicant",
+      "name": "Total Applicant",
       "series": [
         {
           "name": "Total",
@@ -110,9 +110,8 @@ export class StatisticApplicantComponent implements OnInit {
       ]
     }
   ];
-  xAxisGroupLabel: string = 'Country';
-  yAxisGroupLabel: string = 'Population';
-  legendGroupTitle: string = 'Years';
+  yAxisGroupLabel: string = 'People';
+  legendGroupTitle: string = '';
   colorGroupScheme = {
     domain: ['Green', 'Blue', '#990000', 'Red']
   };
@@ -176,9 +175,6 @@ export class StatisticApplicantComponent implements OnInit {
     );
   }
 
-  getApplicant(input) {
-  }
-
   changeConfig() {
     const index = this.listConfig.findIndex(x => x.configId == this.configId);
     this.setFilter(index);
@@ -225,7 +221,7 @@ export class StatisticApplicantComponent implements OnInit {
   }
 
   generateExcel() {
-    let title = "ListApplicant";
+    let title = "Applicant Result";
     let data = [];
     this.applicantList.forEach(element => {
       data.push(
