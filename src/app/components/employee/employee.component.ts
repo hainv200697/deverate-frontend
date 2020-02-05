@@ -297,7 +297,6 @@ export class EmployeeComponent implements OnInit {
             this.insertEmployeeExcel();
         } else {
             this.employees = [];
-            this.insEmployee['fullname'] = this.insEmployee['fullname'].toUpperCase();
             this.insEmployee['companyId'] = this.companyId;
             this.employees.push(this.insEmployee);
             let check = true;
@@ -486,14 +485,7 @@ export class EmployeeComponent implements OnInit {
         console.log(this.listUser);
     }
     validate() {
-        const fullname = $.trim(this.insEmployee['fullname'].replace(/\s\s+/g, ' ')).toUpperCase();
-        const str = fullname.split(" ");
-        if(str.length < 2){
-            this.toastr.error('Employee\'s name min 2 words');
-            document.getElementById('ins_manage_fullname').style.borderColor = 'red';
-            document.getElementById('ins_manage_fullname').focus();
-            return false;
-        }
+        let fullname = this.insEmployee['fullname'];
         if (fullname == '' || fullname == null) {
             this.toastr.error('Please input employee name');
             document.getElementById('ins_manage_fullname').style.borderColor = 'red';
@@ -505,7 +497,15 @@ export class EmployeeComponent implements OnInit {
             document.getElementById('ins_manage_fullname').focus();
             return false;
         } else {
+            fullname = $.trim(this.insEmployee['fullname'].replace(/\s\s+/g, ' ')).toUpperCase();
             document.getElementById('ins_manage_fullname').style.borderColor = 'green';
+        }
+        const str = fullname.split(" ");
+        if(str.length < 2){
+            this.toastr.error('Employee\'s name min 2 words');
+            document.getElementById('ins_manage_fullname').style.borderColor = 'red';
+            document.getElementById('ins_manage_fullname').focus();
+            return false;
         }
         this.insEmployee['fullname'] = fullname;
         return true;
@@ -530,7 +530,7 @@ export class EmployeeComponent implements OnInit {
     }
 
     validateAddress() {
-        const address = $.trim(this.insEmployee['address'].replace(/\s\s+/g, ' '));
+        let address = this.insEmployee['address'];
         if (address != undefined) {
             if (address != '') {
                 if (address.length < 3) {
@@ -545,6 +545,7 @@ export class EmployeeComponent implements OnInit {
                     document.getElementById('ins_manage_address').focus();
                     return false;
                 } else {
+                    address = $.trim(this.insEmployee['address'].replace(/\s\s+/g, ' '))
                     document.getElementById('ins_manage_address').style.borderColor = 'green';
                 }
             }
@@ -577,7 +578,7 @@ export class EmployeeComponent implements OnInit {
     }
 
     validateEmail() {
-        let email = $.trim(this.insEmployee['email'].replace(/\s\s+/g, ' '));
+        let email = this.insEmployee['email'];
         if (email == '' || email == null || email == undefined) {
             this.toastr.error('Email can not blank');
             document.getElementById('ins_manage_email').style.borderColor = 'red';
@@ -599,6 +600,7 @@ export class EmployeeComponent implements OnInit {
                 }
             });
             if (!checkDup) {
+                email = $.trim(this.insEmployee['email'].replace(/\s\s+/g, ' '));
                 document.getElementById('ins_manage_email').style.borderColor = 'green';
             }
         }
