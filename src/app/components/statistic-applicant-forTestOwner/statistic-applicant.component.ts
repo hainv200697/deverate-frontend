@@ -105,7 +105,7 @@ export class StatisticApplicantComponent implements OnInit {
   setFilter(index) {
     this.configId = this.listConfig[index].configId;
     this.filter.configId = this.listConfig[index].configId;
-    const date = moment.utc(this.listConfig[index].startDate).local();
+    const date = moment.utc(this.listConfig[index].createDate).local();
     this.minDate = this.momentToOpjectDate(date);
     this.startDate = this.minDate;
     this.endDate = this.momentToOpjectDate(moment());
