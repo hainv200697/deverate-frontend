@@ -67,7 +67,7 @@
                                             <div [formGroup]="answer" class="form-row">
                                                 <div class="form-group col-9">
                                                     <label>Answer</label>
-                                                    <input type="text" formControlName="answer"
+                                                    <input type="text" formControlName="answerText"
                                                         placeholder="Input answer {{i+1}}"
                                                         class="answer-input form-control ans-{{i}}" />
                                                 </div>
@@ -118,7 +118,7 @@
                                         <tbody>
                                             <tr class="col-md-12 row no-padding-no-margin" *ngFor="let q of insAnswer">
                                                 <td class="col-md-9">
-                                                    <pre>{{q.answer}}</pre>
+                                                    <pre>{{q.answerText}}</pre>
                                                 </td>
                                                 <td class="col-md-3">
                                                    {{q.Percent}}
