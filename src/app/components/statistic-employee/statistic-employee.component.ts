@@ -87,7 +87,7 @@ export class StatisticEmployeeComponent implements OnInit {
     );
 
   }
-  public view: any[] = [1300, 400];
+  public view: any[] = [1150, 400];
   public showXAxis = true;
   public showYAxis = true;
   public gradient = false;
