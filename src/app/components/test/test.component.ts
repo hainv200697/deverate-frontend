@@ -66,11 +66,7 @@ export class TestComponent implements OnInit {
         }
         this.config.title = this.config.title.toUpperCase();
         this.config.startDate = moment.utc(this.config.startDate).local().format('LLLL');
-        if(this.config.endDate != "Invalid date"){
-          this.config.endDate = moment.utc(this.config.endDate).local().format('LLLL');
-        }else{
-          this.config.endDate = null;
-        }
+        this.config.endDate = moment.utc(this.config.endDate).local().format('LLLL');
         $('#openModalButton').click();
       });
   }

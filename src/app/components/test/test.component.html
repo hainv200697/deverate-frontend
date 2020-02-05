@@ -23,13 +23,18 @@
                 <div>
                     <div>
                         <p>This test opened at {{config.startDate}}</p>
-                        <p *ngIf="!config.endDate">This test will close at {{config.endDate}}</p>
+                        <p>This test will close at {{config.endDate}}</p>
                         <p>To attempt this test you need to know the test password</p>
                         <p>Time limit: {{config.duration}} mins</p>
                     </div>
                     <div class="input-group input-group-icon col-md-9">
-                        <input [hidden]="expired == true" type="password" placeholder="Key" [(ngModel)]="key">
-                        <div class="input-icon"><i class="fa fa-key"></i></div>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fa fa-key"></i>
+                            </span>
+                        </div>
+                        <input [hidden]="expired == true" type="password" class="form-control" placeholder="Key"
+                            [(ngModel)]="key">
                         <br />
                         <p [hidden]="!status" style="color: green;">Test is submitted successfully</p>
                         <p [hidden]="!error" style="color: red;">{{message}}</p>
