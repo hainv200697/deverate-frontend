@@ -67,6 +67,12 @@ export class TestComponent implements OnInit {
         this.config.title = this.config.title.toUpperCase();
         this.config.startDate = moment.utc(this.config.startDate).local().format('LLLL');
         this.config.endDate = moment.utc(this.config.endDate).local().format('LLLL');
+        var isAfter = moment(this.config.startDate).isAfter(moment());
+        if(isAfter){
+          this.expired = true;
+          this.error = true;
+          this.message = "It's not time to do quiz!"
+        }
         $('#openModalButton').click();
       });
   }
@@ -124,7 +130,6 @@ export class TestComponent implements OnInit {
         if (this.time > 0) {
           this.closeModal();
           this.questionInTest.forEach(element => {
-
             newAnswer = this.gblserv.shuffleAnswer(element['answers']);
             element['answers'] = newAnswer;
           });
