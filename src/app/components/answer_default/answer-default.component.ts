@@ -55,7 +55,7 @@ export class AnswerDefaultComponent implements OnInit {
     openUpdateModal(item, update) {
         this.updAnswer['AnswerId'] = item['AnswerId'];
         this.updAnswer['answer'] = item['answer'];
-        this.updAnswer['point'] = item['point'];
+        this.updAnswer['percent'] = item['percent'];
         this.updAnswer['isActive'] = true;
         this.updAnswer['questionId'] = item['questionId'];
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
@@ -191,9 +191,7 @@ export class AnswerDefaultComponent implements OnInit {
         }
 
     }
-
-
-
+    
     validate() {
         if (this.insAnswer['answer'].trim().length < 3) {
             this.toastr.error("Answer must be more than 3 characters");
@@ -203,8 +201,8 @@ export class AnswerDefaultComponent implements OnInit {
             this.toastr.error("Answer must be less than 200 characters");
             return false;
         }
-        if (this.insAnswer['point'] < 0 || this.insAnswer['point'] > 6) {
-            this.toastr.error("Point must be in range from 1 to 6");
+        if (this.insAnswer['percent'] < 0 || this.insAnswer['percent'] > 100) {
+            this.toastr.error("Percent must be in range from 1 to 100");
             return false;
         }
         this.checkAdd = true;
@@ -212,7 +210,6 @@ export class AnswerDefaultComponent implements OnInit {
     }
 
     validateUpdate() {
-
         if (this.updAnswer['answer'].trim().length < 5) {
             this.toastr.error("Answer must be more than 5 characters");
             this.checkUpd = false;
@@ -222,8 +219,8 @@ export class AnswerDefaultComponent implements OnInit {
             this.toastr.error("Answer must be less than 200 characters");
             return false;
         }
-        if (this.updAnswer['point'] < 0 || this.updAnswer['point'] > 6) {
-            this.toastr.error("Percent must be in range from 1 to 6");
+        if (this.updAnswer['percent'] < 0 || this.updAnswer['percent'] > 100) {
+            this.toastr.error("Percent must be in range from 1 to 100");
             this.checkUpd = false;
             return false;
         }

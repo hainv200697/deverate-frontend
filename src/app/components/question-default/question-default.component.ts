@@ -237,7 +237,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 this.listInsert.push(questionObj);
             });
         } catch (err) {
-            console.log(err);
+            console.log(err); 
         }
 
     }
@@ -492,6 +492,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
     openUpdate(item, update) {
         this.index = 1;
         this.updQuestion['QuestionDefaultId'] = item['QuestionDefaultId'];
+        this.updQuestion['point'] = item['point'];
         this.updQuestion['catalogueDefaultId'] = item['catalogueDefaultId'];
         this.updQuestion['question'] = item['question'];
         this.updQuestion['catalogueName'] = item['catalogueName'];
