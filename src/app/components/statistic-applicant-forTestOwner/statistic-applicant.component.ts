@@ -5,7 +5,10 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-
+import { GobalService } from 'src/app/shared/services/gobal-service';
+import { DatePipe } from '@angular/common';
+import * as moment from 'moment';
+import { ExcelService } from './../../shared/services/excel.service';
 @Component({
   selector: 'statistic-applicant',
   templateUrl: './statistic-applicant.component.html',
@@ -13,233 +16,218 @@ import { ToastrService } from 'ngx-toastr';
 })
 
 export class StatisticApplicantComponent implements OnInit {
-  dropdownList = [];
-  selectedItems = [];
-  dropdownSettings = {};
-  catalogConfig = [];
-  view = [550, 450];
-  showXAxis = true;
-  showYAxis = true;
-  gradient = false;
-  xAxes: [{ stacked: true }];
-  showLegend = true;
-  legend = {
-    display: true,
-
-  }
-  legendTitle = 'Title';
-  legendPosition = 'right';
-  showXAxisLabel = false;
-  xAxisLabel = 'Test';
-  showYAxisLabel = false;
-  yAxisLabel = 'Catalogue Point';
-  showGridLines = true;
-  innerPadding = '5%';
-  animations: boolean = true;
-  barChart: any[] = [];
-  series: any[] = [];
-  isLoaded = false;
-  load = false;
-  //vertical bar chart
-  colorScheme = {
-    domain: ['#9370DB', '#87CEFA', '#FA8072', '#FF7F50', '#90EE90', '#C7B42C']
-  };
-
-  dataGroupChart: any;
-  data = [];
-
-  lineChartSeries: any[] = [];
-  lineChartScheme = {
-    name: 'coolthree',
-    selectable: true,
-    group: 'Ordinal',
-    domain: ['#01579b', '#7aa3e5', '#a8385d', '#00bfa5']
-  };
-
-  comboBarScheme = {
-    name: 'singleLightBlue',
-    selectable: true,
-    group: 'Ordinal',
-    domain: ['#01579b']
-  };
-
-  showRightYAxisLabel: boolean = true;
-  yAxisLabelRight: string = 'Average Point';
-
-  rankStattistic = [];
-  dataEmployeeOverPoint: any;
-  chooseConfig = [];
-  counApi = 0;
-  dataRankStatistic;
-
-  companyId = Number(localStorage.getItem('CompanyId'));
-  ngOnInit() {
-    this.isLoaded = false;
-    this.load = false;
-    this.getConfig();
-    this.dropdownSettings = {
-      singleSelection: false,
-      idField: 'id',
-      textField: 'text',
-      enableCheckAll: false,
-      itemsShowLimit: 3,
-      allowSearchFilter: true,
-    };
-  }
-
   constructor(
     private historyApi: StatisticApiService,
     private configApi: ConfigurationApiService,
-    private modalService: NgbModal,
-    private toast: ToastrService,
-    private router: Router,
+    private excelService: ExcelService
   ) { }
+  startDate;
+  filter = {
+    configId: 0,
+    from: null,
+    to: null
+  };
+  configId;
+  minDate;
+  current;
+  endDate;
+  listConfig = [];
+  applicantList;
+  loading = false;
+  companyId = Number(localStorage.getItem('CompanyId'));
+  // Pie chart
+  valuePieChart;
+  colorScheme = {
+    domain: ['#08DDC1', '#FFDC1B', '#FF5E3A']
+  };
+  view: any[] = [700, 300];
+  legendTitle = "Rank";
+  showLabels = true;
+  explodeSlices = false;
+  doughnut = false;
+  // item duplicate 
+  showLegend = true;
+  // Line chart
+  viewLine: any[] = [700, 400];
+  colorLineScheme = {
+    domain: ['Red', 'Blue', '#990000', 'Purple', 'Teal', 'Fuchsia', 'Maroon', 'Olive', 'Yellow', 'Lime', 'Green', 'Navy', 'White', 'Black']
+  };
+  legendLineTitle = "Catalogue";
+  showXAxis = true;
+  showYAxis = true;
+  gradient = false;
+  showXAxisLabel = true;
+  xAxisLabel: "Rank";
+  showYAxisLabel = true;
+  yAxisLabel: "Average Point";
+  graphDataChart: any[];
+  valueLineChart;
+  // Group chart
+  dataGourp = [
+    {
+      name: "Total Applicant",
+      series: []
+    }
+  ];
+  yAxisGroupLabel: string = 'People';
+  legendGroupTitle: string = '';
+  colorGroupScheme = {
+    domain: ['Green', 'Blue', '#990000', 'Red']
+  };
+  // import excel
+  header = ["FullName", "Rank", "Point", "Email"];
+  groupReady = false;
 
-  public loading = false;
-  historyData: any;
-  averageCatalogue = [];
-  catalogues: [];
-  selectData;
-
-  GetGeneralStatistic(id) {
-    this.loading = true
-    this.series = [];
-    this.historyApi.GetGeneralStatisticOfApplicant(id).subscribe(
-      (data) => {
-        this.historyData = data['items'];
-        this.setAveragePointCatalogue();
-        this.isLoaded = true;
-        this.counApi++;
-        if (this.counApi == 3) {
-          this.isLoaded = true;
-          this.loading = false;
-        }
-      },
-      (error) => {
-        this.loading = false;
-        this.router.navigate(['/not-found']);
-      }
-    );
-  }
-
-  GetRankStatistic(id) {
-    this.loading = true
-    this.historyApi.GetRankStatisticOfApplicant(id).subscribe(
-      (data) => {
-        this.dataRankStatistic = data;
-        this.setStatisticRank();
-        this.counApi++;
-        if (this.counApi == 3) {
-          this.isLoaded = true;
-          this.loading = false;
-        }
-      },
-      (error) => {
-        this.loading = false;
-        this.router.navigate(['/not-found']);
-      }
-    );
+  ngOnInit() {
+    this.current = this.momentToOpjectDate(moment());
+    this.loading = false;
+    this.getConfig();
   }
 
   getConfig() {
     this.loading = true
     this.configApi.getConfigForApplicant(false, this.companyId).subscribe(
       (data) => {
-        let count = 1;
-        data.forEach(element => {
-          const item = { id: element.configId, text: element.title }
-          this.dropdownList.push(item)
-          if (count <= 5) {
-            this.selectedItems.push(item);
-            count++;
-          }
-        });
-        this.selectData = this.selectedItems[0].id;
-        this.GetGeneralStatistic(localStorage.getItem("AccountId"));
-        this.GetRankStatistic(localStorage.getItem("AccountId"));
-        this.GetOverallPointStatistic(true);
+        this.listConfig = data;
+        this.setFilter(0);
+        this.changeLineChart();
+        this.changePieChart();
+        this.changeApplicantResult();
+        this.changeGroupStatusTest();
+        this.loading = false;
       }
       , (error) => {
         this.loading = false;
-        this.router.navigate(['/not-found']);
       }
     );
   }
 
-  GetOverallPointStatistic(checkCount) {
-    this.loading = true
-    this.historyApi.GetOverallPointStatistic(this.companyId, this.selectData, false).subscribe(
+  setFilter(index) {
+    this.configId = this.listConfig[index].configId;
+    this.filter.configId = this.listConfig[index].configId;
+    const date = moment.utc(this.listConfig[index].startDate).local();
+    this.minDate = this.momentToOpjectDate(date);
+    this.startDate = this.minDate;
+    this.endDate = this.momentToOpjectDate(moment());
+  }
+
+  changeLineChart() {
+    this.loading = true;
+    this.historyApi.GetCatalogueStatisticApplicant(this.filter).subscribe(
       (data) => {
-        this.dataEmployeeOverPoint = data;
-        this.counApi++;
-        if (this.counApi == 3 && checkCount == true) {
-          this.isLoaded = true;
-          this.loading = false;
-        }
-        else if (checkCount == false) {
-          this.loading = false;
-        }
-      },
-      (error) => {
+        this.valueLineChart = data;
         this.loading = false;
-        this.router.navigate(['/not-found']);
+      }
+      , (error) => {
+        this.loading = false;
       }
     );
   }
 
-  onSelect(modal, evt) {
-    this.modalService.open(modal, { size: 'lg', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-    }).catch((error) => {
-    });
-  }
-
-  getDataStatistic(value) {
-    this.chooseConfig.push(value);
-
-  }
-
-  onItemDeSelect(value) {
-    for (let i = 0; i < this.chooseConfig.length; i++) {
-      if (this.chooseConfig[i].id == value.id) {
-        this.chooseConfig.splice(i, 1);
-        break;
+  changePieChart() {
+    this.loading = true;
+    this.historyApi.GetRankStatisticApplicant(this.filter).subscribe(
+      (data) => {
+        this.valuePieChart = data;
+        this.loading = false;
       }
+      , (error) => {
+        this.loading = false;
+      }
+    );
+  }
+
+  changeApplicantResult() {
+    this.loading = true;
+    this.historyApi.GetApplicantResult(this.filter).subscribe(
+      (data) => {
+        this.applicantList = data;
+        this.loading = false;
+      }
+      , (error) => {
+        this.loading = false;
+      }
+    );
+  }
+
+  changeGroupStatusTest() {
+    this.loading = true;
+    this.groupReady = false;
+    this.historyApi.GetGroupStatusTest(this.filter).subscribe(
+      (data) => {
+        this.dataGourp[0].series = data;
+        this.groupReady = true;
+        this.loading = false;
+      }
+      , (error) => {
+        this.loading = false;
+      }
+    );
+  }
+
+  changeConfig() {
+    const index = this.listConfig.findIndex(x => x.configId == this.configId);
+    this.setFilter(index);
+    this.filter = {
+      configId: this.configId,
+      from: null,
+      to: null
+    };
+    this.changeLineChart();
+    this.changePieChart();
+    this.changeApplicantResult();
+    this.changeGroupStatusTest();
+  }
+
+  momentToOpjectDate(date) {
+    return {
+      year: date.year(),
+      month: date.month() + 1,
+      day: date.date()
     }
   }
-
-  onSelectAll(value) {
-  }
-
-  Apply() {
-    this.selectData = this.selectedItems[0].id;
-    this.GetOverallPointStatistic(false);
-    this.setAveragePointCatalogue();
-    this.setStatisticRank();
-  }
-
-  setStatisticRank(){
-    this.dataGroupChart = [];
-    this.selectedItems.forEach(select => {
-      const element = this.dataRankStatistic.find(x=> x.configId == select.id);
-      this.dataGroupChart.push(element);
-    });
-  }
-
-  setAveragePointCatalogue() {
-    var size = this.historyData[0].series.length;
-    this.averageCatalogue = []
-    for (let i = 0; i < size; i++) {
-      var series = [];
-      this.selectedItems.forEach(select => {
-        const element = this.historyData.find(x => x.configId === select.id);
-        series.push({ name: element.name, value: element.series[i].value });
-      });
-      var element = {
-        name: this.historyData[0].series[i].name,
-        series
-      }
-      this.averageCatalogue.push(element);
+  changeDate() {
+    let startMonth = this.startDate.month
+    if (startMonth < 10) {
+      startMonth = '0' + startMonth;
     }
-
+    let startDay = this.startDate.day
+    if (startDay < 10) {
+      startDay = '0' + startDay;
+    }
+    let endMonth = this.endDate.month
+    if (endMonth < 10) {
+      endMonth = '0' + endMonth;
+    }
+    let endDay = this.endDate.day
+    if (endDay < 10) {
+      endDay = '0' + endDay;
+    }
+    this.filter = {
+      configId: this.configId,
+      from: this.startDate.year + '-' + startMonth + '-' + startDay + 'T00:00:01.000+07:00',
+      to: this.endDate.year + '-' + endMonth + '-' + endDay + 'T23:59:59.000+07:00',
+    };
+    this.changeLineChart();
+    this.changePieChart();
+    this.changeApplicantResult();
+    this.changeGroupStatusTest();
   }
+
+  generateExcel() {
+    let title = "Applicant Result";
+    let data = [];
+    this.applicantList.forEach(element => {
+      data.push(
+        [
+          element.fullName,
+          element.rank,
+          element.point,
+          element.email
+        ]
+      );
+    });
+    this.excelService.generateExcel(this.header,data,title);
+  }
+
 }

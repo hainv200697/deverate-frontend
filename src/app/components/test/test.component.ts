@@ -24,6 +24,7 @@ export class TestComponent implements OnInit {
     private router: Router,
     private gblserv: GobalService
   ) { }
+  isSave = false;
   config;
   key;
   error = false;
@@ -39,7 +40,6 @@ export class TestComponent implements OnInit {
   sub: Subscription;
   ngOnInit() {
     this.testId = this.route.snapshot.paramMap.get('testId');
-    
     this.config = this.testService.getConfig(this.testId)
       .subscribe(res => {
         this.config = res;
@@ -65,11 +65,14 @@ export class TestComponent implements OnInit {
           return;
         }
         this.config.title = this.config.title.toUpperCase();
-        this.config.startDate = moment(this.config.startDate).format('LLLL');
-        this.config.endDate = moment(this.config.endDate).format('LLLL');
+        this.config.startDate = moment.utc(this.config.startDate).local().format('LLLL');
+        if(this.config.endDate != "Invalid date"){
+          this.config.endDate = moment.utc(this.config.endDate).local().format('LLLL');
+        }else{
+          this.config.endDate = null;
+        }
         $('#openModalButton').click();
       });
-
   }
 
   viewResult(){
@@ -131,7 +134,7 @@ export class TestComponent implements OnInit {
           });
           this.sub = interval(60000)
             .subscribe((val) => {
-              console.log("Auto Save")
+              console.log("Auto Save");
               this.autoSave()
             });
         }
@@ -191,7 +194,17 @@ export class TestComponent implements OnInit {
     };
     this.testService.postAutoSaveTest(userTest)
       .subscribe((res) => {
-      });
+        if(!this.isSave){
+          this.toastr.success("Auto save success");
+          this.isSave = true;
+        }
+      },(error)=>{
+        if(this.isSave){
+          this.toastr.error("Auto save fail!");
+          this.isSave = false;
+        }
+      }
+      );
   }
 
   scroll(id) {

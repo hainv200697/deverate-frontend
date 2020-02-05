@@ -7,6 +7,7 @@ import * as XLSX from 'ts-xlsx';
 import Stepper from 'bs-stepper';
 import { GloblaService } from 'src/assets/service/global.service';
 import { ConfigurationApiService } from 'src/app/services/configuration-api.service';
+import * as moment from 'moment';
 @Component({
     selector: 'app-applicant',
     templateUrl: './applicant.component.html',
@@ -36,10 +37,14 @@ export class ApplicantComponent implements OnInit {
     insApplicant = {};
     applicants = [];
     listConfig = [];
+    startDate;
+    endDate;
+    minDate;
     config_id;
     ngOnInit() {
         this.config_id = -1;
         this.getAllConfig();
+        this.minDate = this.momentToOpjectDate(moment());
     }
 
     openModalExcel(excel) {
@@ -217,7 +222,23 @@ export class ApplicantComponent implements OnInit {
         }
         if(check){
             this.loading = true;
-            this.applicantService.postCreateApplicant(this.applicantList,this.config_id).subscribe(
+            for (let index = 0; index < this.listConfig.length; index++) {
+                if (this.listConfig[index].configId == this.config_id) {
+                    const date = moment(this.startDate);
+                    this.endDate = this.calculateEndDate(date, this.listConfig[index].expiredDays);
+                }
+            }
+            if (this.startDate.month < 10) {
+                this.startDate.month =  ("0" + this.startDate.month).slice(-2);
+            }
+            if (this.startDate.day < 10) {
+                this.startDate.day =  ("0" + this.startDate.day).slice(-2)
+            }
+            var startDateString = `${this.startDate.year}-${this.startDate.month}-${this.startDate.day}T00:00:01.000+07:00`;
+            var endDateString =  `${this.endDate.year}-${this.endDate.month}-${this.endDate.day}T23:59:59.000+07:00`;
+            console.log(startDateString);
+            console.log(endDateString);
+            this.applicantService.postCreateApplicant(this.applicantList,this.config_id,startDateString,endDateString).subscribe(
             results => {
                 this.loading = false;
                 this.toastr.success("Send mail success");
@@ -284,6 +305,22 @@ export class ApplicantComponent implements OnInit {
                 }
             }
         )
+    }
+
+    calculateEndDate(date, expiredDays) {
+        return {
+            year: date.year(),
+            month: date.month() < 10 ? ("0" + date.month()).slice(-2) : date.month(),
+            day: date.date() + expiredDays < 10 ? ("0" + date.date() + expiredDays).slice(-2) : date.date() + expiredDays
+        }
+    }
+
+    momentToOpjectDate(date) {
+        return {
+            year: date.year(),
+            month: date.month() + 1,
+            day: date.date()
+        }
     }
 
 }

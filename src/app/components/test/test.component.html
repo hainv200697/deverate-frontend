@@ -23,7 +23,7 @@
                 <div>
                     <div>
                         <p>This test opened at {{config.startDate}}</p>
-                        <p>This test will close at {{config.endDate}}</p>
+                        <p *ngIf="!config.endDate">This test will close at {{config.endDate}}</p>
                         <p>To attempt this test you need to know the test password</p>
                         <p>Time limit: {{config.duration}} mins</p>
                     </div>

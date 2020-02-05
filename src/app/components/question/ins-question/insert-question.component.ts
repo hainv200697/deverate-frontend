@@ -156,7 +156,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 ind = ind + 1;
                 const questionObj = new QuestionModel();
                 this.listAnswer = [];
-                questionObj.point = element['QuestionPoint'];
+                questionObj.point = element['QuestionPoint']
                 if (questionObj.point === null || questionObj.point === undefined) {
                     this.message.push("Percent of question #" + ind + " is blank");
                     this.checkFile = false;

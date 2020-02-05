@@ -5,7 +5,7 @@
                 <div class="step" data-target="#test-l-1">
                     <button [disabled]="index != 1" class="step-trigger">
                         <span class="bs-stepper-circle">1</span>
-                        <span class="bs-stepper-label">Create Test</span>
+                        <span class="bs-stepper-label">Create Semester</span>
                     </button>
                 </div>
                 <div class="line"></div>
@@ -13,7 +13,7 @@
                 <div class="step" data-target="#test-l-2">
                     <button [disabled]="index != 2" class="step-trigger">
                         <span class="bs-stepper-circle">2</span>
-                        <span class="bs-stepper-label">View Configuration Test</span>
+                        <span class="bs-stepper-label">View Semester</span>
                     </button>
                 </div>
             </div>
@@ -161,7 +161,7 @@
 
 <ng-template #update let-modal>
     <div class="modal-header">
-        <h4 class="modal-title modal-header" id="modal-basic-title">Config Information</h4>
+        <h4 class="modal-title modal-header" id="modal-basic-title">Semester Information</h4>
     </div>
     <div class="form-content">
         <div class="form-group col-sm-12 col-md-12 col-lg-12">
@@ -256,7 +256,7 @@
 <div class="insert-form col-md-12">
     <app-page-header [heading]="'Employee Test Management'"></app-page-header>
     <div class="card-header">
-        <h5>Employee Test Management</h5>
+        <h5>Employee Semester Management</h5>
     </div>
     <div class="card mb-3 shadow-card">
         <div class="table-responsive col-md-12 datatable" style="overflow: unset;">
@@ -272,7 +272,7 @@
                         </div>
                         <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
                             <i class="fa fa-fw fa-plus"></i>
-                            Create Test
+                            Create Semester
                         </button>
                     </div>
                     <div class="row justify-content-end" style="margin-top: 20px;">

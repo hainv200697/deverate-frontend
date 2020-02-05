@@ -211,7 +211,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
   Sample() {
     const sampleTest = {
       companyId: this.companyId,
-      catalogueInConfigurations: this.selectedItems
+      catalogueInConfigurations: this.listCatalogue
     }
     localStorage.setItem("SampleTest", JSON.stringify(sampleTest));
     const link = document.createElement('a');
