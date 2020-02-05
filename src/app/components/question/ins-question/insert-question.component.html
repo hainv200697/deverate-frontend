@@ -80,7 +80,7 @@
                                             <div [formGroup]="answer" class="form-row">
                                                 <div class="form-group col-9">
                                                     <label>Answer</label>
-                                                    <input type="text" formControlName="answer1"
+                                                    <input type="text" formControlName="answerText"
                                                         placeholder="Input answer {{i+1}}"
                                                         class="answer-input form-control ans-{{i}}" />
                                                 </div>
@@ -117,6 +117,14 @@
                                                     {{insQuestion['question1']}}
                                                 </td>
                                             </tr>
+                                            <tr class="col-md-12 row no-padding-no-margin">
+                                                <td class="col-md-3" style="font-weight: bold">
+                                                    Catlogue
+                                                </td>
+                                                <td class="col-md-9">
+                                                    {{catalogueName}}
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -131,7 +139,7 @@
                                         <tbody>
                                             <tr class="col-md-12 row no-padding-no-margin" *ngFor="let q of insAnswer">
                                                 <td class="col-md-9">
-                                                    <pre>{{q.answer1}}</pre>
+                                                    <pre>{{q.answerText}}</pre>
                                                 </td>
                                                 <td class="col-md-3">
                                                     {{q.Percent}}
@@ -284,13 +292,16 @@
                                     <h4>Update Question</h4>
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12">
-
-                                </div>
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                     <label>Question:</label>
                                     <input type="text" [(ngModel)]="updQuestion['question1']"
                                         name="upd_question_question" class="form-control input-underline input-lg"
                                         id="upd_question_question" placeholder="Question">
+                                </div>
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                    <label>Point:</label>
+                                    <input type="number" [(ngModel)]="updQuestion['point']" name="ins_question_point"
+                                        class="form-control input-underline input-lg" id="ins_question_point"
+                                        placeholder="Point">
                                 </div>
                             </div>
                         </div>
@@ -304,7 +315,7 @@
                                                     Catalogue
                                                 </td>
                                                 <td class="col-md-9">
-                                                    {{updQuestion['catalogueName']}}
+                                                    {{catalogueName}}
                                                 </td>
                                             </tr>
                                             <tr class="col-md-12 row no-padding-no-margin">

@@ -26,6 +26,7 @@ export class CatalogueComponent implements OnInit {
     check = 0;
     catalogueList = [];
     searchText: string;
+    oldName; 
     insCatalogue = {};
     updCatalogue = {};
     updateStatus = [];
@@ -48,11 +49,11 @@ export class CatalogueComponent implements OnInit {
     updateModal(item) {
         if (item != null) {
             this.updCatalogue['companyCatalogueId'] = item['companyCatalogueId'];
+            this.oldName = item['name'];
             this.updCatalogue['Name'] = item['name'];
             this.updCatalogue['Description'] = item['description'];
             this.updCatalogue['IsActive'] = item['isActive'];
         }
-
     }
 
     closeModal() {
@@ -276,7 +277,6 @@ export class CatalogueComponent implements OnInit {
     }
 
     validateUpdate() {
-        console.log(this.updCatalogue['Name']);
         if (this.updCatalogue['Name'] == null || this.updCatalogue['Name'] == undefined) {
             this.toastr.error('Message', 'Please input catalogue name');
             document.getElementById('upd_Catalogue_name').style.borderColor = 'red';
@@ -292,7 +292,8 @@ export class CatalogueComponent implements OnInit {
             document.getElementById('upd_Catalogue_name').style.borderColor = 'red';
             document.getElementById('upd_Catalogue_name').focus();
             return false;
-        } else {
+        } else if(this.oldName != this.updCatalogue['Name'])
+        {
             let checkDup = false;
             this.catalogueList.forEach(element => {
                 if (this.updCatalogue['Name'] === element.name) {
