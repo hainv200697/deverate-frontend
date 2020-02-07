@@ -301,7 +301,6 @@ export class EmployeeSystemComponent implements OnInit {
             this.insertEmployeeExcel();
         } else {
             this.employees = [];
-            this.insEmployee['fullname'] = this.insEmployee['fullname'].toUpperCase();
             this.insEmployee['companyId'] = this.companyId;
             this.employees.push(this.insEmployee);
             let check = true;
@@ -489,19 +488,29 @@ export class EmployeeSystemComponent implements OnInit {
         }
     }
     validate() {
-        if (this.insEmployee['fullname'] == '' || this.insEmployee['fullname'] == null) {
+        let fullname = this.insEmployee['fullname'];
+        if (fullname == '' || fullname == null) {
             this.toastr.error('Please input employee name');
             document.getElementById('ins_manage_fullname').style.borderColor = 'red';
             document.getElementById('ins_manage_fullname').focus();
             return false;
-        } else if (this.insEmployee['fullname'].length < 3) {
+        } else if (fullname.length < 3) {
             this.toastr.error('Please input employee name min 3 letter');
             document.getElementById('ins_manage_fullname').style.borderColor = 'red';
             document.getElementById('ins_manage_fullname').focus();
             return false;
         } else {
+            fullname = $.trim(this.insEmployee['fullname'].replace(/\s\s+/g, ' ')).toUpperCase();
             document.getElementById('ins_manage_fullname').style.borderColor = 'green';
         }
+        const str = fullname.split(" ");
+        if(str.length < 2){
+            this.toastr.error('Employee\'s name min 2 words');
+            document.getElementById('ins_manage_fullname').style.borderColor = 'red';
+            document.getElementById('ins_manage_fullname').focus();
+            return false;
+        }
+        this.insEmployee['fullname'] = fullname;
         return true;
     }
 
@@ -524,24 +533,27 @@ export class EmployeeSystemComponent implements OnInit {
     }
 
     validateAddress() {
-        if (this.insEmployee['address'] != undefined) {
-            if (this.insEmployee['address'] != '') {
-                if (this.insEmployee['address'].length < 3) {
+        let address = this.insEmployee['address'];
+        if (address != undefined) {
+            if (address != '') {
+                if (address.length < 3) {
                     this.toastr.error('Please input employee address min 3 characters');
                     document.getElementById('ins_manage_address').style.borderColor = 'red';
                     document.getElementById('ins_manage_address').focus();
                     return false;
                 }
-                else if (this.insEmployee['address'].length > 200) {
+                else if (address.length > 200) {
                     this.toastr.error('Please input employee Employee address max 200 characters');
                     document.getElementById('ins_manage_address').style.borderColor = 'red';
                     document.getElementById('ins_manage_address').focus();
                     return false;
                 } else {
+                    address = $.trim(this.insEmployee['address'].replace(/\s\s+/g, ' '))
                     document.getElementById('ins_manage_address').style.borderColor = 'green';
                 }
             }
         }
+        this.insEmployee['address'] = address;
         return true;
     }
     validatePhone() {

@@ -19,13 +19,8 @@ export class SystemEmployeeApiService {
     }
 
     postCreateEmployee(employees) {
-        const API = 'api/EmployeeSystem/SystemCreateEmployee';
+        const API = 'api/Employee/CreateEmployee';
         return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_AUTH+ API, employees);
-    }
-
-    postCreateManager(manager) {
-        const API = 'api/EmployeeSystem/SystemCreateEmployee';
-        return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_AUTH+ API, manager);
     }
 
     disableEmployee(employees,status){
