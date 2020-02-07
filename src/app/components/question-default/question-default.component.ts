@@ -237,14 +237,13 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 this.listInsert.push(questionObj);
             });
         } catch (err) {
-            console.log(err);
+            console.log(err); 
         }
 
     }
     // End import
     next(key) {
         if (key === 'ins') {
-
             this.insAnswer = this.answerForm.controls['answers'].value;
             let check = true;
             this.insAnswer.forEach(element => {
@@ -292,7 +291,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
             this.insAnswer.forEach(element => {
                 i++;
                 if (check === true) {
-                    const ans = $.trim(element['answer']);
+                    const ans = $.trim(element['answerText']);
                     element['answer'] = ans;
                     if (ans === '' || ans.length < 3 || ans.length > 200) {
                         this.toastr.error('Message', 'Answer must be more than 3 characters!');
@@ -440,7 +439,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
 
     addAnswerForm(): FormGroup {
         this.answersForm = this.formBuilder.group({
-            answer: ['', Validators.required],
+            answerText: ['', Validators.required],
             Percent: ['', Validators.required]
         });
         return this.answersForm;
@@ -492,6 +491,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
     openUpdate(item, update) {
         this.index = 1;
         this.updQuestion['QuestionDefaultId'] = item['QuestionDefaultId'];
+        this.updQuestion['point'] = item['point'];
         this.updQuestion['catalogueDefaultId'] = item['catalogueDefaultId'];
         this.updQuestion['question'] = item['question'];
         this.updQuestion['catalogueName'] = item['catalogueName'];
