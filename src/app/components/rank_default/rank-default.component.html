@@ -63,6 +63,13 @@
 
                     </div>
                 </div>
+                <div class="col-md-1">
+                    <div style="width: 100%; height: 80px;"></div>
+                    <div style="width: 100%;" *ngFor="let item of catalogueList">
+                        <i (click)="removeCatalogue(item.companyCatalogueId)" *ngIf="item.isShow"
+                            style="border-color: white;color: red; cursor: pointer;" class="fa fa-window-close mt-3 form-control"></i>
+                    </div>
+                </div>
                 <div class="no-padding-no-margin" style="width: 150px" *ngFor="let r of clone; let i = index">
                     <div style="width: 100%; height: 40px;">
                         <input class="form-control" style="width: 100px; text-align: center;" disabled="disabled" value="{{r.point}}">

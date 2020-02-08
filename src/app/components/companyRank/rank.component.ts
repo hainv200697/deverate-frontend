@@ -234,4 +234,17 @@ export class RankComponent implements OnInit {
       }
     });
   }
+  removeCatalogue(catalogueId){
+    for (let i = 0; i < this.clone.length; i++) {
+      for (let z = 0; z < this.clone[i].catalogueInRanks.length; z++) {
+        if(catalogueId == this.clone[i].catalogueInRanks[z].catalogueId){
+          this.catalogueList[z].isShow = false;
+          this.clone[i].catalogueInRanks[z].point = 0;
+          this.clone[i].catalogueInRanks[z].isShow = false;
+          break;
+        }
+      }
+    }
+    this.calculateWeightPoint();
+  }
 }
