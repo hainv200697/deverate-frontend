@@ -72,6 +72,7 @@ export class StatisticComponent implements OnInit {
   chooseConfig = [];
   counApi = 0;
   dataRankStatistic;
+  noData: boolean;
 
   companyId = Number(localStorage.getItem('CompanyId'));
   ngOnInit() {
@@ -143,9 +144,15 @@ export class StatisticComponent implements OnInit {
   }
 
   getConfig() {
-    this.loading = true
+    this.loading = true;
+    this.noData = false;
     this.configApi.getConfigForApplicant(true, this.companyId).subscribe(
       (data) => {
+        if(data.length == 0){
+          this.noData = true;
+          this.loading = false;
+          return;
+        }
         let count = 1;
         data.forEach(element => {
           const item = { id: element.configId, text: element.title }
