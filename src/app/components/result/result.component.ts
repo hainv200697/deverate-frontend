@@ -152,7 +152,7 @@ export class ResultComponent implements OnInit {
           this.radarChartData[0].data.push(this.catalogueOverpoint[a].overallPoint)
         }
 
-        this.fusionChartAnotation.groups[0].items[1].label = "Overall point:" + this.statistic.point;
+        this.fusionChartAnotation.groups[0].items[1].label = "Point:" + this.statistic.point;
         var dataTest = {
           chart: this.fusionchart,
           colorRange: {
