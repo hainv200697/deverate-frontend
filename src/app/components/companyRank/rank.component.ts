@@ -157,6 +157,14 @@ export class RankComponent implements OnInit {
   }
 
   saveChange() {
+    if(this.validateRankName() == false){
+      this.toast.error('Rank name can not duplicate');
+      return;
+    }
+    if(this.validateRankPoint() == false){
+      this.toast.error('Rank point can not duplicate');
+      return;
+    }
     var listSave = [];
     this.clone.forEach(rank => {
       var find = this.listRank.find(x => x.rankId == rank.rankId);
@@ -233,5 +241,25 @@ export class RankComponent implements OnInit {
               });
       }
     });
+  }
+
+  validateRankName(){
+    var valueArr = this.clone.map(function(item){ return item.name });
+    var isDuplicate = valueArr.some(function(item, idx){ 
+    return valueArr.indexOf(item) != idx 
+  });
+    if(isDuplicate == true){
+      return false;
+    }
+  }
+
+  validateRankPoint(){
+    var valueArr = this.clone.map(function(item){ return item.point });
+    var isDuplicate = valueArr.some(function(item, idx){ 
+    return valueArr.indexOf(item) != idx 
+  });
+    if(isDuplicate == true){
+      return false;
+    }
   }
 }
