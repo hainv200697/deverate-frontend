@@ -376,6 +376,10 @@ export class ManageConfigurationComponent implements OnInit {
       this.toast.error('Message', 'duration must be range ' + this.selectedItems.length * 5 + '\'' + ' to 200\'');
       return false;
     }
+    else if (this.inputConfiguration['expiredDays'] < 1) {
+      this.toast.error('Message', 'ExpiredDays must be be greater than 0');
+      return false;
+    }
     else if (this.selectedItems.length === 0) {
       this.toast.error('Message', 'Please select the rank');
       return false;
