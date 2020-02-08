@@ -157,11 +157,11 @@ export class RankComponent implements OnInit {
   }
 
   saveChange() {
-    if(this.validateRankName() == false){
+    if(this.isDuplicateRankName()){
       this.toast.error('Rank name can not duplicate');
       return;
     }
-    if(this.validateRankPoint() == false){
+    if(this.isDuplicateRankPoint()){
       this.toast.error('Rank point can not duplicate');
       return;
     }
@@ -243,23 +243,17 @@ export class RankComponent implements OnInit {
     });
   }
 
-  validateRankName(){
+  isDuplicateRankName(){
     var valueArr = this.clone.map(function(item){ return item.name });
-    var isDuplicate = valueArr.some(function(item, idx){ 
+    return valueArr.some(function(item, idx){ 
     return valueArr.indexOf(item) != idx 
   });
-    if(isDuplicate == true){
-      return false;
-    }
   }
 
-  validateRankPoint(){
+  isDuplicateRankPoint(){
     var valueArr = this.clone.map(function(item){ return item.point });
-    var isDuplicate = valueArr.some(function(item, idx){ 
+    return valueArr.some(function(item, idx){ 
     return valueArr.indexOf(item) != idx 
   });
-    if(isDuplicate == true){
-      return false;
-    }
   }
 }
