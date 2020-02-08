@@ -261,7 +261,7 @@ export class ResultComponent implements OnInit {
     "showTickValues": "0"
   }
 
-  public fusionChartColor = ['#F2726F', '#FFC533', '#00CC00', '#62B58F','black','blue','gray'];
+  public fusionChartColor = ['#F2726F', '#FFC533', '#00CC00', '#62B58F','#FF0000','#FF9999','#3300CC','#330066','#330000','#6633CC','#663300','#660099'];
 
   public fusionChartAnotation: any = {
     origw: 100,
