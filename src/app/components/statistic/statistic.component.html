@@ -11,7 +11,10 @@
 <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px',fullScreenBackdrop: true  }"
     [template]="customLoadingTemplate">
 </ngx-loading>
-<div class=" row col-md-12 d-flex justify-content-center no-padding-no-margin" *ngIf="isLoaded">
+<div *ngIf="noData" >
+    <b>No data</b>
+</div>
+<div class=" row col-md-12 d-flex justify-content-center no-padding-no-margin" *ngIf="isLoaded && !noData">
     <div class="row col-md-12 d-flex justify-content-center">
         <div class="col-md-6">
             <b>
