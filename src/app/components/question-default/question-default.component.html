@@ -364,21 +364,21 @@
                         </button>
                     </div>
                     <div class="row justify-content-end" style="margin-top: 20px;">
-                        <button [hidden]="iconIsActive==false" style="margin-right: 10px;"
+                        <button [hidden]="iconIsActive==false" style="margin-right: 10px;" ngbTooltip="Deactive"
                             (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger"
                             data-toggle="button">
                             <i class="fa fa-ban" tooltip="delete" placement="top"></i>
                         </button>
-                        <button [hidden]="iconIsActive==true" style="margin-right: 10px;"
+                        <button [hidden]="iconIsActive==true" style="margin-right: 10px;" ngbTooltip="Active"
                             (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success"
                             data-toggle="button">
                             <i class="fa fa-check" tooltip="Active" placement="top"></i>
                         </button>
-                        <button style="margin-right: 10px;" (click)="openModalExcel(excel);"
+                        <button style="margin-right: 10px;" (click)="openModalExcel(excel);" ngbTooltip="Import Excel"
                             class="btn btn-lg btn-success " data-toggle="button">
                             <i class="fa fa-file-excel-o"></i>
                         </button>
-                        <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)"
+                        <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)" ngbTooltip="Refesh"
                             class="btn btn-lg btn-primary" data-toggle="button">
                             <i #refesh class="fa fa-refresh" tooltip="common_refresh" placement="top"
                                 aria-hidden="true" [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
@@ -439,12 +439,12 @@
                         </td>
                         <td class="col-md-2 nowrap text-center action-column">
                             <button class="btn-primary btn btn-circle shadow-item" (click)="viewAnswer(q);"
-                                tooltip="view">
+                                ngbTooltip="View Answer">
                                 <i class="fa fa fa-eye"></i>
                             </button>
                             &nbsp;
                             <button class="btn-warning btn btn-circle shadow-item" (click)="openUpdate(q,update);"
-                                tooltip="common_modify">
+                                ngbTooltip="Update question">
                                 <i class="fa fa-edit edit-icon"></i>
                             </button>
                         </td>

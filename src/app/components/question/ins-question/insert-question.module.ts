@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InsertQuestionComponent } from './insert-question.component';
 import { PageHeaderModule } from '../../../shared';
 import { InsertQuestionRoutingModule } from './insert-question-routing.module';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule,NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableModule } from 'ng-angular8-datatable';
 import {InsertQuestionFilterPipe} from './insert-question-filter.pipe';
 import { NgxLoadingModule } from 'ngx-loading';
@@ -13,6 +13,7 @@ import { NgxLoadingModule } from 'ngx-loading';
     CommonModule,
     NgbModule,
     FormsModule,
+    NgbTooltipModule,
     DataTableModule,
     ReactiveFormsModule,
     InsertQuestionRoutingModule,
