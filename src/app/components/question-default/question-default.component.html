@@ -278,7 +278,7 @@
                                     <label>Question:</label>
                                     <textarea cols="35" [(ngModel)]="updQuestion['question']"
                                         name="upd_question_question" class="form-control input-underline input-lg"
-                                        id="upd_question_question" placeholder="Question">
+                                        id="upd_question_question" placeholder="Question"></textarea>
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                     <label>Point:</label>
@@ -314,7 +314,7 @@
                                                     Question
                                                 </td>
                                                 <td class="col-md-9">
-                                                    {{updQuestion['question1']}}
+                                                    {{updQuestion['point']}}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -354,9 +354,6 @@
                         <div class="form-group input-group col-md-6">
                             <input type="text" class="form-control" placeholder="Enter your key word" name="searchText"
                                 [(ngModel)]="searchText">
-                            <div class="input-group-append">
-                                <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
-                            </div>
                         </div>
                         <button class="btn btn-outline-primary col-md-3 " (click)="open(content)">
                             <i class="fa fa-fw fa-plus"></i>
