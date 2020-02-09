@@ -75,8 +75,9 @@ export class StatisticApplicantComponent implements OnInit {
     domain: ['Green', 'Blue', '#990000', 'Red']
   };
   // import excel
-  header = ["FullName", "Rank", "Point", "Email"];
+  header = ["FullName", "Rank", "Point", "Email","Create Date"];
   groupReady = false;
+  noData: boolean;
 
   ngOnInit() {
     this.current = this.momentToOpjectDate(moment());
@@ -86,14 +87,19 @@ export class StatisticApplicantComponent implements OnInit {
 
   getConfig() {
     this.loading = true
+    this.noData = false;
     this.configApi.getConfigForApplicant(false, this.companyId).subscribe(
       (data) => {
-        this.listConfig = data;
-        this.setFilter(0);
-        this.changeLineChart();
-        this.changePieChart();
-        this.changeApplicantResult();
-        this.changeGroupStatusTest();
+        if(data.length != 0){
+          this.listConfig = data;
+          this.setFilter(0);
+          this.changeLineChart();
+          this.changePieChart();
+          this.changeApplicantResult();
+          this.changeGroupStatusTest();
+        }else{
+          this.noData = true;
+        }
         this.loading = false;
       }
       , (error) => {
@@ -223,7 +229,8 @@ export class StatisticApplicantComponent implements OnInit {
           element.fullName,
           element.rank,
           element.point,
-          element.email
+          element.email,
+          element.createDate
         ]
       );
     });
