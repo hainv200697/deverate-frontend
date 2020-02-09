@@ -72,7 +72,7 @@ export class StatisticApplicantComponent implements OnInit {
   yAxisGroupLabel: string = 'People';
   legendGroupTitle: string = '';
   colorGroupScheme = {
-    domain: ['Green', 'Blue', '#990000', 'Red']
+    domain: ['Blue', '#FFA500', 'Green', 'Red']
   };
   // import excel
   header = ["FullName", "Rank", "Point", "Email","Create Date"];
