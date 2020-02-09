@@ -81,14 +81,14 @@ export class SemesterComponent implements OnInit {
         if(this.selectedAll){
             this.listEmployee.forEach(e=>{
                 e.selected = true;
-                this.listEmployee.push(e.username);
+                this.chooseEmployee.push(e.accountId);
             });
         }
         else{
             this.listEmployee.forEach(e=>{
                 e.selected = false;
             });
-            this.listEmployee = [];
+            this.chooseEmployee = [];
         }
     }
 
@@ -97,8 +97,10 @@ export class SemesterComponent implements OnInit {
         this.listEmployee[index].selected = !this.listEmployee[index].selected;
         if (this.listEmployee[index].selected == false) {
             this.chooseEmployee.splice(this.listEmployee.indexOf(accountId), 1);
+            this.selectedAll = false;
         } else {
             this.chooseEmployee.push(accountId);
+            this.selectedAll = false;
         }
     }
 
@@ -158,10 +160,11 @@ export class SemesterComponent implements OnInit {
     }
 
     calculateEndDate(date, expiredDays) {
+        const endDate =date.date()+ expiredDays;
         return {
             year: date.year(),
             month: date.month() < 10 ? ("0" + date.month()).slice(-2) : date.month(),
-            day: date.date() + expiredDays < 10 ? ("0" + date.date() + expiredDays).slice(-2) : date.date() + expiredDays
+            day: endDate < 10 ? ("0" + endDate).slice(-2) : endDate
         }
     }
 
