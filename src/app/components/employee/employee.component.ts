@@ -231,6 +231,7 @@ export class EmployeeComponent implements OnInit {
         this.employeeService.getAllWithRole(this.companyId, this.getRole).subscribe(
             (data) => {
                 this.loading = false;
+                console.log(data);
                 data.forEach(element => {
                     element['joinDate'] = moment.utc(element['joinDate']).local().format();
                 });

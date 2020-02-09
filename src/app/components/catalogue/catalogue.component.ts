@@ -317,12 +317,12 @@ export class CatalogueComponent implements OnInit {
     validateDes() {
         if (this.insCatalogue['Description'] != null || this.insCatalogue['Description'] != undefined) {
             if (this.insCatalogue['Description'].length < 3) {
-                this.toastr.error('Message', 'Please input catalogue name min 3 letter');
+                this.toastr.error('Message', 'Please input description min 3 letter');
                 document.getElementById('ins_Catalogue_des').style.borderColor = 'red';
                 document.getElementById('ins_Catalogue_des').focus();
                 return false;
             } else if (this.insCatalogue['Description'].length > 200) {
-                this.toastr.error('Message', 'Please input catalogue name max 200 letter');
+                this.toastr.error('Message', 'Please input description max 200 letter');
                 document.getElementById('ins_Catalogue_des').style.borderColor = 'red';
                 document.getElementById('ins_Catalogue_des').focus();
                 return false;
@@ -338,12 +338,12 @@ export class CatalogueComponent implements OnInit {
     validateUpdateDes() {
         if (this.updCatalogue['Description'] != '' || this.updCatalogue['Description'] != null || this.insCatalogue['Description'] != undefined) {
             if (this.updCatalogue['Description'].length < 3) {
-                this.toastr.error('Message', 'Please input catalogue name min 3 letter');
+                this.toastr.error('Message', 'Please input description min 3 letter');
                 document.getElementById('upd_Catalogue_description').style.borderColor = 'red';
                 document.getElementById('upd_Catalogue_description').focus();
                 return false;
             } else if (this.updCatalogue['Description'].length > 200) {
-                this.toastr.error('Message', 'Please input catalogue name max 200 letter');
+                this.toastr.error('Message', 'Please input description max 200 letter');
                 document.getElementById('upd_Catalogue_description').style.borderColor = 'red';
                 document.getElementById('upd_Catalogue_description').focus();
                 return false;

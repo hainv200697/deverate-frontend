@@ -283,11 +283,11 @@
                                 (change)="checkSelected(item.username);">
                         </label>
                     </td>
-                    <td class="two text-center">{{ item.username }}</td>
-                    <td class="four text-center">{{ item.fullname }}</td>
-                    <td class="four text-center">{{ item.email }}</td>
-                    <td class="text-center two" >{{ item.roleName }}</td>
-                    <td class="text-center three">
+                    <td class="two text-left">{{ item.username }}</td>
+                    <td class="four text-left">{{ item.fullname }}</td>
+                    <td class="four text-left">{{ item.email }}</td>
+                    <td class="text-left two" >{{ item.roleName }}</td>
+                    <td class="text-left three">
                         {{ item.joinDate | date : 'dd-MM-yyyy hh:mm a'}}
                     </td>
                     <td class="text-center two" [hidden]="item.gender==false">
