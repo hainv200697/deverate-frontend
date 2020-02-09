@@ -27,6 +27,7 @@ export class RankComponent implements OnInit {
   clone = [];
   avaragePercent = [];
   companyId = localStorage.getItem('CompanyId');
+  isButtonVisible = false;
 
   ngOnInit() {
     this.getRank();
@@ -52,7 +53,8 @@ export class RankComponent implements OnInit {
         for (let i = 0; i < this.catalogueList.length; i++) {
           this.catalogueList[i].isShow = true;
           if(this.catalogueList[i].point == 0){
-            this.catalogueList[i].isShow = false
+            this.catalogueList[i].isShow = false;
+            this.isButtonVisible = true;
           }
         }
         for (let i = 0; i < this.clone.length; i++) {
@@ -106,9 +108,16 @@ export class RankComponent implements OnInit {
       for (let z = 0; z < this.clone[i].catalogueInRanks.length; z++) {
         if(this.clone[i].catalogueInRanks[z].catalogueId == catalogue.companyCatalogueId){
           this.clone[i].catalogueInRanks[z].isShow = true;
+          break;
         }
       }
     }
+    this.isButtonVisible = false;
+    this.catalogueList.forEach(catalogue => {
+      if (!catalogue.isShow) {
+        this.isButtonVisible = true;
+      }
+    });
   }
 
   calculateWeightPoint(item = null){
