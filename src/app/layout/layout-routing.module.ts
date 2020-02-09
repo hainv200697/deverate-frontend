@@ -39,7 +39,6 @@ const routes: Routes = [
             { path: 'manage-detail-test/:id', loadChildren: () => import('../components/default-test/defaut-test.module').then(m => m.DefautTestModule), canActivate: [OwnerGuard] },
             { path: 'statistic', loadChildren: () => import('../components/statistic/statistic.module').then(m => m.StatisticModule), canActivate: [OwnerGuard]},
             { path: 'applicant', loadChildren: () => import('../components/applicant/applicant.module').then(m => m.ApplicantModule), canActivate: [OwnerGuard]},
-            { path: 'sample-test', loadChildren: () => import('../components/sample-test/sample-test.module').then(m => m.SampleTestModule), canActivate: [OwnerGuard] },
             { path: 'statistic-applicant', loadChildren: () => import('../components/statistic-applicant-forTestOwner/statistic-applicant.module').then(m => m.StatisticApplicantModule), canActivate: [OwnerGuard]},
             { path: 'generate-test', loadChildren: () => import('../components/semester/semester.module').then(m => m.SemesterModule), canActivate: [OwnerGuard]},
             //Employee

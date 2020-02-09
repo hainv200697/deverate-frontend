@@ -276,7 +276,7 @@
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                     <label>Question:</label>
-                                    <input type="text" [(ngModel)]="updQuestion['question']"
+                                    <textarea cols="35" [(ngModel)]="updQuestion['question']"
                                         name="upd_question_question" class="form-control input-underline input-lg"
                                         id="upd_question_question" placeholder="Question">
                                 </div>
@@ -307,6 +307,14 @@
                                                 </td>
                                                 <td class="col-md-9">
                                                     {{updQuestion['question']}}
+                                                </td>
+                                            </tr>
+                                            <tr class="col-md-12 row no-padding-no-margin">
+                                                <td class="col-md-3" style="font-weight: bold">
+                                                    Question
+                                                </td>
+                                                <td class="col-md-9">
+                                                    {{updQuestion['question1']}}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -419,8 +427,8 @@
                                     (change)="checkIfAllSelected();">
                             </label>
                         </td>
-                        <td class="text-center col-md-3">{{q.catalogueName}}</td>
-                        <td class="text-center col-md-4">{{q.question}}</td>
+                        <td class="text-left col-md-3">{{q.catalogueName}}</td>
+                        <td class="text-left col-md-4">{{q.question}}</td>
                         <!-- <td class="text-center col-md-1">{{q.fullname}}</td> -->
                         <td class="text-center col-md-1">{{q.point}}</td>
                         <td class="text-center col-md-1" [hidden]="q.isActive==true">
