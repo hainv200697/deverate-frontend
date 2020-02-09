@@ -33,7 +33,7 @@
                     <div class="form-group col-md-5 row">
                         <label style="width: 29%;">Start Date: </label>
                         <input id="startDate" style="width: 50%;" class="form-control" placeholder="yyyy-mm-dd" name="start" ngbDatepicker
-                            #start="ngbDatepicker" [(ngModel)]="startDate" [minDate]="minDate">
+                            #start="ngbDatepicker" [(ngModel)]="startDate" [minDate]="minDate" onkeydown="return false">
                         <div class="input-group-append" style="width: 20%;">
                             <button class="btn btn-outline-secondary fa fa-calendar" (click)="start.toggle()"
                                 type="button"></button>
