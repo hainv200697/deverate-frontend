@@ -44,6 +44,7 @@ export class ApplicantComponent implements OnInit {
     ngOnInit() {
         this.config_id = -1;
         this.getAllConfig();
+        this.startDate = this.momentToOpjectDate(moment());
         this.minDate = this.momentToOpjectDate(moment());
     }
 
@@ -284,10 +285,6 @@ export class ApplicantComponent implements OnInit {
     }
     
     validateConfig() {
-        if(this.startDate == undefined || this.startDate == null){
-            this.toastr.error('Please choose startdate');
-            return false;
-        }
         if (this.config_id == -1) {
             this.toastr.error('Message', 'Please choose setting!');
             return false;
@@ -298,7 +295,6 @@ export class ApplicantComponent implements OnInit {
         this.configurationApiService.getConfigForApplicant(false,this.companyId).subscribe(
             (result)=>{
                 this.listConfig = result;
-                console.log(result);
             },(error)=>
             {
                 if (error.status == 400) {
