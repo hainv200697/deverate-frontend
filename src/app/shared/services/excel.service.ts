@@ -15,7 +15,7 @@ export class ExcelService {
     public generateExcel(header, data, excelFileName: string): void {
         let workbook = new Workbook();
         let worksheet = workbook.addWorksheet('Applicant');
-        worksheet.mergeCells('A1:D1');
+        worksheet.mergeCells('A1:E1');
         worksheet.getCell('A1').value = excelFileName;
         worksheet.getCell('A1').alignment = { horizontal:'center'} ;
         // Set font, size and style in title row.
@@ -33,7 +33,9 @@ export class ExcelService {
             cell.font = { name: 'Calibri', family: 4, size: 13, bold: true };
         });
         worksheet.columns[0].width = 30;
+        worksheet.columns[1].width = 30;
         worksheet.columns[3].width = 30;
+        worksheet.columns[4].width = 40;
         //Add data
         worksheet.addRows(data);
 
