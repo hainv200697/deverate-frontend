@@ -187,9 +187,6 @@
                     <div class="form-group input-group col-md-6">
                         <input type="text" class="form-control" placeholder="Enter your key word" name="searchText"
                             [(ngModel)]="searchText">
-                        <div class="input-group-append">
-                            <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
-                        </div>
                     </div>
                     <button class="btn btn-lg btn-outline-primary" (click)="open(create)">
                         <i class="fa fa-fw fa-plus"></i>
@@ -265,7 +262,7 @@
                         <sv-default-sorter by='roleId'>Role</sv-default-sorter>
                     </th>
                     <th class="three text-center" scope="col">
-                        <sv-default-sorter by='joinDate'>Join Date</sv-default-sorter>
+                        <sv-default-sorter by='joinDate'>Rank</sv-default-sorter>
                     </th>
                     <th class="two text-center" scope="col">
                         <sv-default-sorter by='gender'>Gender</sv-default-sorter>
@@ -287,8 +284,8 @@
                     <td class="four text-left">{{ item.fullname }}</td>
                     <td class="four text-left">{{ item.email }}</td>
                     <td class="text-left two" >{{ item.roleName }}</td>
-                    <td class="text-left three">
-                        {{ item.joinDate | date : 'dd-MM-yyyy hh:mm a'}}
+                    <td class="text-center three">
+                        {{ item.rankName}}
                     </td>
                     <td class="text-center two" [hidden]="item.gender==false">
                         Male

@@ -273,7 +273,7 @@
                         <sv-default-sorter by='roleId'>Role</sv-default-sorter>
                     </th>
                     <th class="four text-center" scope="col">
-                        <sv-default-sorter by='joinDate'>Join Date</sv-default-sorter>
+                        <sv-default-sorter by='joinDate'>Rank</sv-default-sorter>
                     </th>
                     <th class="four text-center" scope="col">
                         <sv-default-sorter by='isActive'>Status</sv-default-sorter>
@@ -291,7 +291,7 @@
                     <td class="six text-center">{{ item.username }}</td>
                     <td class="text-center four" >{{ item.roleName }}</td>
                     <td class="text-center four">
-                        {{ item.joinDate | date : 'dd-MM-yyyy hh:mm a'}}
+                        {{ item.rankName}}
                     </td>
                     <td class="text-center four" [hidden]="item.isActive==true">
                         <span class="shadow-item text-center badge badge-pill badge-danger">Deactive</span>
