@@ -284,6 +284,10 @@ export class ApplicantComponent implements OnInit {
     }
     
     validateConfig() {
+        if(this.startDate == undefined || this.startDate == null){
+            this.toastr.error('Please choose startdate');
+            return false;
+        }
         if (this.config_id == -1) {
             this.toastr.error('Message', 'Please choose setting!');
             return false;
