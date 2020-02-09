@@ -19,7 +19,8 @@ export class StatisticApplicantComponent implements OnInit {
   constructor(
     private historyApi: StatisticApiService,
     private configApi: ConfigurationApiService,
-    private excelService: ExcelService
+    private excelService: ExcelService,
+    private toastr: ToastrService,
   ) { }
   startDate;
   filter = {
@@ -89,11 +90,16 @@ export class StatisticApplicantComponent implements OnInit {
     this.configApi.getConfigForApplicant(false, this.companyId).subscribe(
       (data) => {
         this.listConfig = data;
+        if(this.listConfig.length > 0){
         this.setFilter(0);
         this.changeLineChart();
         this.changePieChart();
         this.changeApplicantResult();
         this.changeGroupStatusTest();
+        }
+        else{
+          this.toastr.warning('System has no data!');
+        }
         this.loading = false;
       }
       , (error) => {
