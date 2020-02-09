@@ -143,11 +143,8 @@
                 <div class="col">
                     <div class="row" style="margin-top: 20px;">
                         <div class="form-group input-group col-md-6 row" style="margin-left: 21px;">
-                            <input class="col-md-10" type="search" placeholder="Enter data" [(ngModel)]="searchText"
+                            <input class="col-md-10" type="search" placeholder="Enter your key word" [(ngModel)]="searchText"
                                 style="height: 38px;">
-                            <div class="input-group-append col-md-2 no-padding-no-margin d-flex align-items-start">
-                                <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
-                            </div>
                         </div>
                         <div class="form-group input-group col-md-6 row d-flex justify-content-end"
                             style="padding-right: 0px;">
@@ -177,7 +174,7 @@
                 </div>
             </div>
             <table class="table  table-hover customtable" [svData]="Companies|CompanyFilterPipe:searchText" [svRowsOnPage]="25"
-                #sv="svDataTable">
+                #sv="svDataTable" svSortBy="isActive" svSortOrder="desc">
                 <thead>
                     <tr class="col-md-12 row no-padding-no-margin pt-3">
                         <th class="text-center" style="width: 5%;" scope="col"></th>
