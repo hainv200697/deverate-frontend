@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { QuestionDefaultComponent } from './question-default.component';
 import { PageHeaderModule } from '../../shared';
 import { QuestionDefaultRoutingModule } from './question-default-routing.module';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableModule } from 'ng-angular8-datatable';
 import {QuestionDefaultFilterPipe} from './question-default-filter.pipe';
 import { NgxLoadingModule } from 'ngx-loading';
@@ -14,6 +14,7 @@ import { NgxLoadingModule } from 'ngx-loading';
     NgbModule,
     FormsModule,
     DataTableModule,
+    NgbTooltipModule,
     ReactiveFormsModule,
     QuestionDefaultRoutingModule,
     PageHeaderModule,

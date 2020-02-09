@@ -35,6 +35,12 @@
             <span>Catalogue</span>
         </a>
 
+        <a [routerLink]="['/manage-question/0']" [routerLinkActive]="['router-link-active']" class="list-group-item"
+            *ngIf="role == 'Company Manager'">
+            <i class="fa fa-th-list"></i>&nbsp;
+            <span>Question</span>
+        </a>
+
         <a [routerLink]="['/rank']" [routerLinkActive]="['router-link-active']" class="list-group-item"
             *ngIf="role == 'Company Manager'">
             <i class="fa fa-level-up"></i>&nbsp;
