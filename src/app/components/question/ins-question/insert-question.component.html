@@ -34,8 +34,9 @@
                                         <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                             <label>Catalogue:</label>
                                             <select id="catalogue_company" name="catalogue_company"
-                                                class="form-control col-md-7"
+                                                class="form-control col-md-7" (change) = "getCatalogueName($event.target.selectedOptions[0].text)"
                                                 [(ngModel)]="insQuestion['companyCatalogueId']">
+                                                <option [value]=0>-- Choose Catalogue</option>
                                                 <option *ngFor="let item of listCatalogue"
                                                     [value]=item.companyCatalogueId>
                                                     {{item.name}}</option>
@@ -189,6 +190,17 @@
                 <div class="bs-stepper-content">
                     <div id="test-l-1" class="content">
                         <div class="modal-body">
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                <label>Catalogue:</label>
+                                <select id="catalogue_default" name="catalogue_default"
+                                    class="form-control col-md-7"
+                                    [(ngModel)]="catalogueIdExcel">
+                                    <option [value]=0>-- Choose Catalogue</option>
+                                    <option *ngFor="let item of listCatalogue"
+                                        [value]=item.companyCatalogueId>
+                                        {{item.name}}</option>
+                                </select>
+                            </div>
                             <div class="col-sm-12 col-md-12 col-lg-12 create-file">
                                 <input type="file" style="display: inline-block;" (change)="incomingfile($event)"
                                     placeholder="Upload file" accept=".xlsx">
