@@ -169,7 +169,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 questionObj.question1 = $.trim(element['Question']);
                 questionObj.isActive = true;
                 questionObj.accountId = this.accountId;
-                questionObj.companyCatalogueId = this.id;
+                questionObj.companyCatalogueId = this.catalogueIdExcel;
                 if (element['Question'] == null || element['Question'] == '') {
                     this.message.push("Question at # " + ind + " is blank");
                 }
