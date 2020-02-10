@@ -502,6 +502,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
         this.updQuestion['question'] = item['question'];
         this.updQuestion['catalogueName'] = item['catalogueName'];
         this.updQuestion['isActive'] = true;
+        this.catalogueName = item['catalogueName'];
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
