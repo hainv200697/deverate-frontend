@@ -78,6 +78,8 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     check = true;
     public message: Array<string> = [];
     allError = [];
+    catalogueIdExcel;
+
     // Import excel file
     changeIns(key) {
         this.create = key;
@@ -167,7 +169,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 questionObj.question1 = $.trim(element['Question']);
                 questionObj.isActive = true;
                 questionObj.accountId = this.accountId;
-                questionObj.companyCatalogueId = this.id;
+                questionObj.companyCatalogueId = this.catalogueIdExcel;
                 if (element['Question'] == null || element['Question'] == '') {
                     this.message.push("Question at # " + ind + " is blank");
                 }
@@ -251,9 +253,12 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             this.insAnswer.forEach(element => {
                 element['isActive'] = true;
             });
-            const catalog = this.id;
-            if (catalog === undefined || catalog === null) {
-                this.toastr.error('Message', 'Cataloguecan not be blank!');
+            if (this.insQuestion['companyCatalogueId'] == 0) {
+                this.toastr.error('Message', 'Please choose catalogue!');
+                return;
+            }
+            if (this.insQuestion['companyCatalogueId'] === undefined || this.insQuestion['companyCatalogueId'] === null) {
+                this.toastr.error('Message', 'Please choose catalogue!');
                 $('#ins_question_cate_id').css('border-color', 'red');
                 $('#ins_question_cate_id').focus();
                 return;
@@ -389,7 +394,9 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     async nextExcel() {
         this.listInsert = [];
         this.message = [];
-        if (this.file != null) {
+        if (this.catalogueIdExcel == 0) {
+            this.toastr.error("Please choose catalogue!");
+        } else if (this.file != null) {
             await this.formatExcel();
             if (this.checkFile == false) {
                 this.toastr.error("View list to see details", "File input is wrong fotmat!");
@@ -461,6 +468,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     open(content) {
         this.index = 1;
         this.listInsert = [];
+        this.insQuestion['companyCatalogueId'] = this.id;
         this.modalService.open(content, { size: 'lg', backdrop: 'static', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
@@ -474,6 +482,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.message = [];
         this.allError = [];
         this.listInsert = [];
+        this.catalogueIdExcel = this.id;
         this.modalService.open(excel, { size: 'lg', backdrop: 'static', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
@@ -495,6 +504,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.updQuestion['point'] = item['point'];
         this.updQuestion['isActive'] = true;
         this.updQuestion['accountId'] = this.accountId;
+        this.catalogueName = item['catalogueName'];
         this.modalService.open(update, { size: 'lg', ariaLabelledBy: 'modal-basic-title' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
@@ -587,7 +597,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     // end Modal
     insertQuestionSubmit(key) {
         if (key === 'excel') {
-
             this.addQuestionByExcel();
         } else {
             this.addQuestion();
@@ -606,7 +615,6 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.loading = true;
         this.insQuestion['isActive'] = true;
         this.insQuestion['accountId'] = this.accountId;
-        this.insQuestion['companyCatalogueId'] = this.id;
         this.insertQuestion = [];
         this.insertQuestion.push(this.insQuestion);
         this.questionService.insertQuestion(this.insertQuestion).subscribe(
@@ -780,5 +788,9 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         link.download = "Question_Template";
         link.href = "/assets/file/question.xlsx";
         link.click();
+    }
+
+    getCatalogueName(name) {
+        this.catalogueName = name;
     }
 }
