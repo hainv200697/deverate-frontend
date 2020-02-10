@@ -76,6 +76,9 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
     check = true;
     public message: Array<string> = [];
     allError = [];
+    listCatalogue;
+    catalogueIdExcel;
+
     // Import excel file
     changeIns(key) {
         this.create = key;
@@ -147,7 +150,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 this.allError.push(duplicate);
                 this.checkFile = false;
             }
-            list.forEach((element, ind) => {
+            list.forEach((element, ind) => { 
                 const countAnswer = Object.keys(element).length / 2 - 1;
                 this.message = [];
                 let errorRow = {};
@@ -163,10 +166,11 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                     this.checkFile = false;
                 }
                 questionObj.question = $.trim(element['Question']);
-                questionObj.catalogueDefaultId = this.id;
+                questionObj.catalogueDefaultId = this.catalogueIdExcel;
                 questionObj.isActive = true;
                 if (element['Question'] == null) {
                     this.message.push("Question at # " + ind + " is blank");
+                    this.checkFile = false;
                 }
                 for (let i = 0; i < countAnswer; i++) {
                     const answerObj = new AnswerDefaultModel();
@@ -246,12 +250,17 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
         if (key === 'ins') {
             this.insAnswer = this.answerForm.controls['answers'].value;
             let check = true;
+            if(this.insQuestion['catalogueDefaultId'] == 0){
+                this.toastr.error('Message', 'Please choose catalogue!');
+                $('#ins_question_cate_id').css('border-color', 'red');
+                $('#ins_question_cate_id').focus();
+                return;
+            }
             this.insAnswer.forEach(element => {
                 element['isActive'] = true;
             });
-            const catalog = this.id;
-            if (catalog === undefined || catalog === null) {
-                this.toastr.error('Message', 'Cataloguecan not be blank!');
+            if (this.insQuestion['catalogueDefaultId'] === undefined || this.insQuestion['catalogueDefaultId'] === null) {
+                this.toastr.error('Message', 'Please choose catalogue!');
                 $('#ins_question_cate_id').css('border-color', 'red');
                 $('#ins_question_cate_id').focus();
                 return;
@@ -344,13 +353,6 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
 
         } else {
             let check = true;
-            const catalog = this.id;
-            if (catalog === undefined || catalog === null) {
-                this.toastr.error('Message', 'Cataloguecan not be blank!');
-                $('#upd_question_cate_id').css('border-color', 'red');
-                $('#upd_question_cate_id').focus();
-                return;
-            }
             const question = $.trim(this.updQuestion['question']);
             if (question === '' || question === undefined || question === null) {
                 this.toastr.error('Message', 'Question can not be blank!');
@@ -387,7 +389,10 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
     async nextExcel() {
         this.listInsert = [];
         this.message = [];
-        if (this.file != null) {
+        if (this.catalogueIdExcel  == 0) {
+            this.toastr.error("Please choose catalogue!");
+            this.checkFile = false;
+        }else if (this.file != null) {
             await this.formatExcel();
             if (this.checkFile == false) {
                 this.toastr.error("View list to see details", "File input is wrong fotmat!");
@@ -416,8 +421,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
         this.question['question'] = '';
         this.question['cate_id'] = '';
         this.getQuestionById(true);
-        this.insQuestion['catalogueDefaultId'] = this.id;
-        this.updQuestion['catalogueDefaultId'] = this.id;
+        this.getAllCatalogue();
     }
 
     // dynamic form
@@ -459,6 +463,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
         this.index = 1;
         this.listInsert = [];
         this.mainForm();
+        this.insQuestion['catalogueDefaultId'] = this.id;
         for (let i = 0; i < this.count - 1; i++) {
             (<FormArray>this.answerForm.controls['answers']).push(this.addAnswerForm());
         }
@@ -475,6 +480,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
         this.message = [];
         this.allError = [];
         this.listInsert = [];
+        this.catalogueIdExcel = this.id;
         this.modalService.open(excel, { size: 'lg', backdrop: 'static', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
@@ -607,7 +613,6 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
     addQuestion() {
         this.loading = true;
         this.insQuestion['isActive'] = true;
-        this.insQuestion['catalogueDefaultId'] = this.id;
         this.insertQuestion = [];
         this.insertQuestion.push(this.insQuestion);
         this.questionService.insertQuestionDefault(this.insertQuestion).subscribe(
@@ -737,5 +742,31 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
         link.download = "Question_Template";
         link.href = "/assets/file/question.xlsx";
         link.click();
+    }
+
+    getAllCatalogue() {
+        this.loading = true;
+        this.catelogueService.getAllCatalogueDefault(true).subscribe(
+            (data: any[]) => {
+                this.loading = false;
+                this.listCatalogue = data;
+                console.log(data);
+            }, error => {
+                if (error.status == 0) {
+                    this.toastr.error("System is not available");
+                }
+                if (error.status == 400) {
+                    this.toastr.error("Input is invalid");
+                }
+                if (error.status == 500) {
+                    this.toastr.error("System error");
+                }
+                this.loading = false;
+            }
+        );
+    }
+
+    changeCatalogueName(name){
+        this.catalogueName = name;
     }
 }
