@@ -192,7 +192,7 @@
         <div class="row mb-1">
             <div class="col">
                 <div class=" row justify-content-between" style="margin-top: 20px;">
-                    <div class="form-group row input-group col-md-6">
+                    <div class="form-group row input-group col-md-8">
                         <div class="col-md-6 row">
                             <label class="col-md-3" for="ins_manage_role">Role</label>
                             <select id="ins_manage_role" name="ins_manage_role" class="form-control col-md-8"
@@ -204,7 +204,7 @@
                             </select>
                         </div>
                         <div class="col-md-6 row">
-                            <label class="col-md-4" for="company">Company</label>
+                            <label class="col-md-6" for="company">Company</label>
                             <select id="company" name="company" class="form-control col-md-8"
                                 [(ngModel)]="companyId" (change)="getEmployee()">
                                 <option *ngFor="let item of companyList" [value]=item.companyId>
