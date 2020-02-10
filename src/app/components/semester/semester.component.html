@@ -26,6 +26,7 @@
                         &nbsp;&nbsp;&nbsp;
                         <select id="ins_setting" name="ins_setting" class="form-control" style="width: 46%;"
                             [(ngModel)]="chooseConfig" (change)="getEmployeeDoTheTest(chooseConfig)">
+                            <option disabled [value]=-1>-- Choosing setting</option>
                             <option style="width: 46%;" *ngFor="let item of listConfig" [value]=item.configId>
                                 {{item.title}}</option>
                         </select>
@@ -49,7 +50,7 @@
                 <div class="row justify-content-end" style="margin-top: 20px;">
                     <button style="margin-right: 10px;" (click)="createTest();" class="btn btn-lg btn-success"
                         data-toggle="button">
-                        <i class="fa fa-paper-plane" placement="top" placement="top">&nbsp; Gen test</i>
+                        <i class="fa fa-paper-plane" placement="top" placement="top">&nbsp; Generate test</i>
                     </button>
                 </div>
             </div>
@@ -94,7 +95,7 @@
                     <td class="text-center" style="font-weight: bold;width: 25%;">{{item.email}}</td>
                     <td class="text-center" style="font-weight: bold;width: 20%;" *ngIf="item.rankName != null">
                         {{item.rankName}}</td>
-                    <td class="text-center" style="font-weight: bold;width: 20%;" *ngIf="item.rankName == null">Updating
+                    <td class="text-center" style="font-weight: bold;width: 20%;" *ngIf="item.rankName == null">Not Ranked
                     </td>
                 </tr>
             </tbody>

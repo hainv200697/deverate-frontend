@@ -34,7 +34,9 @@ export class SemesterComponent implements OnInit {
     minDate;
     ngOnInit() {
         this.getAllConfig();
+        this.chooseConfig = -1;
         this.minDate = this.momentToOpjectDate(moment());
+        this.startDate = this.minDate;
     }
 
     getEmployeeDoTheTest(configId) {
@@ -178,8 +180,8 @@ export class SemesterComponent implements OnInit {
 
     validate() {
         this.check = true;
-        if (this.chooseConfig == null) {
-            this.toast.error('Please choose test setting');
+        if (this.chooseConfig == -1) {
+            this.toast.error('Please choose setting!');
             this.check = false;
         }
         if (this.chooseEmployee == undefined || this.chooseEmployee.length == 0) {

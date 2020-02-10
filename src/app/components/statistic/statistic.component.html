@@ -31,7 +31,7 @@
             </ng-multiselect-dropdown>
             &nbsp;
             <button class="btn btn-success save shadow-card" (click)="Apply()" style="height: 88%;"
-                [hidden]="selectedItems.length ==0">Apply</button>
+                [hidden]="selectedItems.length ==0">Search</button>
         </div>
     </div>
 
@@ -130,7 +130,7 @@
                                     {{data?.startDate.split('T')[0]}}</td>
                                 <th class="text-center" style="width: 15%;">
                                     <a href='result/{{data.testId}}' target="_blank">
-                                        <button class="btn btn-primary btn-xs btn-circle">
+                                        <button class="btn btn-warning btn-xs btn-circle">
                                             <i class="fa fa-edit"></i>
                                         </button>
                                     </a>
