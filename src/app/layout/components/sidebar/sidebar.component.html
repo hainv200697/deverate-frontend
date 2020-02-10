@@ -11,6 +11,11 @@
             <i class="fa fa-th-list"></i>&nbsp;
             <span>Catalogue</span>
         </a>
+        <a [routerLink]="['/manage-question-default/0']" [routerLinkActive]="['router-link-active']" class="list-group-item"
+            *ngIf="role == 'System Manager'">
+            <i class="fa fa-th-list"></i>&nbsp;
+            <span>Question</span>
+        </a>
         <a [routerLink]="['/manage-company-account']" [routerLinkActive]="['router-link-active']"
             class="list-group-item" *ngIf="role == 'System Manager'">
             <i class="fa fa-user"></i>&nbsp;
