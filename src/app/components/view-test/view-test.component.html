@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="row justify-content-end" style="margin-top: 20px;">
-                <button [hidden]="iconIsActive==false" style="margin-right: 20px;"
+                <button [hidden]="iconIsActive==false" style="margin-right: 20px;" ngbTooltip="Resend Quiz Code"
                     (click)="sendQuizCode();" class="btn btn-lg btn-warning" data-toggle="button">
                     <i class="fa fa-envelope" tooltip="Send mail" placement="top"></i>
                 </button>
@@ -78,7 +78,7 @@
                         <span class="shadow-item text-center badge badge-pill  badge-success">Doing</span>
                     </td>
                     <td class="col-md-1 text-center nowrap text-center action-column" style="color: red;">
-                        <button class="btn-warning btn btn-circle shadow-item" (click)="openViewTest(item.testId)"
+                        <button class="btn-warning btn btn-circle shadow-item" ngbTooltip="Detail" (click)="openViewTest(item.testId)"
                             tooltip="update">
                             <i class="fa fa fa-eye edit-icon"></i>
                         </button>

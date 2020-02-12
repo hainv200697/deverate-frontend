@@ -617,10 +617,14 @@ export class EmployeeSystemComponent implements OnInit {
             this.loading = false;
             this.companyList = data;
             this.selectedAll = false;
-            if(this.companyList.length > 0){
-                this.companyId = this.companyList[0].companyId;
+            if(this.companyId != 0){
+                this.getEmployee();
+                localStorage.removeItem('CompanyId')
             }
-            this.getEmployee();
+            else if(this.companyId ==0 && this.companyList.length != 0){
+                this.companyId = this.companyList[0].companyId;
+                this.getEmployee();
+            }
           },
           (error) => {
             if (error.status == 0) {
