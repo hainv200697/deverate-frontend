@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { routerTransition } from '../router.animations';
 import { ToastrService } from 'ngx-toastr';
 import { AuthenticationService } from '../services/authentication.service';
@@ -18,10 +18,21 @@ export class LoginComponent implements OnInit {
     constructor(
         private router: Router,
         private toast : ToastrService,
-        private authenticationService: AuthenticationService
+        private authenticationService: AuthenticationService,
+        private activatedRoute: ActivatedRoute
     ) { }
 
     ngOnInit() {
+        this.activatedRoute.queryParams.subscribe(params => {
+            let username = params['username'];
+            let password = params['password'];
+            if (username && password) {
+                localStorage.clear();
+                this.username = username;
+                this.password = password;
+                this.onLogin();
+            }
+        });
         if (localStorage.getItem('Authorization')) {
             const role = localStorage.getItem('Role');
             switch (role) {
