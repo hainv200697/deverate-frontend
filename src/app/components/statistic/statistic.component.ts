@@ -46,7 +46,7 @@ export class StatisticComponent implements OnInit {
     domain: ['#F2726F', '#FFC533', '#00CC00', '#62B58F','#FF0000','#FF9999','#3300CC','#330066','#330000','#6633CC','#663300','#660099']
   };
 
-  dataGroupChart: any;
+  dataGroupChart = [];
   data = [];
 
   lineChartSeries: any[] = [];
@@ -68,10 +68,10 @@ export class StatisticComponent implements OnInit {
   yAxisLabelRight: string = 'Average Point';
 
   rankStattistic = [];
-  dataEmployeeOverPoint: any;
+  dataEmployeeOverPoint = [];
   chooseConfig = [];
   counApi = 0;
-  dataRankStatistic;
+  dataRankStatistic = [];
   noData: boolean;
 
   companyId = Number(localStorage.getItem('CompanyId'));
@@ -98,10 +98,10 @@ export class StatisticComponent implements OnInit {
   ) { }
 
   public loading = false;
-  historyData: any;
+  historyData = [];
   averageCatalogue = [];
   catalogues: [];
-  selectData;
+  selectData: [];
 
   GetGeneralStatistic(id) {
     this.loading = true

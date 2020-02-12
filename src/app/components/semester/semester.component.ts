@@ -102,7 +102,9 @@ export class SemesterComponent implements OnInit {
             this.selectedAll = false;
         } else {
             this.chooseEmployee.push(accountId);
-            this.selectedAll = false;
+            if(this.chooseEmployee.length == this.listEmployee.length){
+                this.selectedAll = true;
+            }
         }
     }
 
