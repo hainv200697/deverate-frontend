@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
                 this.onLogin();
             }
         });
+
         if (localStorage.getItem('Authorization')) {
             const role = localStorage.getItem('Role');
             switch (role) {
