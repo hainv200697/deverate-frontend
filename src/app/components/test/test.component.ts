@@ -48,7 +48,7 @@ export class TestComponent implements OnInit {
           return;
         }
         if (this.config.accountId != null && this.accountId != this.config.accountId) {
-          this.router.navigate(['**']);
+          this.router.navigate(['forbidden']);
           return;
         }
         if (this.config.accountId != null && this.config.status == 'Submitted' && this.config.accountId == this.accountId) {
