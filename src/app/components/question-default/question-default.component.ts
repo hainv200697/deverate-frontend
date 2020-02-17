@@ -138,11 +138,16 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
             });
             list.forEach(element => {
                 this.allQuestions.forEach(ques => {
-                    if (element.Question.trim() == ques.question1) {
+                    let questionExcel = element.Question.trim();
+                    let question = ques.question;
+                    if (questionExcel === question && this.catalogueIdExcel == ques.catalogueDefaultId) {
                         existedQues.push("Question  " + element.Question + " is existed");
+                        this.checkFile = false;
+                        console.log(this.checkFile);
                     }
                 });
             });
+            
             if (existedQues != null && existedQues.length != 0) {
                 let duplicate = {};
                 duplicate['row'] = "Question duplicated:";
@@ -154,7 +159,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 const countAnswer = Object.keys(element).length / 2 - 1;
                 this.message = [];
                 let errorRow = {};
-                ind = ind + 1;
+                ind = ind + 2;
                 const questionObj = new QuestionDefaultModel();
                 this.listAnswer = [];
                 questionObj.point = element['QuestionPoint'];
@@ -196,7 +201,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 let ans = [];
                 let dupAns: string[] = []
                 this.listAnswer.map(function (item) {
-                    var existItem = ans.find(x => x.answer == item.answerText);
+                    var existItem = ans.find(x => x.answerText == item.answerText);
                     if (existItem) {
                         dupAns.push("Question #" + ind + " has duplicated answer");
                     } else {
@@ -205,9 +210,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                 });
 
                 if (dupAns != null && dupAns.length != 0) {
-                    dupAns.forEach(element => {
-                        this.message.push(element);
-                    });
+                    this.message.push(dupAns[0]);
                     this.checkFile = false;
                 }
                 this.listAnswer.forEach((element, index) => {
@@ -751,7 +754,6 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
             (data: any[]) => {
                 this.loading = false;
                 this.listCatalogue = data;
-                console.log(data);
             }, error => {
                 if (error.status == 0) {
                     this.toastr.error("System is not available");
