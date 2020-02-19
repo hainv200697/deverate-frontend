@@ -99,7 +99,7 @@ export class RankComponent implements OnInit {
   }
 
   removeRank(index){
-    this.clone.splice(index,1)
+    this.clone.splice(index,1);
     this.calculateWeightPoint();
   }
 
