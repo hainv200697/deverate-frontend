@@ -139,7 +139,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
             });
             list.forEach(element => {
                 this.allQuestions.forEach(ques => {
-                    if ($.trim(element.Question) == ques.question1) {
+                    if ($.trim(element.Question) == ques.question1 && this.catalogueIdExcel == ques.companyCatalogueId) {
                         existedQues.push("Question  " + element.Question + " is existed");
                     }
                 });
@@ -206,9 +206,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
                 });
 
                 if (dupAns != null && dupAns.length != 0) {
-                    dupAns.forEach(element => {
-                        this.message.push(element);
-                    });
+                    this.message.push(dupAns[0]);
                     this.checkFile = false;
                 }
                 this.listAnswer.forEach((element, index) => {

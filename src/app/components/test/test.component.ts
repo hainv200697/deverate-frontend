@@ -221,6 +221,7 @@ export class TestComponent implements OnInit {
       questionInTest: this.questionInTest
     }
     this.loading = true;
+    console.log(JSON.stringify(userTest));
     this.testService.postSubmitTest(userTest)
       .subscribe((res) => {
         if(res != 0){

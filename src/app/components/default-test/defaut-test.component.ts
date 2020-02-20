@@ -48,10 +48,9 @@ export class DefautTestComponent implements OnInit {
         this.questionInTest = res.questionInTest;
         this.questionInTest.forEach(element => {
           newAnswer = this.gblserv.shuffleAnswer(element['answers']);
-          console.log(newAnswer);
           element['answers'] =newAnswer;
         });
-        
+        console.log(res.questionInTest);
         
       },
         (error) => {
