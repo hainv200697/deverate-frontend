@@ -50,7 +50,6 @@ export class DefautTestComponent implements OnInit {
           newAnswer = this.gblserv.shuffleAnswer(element['answers']);
           element['answers'] =newAnswer;
         });
-        console.log(res.questionInTest);
         
       },
         (error) => {
@@ -61,7 +60,6 @@ export class DefautTestComponent implements OnInit {
 
 
   scroll(id) {
-    console.log(id);
     let el = document.getElementById(id);
     el.scrollIntoView({ behavior: "smooth" });
   }
