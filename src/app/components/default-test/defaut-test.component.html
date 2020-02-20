@@ -18,9 +18,10 @@
                         <h5>{{iq+1}}. {{item['question']}}</h5>
                     </div>
                     <div class="radio answer" *ngFor="let ans of item.answers; let ia = index"> 
-                        <label style="padding-top: 5px;">
+                        <label [ngStyle]="{'color': item.answerId == ans.answerId ?  '#FF8C00' : 'black' }" style="padding-top: 5px;">
                             {{alpha[ia]}}. {{ans.answer}}
                         </label>
+                        &nbsp;<i *ngIf="item.answerId == ans.answerId" class="fa fa-hand-o-left" aria-hidden="true"></i>
                     </div>
                 </div>
             </div>
