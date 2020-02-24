@@ -13,6 +13,8 @@ const routes: Routes = [
         path: '',
         component: LayoutComponent,
         children: [
+            { path: '', loadChildren: () => import('../login/login.module').then(m => m.LoginModule)},
+
             // System Manager
             { path: 'default-catalogue', loadChildren: () => import('../components/catalogue-default/catalogue-default.module').then(m => m.CatalogueDefaultModule), canActivate: [SystemGuard]},
             { path: 'manage-company', loadChildren: () => import('../components/company/ins-company/insert-company.module').then(m => m.InsertCompanyModule), canActivate: [SystemGuard]},

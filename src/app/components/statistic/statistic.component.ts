@@ -43,7 +43,7 @@ export class StatisticComponent implements OnInit {
   load = false;
   //vertical bar chart
   colorScheme = {
-    domain: ['#F2726F', '#FFC533', '#00CC00', '#62B58F','#FF0000','#FF9999','#3300CC','#330066','#330000','#6633CC','#663300','#660099']
+    domain: ['#d9d9d9','#fecc65','#fe9a65','#e47121','#fd5050','#d40291','#670634','#3300CC','#330066','#330000','#6633CC','#663300','#660099']
   };
 
   dataGroupChart = [];
