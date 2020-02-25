@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TestService } from 'src/app/services/test.service';
-import { Location } from '@angular/common';
-import { GobalService } from 'src/app/shared/services/gobal-service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-sample-test',
@@ -13,7 +12,8 @@ export class SampleTestComponent implements OnInit {
 
   constructor(
     private testService: TestService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService,
   ) { }
   config;
   key;
@@ -53,6 +53,15 @@ export class SampleTestComponent implements OnInit {
           this.error = true;
           this.loading = false;
           this.isLoaded = true;
+          if (error.status == 0) {
+            this.toastr.error("System is not available");
+          }
+          if (error.status == 400) {
+            this.toastr.error("Input is invalid");
+          }
+          if (error.status == 500) {
+            this.toastr.error("System error");
+          }
         });
   }
 
