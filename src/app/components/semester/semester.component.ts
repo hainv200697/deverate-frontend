@@ -115,8 +115,7 @@ export class SemesterComponent implements OnInit {
         }
         for (let index = 0; index < this.listConfig.length; index++) {
             if (this.listConfig[index].configId == this.chooseConfig) {
-                const date = moment(this.startDate);
-                this.endDate = this.calculateEndDate(date, this.listConfig[index].expiredDays);
+                this.calculateEndDate(this.startDate, this.listConfig[index].expiredDays);
             }
         }
         if (this.startDate.month < 10) {
@@ -164,11 +163,11 @@ export class SemesterComponent implements OnInit {
     }
 
     calculateEndDate(date, expiredDays) {
-        const endDate =date.date()+ expiredDays;
-        return {
-            year: date.year(),
-            month: date.month() < 10 ? ("0" + date.month()).slice(-2) : date.month(),
-            day: endDate < 10 ? ("0" + endDate).slice(-2) : endDate
+        var ed = moment(`${date.day}-${date.month}-${date.year}`, "DD-MM-YYYY").add( expiredDays - 1, 'days');
+        this.endDate = {
+            year: ed.format('YYYY'),
+            month: ed.format('MM'),
+            day: ed.format('DD')
         }
     }
 
