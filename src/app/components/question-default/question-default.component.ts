@@ -143,7 +143,6 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
                     if (questionExcel === question && this.catalogueIdExcel == ques.catalogueDefaultId) {
                         existedQues.push("Question  " + element.Question + " is existed");
                         this.checkFile = false;
-                        console.log(this.checkFile);
                     }
                 });
             });

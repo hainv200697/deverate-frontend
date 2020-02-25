@@ -39,7 +39,6 @@ export class AnswerComponent implements OnInit {
         this.iconIsActive = status;
         this.answerService.getAllAnswerByQuestioId(this.id, status).subscribe(
             (data: any) => {
-                console.log(data);
                 this.answerList = data;
             }
         );
@@ -90,7 +89,6 @@ export class AnswerComponent implements OnInit {
             this.insAnswer['questionId'] = parseInt(this.insAnswer['questionId']);
             this.answerService.insertAnswer(this.insAnswer).subscribe(
                 (results) => {
-                    console.log(results);
                     this.loading = false;
                     this.getAnswerById(true);
                     this.toastr.success(results['message']);
@@ -110,10 +108,8 @@ export class AnswerComponent implements OnInit {
     // update anser function
     updateAnswer() {
         this.loading = true;
-        console.log(this.updAnswer);
         this.answerService.updateAnswer(this.updAnswer).subscribe(
             (results) => {
-                console.log(results);
                 this.loading = false;
                 this.getAnswerById(this.iconIsActive);
                 this.toastr.success(results['message']);

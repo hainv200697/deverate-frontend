@@ -30,7 +30,6 @@ export class RerankingComponent implements OnInit {
           element.startDate = moment.utc(element.startDate).local().format('MM/DD/YYYY');
           element.endDate = moment.utc(element.endDate).local().format('MM/DD/YYYY');
         });
-        console.log(res);
         this.configs = res;
       });
   }
@@ -57,11 +56,9 @@ export class RerankingComponent implements OnInit {
     };
     this.testService.getAllQuestion(testInfo)
       .subscribe((res) => {
-        console.log(res);
         this.message = res;
         this.closeModal();
         this.test = false;
-        console.log(this.test);
       },
         (error) => {
           this.error = true;

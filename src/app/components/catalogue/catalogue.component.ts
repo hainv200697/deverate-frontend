@@ -103,7 +103,6 @@ export class CatalogueComponent implements OnInit {
         if(!this.validateDes()){
             check =false;
         }
-        console.log(check);
         if(check==true){
             this.insCata();
             this.closeModal();

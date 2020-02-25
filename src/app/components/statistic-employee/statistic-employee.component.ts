@@ -40,10 +40,8 @@ export class StatisticEmployeeComponent implements OnInit {
           for (let i = 0; i < size; i++) {
             var series = [];
             this.dataLineChart.forEach(element => {
-              console.log(element)
               series.push({ name: element.name, value: element.series[i].overallPoint });
             });
-            console.log(series)
             var element = {
               name: this.dataLineChart[0].series[i].name,
               series
@@ -64,7 +62,6 @@ export class StatisticEmployeeComponent implements OnInit {
           this.averageCatalogue.push({
             name : "Over Point",
             series});
-          console.log(this.averageCatalogue)
         }
         if(itemSelect == 1){
 
