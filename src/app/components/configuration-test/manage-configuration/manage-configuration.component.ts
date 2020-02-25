@@ -403,6 +403,7 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   viewTest(id) {
+    localStorage.setItem('isEmployee', 'true');
     this.router.navigate(['/manage-test/', id]);
   }
 }

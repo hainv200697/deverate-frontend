@@ -34,6 +34,7 @@ export class ViewTestComponent implements OnInit {
   sub: Subscription;
   id = this.activeRoute.snapshot.params.id;
   listTest = [];
+  
   ngOnInit() {
     this.getTestByConfig();
 
@@ -87,7 +88,7 @@ export class ViewTestComponent implements OnInit {
         this.sendMail.forEach(element => {
           listTestId.push(element.testId);
         });
-        this.testService.sendMail(listTestId).subscribe(data => {
+        this.testService.sendMail(listTestId, localStorage.getItem('isEmployee')).subscribe(data => {
           this.getTestByConfig();
           Swal.fire('Success', 'Code has been send', 'success');
         });;

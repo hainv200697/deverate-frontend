@@ -50,9 +50,10 @@ export class TestService {
     return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST + API, sampleTest);
   }
 
-  sendMail(listId) {
+  sendMail(listId,isEmployee) {
+    const param = new HttpParams().set('isEmployee', isEmployee);
     const API = 'api/Test/SendTestCode';
-    return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST + API, listId);
+    return this.httpClient.post<any>(this.URL + AppSettings.ROUTE_TEST + API, listId,{ params: param });
   }
 
   checkCode(testId,code) {
