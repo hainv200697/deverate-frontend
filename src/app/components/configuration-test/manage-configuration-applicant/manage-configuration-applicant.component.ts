@@ -400,6 +400,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
   }
 
   viewTest(id) {
+    localStorage.setItem('isEmployee', 'false');
     this.router.navigate(['/manage-test/', id]);
   }
 }

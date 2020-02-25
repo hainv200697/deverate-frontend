@@ -225,8 +225,7 @@ export class ApplicantComponent implements OnInit {
             this.loading = true;
             for (let index = 0; index < this.listConfig.length; index++) {
                 if (this.listConfig[index].configId == this.config_id) {
-                    const date = moment(this.startDate);
-                    this.endDate = this.calculateEndDate(date, this.listConfig[index].expiredDays);
+                    this.calculateEndDate(this.startDate, this.listConfig[index].expiredDays);
                 }
             }
             if (this.startDate.month < 10) {
@@ -237,8 +236,6 @@ export class ApplicantComponent implements OnInit {
             }
             var startDateString = `${this.startDate.year}-${this.startDate.month}-${this.startDate.day}T00:00:01.000+07:00`;
             var endDateString =  `${this.endDate.year}-${this.endDate.month}-${this.endDate.day}T23:59:59.000+07:00`;
-            console.log(startDateString);
-            console.log(endDateString);
             this.applicantService.postCreateApplicant(this.applicantList,this.config_id,startDateString,endDateString).subscribe(
             results => {
                 this.loading = false;
@@ -308,10 +305,11 @@ export class ApplicantComponent implements OnInit {
     }
 
     calculateEndDate(date, expiredDays) {
-        return {
-            year: date.year(),
-            month: date.month() < 10 ? ("0" + date.month()).slice(-2) : date.month(),
-            day: date.date() + expiredDays < 10 ? ("0" + date.date() + expiredDays).slice(-2) : date.date() + expiredDays
+        var ed = moment(`${date.day}-${date.month}-${date.year}`, "DD-MM-YYYY").add( expiredDays - 1, 'days');
+        this.endDate = {
+            year: ed.format('YYYY'),
+            month: ed.format('MM'),
+            day: ed.format('DD')
         }
     }
 
