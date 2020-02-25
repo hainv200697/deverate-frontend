@@ -37,10 +37,8 @@ export class SampleTestComponent implements OnInit {
     if (sampleTest == null || sampleTest == undefined || sampleTest == '') {
       this.router.navigate(['/not-fount']);
     }
-    console.log(JSON.stringify(sampleTest));
     this.testService.getAllQuestionSample(sampleTest)
       .subscribe((res) => {
-        console.log(res);
         this.test = true;
         this.questionInTest = res.questions;
         this.catalogues = res.catalogues;
@@ -53,18 +51,9 @@ export class SampleTestComponent implements OnInit {
       },
         (error) => {
           this.error = true;
+          this.loading = false;
+          this.isLoaded = true;
         });
   }
 
-
-  scroll(id) {
-    let el = document.getElementById(id);
-    el.scrollIntoView({ behavior: "smooth" });
-  }
-
-  changeAnswer(id) {
-    let el = document.getElementById(id);
-    el.style.backgroundColor = "blue";
-    el.style.color = "white";
-  }
 }
