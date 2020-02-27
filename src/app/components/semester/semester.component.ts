@@ -182,7 +182,7 @@ export class SemesterComponent implements OnInit {
     validate() {
         this.check = true;
         if (this.chooseConfig == -1) {
-            this.toast.error('Please choose setting!');
+            this.toast.error('Please choose semester!');
             this.check = false;
         }
         if (this.chooseEmployee == undefined || this.chooseEmployee.length == 0) {

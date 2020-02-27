@@ -283,7 +283,7 @@ export class ApplicantComponent implements OnInit {
     
     validateConfig() {
         if (this.config_id == -1) {
-            this.toastr.error('Message', 'Please choose setting!');
+            this.toastr.error('Message', 'Please choose semester!');
             return false;
         }
         return true;
