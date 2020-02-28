@@ -148,6 +148,7 @@ export class StatisticApplicantComponent implements OnInit {
     this.historyApi.GetApplicantResult(this.filter).subscribe(
       (data) => {
         this.applicantList = data;
+        console.log(this.applicantList);
         this.loading = false;
       }
       , (error) => {
