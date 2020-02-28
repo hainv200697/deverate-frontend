@@ -396,7 +396,7 @@
                             <div class="row" style="margin-left: 20px; margin-top: 20px;">
                                 <select id="catalogue_company" name="catalogue_company" class="form-control col-md-5"
                                     [(ngModel)]="id" (change)="getQuestionById(true)">
-                                    <option [value]=0>All question</option>
+                                    <option [value]=0>All catalogue</option>
                                     <option *ngFor="let item of listCatalogue" [value]=item.catalogueId>
                                         {{item.name}}</option>
                                 </select>
