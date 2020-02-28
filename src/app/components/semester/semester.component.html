@@ -26,7 +26,7 @@
                         &nbsp;&nbsp;&nbsp;
                         <select id="ins_setting" name="ins_setting" class="form-control" style="width: 46%;"
                             [(ngModel)]="chooseConfig" (change)="getEmployeeDoTheTest(chooseConfig)">
-                            <option disabled [value]=-1>-- Choosing setting</option>
+                            <option disabled [value]=-1>-- Choosing semester</option>
                             <option style="width: 46%;" *ngFor="let item of listConfig" [value]=item.configId>
                                 {{item.title}}</option>
                         </select>
@@ -43,7 +43,7 @@
                     <div class="form-group col-md-2 row">
                         <div class="text-center">
                             <input type="checkbox" [(ngModel)]="chooseType" [value]=true>
-                            <label class="ml-2">Share Quiz</label>
+                            <label class="ml-2">Use same question</label>
                         </div>
                     </div>
                 </div>

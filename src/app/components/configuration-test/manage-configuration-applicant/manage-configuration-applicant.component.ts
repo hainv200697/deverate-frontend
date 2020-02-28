@@ -266,7 +266,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
     this.loading = false;
     Swal.fire({
       title: 'Are you sure?',
-      text: 'The configuration will be create!',
+      text: 'The semester will be create!',
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, create it!',
@@ -324,7 +324,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
   DisableConfiguration(status) {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'The config will be delete!',
+      text: 'The semester will be delete!',
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it!',
@@ -358,7 +358,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
 
   validateConfiguration() {
     if (this.inputConfiguration['title'] == "") {
-      this.toast.error('Message', 'Please input title config');
+      this.toast.error('Message', 'Please input semester name!');
       return false;
     }
     else if(this.listCatalogue.length == 0 ){
