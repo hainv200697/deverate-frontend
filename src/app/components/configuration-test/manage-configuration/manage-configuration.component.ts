@@ -365,11 +365,11 @@ export class ManageConfigurationComponent implements OnInit {
 
   validateConfiguration() {
     if (this.inputConfiguration['title'] == "") {
-      this.toast.error('Message', 'Please input semester name!');
+      this.toast.error('Message', 'Please input title semester!');
       return false;
     }
     else if (this.inputConfiguration['title'].length > 20) {
-      this.toast.error('Message', 'The maximum exam name is 20');
+      this.toast.error('Message', 'The maximum title semester is 20');
       return false;
     }
     else if (this.inputConfiguration['duration'] < 5 || this.inputConfiguration['duration'] > 180) {
