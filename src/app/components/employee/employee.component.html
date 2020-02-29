@@ -178,7 +178,7 @@
 
 <div class="card mb-3">
     <div class="card-header">
-        <h5>Manage Account</h5>
+        <h5>Account</h5>
     </div>
     <div class="table-responsive col-md-12 datatable">
         <div class="row mb-1">
@@ -218,7 +218,7 @@
                             <button [hidden]="selected==false" style="margin-right: 10px;"
                                 (click)="clickButtonChangeStatus(false);" class="btn btn-lg btn-danger" placement="top"
                                 ngbTooltip="Disable account" data-toggle="button">
-                                <i class="fa fa-ban"></i>
+                                <i class="fa fa-trash-o delete-icon"></i>
                             </button>
                             <button [hidden]="selected==false" style="margin-right: 10px;"
                                 (click)="clickButtonChangeStatus(true);" class="btn btn-lg btn-success"
@@ -249,16 +249,16 @@
                     <th class="text-center one" scope="col">
                         <input [disabled]="sv.data.length == 0" class="btn" type="checkbox" value="" [(ngModel)]="selectedAll" (change)="selectAll();">
                     </th>
-                    <th class="two text-center" scope="col">
+                    <th class="two text-left" scope="col">
                         <sv-default-sorter by='username'>Username</sv-default-sorter>
                     </th>
-                    <th class="four text-center" scope="col">
+                    <th class="four text-left" scope="col">
                         <sv-default-sorter by='fullname'>Fullname</sv-default-sorter>
                     </th>
-                    <th class="four text-center" scope="col">
+                    <th class="four text-left" scope="col">
                         <sv-default-sorter by='email'>Email</sv-default-sorter>
                     </th>
-                    <th class="two text-center" scope="col">
+                    <th class="two text-left" scope="col">
                         <sv-default-sorter by='roleId'>Role</sv-default-sorter>
                     </th>
                     <th class="three text-center" scope="col">

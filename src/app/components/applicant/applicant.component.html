@@ -37,7 +37,7 @@
                         </div>
                         <div class="form-inline col-sm-12 col-md-6 col-lg-5">
                             <label>Semester:&nbsp;&nbsp;</label>
-                            <select id="ins_setting" name="ins_setting"  class="form-control col-md-5"
+                            <select id="ins_setting" name="ins_setting"  class="form-control" style="width: 46%;"
                             [(ngModel)]="config_id">
                                 <option disabled [value]=-1>-- Choosing semester</option>
                                 <option *ngFor="let item of listConfig" [value]=item.configId>{{item.title}}</option>
@@ -72,7 +72,7 @@
             svSortBy="name" svSortOrder="asc">
             <thead>
                 <tr class="col-md-12 row no-padding-no-margin">
-                    <td class="col-md-2 text-center" style="font-weight: bold">#</td>
+                    <td class="col-md-2 text-center" style="font-weight: bold">No.</td>
                     <td class="col-md-4 text-center" style="font-weight: bold">Fullname</td>
                     <td class="col-md-5 text-center" style="font-weight: bold">Email</td>
                     <td class="col-md-1 text-center" style="font-weight: bold">Action</td>
@@ -139,7 +139,7 @@
                                 <table class="table table-striped table-bordered table-hover customtable">
                                     <thead>
                                         <tr class="col-md-12 row no-padding-no-margin">
-                                            <td class="col-md-2" style="font-weight: bold">#</td>
+                                            <td class="col-md-2" style="font-weight: bold">No.</td>
                                             <td class="col-md-4" style="font-weight: bold">Fullname</td>
                                             <td class="col-md-6" style="font-weight: bold">Email</td>
                                         </tr>

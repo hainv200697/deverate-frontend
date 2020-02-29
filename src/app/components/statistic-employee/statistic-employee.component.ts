@@ -89,6 +89,7 @@ export class StatisticEmployeeComponent implements OnInit {
   public showYAxis = true;
   public gradient = false;
   public showLegend = true;
+  public legendTitle = 'Title';
   public showXAxisLabel = true;
   public xAxisLabel: "Years";
   public showYAxisLabel = true;

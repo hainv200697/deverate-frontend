@@ -22,7 +22,7 @@
                             name="searchText" [(ngModel)]="searchText">
                     </div>
                     <div class="form-group col-md-6 row">
-                        <label style="width: 30%;">Choose config:</label>
+                        <label style="width: 30%;">Choose semester:</label>
                         &nbsp;
                         <select id="config" name="config" class="form-control" style="width: 36%;"
                             [(ngModel)]="chooseConfig" (change)="getEmployeeToApprove()">
@@ -31,7 +31,7 @@
                         </select>
                     </div>
                     <div class="form-group col-md-6 d-flex justify-content-end">
-                        <button style="margin-right: 10px;" ngbTooltip="Refesh" (click)="getEmployeeToApprove(chooseConfig)"
+                        <button style="margin-right: 10px;" ngbTooltip="Refresh" (click)="getEmployeeToApprove(chooseConfig)"
                             class="btn btn-lg btn-primary">
                             <i class="fa fa-refresh"></i>
                         </button>
