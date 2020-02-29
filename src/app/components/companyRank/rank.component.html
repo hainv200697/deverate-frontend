@@ -14,7 +14,7 @@
 
     <div class="card mb-3 shadow-card">
         <div class="card-header">
-            Rank Management
+            <h5>Rank</h5>
         </div>
         <div style="overflow-x: auto; height: 600px;">
 
@@ -25,7 +25,7 @@
                             class="btn btn-lg btn-success" ngbTooltip="Save">
                             <i class="fa fa-save"></i>
                         </button>
-                        <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)" ngbTooltip="Refesh"
+                        <button style="margin-right: 10px;" (click)="clickButtonRefresh(refesh)" ngbTooltip="Refresh"
                             class="btn btn-lg btn-primary" data-toggle="button">
                             <i #refesh class="fa fa-refresh" placement="top" aria-hidden="true"
                                 [ngClass]="{'fa-spin' : getallCustomerFlag}"></i>
