@@ -112,6 +112,14 @@
                                         <tbody>
                                             <tr class="col-md-12 row no-padding-no-margin">
                                                 <td class="col-md-3" style="font-weight: bold">
+                                                    Catlogue
+                                                </td>
+                                                <td class="col-md-9">
+                                                    {{catalogueName}}
+                                                </td>
+                                            </tr>
+                                            <tr class="col-md-12 row no-padding-no-margin">
+                                                <td class="col-md-3" style="font-weight: bold">
                                                     Question
                                                 </td>
                                                 <td class="col-md-9">
@@ -120,10 +128,10 @@
                                             </tr>
                                             <tr class="col-md-12 row no-padding-no-margin">
                                                 <td class="col-md-3" style="font-weight: bold">
-                                                    Catlogue
+                                                    Question
                                                 </td>
                                                 <td class="col-md-9">
-                                                    {{catalogueName}}
+                                                    {{insQuestion['point']}}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -289,7 +297,7 @@
                     <div class="step" data-target="#test-l-2">
                         <button [disabled]="index != 2" class="step-trigger">
                             <span class="bs-stepper-circle">2</span>
-                            <span class="bs-stepper-label">View Question and Answer</span>
+                            <span class="bs-stepper-label">View Question</span>
                         </button>
                     </div>
                 </div>

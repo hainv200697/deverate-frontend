@@ -465,7 +465,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
         this.index = 1;
         this.listInsert = [];
         this.mainForm();
-        this.insQuestion['catalogueDefaultId'] = this.id;
+        this.insQuestion['catalogueDefaultId'] = 0;
         for (let i = 0; i < this.count - 1; i++) {
             (<FormArray>this.answerForm.controls['answers']).push(this.addAnswerForm());
         }
@@ -482,7 +482,7 @@ export class QuestionDefaultComponent implements OnInit, AfterViewInit {
         this.message = [];
         this.allError = [];
         this.listInsert = [];
-        this.catalogueIdExcel = this.id;
+        this.catalogueIdExcel = 0;
         this.modalService.open(excel, { size: 'lg', backdrop: 'static', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
