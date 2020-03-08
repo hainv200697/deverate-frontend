@@ -145,7 +145,6 @@ export class StatisticApplicantComponent implements OnInit {
           });
         }
         this.valuePieChart = data;
-        console.log(this.valuePieChart);
         this.loading = false;
       }
       , (error) => {
