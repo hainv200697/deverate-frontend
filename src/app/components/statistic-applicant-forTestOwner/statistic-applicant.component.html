@@ -90,10 +90,7 @@
                         [legendTitle]="legendTitle" [legend]="showLegend" [explodeSlices]="explodeSlices"
                         [labels]="showLabels" [doughnut]="doughnut">
                         <ng-template #tooltipTemplate let-model="model">
-                            <p style="font-size: 15px; font-weight: bold;">
-                                Rank:{{model.name}} ({{model.extra.percent}}%)
-                            </p>
-                            <p style="font-size: 15px;">Number of applicant: {{model.value}}</p>
+                            <p style="font-size: 15px;">{{model.extra.percent | number}}% ({{model.value}})</p>
                         </ng-template>
                     </ngx-charts-pie-chart>
                 </div>
@@ -128,8 +125,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-hover" [svData]="applicantList" #sv="svDataTable" [svRowsOnPage]="10"
-                    svSortBy="rank" svSortOrder="desc">
+                <table class="table table-hover" [svData]="applicantList" #sv="svDataTable" [svRowsOnPage]="10">
                     <thead>
                         <tr style="background-color: rgba(0, 0, 0, 0.03);" class="col-md-12 row no-padding-no-margin">
                             <td class="text-center" style="width: 10%; font-weight: bold">No.</td>
