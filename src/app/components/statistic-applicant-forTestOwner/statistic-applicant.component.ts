@@ -134,7 +134,18 @@ export class StatisticApplicantComponent implements OnInit {
     this.loading = true;
     this.historyApi.GetRankStatisticApplicant(this.filter).subscribe(
       (data) => {
+        if(data.length > 0)
+        {
+          let sum = 0;
+          data.forEach(element => {
+            sum += element.value;
+          });
+          data.forEach(element => {
+            element.extra = {"percent": element.value * 100 / sum};
+          });
+        }
         this.valuePieChart = data;
+        console.log(this.valuePieChart);
         this.loading = false;
       }
       , (error) => {

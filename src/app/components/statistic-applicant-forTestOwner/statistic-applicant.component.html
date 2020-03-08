@@ -91,7 +91,7 @@
                         [labels]="showLabels" [doughnut]="doughnut">
                         <ng-template #tooltipTemplate let-model="model">
                             <p style="font-size: 15px; font-weight: bold;">
-                                Rank:{{model.name}}
+                                Rank:{{model.name}} ({{model.extra.percent}}%)
                             </p>
                             <p style="font-size: 15px;">Number of applicant: {{model.value}}</p>
                         </ng-template>
@@ -129,7 +129,7 @@
             </div>
             <div class="card-body">
                 <table class="table table-hover" [svData]="applicantList" #sv="svDataTable" [svRowsOnPage]="10"
-                    svSortBy="name" svSortOrder="asc">
+                    svSortBy="rank" svSortOrder="desc">
                     <thead>
                         <tr style="background-color: rgba(0, 0, 0, 0.03);" class="col-md-12 row no-padding-no-margin">
                             <td class="text-center" style="width: 10%; font-weight: bold">No.</td>
