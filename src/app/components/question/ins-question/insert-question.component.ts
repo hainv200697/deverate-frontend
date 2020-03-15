@@ -466,7 +466,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
     open(content) {
         this.index = 1;
         this.listInsert = [];
-        this.insQuestion['companyCatalogueId'] = this.id;
+        this.insQuestion['companyCatalogueId'] = 0;
         this.modalService.open(content, { size: 'lg', backdrop: 'static', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
@@ -480,7 +480,7 @@ export class InsertQuestionComponent implements OnInit, AfterViewInit {
         this.message = [];
         this.allError = [];
         this.listInsert = [];
-        this.catalogueIdExcel = this.id;
+        this.catalogueIdExcel = 0;
         this.modalService.open(excel, { size: 'lg', backdrop: 'static', windowClass: 'myCustomModalClass' });
         const a = document.querySelector('#stepper1');
         this.stepper = new Stepper(a, {
