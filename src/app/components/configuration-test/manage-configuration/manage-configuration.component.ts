@@ -62,8 +62,12 @@ export class ManageConfigurationComponent implements OnInit {
   avaragePercent = [];
 
   listCatalogue = [];
-  configDetail
+  configDetail;
 
+  totalQuestion;
+
+  rankInConfig;
+  catalogueInConfiguration;
   ngOnInit() {
     this.getAllRank();
     this.getConfigurationIsActive(true);
@@ -96,6 +100,24 @@ export class ManageConfigurationComponent implements OnInit {
     }
     this.stepper.next();
     this.index = this.index + 1;
+    this.calculateWeightPoint(this.selectedItems);
+
+    this.rankInConfig = [];
+    this.selectedItems.forEach(item => {
+      this.rankInConfig.push({
+        rankId: item.rankId,
+        point: item.point,
+      })
+    });
+
+    this.catalogueInConfiguration = [];
+    this.listCatalogue.forEach(item => {
+      this.catalogueInConfiguration.push({
+        catalogueId: item.companyCatalogueId,
+        weightPoint: Math.round(item.point * 100),
+        numberQuestion: item.numberQuestion
+      })
+    });
   }
 
   back() {
@@ -280,27 +302,9 @@ export class ManageConfigurationComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
-        this.calculateWeightPoint(this.selectedItems);
 
-        var rankInConfig = [];
-        this.selectedItems.forEach(item => {
-          rankInConfig.push({
-            rankId: item.rankId,
-            point: item.point,
-          })
-        });
-
-        var catalogueInConfiguration = [];
-        this.listCatalogue.forEach(item => {
-          catalogueInConfiguration.push({
-            catalogueId: item.companyCatalogueId,
-            weightPoint: Math.round(item.point * 100),
-            numberQuestion: item.numberQuestion
-          })
-        });
-
-        this.inputConfiguration['rankInConfigs'] = rankInConfig;
-        this.inputConfiguration['catalogueInConfigurations'] = catalogueInConfiguration;
+        this.inputConfiguration['rankInConfigs'] = this.rankInConfig;
+        this.inputConfiguration['catalogueInConfigurations'] = this.catalogueInConfiguration;
         this.loading = true;
         this.configAPi.createConfigurartion(this.inputConfiguration).subscribe(data => {
           this.getConfigurationIsActive(true);
@@ -364,6 +368,8 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   validateConfiguration() {
+    this.totalQuestion = 0;
+
     if (this.inputConfiguration['title'] == "") {
       this.toast.error('Message', 'Please input title semester!');
       return false;
@@ -398,6 +404,11 @@ export class ManageConfigurationComponent implements OnInit {
           this.toast.error('Message', this.listCatalogue[index].name + ' max question ' + this.listCatalogue[index].quescount);
           return false;
         }
+        this.totalQuestion = this.listCatalogue[index].numberQuestion + this.totalQuestion;
+      }
+      if (this.inputConfiguration['duration'] < this.totalQuestion * 2) {
+        this.toast.error('Message', 'Please input duration min: ' + this.totalQuestion * 2);
+        return false;
       }
     }
   }
