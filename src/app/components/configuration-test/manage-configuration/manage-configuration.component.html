@@ -95,6 +95,14 @@
                                     </tr>
                                     <tr class="col-md-12 row no-padding-no-margin">
                                         <td class="col-md-3" style="font-weight: bold">
+                                            Total question
+                                        </td>
+                                        <td class="col-md-9">
+                                            {{totalQuestion}}
+                                        </td>
+                                    </tr>
+                                    <tr class="col-md-12 row no-padding-no-margin">
+                                        <td class="col-md-3" style="font-weight: bold">
                                             Duration
                                         </td>
                                         <td class="col-md-9">
@@ -142,6 +150,32 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="form-group row ml-2" style="overflow-x: auto;">
+                            <div style="width: 300px">
+                                <div style="width: 100%; height: 40px;"></div>
+                                <div style="height: 40px; width: 100%;">
+                                    <b>Catalogue</b></div>
+                                <div *ngFor="let item of listCatalogue">
+                                    <input class="form-control mt-1" style="width: 100%;" disabled
+                                        value="{{item.name}}">
+                                </div>
+                            </div>
+                            <div class="no-padding-no-margin" style="width: 80px"
+                                *ngFor="let r of selectedItems; let i = index">
+                                <div style="width: 100%; height: 40px;">
+                                    <input class="form-control" style="width: 80px; text-align: center;"
+                                        disabled="disabled" value="{{r.point}}">
+                                </div>
+                                <div class="row no-padding-no-margin" style="width: 80px; height: 40px;">
+                                    <input class="form-control" style="width: 80px; font-weight: bold;" disabled
+                                        value="{{r.name}}">
+                                </div>
+                                <div *ngFor="let item of r.catalogueInRanks">
+                                    <input class="form-control mt-1" style="width: 80px;" disabled
+                                        value="{{item.point}}">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
