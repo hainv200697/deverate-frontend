@@ -44,9 +44,8 @@
                                     name="ins_config_durartion" step="5" [min]="5" style="height: 30px">
                             </div>
                             <div class="col-md-7 row" style="margin-left: 33px;">
-                                <label class="col-md-4" style="text-align: right;">ExpiredDays:</label>
-                                <input class="col-md-6" type="number" [(ngModel)]="inputConfiguration['expiredDays']"
-                                    name="ins_config_expiredDays" step="1" [min]="1">
+                                <label class="col-md-4" style="text-align: center;">Total:</label>
+                                <input class="col-md-6" type="number" disabled value="{{totalQuestion}}">
                             </div>
                         </div>
 
@@ -66,7 +65,7 @@
                                 <div class="col-md-12 row" *ngFor="let cata of listCatalogue">
                                     <label class="col-md-10 mt-2">{{cata.name}}&nbsp;({{cata.quescount}})</label>
                                     <input type="number" class="form-control col-md-2 mt-1" style="font-size: 15px"
-                                       [(ngModel)]="cata.numberQuestion" min="0" max="{{cata.quescount}}" step="1">
+                                    (change)="validateQuestion()" [(ngModel)]="cata.numberQuestion" min="0" max="{{cata.quescount}}" step="1">
                                 </div>
                             </div>
                         </div>

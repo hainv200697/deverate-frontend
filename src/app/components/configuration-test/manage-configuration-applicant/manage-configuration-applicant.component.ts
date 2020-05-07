@@ -76,7 +76,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
     this.inputConfiguration['companyId'] = localStorage.getItem("CompanyId");
     this.inputConfiguration['title'] = '';
     this.inputConfiguration['type'] = false;
-    this.inputConfiguration['duration'] = 15;
+    this.inputConfiguration['duration'] = 0;
     this.inputConfiguration['expiredDays'] = 7;
     this.selectedItems = [];
     this.modalService.open(content, { backdrop: 'static', size: 'lg', windowClass: 'myCustomModalClass' });
@@ -93,7 +93,6 @@ export class ManageConfigurationApplicantComponent implements OnInit {
     }
     this.stepper.next();
     this.index = this.index + 1;
-    this.calculateWeightPoint(this.selectedItems);
 
     this.rankInConfig = [];
     this.selectedItems.forEach(item => {
@@ -136,6 +135,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
         this.listCatalogue = data.catalogueDTOs;
         this.calculateWeightPoint(this.ListRank);
         for (let i = 0; i < this.listCatalogue.length; i++) {
+          this.listCatalogue[i].numberQuestion = 0;
           if (this.listCatalogue[i].point == 0) {
             this.listCatalogue.splice(i, 1);
             i--
@@ -360,7 +360,6 @@ export class ManageConfigurationApplicantComponent implements OnInit {
   }
 
   validateConfiguration() {
-    this.totalQuestion = 0;
     if (this.inputConfiguration['title'] == "") {
       this.toast.error('Message', 'Please input title semester!');
       return false;
@@ -391,7 +390,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
           this.toast.error('Message', 'Please input number of question');
           return false;
         }
-        if (this.listCatalogue[index].numberQuestion < 0) {
+        if (this.listCatalogue[index].numberQuestion <= 0) {
           this.toast.error('Message', 'Please input number of question valid');
           return false;
         }
@@ -399,10 +398,9 @@ export class ManageConfigurationApplicantComponent implements OnInit {
           this.toast.error('Message', this.listCatalogue[index].name + ' max question ' + this.listCatalogue[index].quescount);
           return false;
         }
-        this.totalQuestion = this.listCatalogue[index].numberQuestion + this.totalQuestion;
       }
-      if (this.inputConfiguration['duration'] < this.totalQuestion * 2) {
-        this.toast.error('Message', 'Please input duration min: ' + this.totalQuestion * 2);
+      if (this.inputConfiguration['duration'] < this.totalQuestion) {
+        this.toast.error('Message', 'Please input duration min: ' + this.totalQuestion);
         return false;
       }
     }
@@ -411,5 +409,15 @@ export class ManageConfigurationApplicantComponent implements OnInit {
   viewTest(id) {
     localStorage.setItem('isEmployee', 'false');
     this.router.navigate(['/manage-test/', id]);
+  }
+  
+  validateQuestion() {
+    this.totalQuestion = 0;
+    for (let index = 0; index < this.listCatalogue.length; index++) {
+      if(this.listCatalogue[index].numberQuestion != null || this.listCatalogue[index].numberQuestion > 0){
+        this.totalQuestion += this.listCatalogue[index].numberQuestion;
+      }
+    }
+    this.inputConfiguration['duration'] = this.totalQuestion * 2;
   }
 }
