@@ -44,7 +44,7 @@
                             </select>
                         </div>
                         <div class="form-inline col-sm-12 col-md-6 col-lg-6">
-                            <label>Start Date:&nbsp;&nbsp; </label>
+                            <label style="width: 29%;">Start Date: </label>
                             <input id="startDate" style="width: 50%;" class="form-control" placeholder="yyyy-mm-dd" name="start" ngbDatepicker
                                 #start="ngbDatepicker" [(ngModel)]="startDate" [minDate]="minDate" onkeydown="return false">
                             <div class="input-group-append" style="width: 20%;">
@@ -52,7 +52,17 @@
                                     type="button"></button>
                             </div>
                         </div>
-                        
+                        <div class="form-inline col-sm-12 col-md-6 col-lg-5"></div>
+                        <div class="form-inline col-sm-12 col-md-6 col-lg-6 mt-2">
+                            <label style="width: 29%;">End Date: </label>
+                            <input id="endDate" style="width: 50%;" class="form-control" placeholder="yyyy-mm-dd" name="end"
+                                [(ngModel)]="endDate" [minDate]="startDate" ngbDatepicker onkeydown="return false"
+                                #end="ngbDatepicker">
+                                <div class="input-group-append" style="width: 20%;">
+                                <button class="btn btn-outline-secondary fa fa-calendar" (click)="end.toggle()"
+                                    type="button"></button>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="row justify-content-end" style="margin-top: 20px;">

@@ -32,10 +32,11 @@
                         </select>
                     </div>
                     <div class="form-group col-md-5 row">
-                        <label style="width: 29%;">Start Date: </label>
-                        <input id="startDate" style="width: 50%;" class="form-control" placeholder="yyyy-mm-dd" name="start" ngbDatepicker
-                            #start="ngbDatepicker" [(ngModel)]="startDate" [minDate]="minDate" onkeydown="return false">
-                        <div class="input-group-append" style="width: 20%;">
+                        <label style="width: 29%;" for="startDate">Start Date: </label>
+                        <input id="startDate" style="width: 50%;" class="form-control" placeholder="yyyy-mm-dd" name="start"
+                            [(ngModel)]="startDate" [minDate]="minDate" ngbDatepicker onkeydown="return false"
+                            #start="ngbDatepicker">
+                            <div class="input-group-append" style="width: 20%;">
                             <button class="btn btn-outline-secondary fa fa-calendar" (click)="start.toggle()"
                                 type="button"></button>
                         </div>
@@ -44,6 +45,18 @@
                         <div class="text-center">
                             <input type="checkbox" [(ngModel)]="chooseType" [value]=true>
                             <label class="ml-2">Use same question</label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-5 row">
+                    </div>
+                    <div class="form-group col-md-5 row">
+                        <label style="width: 29%;" for="endDate">End Date: </label>
+                        <input id="endDate" style="width: 50%;" class="form-control" placeholder="yyyy-mm-dd" name="end"
+                            [(ngModel)]="endDate" [minDate]="startDate" ngbDatepicker onkeydown="return false"
+                            #end="ngbDatepicker">
+                            <div class="input-group-append" style="width: 20%;">
+                            <button class="btn btn-outline-secondary fa fa-calendar" (click)="end.toggle()"
+                                type="button"></button>
                         </div>
                     </div>
                 </div>
