@@ -6,7 +6,7 @@ import { LayoutComponent } from './layout.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ChangepassComponent } from '../components/changepass/changepass.component';
 import { RerankingComponent } from '../components/ranking/reranking/reranking.component';
-import { SystemGuard, CompanyGuard, OwnerGuard, EmployeeGuard } from '../shared';
+import { SystemGuard, CompanyGuard, OwnerGuard, EmployeeGuard, CMAndOwnerGuard } from '../shared';
 
 const routes: Routes = [
     {
@@ -35,20 +35,22 @@ const routes: Routes = [
             { path: 'approve-rank', loadChildren: () => import('../components/approveRank/approve.module').then(m => m.ApproveModule), canActivate: [CompanyGuard]},
 
             // Test Owner
-            { path: 'semester-applicant', loadChildren: () => import('../components/configuration-test/manage-configuration-applicant/manage-configuration-applicant.module').then(m => m.ManageConfigurationApplicantModule), canActivate: [OwnerGuard] },
-            { path: 'semester', loadChildren: () => import('../components/configuration-test/manage-configuration/manage-configuration.module').then(m => m.ManageConfigurationModule), canActivate: [OwnerGuard] },
-            { path: 'manage-test/:id', loadChildren: () => import('../components/view-test/view-test.module').then(m => m.TestModule), canActivate: [OwnerGuard] },
-            { path: 'manage-detail-test/:id', loadChildren: () => import('../components/default-test/defaut-test.module').then(m => m.DefautTestModule), canActivate: [OwnerGuard] },
             { path: 'statistic', loadChildren: () => import('../components/statistic/statistic.module').then(m => m.StatisticModule), canActivate: [OwnerGuard]},
-            { path: 'applicant', loadChildren: () => import('../components/applicant/applicant.module').then(m => m.ApplicantModule), canActivate: [OwnerGuard]},
             { path: 'statistic-applicant', loadChildren: () => import('../components/statistic-applicant-forTestOwner/statistic-applicant.module').then(m => m.StatisticApplicantModule), canActivate: [OwnerGuard]},
-            { path: 'generate-test', loadChildren: () => import('../components/semester/semester.module').then(m => m.SemesterModule), canActivate: [OwnerGuard]},
             //Employee
             { path: 'reranking', component: RerankingComponent, canActivate: [EmployeeGuard]},
             { path: 'statistic-employee', loadChildren: () => import('../components/statistic-employee/statistic-employee.module').then(m => m.StatisticEmployeeModule), canActivate: [EmployeeGuard]},
             
             { path: 'profile', component: ProfileComponent },
             { path: 'changepass', component: ChangepassComponent },
+
+            // Share Company Manager and Test Owner
+            { path: 'semester-applicant', loadChildren: () => import('../components/configuration-test/manage-configuration-applicant/manage-configuration-applicant.module').then(m => m.ManageConfigurationApplicantModule), canActivate: [CMAndOwnerGuard] },
+            { path: 'semester', loadChildren: () => import('../components/configuration-test/manage-configuration/manage-configuration.module').then(m => m.ManageConfigurationModule), canActivate: [CMAndOwnerGuard] },
+            { path: 'manage-test/:id', loadChildren: () => import('../components/view-test/view-test.module').then(m => m.TestModule), canActivate: [CMAndOwnerGuard] },
+            { path: 'manage-detail-test/:id', loadChildren: () => import('../components/default-test/defaut-test.module').then(m => m.DefautTestModule), canActivate: [CMAndOwnerGuard] },
+            { path: 'generate-test', loadChildren: () => import('../components/semester/semester.module').then(m => m.SemesterModule), canActivate: [CMAndOwnerGuard]},
+            { path: 'applicant', loadChildren: () => import('../components/applicant/applicant.module').then(m => m.ApplicantModule), canActivate: [CMAndOwnerGuard]},
         ]
     }
 ];
