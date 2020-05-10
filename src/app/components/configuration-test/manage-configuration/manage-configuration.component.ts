@@ -85,7 +85,6 @@ export class ManageConfigurationComponent implements OnInit {
     this.totalQuestion = 0;
     this.inputConfiguration['title'] = "";
     this.inputConfiguration['companyId'] = localStorage.getItem("CompanyId");
-    this.inputConfiguration['title'] = '';
     this.inputConfiguration['type'] = true;
     this.inputConfiguration['duration'] = 0;
     this.inputConfiguration['expiredDays'] = 7;
@@ -372,6 +371,10 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   validateConfiguration() {
+    let totalQuestionCount = 0;
+    for (let index = 0; index < this.listCatalogue.length; index++) {
+      totalQuestionCount += this.listCatalogue[index].numberQuestion;
+    }
     if (this.inputConfiguration['title'] == "") {
       this.toast.error('Message', 'Please input title semester!');
       return false;
@@ -380,8 +383,8 @@ export class ManageConfigurationComponent implements OnInit {
       this.toast.error('Message', 'The maximum title semester is 20');
       return false;
     }
-    else if (this.inputConfiguration['duration'] < 5 || this.inputConfiguration['duration'] > 180) {
-      this.toast.error('Message', 'duration must be range ' + this.selectedItems.length * 5 + '\'' + ' to 200\'');
+    else if (this.inputConfiguration['duration'] < totalQuestionCount || this.inputConfiguration['duration'] > totalQuestionCount * 5) {
+      this.toast.error('Message', 'duration must be range ' + totalQuestionCount + ' to ' + totalQuestionCount * 5);
       return false;
     }
     else if (this.inputConfiguration['expiredDays'] < 1) {
