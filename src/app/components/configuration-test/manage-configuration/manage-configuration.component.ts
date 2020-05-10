@@ -68,6 +68,9 @@ export class ManageConfigurationComponent implements OnInit {
 
   rankInConfig;
   catalogueInConfiguration;
+
+  cloneConfigId;
+  cloneConfigTitle; 
   ngOnInit() {
     this.getAllRank();
     this.getConfigurationIsActive(true);
@@ -422,7 +425,57 @@ export class ManageConfigurationComponent implements OnInit {
     localStorage.setItem('isEmployee', 'true');
     this.router.navigate(['/manage-test/', id]);
   }
+  
+  openModalcloneConfig(content, confidId) {
+    this.modalService.open(content, { windowClass: 'myCustomModalClass' });
+    this.cloneConfigId = confidId;
+    this.cloneConfigTitle = "";
+  }
 
+  cloneConfig(){
+    if (this.validateCloneTitle() == false) {
+      return;
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'The semester will be clone!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, clone it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
+      if (result.value) {
+        this.loading = true;
+        this.configAPi.cloneConfig(this.cloneConfigId, this.cloneConfigTitle).subscribe(data => {
+          this.getConfigurationIsActive(true);
+          this.closeModal();
+          this.toast.success('Clone semester success');
+          this.loading = false;
+          this.cloneConfigTitle = "";
+          this.cloneConfigId = "";
+        }, (error) => {
+          if (error.status == 0) {
+            this.toast.error('Server is not availiable');
+          }
+          if (error.status == 400) {
+            this.toast.error(error['message']);
+          }
+          if (error.status == 500) {
+            this.toast.error('Server error');
+          }
+          this.loading = false;
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.closeModal();
+      }
+    });
+  }
+
+  validateCloneTitle(){
+    if (this.cloneConfigTitle == null || this.cloneConfigTitle == undefined || this.cloneConfigTitle == "") {
+      this.toast.error('Message', 'Please input title semester');
+      return false;
+    }
   validateQuestion() {
     this.totalQuestion = 0;
     for (let index = 0; index < this.listCatalogue.length; index++) {
@@ -435,3 +488,4 @@ export class ManageConfigurationComponent implements OnInit {
     }
   }
 }
+
