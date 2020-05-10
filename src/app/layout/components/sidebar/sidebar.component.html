@@ -59,6 +59,48 @@
         </a>
 
         <div class="nested-menu" *ngIf="role == 'Company Manager'">
+            <a class="list-group-item" (click)="addExpandClass('pages')">
+                <i class="fa fa-cog"></i>&nbsp;
+                <span>Semester</span>
+            </a>
+            <li class="nested" [class.expand]="showMenu === 'pages'">
+                <ul class="submenu">
+                    <li>
+                        <a [routerLink]="['/semester']" [routerLinkActive]="['router-link-active']">
+                            <span>Employee</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['/semester-applicant']" [routerLinkActive]="['router-link-active']">
+                            <span>Applicant</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </div>
+        
+        <div class="nested-menu" *ngIf="role == 'Company Manager'">
+            <a class="list-group-item" (click)="addExpandClass('pages2')">
+                <i class="fa fa-user"></i>&nbsp;
+                <span>Test generator</span>
+            </a>
+            <li class="nested" [class.expand]="showMenu === 'pages2'">
+                <ul class="submenu">
+                    <li>
+                        <a [routerLink]="['/generate-test']" [routerLinkActive]="['router-link-active']">
+                            <span>Employee</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['/applicant']" [routerLinkActive]="['router-link-active']">
+                            <span>Applicant</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </div>
+
+        <div class="nested-menu" *ngIf="role == 'Company Manager'">
             <a class="list-group-item" (click)="addExpandClass('pages1')">
                 <i class="fa fa-bar-chart"></i>&nbsp;
                 <span>Statistic</span>

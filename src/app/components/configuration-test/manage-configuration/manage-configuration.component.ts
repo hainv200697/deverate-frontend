@@ -82,11 +82,14 @@ export class ManageConfigurationComponent implements OnInit {
 
   open(content) {
     this.index = 1;
+    for (let index = 0; index < this.listCatalogue.length; index++) {
+      this.listCatalogue[index].numberQuestion = 0;
+    }
+    this.totalQuestion = 0;
     this.inputConfiguration['title'] = "";
     this.inputConfiguration['companyId'] = localStorage.getItem("CompanyId");
-    this.inputConfiguration['title'] = '';
     this.inputConfiguration['type'] = true;
-    this.inputConfiguration['duration'] = 15;
+    this.inputConfiguration['duration'] = 0;
     this.inputConfiguration['expiredDays'] = 7;
     this.selectedItems = [];
     this.modalService.open(content, { backdrop: 'static', size: 'lg', windowClass: 'myCustomModalClass' });
@@ -103,7 +106,6 @@ export class ManageConfigurationComponent implements OnInit {
     }
     this.stepper.next();
     this.index = this.index + 1;
-    this.calculateWeightPoint(this.selectedItems);
 
     this.rankInConfig = [];
     this.selectedItems.forEach(item => {
@@ -146,6 +148,7 @@ export class ManageConfigurationComponent implements OnInit {
         this.listCatalogue = data.catalogueDTOs;
         this.calculateWeightPoint(this.ListRank);
         for (let i = 0; i < this.listCatalogue.length; i++) {
+          this.listCatalogue[i].numberQuestion = 0;
           if (this.listCatalogue[i].point == 0) {
             this.listCatalogue.splice(i, 1);
             i--
@@ -371,8 +374,10 @@ export class ManageConfigurationComponent implements OnInit {
   }
 
   validateConfiguration() {
-    this.totalQuestion = 0;
-
+    let totalQuestionCount = 0;
+    for (let index = 0; index < this.listCatalogue.length; index++) {
+      totalQuestionCount += this.listCatalogue[index].numberQuestion;
+    }
     if (this.inputConfiguration['title'] == "") {
       this.toast.error('Message', 'Please input title semester!');
       return false;
@@ -381,8 +386,8 @@ export class ManageConfigurationComponent implements OnInit {
       this.toast.error('Message', 'The maximum title semester is 20');
       return false;
     }
-    else if (this.inputConfiguration['duration'] < 5 || this.inputConfiguration['duration'] > 180) {
-      this.toast.error('Message', 'duration must be range ' + this.selectedItems.length * 5 + '\'' + ' to 200\'');
+    else if (this.inputConfiguration['duration'] < totalQuestionCount || this.inputConfiguration['duration'] > totalQuestionCount * 5) {
+      this.toast.error('Message', 'duration must be range ' + totalQuestionCount + ' to ' + totalQuestionCount * 5);
       return false;
     }
     else if (this.inputConfiguration['expiredDays'] < 1) {
@@ -399,7 +404,7 @@ export class ManageConfigurationComponent implements OnInit {
           this.toast.error('Message', 'Please input number of question');
           return false;
         }
-        if (this.listCatalogue[index].numberQuestion < 0) {
+        if (this.listCatalogue[index].numberQuestion <= 0) {
           this.toast.error('Message', 'Please input number of question valid');
           return false;
         }
@@ -407,10 +412,10 @@ export class ManageConfigurationComponent implements OnInit {
           this.toast.error('Message', this.listCatalogue[index].name + ' max question ' + this.listCatalogue[index].quescount);
           return false;
         }
-        this.totalQuestion = this.listCatalogue[index].numberQuestion + this.totalQuestion;
+
       }
-      if (this.inputConfiguration['duration'] < this.totalQuestion * 2) {
-        this.toast.error('Message', 'Please input duration min: ' + this.totalQuestion * 2);
+      if (this.inputConfiguration['duration'] < this.totalQuestion) {
+        this.toast.error('Message', 'Please input duration min: ' + this.totalQuestion);
         return false;
       }
     }
@@ -420,7 +425,7 @@ export class ManageConfigurationComponent implements OnInit {
     localStorage.setItem('isEmployee', 'true');
     this.router.navigate(['/manage-test/', id]);
   }
-
+  
   openModalcloneConfig(content, confidId) {
     this.modalService.open(content, { windowClass: 'myCustomModalClass' });
     this.cloneConfigId = confidId;
@@ -470,6 +475,16 @@ export class ManageConfigurationComponent implements OnInit {
     if (this.cloneConfigTitle == null || this.cloneConfigTitle == undefined || this.cloneConfigTitle == "") {
       this.toast.error('Message', 'Please input title semester');
       return false;
+    }
+  validateQuestion() {
+    this.totalQuestion = 0;
+    for (let index = 0; index < this.listCatalogue.length; index++) {
+      if(this.listCatalogue[index].numberQuestion != null || this.listCatalogue[index].numberQuestion > 0){
+        this.totalQuestion += this.listCatalogue[index].numberQuestion;
+      }
+    }
+    if(this.inputConfiguration['duration'] < this.totalQuestion){
+      this.inputConfiguration['duration'] = this.totalQuestion;
     }
   }
 }
