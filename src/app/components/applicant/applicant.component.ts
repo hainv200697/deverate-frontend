@@ -223,16 +223,17 @@ export class ApplicantComponent implements OnInit {
         }
         if(check){
             this.loading = true;
-            for (let index = 0; index < this.listConfig.length; index++) {
-                if (this.listConfig[index].configId == this.config_id) {
-                    this.calculateEndDate(this.startDate, this.listConfig[index].expiredDays);
-                }
-            }
             if (this.startDate.month < 10) {
                 this.startDate.month =  ("0" + this.startDate.month).slice(-2);
             }
             if (this.startDate.day < 10) {
                 this.startDate.day =  ("0" + this.startDate.day).slice(-2)
+            }
+            if (this.endDate.month < 10) {
+                this.endDate.month =  ("0" + this.endDate.month).slice(-2);
+            }
+            if (this.endDate.day < 10) {
+                this.endDate.day =  ("0" + this.endDate.day).slice(-2)
             }
             var startDateString = `${this.startDate.year}-${this.startDate.month}-${this.startDate.day}T00:00:01.000+07:00`;
             var endDateString =  `${this.endDate.year}-${this.endDate.month}-${this.endDate.day}T23:59:59.000+07:00`;
@@ -286,6 +287,10 @@ export class ApplicantComponent implements OnInit {
             this.toastr.error('Message', 'Please choose semester!');
             return false;
         }
+        if(this.endDate == undefined || this.endDate == null){
+            this.toastr.error('Please choose enddate');
+            return false;
+        }
         return true;
     }
     getAllConfig(){
@@ -302,15 +307,6 @@ export class ApplicantComponent implements OnInit {
                 }
             }
         )
-    }
-
-    calculateEndDate(date, expiredDays) {
-        var ed = moment(`${date.day}-${date.month}-${date.year}`, "DD-MM-YYYY").add( expiredDays - 1, 'days');
-        this.endDate = {
-            year: ed.format('YYYY'),
-            month: ed.format('MM'),
-            day: ed.format('DD')
-        }
     }
 
     momentToOpjectDate(date) {
