@@ -439,7 +439,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
         this.configAPi.cloneConfig(this.cloneConfigId, this.cloneConfigTitle).subscribe(data => {
           this.getConfigurationIsActive(true);
           this.closeModal();
-          this.toast.success('Clone config success');
+          this.toast.success('Clone semester success');
           this.loading = false;
           this.cloneConfigTitle = "";
           this.cloneConfigId = "";
@@ -463,7 +463,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
 
   validateCloneTitle(){
     if (this.cloneConfigTitle == null || this.cloneConfigTitle == undefined || this.cloneConfigTitle == "") {
-      this.toast.error('Message', 'Please input title config');
+      this.toast.error('Message', 'Please input title semester');
       return false;
     }
   }
