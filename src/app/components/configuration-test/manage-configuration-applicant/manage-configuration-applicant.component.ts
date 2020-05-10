@@ -419,6 +419,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
   openModalcloneConfig(content, confidId) {
     this.modalService.open(content, { windowClass: 'myCustomModalClass' });
     this.cloneConfigId = confidId;
+    this.cloneConfigTitle = "";
   }
 
   cloneConfig(){
