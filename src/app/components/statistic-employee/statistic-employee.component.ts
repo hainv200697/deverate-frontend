@@ -19,7 +19,7 @@ export class StatisticEmployeeComponent implements OnInit {
   loading = false;
   dataHistory;
   averageCatalogue = [];
-  lo
+  noData: boolean;
   ngOnInit() {
     this.getHistory(2);
   }
@@ -31,9 +31,15 @@ export class StatisticEmployeeComponent implements OnInit {
 
   getHistory(itemSelect) {
     this.loading = true;
+    this.noData = false;
     this.historyApi.getHistory(this.accountId).subscribe(
       (data) => {
         this.dataLineChart = data;
+        if(data == null || data == undefined || data == "" || data.length == 0){
+          this.loading = false;
+          this.noData = true;
+          return;
+        }
         var size = this.dataLineChart[0].series.length;
         this.averageCatalogue = [];
         if (itemSelect == 3) {

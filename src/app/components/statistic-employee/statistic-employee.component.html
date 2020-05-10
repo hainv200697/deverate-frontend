@@ -12,6 +12,10 @@
     [template]="customLoadingTemplate">
 </ngx-loading>
 
+<div *ngIf="noData" >
+    <b>No data</b>
+</div>
+
 <div class="col col-md-12 mt-3 row" *ngIf="isLoaded">
     <div class="col col-md-12 mt-3">
         <div class="card mb-5">
