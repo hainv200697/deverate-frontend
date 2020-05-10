@@ -79,6 +79,10 @@ export class ManageConfigurationComponent implements OnInit {
 
   open(content) {
     this.index = 1;
+    for (let index = 0; index < this.listCatalogue.length; index++) {
+      this.listCatalogue[index].numberQuestion = 0;
+    }
+    this.totalQuestion = 0;
     this.inputConfiguration['title'] = "";
     this.inputConfiguration['companyId'] = localStorage.getItem("CompanyId");
     this.inputConfiguration['title'] = '';
@@ -423,6 +427,8 @@ export class ManageConfigurationComponent implements OnInit {
         this.totalQuestion += this.listCatalogue[index].numberQuestion;
       }
     }
-    this.inputConfiguration['duration'] = this.totalQuestion * 2;
+    if(this.inputConfiguration['duration'] < this.totalQuestion){
+      this.inputConfiguration['duration'] = this.totalQuestion * 2;
+    }
   }
 }
