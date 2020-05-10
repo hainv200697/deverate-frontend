@@ -37,6 +37,7 @@ export class SemesterComponent implements OnInit {
         this.chooseConfig = -1;
         this.minDate = this.momentToOpjectDate(moment());
         this.startDate = this.minDate;
+        this.calculateEndDate(this.startDate, 7);
     }
 
     getEmployeeDoTheTest(configId) {
@@ -150,6 +151,9 @@ export class SemesterComponent implements OnInit {
                     this.chooseEmployee = [];
                     this.loading = false;
                     this.selectedAll = false;
+                    this.startDate = this.momentToOpjectDate(moment());
+                    this.minDate = this.momentToOpjectDate(moment());
+                    this.calculateEndDate(this.startDate, 7);
                 }, (error) => {
                     if (error.status == 0) {
                         this.toast.error('Conection time out');
@@ -190,4 +194,14 @@ export class SemesterComponent implements OnInit {
             this.check = false;
         }
     }
+
+    calculateEndDate(startDate, days) {
+        var ed = moment(`${startDate.day}-${startDate.month}-${startDate.year}`, "DD-MM-YYYY").add( days - 1, 'days');
+        this.endDate = {
+            year: ed.year(),
+            month: ed.month() + 1,
+            day: ed.date()
+        }
+    }
+
 }
