@@ -380,6 +380,9 @@
                                 <i class="fa fa fa-eye"></i>
                             </button>
                             &nbsp;
+                            <button class="btn-dark btn btn-circle shadow-item" ngbTooltip="Clone" (click)="openModalcloneConfig(cloneConfigModal, c.configId)">
+                                <i class="fa fa-clone"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>
@@ -394,3 +397,23 @@
         </div>
     </div>
 </div>
+
+<ng-template #cloneConfigModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title modal-header">Clone New Semester</h4>
+    </div>
+    <div class="form-content row">
+        <div class="form-group col-sm-12 col-md-12 col-lg-12 row no-padding-no-margin">
+
+            <div class="col-md-12 row">
+                <label class="col-md-4" style="text-align: center">Title:</label>
+                <input class="col-md-6" type="text" [(ngModel)]="cloneConfigTitle"
+                    name="ins_clone_config_title">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
+        <button class="btn btn-success save" (click)="cloneConfig()">Clone</button>
+    </div>
+</ng-template>
