@@ -431,7 +431,7 @@ export class ManageConfigurationComponent implements OnInit {
       }
     }
     if(this.inputConfiguration['duration'] < this.totalQuestion){
-      this.inputConfiguration['duration'] = this.totalQuestion * 2;
+      this.inputConfiguration['duration'] = this.totalQuestion;
     }
   }
 }
