@@ -476,6 +476,8 @@ export class ManageConfigurationComponent implements OnInit {
       this.toast.error('Message', 'Please input title semester');
       return false;
     }
+  }
+
   validateQuestion() {
     this.totalQuestion = 0;
     for (let index = 0; index < this.listCatalogue.length; index++) {

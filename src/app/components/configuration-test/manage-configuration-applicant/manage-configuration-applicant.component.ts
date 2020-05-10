@@ -470,6 +470,7 @@ export class ManageConfigurationApplicantComponent implements OnInit {
     if (this.cloneConfigTitle == null || this.cloneConfigTitle == undefined || this.cloneConfigTitle == "") {
       this.toast.error('Message', 'Please input title semester');
       return false;
+    }
   }
   
   validateQuestion() {
