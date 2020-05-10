@@ -55,8 +55,6 @@ export class ConfigurationApiService {
     cloneConfig(confidId, title){
         const param = new HttpParams().set('configId', confidId).set('title',title);
         const API = 'configurationapi/cloneconfiguration';
-        console.log(confidId);
-        console.log(title);
         return this.httpClient.post(this.URL + AppSettings.ROUTE_RESOURCE + API, null, { params: param });
         
     }
