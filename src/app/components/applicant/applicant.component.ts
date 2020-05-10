@@ -46,6 +46,7 @@ export class ApplicantComponent implements OnInit {
         this.getAllConfig();
         this.startDate = this.momentToOpjectDate(moment());
         this.minDate = this.momentToOpjectDate(moment());
+        this.calculateEndDate(this.startDate, 7);
     }
 
     openModalExcel(excel) {
@@ -243,6 +244,9 @@ export class ApplicantComponent implements OnInit {
                 this.toastr.success("Send mail success");
                 this.applicantList = [];
                 this.insApplicant = {};
+                this.startDate = this.momentToOpjectDate(moment());
+                this.minDate = this.momentToOpjectDate(moment());
+                this.calculateEndDate(this.startDate, 7);
             },
             (error) => {
                 this.loading = false;
@@ -314,6 +318,15 @@ export class ApplicantComponent implements OnInit {
             year: date.year(),
             month: date.month() + 1,
             day: date.date()
+        }
+    }
+
+    calculateEndDate(startDate, days) {
+        var ed = moment(`${startDate.day}-${startDate.month}-${startDate.year}`, "DD-MM-YYYY").add( days - 1, 'days');
+        this.endDate = {
+            year: ed.year(),
+            month: ed.month() + 1,
+            day: ed.date()
         }
     }
 
