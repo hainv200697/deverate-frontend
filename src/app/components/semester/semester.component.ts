@@ -36,7 +36,8 @@ export class SemesterComponent implements OnInit {
         this.getAllConfig();
         this.chooseConfig = -1;
         this.minDate = this.momentToOpjectDate(moment());
-        this.startDate = this.minDate;
+        this.startDate = this.momentToOpjectDate(moment());
+        this.endDate = this.momentToOpjectDate(moment().add(6, 'days'));
     }
 
     getEmployeeDoTheTest(configId) {

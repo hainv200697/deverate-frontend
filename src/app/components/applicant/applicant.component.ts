@@ -46,6 +46,7 @@ export class ApplicantComponent implements OnInit {
         this.getAllConfig();
         this.startDate = this.momentToOpjectDate(moment());
         this.minDate = this.momentToOpjectDate(moment());
+        this.endDate = this.momentToOpjectDate(moment().add(6, 'days'));
     }
 
     openModalExcel(excel) {
